@@ -185,9 +185,6 @@ call EngineHeaderCopy.bat</Command>
   <ItemGroup>
     <None Include="SimpleMath.inl" />
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="test.fx" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

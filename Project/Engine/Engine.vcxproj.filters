@@ -107,7 +107,4 @@
       <Filter>Module</Filter>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="test.fx" />
-  </ItemGroup>
 </Project>
