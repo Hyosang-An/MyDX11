@@ -45,4 +45,14 @@ enum class COMPONENT_TYPE
 	LANDSCAPE,
 
 	END,
+
+	// Script 컴포넌트는 따로 관리
+	SCRIPT
+};
+
+enum DIR
+{
+	RIGHT,	// 로컬 X방향
+	UP,		// 로컬 Y방향
+	FRONT,	// 로컬 Z방향
 };
