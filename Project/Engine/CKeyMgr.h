@@ -10,7 +10,7 @@ enum class KEY
 
 	LEFT, RIGHT, UP, DOWN,
 
-	ENTER, SPACE, ALT, CTRL, SHIFT, ESC,
+	ENTER, SPACE, ALT, CTRL, LSHIFT, ESC,
 
 	LBTN,
 	RBTN,
@@ -69,8 +69,8 @@ private:
 	Vec2	m_DragDir;
 
 public:
-	void init();
-	void tick();
+	void Init();
+	void Tick();
 
 	KEY_STATE GetKeyState(KEY _key) { return m_vecKeyInfo[(UINT)_key].eKeyState; }
 	Vec2 GetMousePos() { return m_MousePos; }

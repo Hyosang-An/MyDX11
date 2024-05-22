@@ -79,16 +79,42 @@
     <ClInclude Include="CRenderMgr.h">
       <Filter>04. Manager\06. RenderMgr</Filter>
     </ClInclude>
-    <ClInclude Include="CAsset.h" />
-    <ClInclude Include="Ptr.h" />
-    <ClInclude Include="CMeshRender.h" />
-    <ClInclude Include="CRenderComponent.h" />
-    <ClInclude Include="CScript.h" />
-    <ClInclude Include="CMesh.h" />
-    <ClInclude Include="CGraphicShader.h" />
-    <ClInclude Include="CShader.h" />
-    <ClInclude Include="CComputeShader.h" />
-    <ClInclude Include="CAssetMgr.h" />
+    <ClInclude Include="CAsset.h">
+      <Filter>06. Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="CAssetMgr.h">
+      <Filter>04. Manager\05. AssetMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CMesh.h">
+      <Filter>06. Asset\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CGraphicShader.h">
+      <Filter>06. Asset\Shader\07. GraphicShader</Filter>
+    </ClInclude>
+    <ClInclude Include="CComputeShader.h">
+      <Filter>06. Asset\Shader\08. ComputeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Ptr.h">
+      <Filter>06. Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshRender.h">
+      <Filter>08. Component\08. RenderComponent\01. MeshRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="CRenderComponent.h">
+      <Filter>08. Component\08. RenderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="CScript.h">
+      <Filter>08. Component\09. Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraMoveScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CShader.h">
+      <Filter>06. Asset\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -142,15 +168,39 @@
     <ClCompile Include="CRenderMgr.cpp">
       <Filter>04. Manager\06. RenderMgr</Filter>
     </ClCompile>
-    <ClCompile Include="CAsset.cpp" />
-    <ClCompile Include="CMeshRender.cpp" />
-    <ClCompile Include="CRenderComponent.cpp" />
-    <ClCompile Include="CScript.cpp" />
-    <ClCompile Include="CMesh.cpp" />
-    <ClCompile Include="CGraphicShader.cpp" />
-    <ClCompile Include="CShader.cpp" />
-    <ClCompile Include="CComputeShader.cpp" />
-    <ClCompile Include="CAssetMgr.cpp" />
+    <ClCompile Include="CAsset.cpp">
+      <Filter>06. Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="CAssetMgr.cpp">
+      <Filter>04. Manager\05. AssetMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CMesh.cpp">
+      <Filter>06. Asset\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="CGraphicShader.cpp">
+      <Filter>06. Asset\Shader\07. GraphicShader</Filter>
+    </ClCompile>
+    <ClCompile Include="CComputeShader.cpp">
+      <Filter>06. Asset\Shader\08. ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshRender.cpp">
+      <Filter>08. Component\08. RenderComponent\01. MeshRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="CRenderComponent.cpp">
+      <Filter>08. Component\08. RenderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="CScript.cpp">
+      <Filter>08. Component\09. Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraMoveScript.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerScript.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CShader.cpp">
+      <Filter>06. Asset\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. Header">
@@ -237,10 +287,63 @@
     <Filter Include="08. Component\09. Script">
       <UniqueIdentifier>{2a90f398-6bef-44b2-9815-1c7e0ddb8f41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. Asset\01. Mesh">
+      <UniqueIdentifier>{4f897358-7e9b-4081-932d-345f16087d54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\02. MeshData">
+      <UniqueIdentifier>{96fe3f62-0fad-489b-bbff-78d5f931e38a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\03. Material">
+      <UniqueIdentifier>{f9501c18-c473-47dc-b956-5b08603a204b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\04. Prefab">
+      <UniqueIdentifier>{1ff6c692-9121-47ad-9400-9d84ec3f94ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\05. Texture">
+      <UniqueIdentifier>{20b50ccb-f384-41c3-82a7-6920e6f9eb6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\06. Sound">
+      <UniqueIdentifier>{0bfdee38-cd3b-4823-a3b0-fea0503afba3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\Shader">
+      <UniqueIdentifier>{44a31cae-c165-4b6c-a03a-b583ffc6d79d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\Shader\07. GraphicShader">
+      <UniqueIdentifier>{fbc0d5e2-04ca-445d-b93e-29e2dfa42d32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\Shader\08. ComputeShader">
+      <UniqueIdentifier>{6e77819b-eae1-4541-beb1-64537c0f8b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\08. RenderComponent\01. MeshRenderer">
+      <UniqueIdentifier>{c7334aa4-4d2e-410e-9cfe-dda80e320ad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\08. RenderComponent\02. TileMap">
+      <UniqueIdentifier>{176247bc-06bb-46c0-b4eb-f1c52fec37dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\08. RenderComponent\03. ParticleSystem">
+      <UniqueIdentifier>{48941e9a-1c85-4993-b876-d14c805bdd36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\08. RenderComponent\04. Decal">
+      <UniqueIdentifier>{390fb3ae-92b7-4875-ab5c-0654405897c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\08. RenderComponent\05. SkyBox">
+      <UniqueIdentifier>{d62afbf9-4b96-40c8-91c1-7821756bb572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\08. RenderComponent\06. LandScape">
+      <UniqueIdentifier>{5a35c13d-92a8-40c7-b904-d87d2e6bd887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{1f9f0ffa-5e11-448c-9c53-eb7b0173fb96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
       <Filter>Module</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="test.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

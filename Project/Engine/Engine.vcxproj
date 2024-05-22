@@ -160,6 +160,7 @@ call EngineHeaderCopy.bat</Command>
     <ClInclude Include="CAsset.h" />
     <ClInclude Include="CAssetMgr.h" />
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CCameraMoveScript.h" />
     <ClInclude Include="CComponent.h" />
     <ClInclude Include="CComputeShader.h" />
     <ClInclude Include="CConstBuffer.h" />
@@ -176,6 +177,7 @@ call EngineHeaderCopy.bat</Command>
     <ClInclude Include="CMeshRender.h" />
     <ClInclude Include="components.h" />
     <ClInclude Include="CPathMgr.h" />
+    <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CRenderComponent.h" />
     <ClInclude Include="CRenderMgr.h" />
     <ClInclude Include="CScript.h" />
@@ -197,6 +199,7 @@ call EngineHeaderCopy.bat</Command>
     <ClCompile Include="CAsset.cpp" />
     <ClCompile Include="CAssetMgr.cpp" />
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CCameraMoveScript.cpp" />
     <ClCompile Include="CComponent.cpp" />
     <ClCompile Include="CComputeShader.cpp" />
     <ClCompile Include="CConstBuffer.cpp" />
@@ -212,6 +215,7 @@ call EngineHeaderCopy.bat</Command>
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="CMeshRender.cpp" />
     <ClCompile Include="CPathMgr.cpp" />
+    <ClCompile Include="CPlayerScript.cpp" />
     <ClCompile Include="CRenderComponent.cpp" />
     <ClCompile Include="CRenderMgr.cpp" />
     <ClCompile Include="CScript.cpp" />
@@ -228,6 +232,14 @@ call EngineHeaderCopy.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="test.fx">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,12 @@
 
 #include "CDevice.h"
 
+#include "CPathMgr.h"
+#include "CKeyMgr.h"
+#include "CTimeMgr.h"
+#include "CAssetMgr.h"
+#include "CLevelMgr.h"
+#include "CRenderMgr.h"
 
 CEngine::CEngine() :
 	m_hWnd{},
@@ -26,11 +32,28 @@ int CEngine::Init(HWND _wnd, POINT _ptResolution)
 		return E_FAIL;
 	}
 
+	// Manager ÃÊ±âÈ­
+	CPathMgr::GetInst()->Init();
+	CKeyMgr::GetInst()->Init();
+	CTimeMgr::GetInst()->Init();
+	CAssetMgr::GetInst()->Init();
+	CLevelMgr::GetInst()->Init();
+	CRenderMgr::GetInst()->Init();
+
 	return S_OK;
 }
 
 void CEngine::Progress()
 {
+	// Manager
+	CKeyMgr::GetInst()->Tick();
+	CTimeMgr::GetInst()->Tick();
+	CLevelMgr::GetInst()->Progress();
+
+	// Render
+	CDevice::GetInst()->Clear();
+	CRenderMgr::GetInst()->Tick();
+	CDevice::GetInst()->Present();
 }
 
 void CEngine::ChangeWindowScale(UINT _width, UINT _height)

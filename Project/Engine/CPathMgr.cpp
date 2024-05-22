@@ -21,7 +21,7 @@ void CPathMgr::Init()
 	wstring strCurrentPath{ szBuffer };
 	wstring strBuildPath = GetParentPath(strCurrentPath);
 
-	m_strContentsPath = strBuildPath + L"\\contents";
+	m_strContentsPath = strBuildPath + L"\\contents\\";
 	m_strSolutionPath = GetParentPath(strBuildPath);
 }
 

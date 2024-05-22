@@ -11,7 +11,7 @@ CKeyMgr::~CKeyMgr()
 {
 }
 
-void CKeyMgr::init()
+void CKeyMgr::Init()
 {
 	for (int i = 0; i < (UINT)KEY::END; i++)
 	{
@@ -24,7 +24,7 @@ void CKeyMgr::init()
 	}
 }
 
-void CKeyMgr::tick()
+void CKeyMgr::Tick()
 {
 	// MainWindow가 포커싱 상태일때만 키 입력 적용
 	if (CEngine::GetInst()->GetMainWnd() == GetFocus())

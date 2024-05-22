@@ -22,7 +22,7 @@ void CTransform::FinalTick()
 	// 이동 행렬
 	Matrix matTranslation = XMMatrixTranslation(m_RelativePos.x, m_RelativePos.y, m_RelativePos.z);
 
-	// 회전 행렬 (X -> Y -> Z 축 순서로 오브젝트를 회전시킴)
+	// 회전 행렬 (월드 좌표계의 X -> Y -> Z 축 순서로 오브젝트를 회전시킴)
 	Matrix matRot = XMMatrixRotationX(m_RelativeRotation.x)
 				  * XMMatrixRotationY(m_RelativeRotation.y)
 				  * XMMatrixRotationZ(m_RelativeRotation.z);
