@@ -2,6 +2,7 @@
 #include "CDevice.h"
 
 #include "CConstBuffer.h"
+#include "CAssetMgr.h"
 
 CDevice::CDevice() :
 	m_hWnd{},
@@ -55,7 +56,7 @@ int CDevice::Init(HWND _hWnd, UINT _width, UINT _height)
 	}
 
 	// Output Merge State (출력 병합 단계)
-	m_Context->OMSetRenderTargets(1, m_RTView.GetAddressOf(), m_DSView.Get());
+	m_Context->OMSetRenderTargets(1, m_RTView.GetAddressOf(), m_DSTex->GetDSV().Get());
 
 	// ViewPort 설정
    // 출력시킬 화면 윈도우 영역을 설정
@@ -77,6 +78,12 @@ int CDevice::Init(HWND _hWnd, UINT _width, UINT _height)
 		return E_FAIL;
 	}
 
+	if (FAILED(CreateRasterizerState()))
+	{
+		MessageBox(nullptr, L"레스터라이저 스테이트 생성 실패", L"장치 초기화 실패", MB_OK);
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -84,7 +91,7 @@ void CDevice::Clear()
 {
 	float color[4] = { 0.4f, 0.4f, 0.4f, 1.f };
 	m_Context->ClearRenderTargetView(m_RTView.Get(), color);
-	m_Context->ClearDepthStencilView(m_DSView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+	m_Context->ClearDepthStencilView(m_DSTex->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 }
 
 int CDevice::CreateSwapChain()
@@ -139,28 +146,9 @@ int CDevice::CreateView()
 	m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)m_RTTex.GetAddressOf());
 
 	// DepthStencil 텍스쳐 생성
-	D3D11_TEXTURE2D_DESC Desc = {};
-
-	Desc.Width = (UINT)m_vResolution.x; // DepthStencil 텍스쳐는 렌더타겟 해상도와 반드시 일치해야한다.
-	Desc.Height = (UINT)m_vResolution.y;
-	Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Depth 24bit , Stencil 8bit
-	Desc.ArraySize = 1;
-	Desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-
-	Desc.Usage = D3D11_USAGE_DEFAULT;   // System Memory 와의 연계 설정
-	Desc.CPUAccessFlags = 0;
-
-	Desc.MiscFlags = 0;
-	Desc.MipLevels = 1;   // 열화버전 해상도 이미지 추가 생성
-
-	Desc.SampleDesc.Count = 1;
-	Desc.SampleDesc.Quality = 0;
-
-	if (FAILED(m_Device->CreateTexture2D(&Desc, nullptr, m_DSTex.GetAddressOf())))
-	{
-		MessageBox(nullptr, L"DepthStencil 텍스쳐 생성 실패", L"View 생성 실패", MB_OK);
-		return E_FAIL;
-	}
+	m_DSTex = CAssetMgr::GetInst()->CreateTexture(L"DepthStencilTex"
+		, (UINT)m_vResolution.x, (UINT)m_vResolution.y
+		, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_DEPTH_STENCIL);
 
 
 	// =======================================
@@ -169,12 +157,6 @@ int CDevice::CreateView()
 	if (FAILED(m_Device->CreateRenderTargetView(m_RTTex.Get(), nullptr, m_RTView.GetAddressOf())))
 	{
 		MessageBox(nullptr, L"RenderTargetView 생성 실패", L"View 생성 실패", MB_OK);
-		return E_FAIL;
-	}
-
-	if (FAILED(m_Device->CreateDepthStencilView(m_DSTex.Get(), nullptr, m_DSView.GetAddressOf())))
-	{
-		MessageBox(nullptr, L"DepthStencilView 생성 실패", L"View 생성 실패", MB_OK);
 		return E_FAIL;
 	}
 
@@ -193,4 +175,31 @@ int CDevice::CreateConstBuffer()
 		return E_FAIL;
 	}
 	m_arrCB[(UINT)CB_TYPE::TRANSFORM] = pCB;
+
+	return S_OK;
+}
+
+int CDevice::CreateRasterizerState()
+{
+	D3D11_RASTERIZER_DESC Desc = {};
+
+	// Cull Back (기본값)
+	m_RSState[(UINT)RS_TYPE::CULL_BACK] = nullptr;
+
+	// Cull Front 
+	Desc.CullMode = D3D11_CULL_FRONT;
+	Desc.FillMode = D3D11_FILL_SOLID;
+	DEVICE->CreateRasterizerState(&Desc, m_RSState[(UINT)RS_TYPE::CULL_FRONT].GetAddressOf());
+
+	// Cull None
+	Desc.CullMode = D3D11_CULL_NONE;
+	Desc.FillMode = D3D11_FILL_SOLID;
+	DEVICE->CreateRasterizerState(&Desc, m_RSState[(UINT)RS_TYPE::CULL_NONE].GetAddressOf());
+
+	// Wire Frame
+	Desc.CullMode = D3D11_CULL_NONE;
+	Desc.FillMode = D3D11_FILL_WIREFRAME;
+	DEVICE->CreateRasterizerState(&Desc, m_RSState[(UINT)RS_TYPE::WIRE_FRAME].GetAddressOf());
+
+	return S_OK;
 }

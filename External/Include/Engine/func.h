@@ -42,15 +42,15 @@ ASSET_TYPE GetAssetType()
 {
 	if constexpr (std::is_same_v<T, CMesh>)
 		return ASSET_TYPE::MESH;
-	//if constexpr (IsSame<T, CMeshData>)
+	//if constexpr (std::is_same_v<T, CMeshData>)
 	//	return ASSET_TYPE::MESH_DATA;
-	//if constexpr (IsSame<T, CMaterial>)
+	//if constexpr (std::is_same_v<T, CMaterial>)
 	//	return ASSET_TYPE::MATERIAL;
-	//if constexpr (IsSame<T, CPrefab>)
+	//if constexpr (std::is_same_v<T, CPrefab>)
 	//	return ASSET_TYPE::PREFAB;
-	//if constexpr (IsSame<T, CTexture>)
-	//	return ASSET_TYPE::TEXTURE;
-	//if constexpr (IsSame<T, CSound>)
+	if constexpr (std::is_same_v<T, CTexture>)
+		return ASSET_TYPE::TEXTURE;
+	//if constexpr (std::is_same_v<T, CSound>)
 	//	return ASSET_TYPE::SOUND;
 	if constexpr (std::is_same_v<T, CGraphicShader>)
 		return ASSET_TYPE::GRAPHIC_SHADER;

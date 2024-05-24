@@ -68,6 +68,9 @@ private:
 	Vec2	m_PrevMousePos;
 	Vec2	m_DragDir;
 
+	Vec2				m_CapturePos;
+	bool				m_MouseCapture;
+
 public:
 	void Init();
 	void Tick();
@@ -75,6 +78,12 @@ public:
 	KEY_STATE GetKeyState(KEY _key) { return m_vecKeyInfo[(UINT)_key].eKeyState; }
 	Vec2 GetMousePos() { return m_MousePos; }
 	Vec2 GetDragDir() { return m_DragDir; }
+
+	void MouseCapture(bool _bCapture)
+	{
+		//m_MouseCapture = _bCapture;		
+		//m_CapturePos = m_MousePos;
+	}
 };
 
 // 키 상태 체크 관련 매크로 함수를 인라인 함수로 변환

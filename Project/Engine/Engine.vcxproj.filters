@@ -115,6 +115,9 @@
     <ClInclude Include="CShader.h">
       <Filter>06. Asset\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="CTexture.h">
+      <Filter>06. Asset\05. Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -200,6 +203,9 @@
     </ClCompile>
     <ClCompile Include="CShader.cpp">
       <Filter>06. Asset\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="CTexture.cpp">
+      <Filter>06. Asset\05. Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

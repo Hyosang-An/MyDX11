@@ -63,13 +63,28 @@ void CKeyMgr::Tick()
 		}
 
 		// 마우스 좌표 계산
-		m_PrevMousePos = m_MousePos;
+		if (m_MouseCapture)
+		{
+			POINT ptMousePos = { };
+			GetCursorPos(&ptMousePos);
+			ScreenToClient(CEngine::GetInst()->GetMainWnd(), &ptMousePos);
+			m_MousePos = Vec2((float)ptMousePos.x, (float)ptMousePos.y);
 
-		POINT ptMousePos{};
-		GetCursorPos(&ptMousePos);
-		ScreenToClient(CEngine::GetInst()->GetMainWnd(), &ptMousePos);
-		m_MousePos = Vec2((float)ptMousePos.x, (float)ptMousePos.y);
-		m_DragDir = (m_MousePos - m_PrevMousePos);
+			m_DragDir = m_MousePos - m_CapturePos;
+
+			POINT ptCapturePos = { (int)m_CapturePos.x, (int)m_CapturePos.y };
+			ClientToScreen(CEngine::GetInst()->GetMainWnd(), &ptCapturePos);
+			SetCursorPos(ptCapturePos.x, ptCapturePos.y);
+		}
+		else
+		{
+			m_PrevMousePos = m_MousePos;
+			POINT ptMousePos = { };
+			GetCursorPos(&ptMousePos);
+			ScreenToClient(CEngine::GetInst()->GetMainWnd(), &ptMousePos);
+			m_MousePos = Vec2((float)ptMousePos.x, (float)ptMousePos.y);
+			m_DragDir = m_MousePos - m_PrevMousePos;
+		}
 	}
 
 	// 윈도우 포커싱이 해제되면 눌려있던 키 해제(Release)

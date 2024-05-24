@@ -26,6 +26,9 @@ CLevelMgr::~CLevelMgr()
 
 void CLevelMgr::Init()
 {
+	// Texture 로딩
+	Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//Character.png");
+
 	m_CurLevel = new CLevel;
 
 	// 카메라 오브젝트
@@ -42,8 +45,7 @@ void CLevelMgr::Init()
 	CamObj->Camera()->SetLayerAll();
 	CamObj->Camera()->SetLayer(31, false);
 	CamObj->Camera()->SetFar(10000.f);
-	//CamObj->Camera()->SetProjType(ORTHOGRAPHIC);
-	CamObj->Camera()->SetProjType(PERSPECTIVE);
+	CamObj->Camera()->SetProjType(ORTHOGRAPHIC);
 
 	m_CurLevel->AddObject(0, CamObj);
 

@@ -7,6 +7,7 @@
 CGraphicShader::CGraphicShader()
 	: CShader(ASSET_TYPE::GRAPHIC_SHADER)
 	, m_Topology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
+	, m_RSType{RS_TYPE::CULL_BACK}
 {
 }
 
@@ -109,4 +110,6 @@ void CGraphicShader::Binding()
 
 	CONTEXT->VSSetShader(m_VS.Get(), nullptr, 0);
 	CONTEXT->PSSetShader(m_PS.Get(), nullptr, 0);
+
+	CONTEXT->RSSetState(CDevice::GetInst()->GetRSState(m_RSType));
 }

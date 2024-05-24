@@ -50,6 +50,7 @@ void CAssetMgr::Init()
 	pShader = new CGraphicShader;
 	pShader->CreateVertexShader(L"shader\\test.fx", "VS_Test");
 	pShader->CreatePixelShader(L"shader\\test.fx", "PS_Test");
+	//pShader->SetRSType(RS_TYPE::CULL_NONE);
 	AddAsset(L"TestShader", pShader);
 }
 
@@ -63,4 +64,21 @@ Ptr<CAsset> CAssetMgr::FindAsset(ASSET_TYPE _Type, const wstring& _Key)
 	}
 
 	return iter->second;
+}
+
+Ptr<CTexture> CAssetMgr::CreateTexture(wstring _strKey, UINT _Width, UINT _Height
+	, DXGI_FORMAT _Format, UINT _Flags, D3D11_USAGE _Usage)
+{
+	// 중복키 검사
+	Ptr<CTexture> pTexture = FindAsset<CTexture>(_strKey);
+	assert(!pTexture.Get());
+
+	pTexture = new CTexture;
+	if (FAILED(pTexture->Create(_Width, _Height, _Format, _Flags, _Usage)))
+	{
+		MessageBox(nullptr, L"텍스쳐 생성 실패", L"텍스쳐 생성 실패", MB_OK);
+		return nullptr;
+	}
+
+	return pTexture;
 }

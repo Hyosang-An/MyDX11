@@ -5,6 +5,8 @@
 
 class CConstBuffer;
 
+#include "CTexture.h"
+
 class CDevice :
 	public CSingleton<CDevice>
 {
@@ -23,15 +25,15 @@ private:
 	ComPtr<IDXGISwapChain>				m_SwapChain;
 
 	ComPtr<ID3D11Texture2D>				m_RTTex;
-	ComPtr<ID3D11Texture2D>				m_DSTex;
-
 	ComPtr<ID3D11RenderTargetView>		m_RTView;
-	ComPtr<ID3D11DepthStencilView>		m_DSView;
+
+	Ptr<CTexture>						m_DSTex;
+
+	ComPtr<ID3D11RasterizerState>		m_RSState[(UINT)RS_TYPE::END];
 
 	ComPtr<ID3D11BlendState>			m_BSState;
 	ComPtr <ID3D11DepthStencilState>	m_DSState;
 	ComPtr<ID3D11SamplerState>			m_Sampler;
-	ComPtr<ID3D11RasterizerState>		m_RSState;
 
 	CConstBuffer*						m_arrCB[(UINT)CB_TYPE::END];
 
@@ -45,11 +47,13 @@ private:
 	int CreateSwapChain();
 	int CreateView();
 	int CreateConstBuffer();
+	int CreateRasterizerState();
 
 public:
 	ID3D11Device* GetDevice() { return m_Device.Get(); }
 	ID3D11DeviceContext* GetContext() { return m_Context.Get(); }
 
 	CConstBuffer* GetConstBuffer(CB_TYPE _type) { return m_arrCB[(UINT)_type]; }
+	ID3D11RasterizerState* GetRSState(RS_TYPE _Type) { return m_RSState[(UINT)_Type].Get(); }
 };
 

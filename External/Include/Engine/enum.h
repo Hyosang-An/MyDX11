@@ -56,3 +56,12 @@ enum DIR
 	UP,		// 로컬 Y방향
 	FRONT,	// 로컬 Z방향
 };
+
+enum class RS_TYPE
+{
+	CULL_BACK,
+	CULL_FRONT,
+	CULL_NONE,
+	WIRE_FRAME,
+	END,
+};
