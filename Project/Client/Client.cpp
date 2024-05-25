@@ -13,6 +13,7 @@
 
 #include <Engine/global.h>
 #include <Engine/CEngine.h>
+#include <Engine/CKeyMgr.h>
 
 #define MAX_LOADSTRING 100
 

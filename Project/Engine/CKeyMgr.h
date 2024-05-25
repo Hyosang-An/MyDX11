@@ -81,8 +81,10 @@ public:
 
 	void MouseCapture(bool _bCapture)
 	{
-		//m_MouseCapture = _bCapture;		
-		//m_CapturePos = m_MousePos;
+		m_MouseCapture = _bCapture;		
+
+		if (_bCapture == true)
+			m_CapturePos = m_MousePos;
 	}
 };
 
