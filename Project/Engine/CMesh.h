@@ -4,6 +4,10 @@
 class CMesh :
     public CAsset
 {
+public:
+    CMesh();
+    ~CMesh();
+
 private:
     ComPtr<ID3D11Buffer>	m_VB;
     ComPtr<ID3D11Buffer>	m_IB;
@@ -19,12 +23,10 @@ private:
 
 public:
     int Create(Vtx* _VtxSysMem, UINT _VtxCount, UINT* _IdxSysMem, UINT _IdxCount);
-    virtual void Binding() override;
+    void Binding();
     void render();
 
-
-public:
-    CMesh();
-    ~CMesh();
+    virtual int Load(const wstring& _FilePath) { return S_OK; }
+    virtual int Save(const wstring& _FilePath) { return S_OK; }
 };
 

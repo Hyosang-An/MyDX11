@@ -28,6 +28,7 @@ void CLevelMgr::Init()
 {
 	// Texture 로딩
 	Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//Character.png");
+	pTexture->Binding(0); // 텍스쳐를 레지스터에 바인딩 (t0)
 
 	m_CurLevel = new CLevel;
 

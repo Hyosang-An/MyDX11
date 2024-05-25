@@ -25,9 +25,9 @@ public:
 public:
     // _Flags : D3D11_BIND_FLAG
     int Create(UINT _Width, UINT _Height, DXGI_FORMAT _PixelFormat, UINT _Flags, D3D11_USAGE _Usage = D3D11_USAGE_DEFAULT);
-    //int Create(ComPtr<ID3D11Texture2D> _Tex2D);
+    int Create(ComPtr<ID3D11Texture2D> _Tex2D);
 
-    virtual void Binding() override;
+    void Binding(UINT _RegisterNum);
 
     virtual int Load(const wstring& _FilePath) override;
     virtual int Save(const wstring& _FilePath) override;

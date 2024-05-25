@@ -26,8 +26,6 @@ public:
     const wstring& GetRelativePath() { return m_RelativePath; }
     ASSET_TYPE GetAssetType() { return m_Type; }
 
-    virtual void Binding() = 0;
-
 private:
     void SetKey(const wstring& _Key) { m_Key = _Key; }
     void SetRelativePath(const wstring& _path) { m_RelativePath = _path; }
@@ -42,7 +40,7 @@ private:
         }
     }
 
-    virtual int Load(const wstring& _FilePath) { return S_OK; };
-    virtual int Save(const wstring& _FilePath) { return S_OK; };
+    virtual int Load(const wstring& _FilePath) = 0;
+    virtual int Save(const wstring& _FilePath) = 0;
 };
 

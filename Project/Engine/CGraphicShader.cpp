@@ -45,7 +45,7 @@ int CGraphicShader::CreateVertexShader(const wstring& _RelativePath, const strin
 		, m_VSBlob->GetBufferSize(), nullptr, m_VS.GetAddressOf());
 
 	// Layout »ý¼º
-	D3D11_INPUT_ELEMENT_DESC Element[2] = {};
+	D3D11_INPUT_ELEMENT_DESC Element[3] = {};
 
 	Element[0].AlignedByteOffset = 0;
 	Element[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -63,7 +63,15 @@ int CGraphicShader::CreateVertexShader(const wstring& _RelativePath, const strin
 	Element[1].SemanticName = "COLOR";
 	Element[1].SemanticIndex = 0;
 
-	DEVICE->CreateInputLayout(Element, 2
+	Element[2].AlignedByteOffset = 28;
+	Element[2].Format = DXGI_FORMAT_R32G32_FLOAT;
+	Element[2].InputSlot = 0;
+	Element[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	Element[2].InstanceDataStepRate = 0;
+	Element[2].SemanticName = "TEXCOORD";
+	Element[2].SemanticIndex = 0;
+
+	DEVICE->CreateInputLayout(Element, 3
 		, m_VSBlob->GetBufferPointer()
 		, m_VSBlob->GetBufferSize()
 		, m_Layout.GetAddressOf());

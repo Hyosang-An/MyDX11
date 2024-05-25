@@ -118,6 +118,9 @@
     <ClInclude Include="CTexture.h">
       <Filter>06. Asset\05. Texture</Filter>
     </ClInclude>
+    <ClInclude Include="CMaterial.h">
+      <Filter>06. Asset\03. Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -206,6 +209,9 @@
     </ClCompile>
     <ClCompile Include="CTexture.cpp">
       <Filter>06. Asset\05. Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="CMaterial.cpp">
+      <Filter>06. Asset\03. Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +355,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="test.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="value.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
