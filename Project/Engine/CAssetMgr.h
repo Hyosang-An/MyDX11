@@ -36,6 +36,13 @@ public:
 		, D3D11_USAGE _Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT);
 
 	Ptr<CTexture> CreateTexture(wstring _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
+
+private:
+	void CreateEngineMesh();
+	void CreateEngineTexture();
+	void CreateEngineGraphicShader();
+	void CreateEngineComputeShader();
+	void CreateEngineMaterial();
 };
 
 template<typename T>

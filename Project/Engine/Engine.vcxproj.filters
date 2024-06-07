@@ -213,6 +213,9 @@
     <ClCompile Include="CMaterial.cpp">
       <Filter>06. Asset\03. Material</Filter>
     </ClCompile>
+    <ClCompile Include="CAssetInit.cpp">
+      <Filter>04. Manager\05. AssetMgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. Header">
@@ -354,10 +357,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="test.fx">
+    <FxCompile Include="std2d.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="value.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="func.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

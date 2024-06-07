@@ -26,9 +26,11 @@ CLevelMgr::~CLevelMgr()
 
 void CLevelMgr::Init()
 {
-	// Texture 로딩
-	Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//Character.png");
-	pTexture->Binding(0); // 텍스쳐를 레지스터에 바인딩 (t0)
+	// Std2DMtrl
+	Ptr<CMaterial> pMtrl = CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl");
+	Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//Idle_Left.bmp");
+	pMtrl->SetScalarParam(INT_0, 1);
+	pMtrl->SetTexParam(TEX_0, pTexture);
 
 	m_CurLevel = new CLevel;
 
@@ -61,7 +63,7 @@ void CLevelMgr::Init()
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 100.f);
 	pObject->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
 	pObject->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetShader(CAssetMgr::GetInst()->FindAsset<CGraphicShader>(L"TestShader"));
+	pObject->MeshRender()->SetMaterial(pMtrl);
 
 	m_CurLevel->AddObject(0, pObject);
 

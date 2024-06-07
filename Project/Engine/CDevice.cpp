@@ -169,14 +169,22 @@ int CDevice::CreateConstBuffer()
 {
 	CConstBuffer* pCB = nullptr;
 
-	// 상수버퍼 생성
+	// 월드, 뷰, 투영 행렬 전달
 	pCB = new CConstBuffer;
 	if (FAILED(pCB->Create(CB_TYPE::TRANSFORM, sizeof(tTransform))))
 	{
-		MessageBox(nullptr, L"상수버퍼 생성 실패", L"초기화 실패", MB_OK);
+		MessageBox(nullptr, L"TRANSFORM 상수버퍼 생성 실패", L"초기화 실패", MB_OK);
 		return E_FAIL;
 	}
 	m_arrCB[(UINT)CB_TYPE::TRANSFORM] = pCB;
+
+	pCB = new CConstBuffer;
+	if (FAILED(pCB->Create(CB_TYPE::MATERIAL, sizeof(tMtrlConst))))
+	{
+		MessageBox(nullptr, L"MATERIAL 상수버퍼 생성 실패", L"초기화 실패", MB_OK);
+		return E_FAIL;
+	}
+	m_arrCB[(UINT)CB_TYPE::MATERIAL] = pCB;
 
 	return S_OK;
 }

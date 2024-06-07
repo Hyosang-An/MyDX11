@@ -161,7 +161,23 @@ int CTexture::Create(ComPtr<ID3D11Texture2D> _Tex2D)
 	return S_OK;
 }
 
-void CTexture::Binding(UINT _RegisterNum)
+void CTexture::Binding(UINT _registerNum)
 {
-	CONTEXT->PSSetShaderResources(_RegisterNum, 1, m_SRV.GetAddressOf());
+	// 텍스쳐를 레지스터에 바인딩 (t[_registerNum]    ex: t0)
+
+	CONTEXT->VSSetShaderResources(_registerNum, 1, m_SRV.GetAddressOf());
+	CONTEXT->HSSetShaderResources(_registerNum, 1, m_SRV.GetAddressOf());
+	CONTEXT->DSSetShaderResources(_registerNum, 1, m_SRV.GetAddressOf());
+	CONTEXT->GSSetShaderResources(_registerNum, 1, m_SRV.GetAddressOf());
+	CONTEXT->PSSetShaderResources(_registerNum, 1, m_SRV.GetAddressOf());
+}
+
+void CTexture::Clear(UINT _registerNum)
+{
+	ID3D11ShaderResourceView* pSRV = nullptr;
+	CONTEXT->VSSetShaderResources(_registerNum, 1, &pSRV);
+	CONTEXT->HSSetShaderResources(_registerNum, 1, &pSRV);
+	CONTEXT->DSSetShaderResources(_registerNum, 1, &pSRV);
+	CONTEXT->GSSetShaderResources(_registerNum, 1, &pSRV);
+	CONTEXT->PSSetShaderResources(_registerNum, 1, &pSRV);
 }

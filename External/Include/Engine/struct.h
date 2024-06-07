@@ -19,9 +19,10 @@ extern tTransform g_Trans;
 
 struct tMtrlConst
 {
-	//int;
-	//float;
-	//Vec2;
-	//Vec4;
-	//Matrix;
+	int		iArr[4];
+	float	fArr[4];
+	Vec2	v2Arr[4];
+	Vec4	v4Arr[4];
+	Matrix	matArr[4];
+	int		btex[TEX_PARAM::END + 2]; // 16바이트 단위로 만들어야 하므로.
 };

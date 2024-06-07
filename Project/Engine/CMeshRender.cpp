@@ -18,10 +18,10 @@ void CMeshRender::FinalTick()
 
 void CMeshRender::Render()
 {
-	if (!GetMesh() || !GetShader())
+	if (!GetMesh() || !GetMaterial() || !(GetMaterial()->GetShader()))
 		return;
 
 	Transform()->Binding();
-	GetShader()->Binding();
+	GetMaterial()->Binding();
 	GetMesh()->render();
 }
