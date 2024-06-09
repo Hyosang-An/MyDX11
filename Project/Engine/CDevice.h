@@ -30,8 +30,8 @@ private:
 	ComPtr<ID3D11RasterizerState>		m_RSState[(UINT)RS_TYPE::END];
 	ComPtr<ID3D11SamplerState>			m_Sampler[2];
 
-	ComPtr<ID3D11BlendState>			m_BSState;
-	ComPtr <ID3D11DepthStencilState>	m_DSState;
+	ComPtr<ID3D11DepthStencilState>		m_DSState[(UINT)DS_TYPE::END];
+	ComPtr<ID3D11BlendState>			m_BSState[(UINT)BS_TYPE::END];
 
 	CConstBuffer*						m_arrCB[(UINT)CB_TYPE::END];
 
@@ -46,6 +46,8 @@ private:
 	int CreateView();
 	int CreateConstBuffer();
 	int CreateRasterizerState();
+	int CreateDepthStencilState();
+	int CreateBlendState();
 	int CreateSamplerState();
 
 public:
@@ -54,5 +56,7 @@ public:
 
 	CConstBuffer* GetConstBuffer(CB_TYPE _type) { return m_arrCB[(UINT)_type]; }
 	ID3D11RasterizerState* GetRSState(RS_TYPE _Type) { return m_RSState[(UINT)_Type].Get(); }
+	ID3D11DepthStencilState* GetDSState(DS_TYPE _Type) { return m_DSState[(UINT)_Type].Get(); }
+	ID3D11BlendState* GetBSState(BS_TYPE _Type) { return m_BSState[(UINT)_Type].Get(); }
 };
 

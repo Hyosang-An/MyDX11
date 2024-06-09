@@ -66,6 +66,27 @@ enum class RS_TYPE
 	END,
 };
 
+enum class DS_TYPE
+{
+	LESS,
+	LESS_EQUAL,
+
+	GREATER,
+
+	NO_TEST,
+	NO_TEST_NO_WRITE,
+
+	END,
+};
+
+enum class BS_TYPE
+{
+	DEFAULT,
+	ALPHABLEND,
+	ONE_ONE,
+	END,
+};
+
 enum SCALAR_PARAM
 {
 	INT_0, INT_1, INT_2, INT_3,
@@ -91,4 +112,12 @@ enum TEX_PARAM
 	TEXARR_1,
 
 	END,
+};
+
+enum SHADER_DOMAIN
+{
+	DOMAIN_OPAQUE,		// 불투명
+	DOMAIN_MASKED,		// 투명, 불투명
+	DOMAIN_TRANSPARENT, // 반투명
+	DOMAIN_PARTICLE,	// 파티클
 };

@@ -27,7 +27,7 @@ VTX_OUT VS_Std2D(VTX_IN _in)
     // float3 x float4x4(matrix)
     // float3 를 float4 로 차수를 맞추어준다.
     // 동차좌표를 1 로 설정, 상태행렬 4행에 들어있는 이동을 적용받겠다는 뜻
-    float3 vWorldPos = mul(float4(_in.vPos, 1.f), matWorld);
+    float3 vWorldPos = mul(float4(_in.vPos, 1.f), matWorld).xyz;
     float4 vViewPos = mul(float4(vWorldPos, 1.f), matView);
     float4 vProjPos = mul(vViewPos, matProj);
     
@@ -40,7 +40,7 @@ VTX_OUT VS_Std2D(VTX_IN _in)
 
 float4 PS_Std2D(VTX_OUT _in) : SV_Target
 {
-    float4 vColor = float4(0.f, 0.f, 0.f, 0.f);
+    float4 vColor = float4(0.f, 0.f, 0.f, 1.f);
      
     if (g_btex_0)
     {
