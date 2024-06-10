@@ -13,6 +13,7 @@
 #include "CTimeMgr.h"
 #include "CKeyMgr.h"
 #include "CTransform.h"
+#include "CRenderComponent.h"
 
 CCamera::CCamera()
 	: CComponent(COMPONENT_TYPE::CAMERA)
@@ -21,7 +22,7 @@ CCamera::CCamera()
 	, m_ProjType(PROJ_TYPE::ORTHOGRAPHIC)
 	, m_Width(0)
 	, m_Height(0)
-	, m_Far(10000.f)
+	, m_Far(100000.f)
 	, m_FOV(XM_PI / 2.f)
 {
 	Vec2 vResolution = CDevice::GetInst()->GetResolution();
@@ -67,9 +68,11 @@ void CCamera::FinalTick()
 	Matrix matTrans = XMMatrixTranslation(-Transform()->GetRelativePos().x, -Transform()->GetRelativePos().y, -Transform()->GetRelativePos().z);
 
 	Matrix matRot;
-	Vec3 vR = Transform()->GetDir(DIR::RIGHT);
-	Vec3 vU = Transform()->GetDir(DIR::UP);
-	Vec3 vF = Transform()->GetDir(DIR::FRONT);
+	Vec3 vR = Transform()->GetWorldDir(DIR::RIGHT);
+	Vec3 vU = Transform()->GetWorldDir(DIR::UP);
+	Vec3 vF = Transform()->GetWorldDir(DIR::FRONT);
+
+	//matRot.Transpose()
 
 	matRot._11 = vR.x; matRot._12 = vU.x; matRot._13 = vF.x;
 	matRot._21 = vR.y; matRot._22 = vU.y; matRot._23 = vF.y;
@@ -95,11 +98,8 @@ void CCamera::FinalTick()
 	}
 }
 
-void CCamera::Render()
+void CCamera::SortGameObject()
 {
-	g_Trans.matView = m_matView;
-	g_Trans.matProj = m_matProj;
-
 	CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)
@@ -111,10 +111,74 @@ void CCamera::Render()
 
 		CLayer* pLayer = pLevel->GetLayer(i);
 
-		const vector<CGameObject*>& vecObjects = pLayer->GetParentObjects();
+		const vector<CGameObject*>& vecObjects = pLayer->GetObjects();
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
-			vecObjects[j]->Render();
+			if (nullptr == vecObjects[j]->GetRenderComponent()
+				|| nullptr == vecObjects[j]->GetRenderComponent()->GetMesh()
+				|| nullptr == vecObjects[j]->GetRenderComponent()->GetMaterial()
+				|| nullptr == vecObjects[j]->GetRenderComponent()->GetMaterial()->GetShader())
+			{
+				continue;
+			}
+
+			Ptr<CGraphicShader> pShader = vecObjects[j]->GetRenderComponent()->GetMaterial()->GetShader();
+			SHADER_DOMAIN Domain = pShader->GetDomain();
+
+			switch (Domain)
+			{
+				case DOMAIN_OPAQUE:
+					m_vecOpaque.push_back(vecObjects[j]);
+					break;
+				case DOMAIN_MASKED:
+					m_vecMasked.push_back(vecObjects[j]);
+					break;
+				case DOMAIN_TRANSPARENT:
+					m_vecTransparent.push_back(vecObjects[j]);
+					break;
+				case DOMAIN_PARTICLE:
+					m_vecParticles.push_back(vecObjects[j]);
+					break;
+			}
 		}
 	}
+}
+
+void CCamera::Render()
+{
+	// 오브젝트 분류
+	SortGameObject();
+
+	// 물체가 렌더링될 때 사용할 View, Proj 행렬
+	g_Trans.matView = m_matView;
+	g_Trans.matProj = m_matProj;
+
+	// Opaque
+	for (size_t i = 0; i < m_vecOpaque.size(); ++i)
+	{
+		m_vecOpaque[i]->Render();
+	}
+
+	// Masked
+	for (size_t i = 0; i < m_vecMasked.size(); ++i)
+	{
+		m_vecMasked[i]->Render();
+	}
+
+	// Transparent
+	for (size_t i = 0; i < m_vecTransparent.size(); ++i)
+	{
+		m_vecTransparent[i]->Render();
+	}
+
+	// Particles
+	for (size_t i = 0; i < m_vecParticles.size(); ++i)
+	{
+		m_vecParticles[i]->Render();
+	}
+
+	m_vecOpaque.clear();
+	m_vecMasked.clear();
+	m_vecTransparent.clear();
+	m_vecParticles.clear();
 }

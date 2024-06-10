@@ -121,6 +121,9 @@
     <ClInclude Include="CMaterial.h">
       <Filter>06. Asset\03. Material</Filter>
     </ClInclude>
+    <ClInclude Include="CCollider2D.h">
+      <Filter>08. Component\02. Collider2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -215,6 +218,12 @@
     </ClCompile>
     <ClCompile Include="CAssetInit.cpp">
       <Filter>04. Manager\05. AssetMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="func.cpp">
+      <Filter>01. Header</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollider2D.cpp">
+      <Filter>08. Component\02. Collider2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -364,6 +373,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="func.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="debug.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

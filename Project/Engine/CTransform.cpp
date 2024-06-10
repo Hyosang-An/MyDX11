@@ -29,21 +29,42 @@ void CTransform::FinalTick()
 
 	m_matWorld = matScale * matRot * matTranslation;
 
-
 	// 방향벡터 계산
-	m_RelativeDir[DIR::RIGHT] = Vec3(1.f, 0.f, 0.f);
-	m_RelativeDir[DIR::UP] = Vec3(0.f, 1.f, 0.f);
-	m_RelativeDir[DIR::FRONT] = Vec3(0.f, 0.f, 1.f);
-
-	// HLSL mul
-	// w 를 1 로 확장
-	//XMVector3TransformCoord(m_RelativeDir[DIR::RIGHT], matRot);
+	static Vec3 vDefaultAxis[3] =
+	{
+		Vec3(1.f, 0.f, 0.f),
+		Vec3(0.f, 1.f, 0.f),
+		Vec3(0.f, 0.f, 1.f)
+	};
 
 	for (int i = 0; i < 3; ++i)
 	{
-		// w 를 0 으로 확장
-		m_RelativeDir[i] = XMVector3TransformNormal(m_RelativeDir[i], matRot);
+		m_RelativeDir[i] = XMVector3TransformNormal(vDefaultAxis[i], matRot);
 		m_RelativeDir[i].Normalize();
+	}
+
+
+	// 부모 오브젝트가 있는지 확인
+	if (GetOwner()->GetParent())
+	{
+		// 부모의 월드행렬을 곱해서 최종 월드행렬을 계산함
+		const Matrix& matParentWorldMat = GetOwner()->GetParent()->Transform()->GetWorldMat();
+		m_matWorld *= matParentWorldMat;
+
+		// 최종 월드기준 오브젝트의 방향벡터를 구함
+		for (int i = 0; i < 3; ++i)
+		{
+			m_WorldDir[i] = XMVector3TransformNormal(vDefaultAxis[i], m_matWorld);
+		}
+	}
+
+	// 부모가 없으면, RelativeDir 이 곧 WorldDir
+	else
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			m_WorldDir[i] = m_RelativeDir[i];
+		}
 	}
 
 }
@@ -51,6 +72,8 @@ void CTransform::FinalTick()
 void CTransform::Binding()
 {
 	g_Trans.matWorld = m_matWorld;
+	g_Trans.matWV = g_Trans.matWorld * g_Trans.matView;
+	g_Trans.matWVP = g_Trans.matWV * g_Trans.matProj;
 
 	CConstBuffer* pTransformCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::TRANSFORM);
 	pTransformCB->SetData(&g_Trans);

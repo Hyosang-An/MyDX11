@@ -1,6 +1,8 @@
 #pragma once
 #include "CComponent.h"
 
+class CGameObject;
+
 enum PROJ_TYPE
 {
     ORTHOGRAPHIC,
@@ -31,6 +33,11 @@ private:
     Matrix      m_matView;
     Matrix      m_matProj;
 
+    vector<CGameObject*>    m_vecOpaque;        // 불투명
+    vector<CGameObject*>    m_vecMasked;        // 불투명, 투명
+    vector<CGameObject*>    m_vecTransparent;   // 투명, 반투명
+    vector<CGameObject*>    m_vecParticles;     // 투명, 반투명, 입자 타입
+
 public:
     void SetPriority(int _Priority) { m_Priority = _Priority; }
     void SetLayer(UINT _LayerIdx, bool _bCheck)
@@ -47,6 +54,9 @@ public:
 
     void SetFar(float _Far) { m_Far = _Far; }
     float GetFar() { return m_Far; }
+
+private:
+    void SortGameObject();
 
 public:
     virtual void Begin() override;

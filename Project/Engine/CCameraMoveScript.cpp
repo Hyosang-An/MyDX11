@@ -77,8 +77,8 @@ void CCameraMoveScript::PerspectiveMove()
 		Speed *= 3.f;
 	}
 
-	Vec3 vFront = Transform()->GetDir(DIR::FRONT);
-	Vec3 vRight = Transform()->GetDir(DIR::RIGHT);
+	Vec3 vFront = Transform()->GetWorldDir(DIR::FRONT);
+	Vec3 vRight = Transform()->GetWorldDir(DIR::RIGHT);
 
 	Vec3 vPos = Transform()->GetRelativePos();
 

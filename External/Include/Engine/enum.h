@@ -120,4 +120,15 @@ enum SHADER_DOMAIN
 	DOMAIN_MASKED,		// 투명, 불투명
 	DOMAIN_TRANSPARENT, // 반투명
 	DOMAIN_PARTICLE,	// 파티클
+
+	DOMAIN_DEBUG,		// 디버그
+};
+
+enum class DEBUG_SHAPE
+{
+	RECT,
+	CIRCLE,
+	LINE,
+	CUBE,
+	SPHERE,
 };

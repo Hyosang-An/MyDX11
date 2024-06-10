@@ -23,6 +23,7 @@ private:
 
 public:
     void SetDomain(SHADER_DOMAIN _Domain) { m_Domain = _Domain; }
+    void SetTopology(D3D11_PRIMITIVE_TOPOLOGY _Topology) { m_Topology = _Topology; }
     void SetRSType(RS_TYPE _Type) { m_RSType = _Type; }
     void SetDSType(DS_TYPE _Type) { m_DSType = _Type; }
     void SetBSType(BS_TYPE _Type) { m_BSType = _Type; }

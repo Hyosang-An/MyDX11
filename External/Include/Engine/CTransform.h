@@ -5,7 +5,7 @@ class CTransform :
     public CComponent
 {
 public:
-    virtual CTransform* Clone() { return new CTransform; }
+    virtual CTransform* Clone() { return new CTransform(*this); }
     CTransform();
     ~CTransform();
 
@@ -15,8 +15,10 @@ private:
     Vec3    m_RelativeRotation;
 
     Vec3    m_RelativeDir[3] = {};
+    Vec3    m_WorldDir[3] = {};
 
     Matrix  m_matWorld; // 크기, 회전, 이동
+    bool    m_IndependentScale = false; // 부모의 크기에 영향받지 않음
 
 public:
     virtual void FinalTick() override;
@@ -30,10 +32,14 @@ public:
     void SetRelativeScale(float x, float y, float z) { m_RelativeScale = Vec3(x, y, z); }
     void SetRelativeRotation(float x, float y, float z) { m_RelativeRotation = Vec3(x, y, z); }
 
+    void SetWorldMatrix(const Matrix& matWorld) { m_matWorld = matWorld; }
+
     Vec3 GetRelativePos() { return m_RelativePos; }
     Vec3 GetRelativeScale() { return m_RelativeScale; }
     Vec3 GetRelativeRoatation() { return m_RelativeRotation; }
+    Vec3 GetRelativeDir(DIR _Type) { return m_RelativeDir[_Type]; }
+    Vec3 GetWorldDir(DIR _Type) { return m_WorldDir[_Type]; }
 
-    Vec3 GetDir(DIR _type) { return m_RelativeDir[_type]; }
+    const Matrix& GetWorldMat() { return m_matWorld; }
 };
 

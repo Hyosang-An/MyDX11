@@ -7,6 +7,9 @@ cbuffer OBJECT_POS : register(b0)
     row_major matrix matWorld;
     row_major matrix matView;
     row_major matrix matProj;
+    
+    row_major matrix matWV;
+    row_major matrix matWVP;
 };
 
 cbuffer MATERIAL : register(b1)
@@ -67,3 +70,4 @@ Texture2DArray g_texarr_1 : register(t9);
 
 
 #endif
+
