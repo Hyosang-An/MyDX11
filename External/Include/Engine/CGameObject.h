@@ -24,7 +24,7 @@ private:
     CGameObject*            m_Parent;
     vector<CGameObject*>    m_vecChildren;
 
-    int                     m_LayerIdx; // 소속 레이어의 인덱스 번호
+    int                     m_LayerIdx = -1; // 소속 레이어의 인덱스 번호
 
 public:
     void AddComponent(CComponent* _Comopnent);
@@ -39,9 +39,14 @@ public:
 
     void DisconnectWithLayer();
 
+    // Unregister : 등록을 취소하다, 등록하는 행위를 취소하다
+    // Deregister : 등록된것을 취소하다
+    void DeregisterChild();
+
     class CTransform* Transform() { return (CTransform*)GetComponent(COMPONENT_TYPE::TRANSFORM); }
     class CMeshRender* MeshRender() { return (CMeshRender*)GetComponent(COMPONENT_TYPE::MESHRENDER); }
     class CCamera* Camera() { return (CCamera*)GetComponent(COMPONENT_TYPE::CAMERA); }
+    class CCollider2D* Collider2D() { return (CCollider2D*)GetComponent(COMPONENT_TYPE::COLLIDER2D); }
 
 public:
     void Begin();

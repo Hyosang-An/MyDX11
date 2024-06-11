@@ -124,6 +124,9 @@
     <ClInclude Include="CCollider2D.h">
       <Filter>08. Component\02. Collider2D</Filter>
     </ClInclude>
+    <ClInclude Include="CCollisionMgr.h">
+      <Filter>04. Manager\07. CollisionMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -224,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="CCollider2D.cpp">
       <Filter>08. Component\02. Collider2D</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollisionMgr.cpp">
+      <Filter>04. Manager\07. CollisionMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -358,6 +364,9 @@
     </Filter>
     <Filter Include="Script">
       <UniqueIdentifier>{1f9f0ffa-5e11-448c-9c53-eb7b0173fb96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Manager\07. CollisionMgr">
+      <UniqueIdentifier>{f6d37147-521c-4cc9-a8f6-d3cff387ceb6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

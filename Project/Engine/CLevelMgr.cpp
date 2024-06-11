@@ -7,6 +7,7 @@
 #include "components.h"
 
 #include "CAssetMgr.h"
+#include "CCollisionMgr.h"
 #include "assets.h"
 
 #include "CPlayerScript.h"
@@ -34,7 +35,14 @@ void CLevelMgr::Init()
 	Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//Character.png");
 	pAlphaBlendMtrl->SetTexParam(TEX_0, pTexture);
 
+	// Level 생성
 	m_CurLevel = new CLevel;
+	// 아래 부분은 CLevel 생성자에서 해주는게 낫지 않을까하는 생각이...
+	m_CurLevel->GetLayer(0)->SetName(L"Default");
+	m_CurLevel->GetLayer(1)->SetName(L"Background");
+	m_CurLevel->GetLayer(2)->SetName(L"Tile");
+	m_CurLevel->GetLayer(3)->SetName(L"Player");
+	m_CurLevel->GetLayer(4)->SetName(L"Monster");
 
 	// 카메라 오브젝트
 	CGameObject* CamObj = new CGameObject;
@@ -61,10 +69,16 @@ void CLevelMgr::Init()
 	pObject->SetName(L"Player");
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CPlayerScript);
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 100.f);
 	pObject->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
+
+	pObject->Collider2D()->SetIndependentScale(true);
+	pObject->Collider2D()->SetOffset(Vec3(20.f, 0.f, 0.f));
+	pObject->Collider2D()->SetScale(Vec3(220.f, 220.f, 1.f));
+
 	pObject->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetMaterial(pMtrl);
 	pObject->MeshRender()->GetMaterial()->SetScalarParam(INT_1, 1);
@@ -77,18 +91,45 @@ void CLevelMgr::Init()
 
 	pChild->AddComponent(new CTransform);
 	pChild->AddComponent(new CMeshRender);
+	pChild->AddComponent(new CCollider2D);
 
-	pChild->Transform()->SetRelativePos(200.f, 0.f, 0.f);
-	pChild->Transform()->SetRelativeScale(0.8f, 0.8f, 1.f);
+	pChild->Transform()->SetRelativePos(400.f, 0.f, 0.f);
+	pChild->Transform()->SetRelativeScale(100.f, 100.f, 1.f);
+	pChild->Transform()->SetIndependentScale(true);
+
+	pChild->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	pChild->Collider2D()->SetScale(Vec3(1.2f, 1.2f, 1.f));
 
 	pChild->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 	pChild->MeshRender()->SetMaterial(pMtrl);
 
 	pObject->AddChild(pChild);
 
-	m_CurLevel->AddObject(0, pObject);
+	m_CurLevel->AddObject(3, pObject);
 
+	// Monster Object
+	CGameObject* pMonster = new CGameObject;
+	pMonster->SetName(L"Monster");
 
+	pMonster->AddComponent(new CTransform);
+	pMonster->AddComponent(new CMeshRender);
+	pMonster->AddComponent(new CCollider2D);
+
+	pMonster->Transform()->SetRelativePos(-400.f, 0.f, 100.f);
+	pMonster->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
+
+	pMonster->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	pMonster->Collider2D()->SetScale(Vec3(1.2f, 1.2f, 1.f));
+
+	pMonster->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pMonster->MeshRender()->SetMaterial(pMtrl);
+
+	m_CurLevel->AddObject(4, pMonster);
+
+	// 충돌 지정
+	CCollisionMgr::GetInst()->CollisionCheck(3, 4);
+
+	// 레벨 시작
 	m_CurLevel->Begin();
 }
 

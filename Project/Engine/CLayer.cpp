@@ -10,30 +10,30 @@ CLayer::CLayer(int _LayerIdx) :
 
 CLayer::~CLayer()
 {
-	Delete_Vec(m_Parents);
+	Delete_Vec(m_vecParents);
 }
 
 void CLayer::Begin()
 {
-	for (size_t i = 0; i < m_Parents.size(); ++i)
+	for (size_t i = 0; i < m_vecParents.size(); ++i)
 	{
-		m_Parents[i]->Begin();
+		m_vecParents[i]->Begin();
 	}
 }
 
 void CLayer::Tick()
 {
-	for (size_t i = 0; i < m_Parents.size(); ++i)
+	for (size_t i = 0; i < m_vecParents.size(); ++i)
 	{
-		m_Parents[i]->Tick();
+		m_vecParents[i]->Tick();
 	}
 }
 
 void CLayer::FinalTick()
 {
-	for (size_t i = 0; i < m_Parents.size(); ++i)
+	for (size_t i = 0; i < m_vecParents.size(); ++i)
 	{
-		m_Parents[i]->FinalTick();
+		m_vecParents[i]->FinalTick();
 	}
 }
 
@@ -52,7 +52,7 @@ void CLayer::AddObject(CGameObject* _Object, bool _bChildMove)
 	// 2. 최상위 오브젝트인 경우
 	if (nullptr == _Object->GetParent())
 	{
-		m_Parents.push_back(_Object);
+		m_vecParents.push_back(_Object);
 	}
 
 	// 자식들까지 이동시킬지 말지
@@ -82,15 +82,56 @@ void CLayer::AddObject(CGameObject* _Object, bool _bChildMove)
 
 void CLayer::DisconnectWithObject(CGameObject* _Object)
 {
-	vector<CGameObject*>::iterator iter = m_Parents.begin();
-	for (; iter != m_Parents.end(); ++iter)
+	vector<CGameObject*>::iterator iter = m_vecParents.begin();
+	for (; iter != m_vecParents.end(); ++iter)
 	{
 		if (_Object == (*iter))
 		{
-			m_Parents.erase(iter);
+			m_vecParents.erase(iter);
 			return;
 		}
 	}
 
 	assert(nullptr);
+}
+
+void CLayer::DeregisterObjectAsParent(CGameObject* _Object)
+{
+	vector<CGameObject*>::iterator iter = m_vecParents.begin();
+
+	for (; iter != m_vecParents.end(); ++iter)
+	{
+		if (_Object == (*iter))
+		{
+			m_vecParents.erase(iter);
+			return;
+		}
+	}
+
+	assert(nullptr);
+}
+
+void CLayer::DeregisterObject(CGameObject* _Object)
+{
+	assert(_Object->m_LayerIdx == m_LayerIdx);
+
+	_Object->m_LayerIdx = -1;
+
+	if (nullptr == _Object->GetParent())
+	{
+		DeregisterObjectAsParent(_Object);
+
+		/*vector<CGameObject*>::iterator iter = m_vecParents.begin();
+
+		for (; iter != m_vecParents.end(); ++iter)
+		{
+			if (_Object == (*iter))
+			{
+				m_vecParents.erase(iter);
+				return;
+			}
+		}
+
+		assert(nullptr);*/
+	}
 }

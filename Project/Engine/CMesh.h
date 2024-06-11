@@ -26,6 +26,8 @@ public:
     void Binding();
     void render();
 
+    void* GetVtxSysMem() { return m_VtxSysMem; }
+
     virtual int Load(const wstring& _FilePath) { return S_OK; }
     virtual int Save(const wstring& _FilePath) { return S_OK; }
 };
