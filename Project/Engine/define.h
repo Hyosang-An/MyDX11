@@ -9,3 +9,6 @@ using Vec4 = Vector4;
 #define MAX_LAYER 32
 
 #define DT CTimeMgr::GetInst()->GetDeltaTime()
+
+#define CLONE(Type) virtual Type* Clone(){return new Type(*this); }
+#define CLONE_DISABLE(Type) virtual Type* Clone() { return nullptr; }

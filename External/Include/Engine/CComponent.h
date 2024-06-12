@@ -27,7 +27,7 @@ public:
     class CTransform* Transform() { return m_Owner->Transform(); }
     class CMeshRender* MeshRender() { return m_Owner->MeshRender(); }
     class CCamera* Camera() { return m_Owner->Camera(); }
-    class CCollider2D* Collider() { return m_Owner->Collider2D(); }
+    class CCollider2D* Collider2D() { return m_Owner->Collider2D(); }
 
 
 private:

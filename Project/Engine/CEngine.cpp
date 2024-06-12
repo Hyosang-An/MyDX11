@@ -10,6 +10,7 @@
 #include "CLevelMgr.h"
 #include "CRenderMgr.h"
 #include "CCollisionMgr.h"
+#include "CTaskMgr.h"
 
 CEngine::CEngine() :
 	m_hWnd{},
@@ -58,6 +59,9 @@ void CEngine::Progress()
 	CDevice::GetInst()->Clear();
 	CRenderMgr::GetInst()->Tick();
 	CDevice::GetInst()->Present();
+
+	// TaskMgr
+	CTaskMgr::GetInst()->Tick();
 }
 
 void CEngine::ChangeWindowScale(UINT _width, UINT _height)

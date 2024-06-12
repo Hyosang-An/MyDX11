@@ -14,6 +14,7 @@ private:
 public:
     virtual void Tick() override;
 
+    virtual void BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider) override;
 
 };
 

@@ -10,6 +10,7 @@ class CGameObject :
 {
     friend class CLevel;
     friend class CLayer;
+    friend class CTaskMgr;
 
 public:
     CGameObject();
@@ -26,17 +27,20 @@ private:
 
     int                     m_LayerIdx = -1; // 소속 레이어의 인덱스 번호
 
+    bool                    m_Dead = false;
+
 public:
     void AddComponent(CComponent* _Comopnent);
     void AddChild(CGameObject* _ChildObject);
 
     CComponent* GetComponent(COMPONENT_TYPE _Type) { return m_arrCom[(UINT)_Type]; }
     CRenderComponent* GetRenderComponent() { return m_RenderCom; }
-
     CGameObject* GetParent() { return m_Parent; }
     const vector<CGameObject*>& GetChildren() { return m_vecChildren; }
     int GetLayerIdx() { return m_LayerIdx; }
+    const vector<CScript*> GetScripts() { return m_vecScript; }
 
+    bool IsDead() { return m_Dead; }
     void DisconnectWithLayer();
 
     // Unregister : 등록을 취소하다, 등록하는 행위를 취소하다

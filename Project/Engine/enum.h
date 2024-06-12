@@ -132,3 +132,16 @@ enum class DEBUG_SHAPE
 	CUBE,
 	SPHERE,
 };
+
+enum TASK_TYPE
+{
+	// Param_0 : Layer, Param_1 : Object Adress
+	CREATE_OBJECT,
+
+	// Param_0 : Delete Object Adress
+	DELETE_OBJECT,
+	CHANGE_LEVEL,
+	ADD_CHILD,
+	COMPONENT_ACTIVATE,
+	COMPONENT_DEACTIVATE,
+};

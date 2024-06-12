@@ -20,6 +20,13 @@ struct tDebugShapeInfo
 	bool			DepthTest;
 };
 
+struct tTask
+{
+	TASK_TYPE	Type;
+	DWORD_PTR	Param_0;
+	DWORD_PTR	Param_1;
+};
+
 // 상수버퍼 연동 구조체
 struct tTransform
 {

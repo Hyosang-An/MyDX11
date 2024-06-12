@@ -127,6 +127,10 @@
     <ClInclude Include="CCollisionMgr.h">
       <Filter>04. Manager\07. CollisionMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CTaskMgr.h">
+      <Filter>04. Manager\TaskMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CMissileScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -231,6 +235,10 @@
     <ClCompile Include="CCollisionMgr.cpp">
       <Filter>04. Manager\07. CollisionMgr</Filter>
     </ClCompile>
+    <ClCompile Include="CTaskMgr.cpp">
+      <Filter>04. Manager\TaskMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CMissileScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. Header">
