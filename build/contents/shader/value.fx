@@ -53,6 +53,16 @@ cbuffer MATERIAL : register(b1)
     int2 mtrlpadding;
 }
 
+cbuffer SPRITE_INFO : register(b2)
+{
+    float2 LeftTopUV;
+    float2 SliceUV;
+    float2 BackGroundUV;
+    float2 OffsetUV;
+    int UseFlipbook;
+    int3 SpriteInfoPadding;
+}
+
 SamplerState g_sam_0 : register(s0); // 이방성 필터 샘플러
 SamplerState g_sam_1 : register(s1); // 포인트 필터 샘플러
 
@@ -68,6 +78,7 @@ TextureCube g_texcube_1 : register(t7);
 Texture2DArray g_texarr_0 : register(t8);
 Texture2DArray g_texarr_1 : register(t9);
 
+Texture2D g_AtlasTex : register(t10);
 
 #endif
 

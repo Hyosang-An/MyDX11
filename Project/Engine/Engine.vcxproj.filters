@@ -130,7 +130,18 @@
     <ClInclude Include="CTaskMgr.h">
       <Filter>04. Manager\TaskMgr</Filter>
     </ClInclude>
-    <ClInclude Include="CMissileScript.h" />
+    <ClInclude Include="CMissileScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CSprite.h">
+      <Filter>06. Asset\07. Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="CFlipBook.h">
+      <Filter>06. Asset\08. FlipBook</Filter>
+    </ClInclude>
+    <ClInclude Include="CFlipBookComponent.h">
+      <Filter>08. Component\04. FlipBookComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -238,7 +249,18 @@
     <ClCompile Include="CTaskMgr.cpp">
       <Filter>04. Manager\TaskMgr</Filter>
     </ClCompile>
-    <ClCompile Include="CMissileScript.cpp" />
+    <ClCompile Include="CMissileScript.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CSprite.cpp">
+      <Filter>06. Asset\07. Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="CFlipBook.cpp">
+      <Filter>06. Asset\08. FlipBook</Filter>
+    </ClCompile>
+    <ClCompile Include="CFlipBookComponent.cpp">
+      <Filter>08. Component\04. FlipBookComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. Header">
@@ -307,9 +329,6 @@
     <Filter Include="08. Component\03. Collider3D">
       <UniqueIdentifier>{e966afb4-8df6-4384-b070-d9f8dfce9e8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="08. Component\04. Animator2D">
-      <UniqueIdentifier>{dae971dd-7986-4fa8-bef6-07a0e8780303}</UniqueIdentifier>
-    </Filter>
     <Filter Include="08. Component\05. Animator3D">
       <UniqueIdentifier>{67687f20-22ac-4fa6-8830-db9579270213}</UniqueIdentifier>
     </Filter>
@@ -375,6 +394,15 @@
     </Filter>
     <Filter Include="04. Manager\07. CollisionMgr">
       <UniqueIdentifier>{f6d37147-521c-4cc9-a8f6-d3cff387ceb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\07. Sprite">
+      <UniqueIdentifier>{c47c9d4f-50b4-4eb4-94c3-58b8981fe3f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Asset\08. FlipBook">
+      <UniqueIdentifier>{9b68643e-5dac-47e5-93a6-27e1e99cc98f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\04. FlipBookComponent">
+      <UniqueIdentifier>{dae971dd-7986-4fa8-bef6-07a0e8780303}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

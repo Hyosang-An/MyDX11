@@ -31,9 +31,16 @@ void CLayer::Tick()
 
 void CLayer::FinalTick()
 {
-	for (size_t i = 0; i < m_vecParents.size(); ++i)
+	vector<CGameObject*>::iterator iter = m_vecParents.begin();
+
+	for (; iter != m_vecParents.end(); )
 	{
-		m_vecParents[i]->FinalTick();
+		(*iter)->FinalTick();
+
+		if ((*iter)->IsDead())
+			iter = m_vecParents.erase(iter);
+		else
+			++iter;
 	}
 }
 

@@ -7,6 +7,8 @@ void CAssetMgr::Init()
 
 	CreateEngineTexture();
 
+	CreateEngineSprite();
+
 	CreateEngineGraphicShader();
 
 	CreateEngineComputeShader();
@@ -109,6 +111,45 @@ void CAssetMgr::CreateEngineMesh()
 
 void CAssetMgr::CreateEngineTexture()
 {
+}
+
+void CAssetMgr::CreateEngineSprite()
+{
+	Ptr<CTexture> pAtlasTex = Load<CTexture>(L"texture\\link_32.png", L"texture\\link.png");
+
+	Ptr<CSprite> pSprite = nullptr;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		//wchar_t szKey[50] = {};
+		//swprintf_s(szKey, 50, L"Link_MoveDown_%d", i);
+
+		wstring szKey = L"Link_MoveDown_" + std::to_wstring(i);
+
+		pSprite = new CSprite;
+		pSprite->Create(pAtlasTex, Vec2((float)i * 120.f, 520.f), Vec2(120.f, 130.f));
+		pSprite->SetBackground(Vec2(200.f, 200.f));
+
+		if (i == 2)
+			pSprite->SetOffset(Vec2(30.f, 30.f));
+
+		AddAsset(szKey, pSprite);
+	}
+
+	Ptr<CFlipBook> pFlipBook = nullptr;
+
+	pFlipBook = new CFlipBook;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		//wchar_t szKey[50] = {};
+		//swprintf_s(szKey, 50, L"Link_MoveDown_%d", i);
+
+		wstring szKey = L"Link_MoveDown_" + std::to_wstring(i);
+		pFlipBook->AddSprite(FindAsset<CSprite>(szKey));
+	}
+
+	AddAsset(L"Link_MoveDown", pFlipBook);
 }
 
 void CAssetMgr::CreateEngineGraphicShader()

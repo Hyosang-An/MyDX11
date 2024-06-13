@@ -67,6 +67,8 @@ void CPlayerScript::Tick()
 
 void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider)
 {
+	DeleteObject(_OtherObject);
+
 	Vec3 vScale = Transform()->GetRelativeScale();
 
 	vScale += Vec3(10.f, 10.f, 0.f);

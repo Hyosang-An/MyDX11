@@ -15,6 +15,15 @@ void CreateObject(CGameObject* _NewObject, int _LayerIndex)
 	CTaskMgr::GetInst()->AddTask(task);
 }
 
+void DeleteObject(CGameObject* _DeleteObject)
+{
+	tTask task = {};
+	task.Type = TASK_TYPE::DELETE_OBJECT;
+	task.Param_0 = (DWORD_PTR)_DeleteObject;
+
+	CTaskMgr::GetInst()->AddTask(task);
+}
+
 bool IsValid(CGameObject*& _Object)
 {
 	if (nullptr == _Object)
