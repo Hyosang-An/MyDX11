@@ -115,41 +115,82 @@ void CAssetMgr::CreateEngineTexture()
 
 void CAssetMgr::CreateEngineSprite()
 {
+	wstring strContentsPath = CPathMgr::GetInst()->GetContentsPath();
+
 	Ptr<CTexture> pAtlasTex = Load<CTexture>(L"texture\\link_32.png", L"texture\\link.png");
 
-	Ptr<CSprite> pSprite = nullptr;
 
-	for (int i = 0; i < 10; ++i)
-	{
-		//wchar_t szKey[50] = {};
-		//swprintf_s(szKey, 50, L"Link_MoveDown_%d", i);
+	//// Sprite 생성 및 저장	================================================
+	//Ptr<CSprite> pSprite = nullptr;
+	//for (int i = 0; i < 10; ++i)
+	//{
+	//	//wchar_t szKey[50] = {};
+	//	//swprintf_s(szKey, 50, L"Link_MoveDown_%d", i);
 
-		wstring szKey = L"Link_MoveDown_" + std::to_wstring(i);
+	//	wstring szKey = L"Link_MoveDown_" + std::to_wstring(i);
 
-		pSprite = new CSprite;
-		pSprite->Create(pAtlasTex, Vec2((float)i * 120.f, 520.f), Vec2(120.f, 130.f));
-		pSprite->SetBackground(Vec2(200.f, 200.f));
+	//	pSprite = new CSprite;
+	//	pSprite->Create(pAtlasTex, Vec2((float)i * 120.f, 520.f), Vec2(120.f, 130.f));
+	//	pSprite->SetBackground(Vec2(200.f, 200.f));
 
-		if (i == 2)
-			pSprite->SetOffset(Vec2(30.f, 30.f));
+	//	pSprite->SetRelativePath(wstring(L"Animation\\") + szKey + L".sprite");
+	//	pSprite->Save(strContentsPath + L"Animation\\" + szKey + L".sprite");
 
-		AddAsset(szKey, pSprite);
-	}
+	//	AddAsset(szKey, pSprite);
+	//}
 
-	Ptr<CFlipBook> pFlipBook = nullptr;
+	//// FlipBook 생성 및 저장	================================================
+	//Ptr<CFlipBook> pFlipBook = nullptr;
+	//pFlipBook = new CFlipBook;
+	//for (int i = 0; i < 10; ++i)
+	//{
+	//	//wchar_t szKey[50] = {};
+	//	//swprintf_s(szKey, 50, L"Link_MoveDown_%d", i);
 
-	pFlipBook = new CFlipBook;
+	//	wstring szKey = L"Link_MoveDown_" + std::to_wstring(i);
+	//	pFlipBook->AddSprite(FindAsset<CSprite>(szKey));
+	//}
 
-	for (int i = 0; i < 10; ++i)
-	{
-		//wchar_t szKey[50] = {};
-		//swprintf_s(szKey, 50, L"Link_MoveDown_%d", i);
+	//AddAsset(L"Link_MoveDown", pFlipBook);
+	//pFlipBook->Save(strContentsPath + L"Animation\\" + L"Link_MoveDown" + L".flip");
 
-		wstring szKey = L"Link_MoveDown_" + std::to_wstring(i);
-		pFlipBook->AddSprite(FindAsset<CSprite>(szKey));
-	}
 
-	AddAsset(L"Link_MoveDown", pFlipBook);
+
+
+
+
+	//Ptr<CSprite> pSprite = nullptr;
+
+	//for (int i = 0; i < 10; ++i)
+	//{
+	//	wchar_t Buffer[50] = {};
+	//	swprintf_s(Buffer, 50, L"Link_MoveDown_%d", i);
+
+	//	pSprite = Load<CSprite>(Buffer, wstring(L"Animation\\") + Buffer + L".sprite");		
+
+	//	pSprite->SetRelativePath(wstring(L"Animation\\") + Buffer + L".sprite");
+	//	pSprite->Save(strContentsPath + L"Animation\\" + Buffer + L".sprite");
+	//}
+
+
+	//Ptr<CFlipBook> pFilpBook = new CFlipBook;
+
+	//for (int i = 0; i < 10; ++i)
+	//{
+	//	wchar_t Buffer[50] = {};
+	//	swprintf_s(Buffer, 50, L"Link_MoveDown_%d", i);
+	//	pFilpBook->AddSprite(FindAsset<CSprite>(Buffer));		
+	//}
+
+	//AddAsset(L"Link_MoveDown", pFilpBook);
+	//pFilpBook->Save(strContentsPath + L"Animation\\" + L"Link_MoveDown" + L".flip");
+
+
+
+	// 저장된 FlipBook 불러오기	================================================
+	Ptr<CFlipBook> pFilpBook = new CFlipBook;
+	pFilpBook->Load(strContentsPath + L"Animation\\" + L"Link_MoveDown" + L".flip");
+	AddAsset(L"Link_MoveDown", pFilpBook);
 }
 
 void CAssetMgr::CreateEngineGraphicShader()

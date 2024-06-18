@@ -108,3 +108,33 @@ void CAssetMgr::AddAsset(const wstring& _Key, Ptr<T> _Asset)
 	_Asset->SetKey(_Key);
 	m_mapAsset[(UINT)Type].insert(make_pair(_Key, _Asset.Get()));
 }
+
+// File 에 Asset 참조정보 저장 불러오기
+template<typename T>
+void SaveAssetRef(Ptr<T> Asset, FILE* _File)
+{
+	bool bAsset = Asset.Get();
+	fwrite(&bAsset, 1, 1, _File);
+
+	if (bAsset)
+	{
+		SaveWString(Asset->GetKey(), _File);
+		SaveWString(Asset->GetRelativePath(), _File);
+	}
+}
+
+template<typename T>
+void LoadAssetRef(Ptr<T>& Asset, FILE* _File)
+{
+	bool bAsset = false;
+	fread(&bAsset, 1, 1, _File);
+
+	if (bAsset)
+	{
+		wstring key, relativepath;
+		LoadWString(key, _File);
+		LoadWString(relativepath, _File);
+
+		Asset = CAssetMgr::GetInst()->Load<T>(key, relativepath);
+	}
+}

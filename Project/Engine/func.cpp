@@ -91,3 +91,19 @@ void DrawDebugCircle(Vec3 _Pos, float _Radius, Vec4 _Color, float _Life, bool _D
 
 	CRenderMgr::GetInst()->AddDebugShapeInfo(Info);
 }
+
+void SaveWString(const wstring& _String, FILE* _File)
+{
+	size_t len = _String.length();
+	fwrite(&len, sizeof(size_t), 1, _File);
+	fwrite(_String.c_str(), sizeof(wchar_t), len, _File);
+}
+
+void LoadWString(wstring& _String, FILE* _File)
+{
+	size_t len = 0;
+	fread(&len, sizeof(size_t), 1, _File);
+
+	_String.resize(len);
+	fread((wchar_t*)_String.c_str(), sizeof(wchar_t), len, _File);
+}
