@@ -2,6 +2,7 @@
 
 void CreateObject(class CGameObject* _NewObject, int _LayerIndex);
 void DeleteObject(CGameObject* _DeleteObject);
+void ChangeLevelState(LEVEL_STATE _NEXTSTATE);
 
 bool IsValid(CGameObject*& _Object);
 

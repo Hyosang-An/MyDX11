@@ -35,6 +35,7 @@ void CLayer::FinalTick()
 
 	for (; iter != m_vecParents.end(); )
 	{
+		// 죽었어도 finaltick은 돌려야 함
 		(*iter)->FinalTick();
 
 		if ((*iter)->IsDead())

@@ -31,6 +31,11 @@ void CTileMap::FinalTick()
 
 void CTileMap::Render()
 {
+	for (int i = 0; i < m_vecTileInfo.size(); i++)
+	{
+		m_vecTileInfo[i].ImgIdx = i;
+	}
+
 	// 타일의 정보를 구조화버퍼를 통해서 t 레지스터에 바인딩 시킨다.
 	m_Buffer->SetData(m_vecTileInfo.data(), sizeof(tTileInfo) * m_Row * m_Col);
 	m_Buffer->Binding(15);

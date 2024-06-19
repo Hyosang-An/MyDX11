@@ -38,6 +38,11 @@ void CTaskMgr::ExecuteTask()
 				int LayerIndex = task.Param_0;
 				CGameObject* pObject = (CGameObject*)task.Param_1;
 				pCurLevel->AddObject(LayerIndex, pObject);
+
+				if (pCurLevel->GetState() != STOP)
+				{
+					pObject->Begin();
+				}
 			}
 			break;
 			case TASK_TYPE::DELETE_OBJECT:
@@ -53,6 +58,15 @@ void CTaskMgr::ExecuteTask()
 				m_GC.push_back(pObject);
 			}
 			break;
+
+			case TASK_TYPE::CHANGE_LEVELSTATE:
+			{
+				LEVEL_STATE NextState = (LEVEL_STATE)task.Param_0;
+				CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+				pCurLevel->ChangeState(NextState);
+			}
+			break;
+
 
 			case TASK_TYPE::CHANGE_LEVEL:
 			{

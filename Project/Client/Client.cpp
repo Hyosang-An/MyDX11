@@ -5,15 +5,8 @@
 #include "framework.h"
 #include "Client.h"
 
-#ifdef _DEBUG
-#pragma comment(lib, "Engine\\Engine_D")
-#else
-#pragma comment(lib, "Engine\\Engine")
-#endif // _DEBUG
+#include "CEditorMgr.h"
 
-#include <Engine/global.h>
-#include <Engine/CEngine.h>
-#include <Engine/CKeyMgr.h>
 
 #define MAX_LOADSTRING 100
 
@@ -78,6 +71,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         else
         {
             CEngine::GetInst()->Progress();
+
+#ifdef _DEBUG
+            CEditorMgr::GetInst()->Tick();
+#endif
         }
     }
 
@@ -143,6 +140,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
        MessageBox(nullptr, L"CEngine 초기화 실패", L"엔진 초기화 실패", MB_OK);
        return 0;
    }
+
+#ifdef _DEBUG
+   // CEditorMgr 초기화
+   CEditorMgr::GetInst()->Init();
+#endif
 
    return TRUE;
 }

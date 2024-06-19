@@ -142,8 +142,19 @@ enum TASK_TYPE
 
 	// Param_0 : Delete Object Adress
 	DELETE_OBJECT,
+
+	// Param_0 : Next Level State
+	CHANGE_LEVELSTATE,
+
 	CHANGE_LEVEL,
 	ADD_CHILD,
 	COMPONENT_ACTIVATE,
 	COMPONENT_DEACTIVATE,
+};
+
+enum LEVEL_STATE
+{
+	PLAY,
+	PAUSE,
+	STOP,
 };

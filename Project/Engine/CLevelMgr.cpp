@@ -158,7 +158,12 @@ void CLevelMgr::Init()
 
 void CLevelMgr::Progress()
 {
-	m_CurLevel->Tick();
+	if (m_CurLevel->GetState() == LEVEL_STATE::PLAY)
+	{
+		m_CurLevel->Tick();
+	}
+
+	// 레벨이 정지해 있어도 finaltick은 돌려야함
 	m_CurLevel->ClearObject();
 	m_CurLevel->FinalTick();
 }

@@ -10,9 +10,6 @@
     <ClInclude Include="global.h">
       <Filter>01. Header</Filter>
     </ClInclude>
-    <ClInclude Include="define.h">
-      <Filter>01. Header</Filter>
-    </ClInclude>
     <ClInclude Include="enum.h">
       <Filter>01. Header</Filter>
     </ClInclude>
@@ -142,8 +139,15 @@
     <ClInclude Include="CFlipBookComponent.h">
       <Filter>08. Component\04. FlipBookComponent</Filter>
     </ClInclude>
-    <ClInclude Include="CTileMap.h" />
-    <ClInclude Include="CStructuredBuffer.h" />
+    <ClInclude Include="define.h">
+      <Filter>08. Component\08. RenderComponent\02. TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="CTileMap.h">
+      <Filter>08. Component\08. RenderComponent\02. TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="CStructuredBuffer.h">
+      <Filter>03. Device\StructuredBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -263,8 +267,12 @@
     <ClCompile Include="CFlipBookComponent.cpp">
       <Filter>08. Component\04. FlipBookComponent</Filter>
     </ClCompile>
-    <ClCompile Include="CTileMap.cpp" />
-    <ClCompile Include="CStructuredBuffer.cpp" />
+    <ClCompile Include="CTileMap.cpp">
+      <Filter>08. Component\08. RenderComponent\02. TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="CStructuredBuffer.cpp">
+      <Filter>03. Device\StructuredBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. Header">

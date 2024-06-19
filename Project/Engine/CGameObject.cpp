@@ -166,9 +166,16 @@ void CGameObject::FinalTick()
 	pLayer->RegisterGameObject(this);
 
 	// 자식 오브젝트
-	for (size_t i = 0; i < m_vecChildren.size(); ++i)
+	vector<CGameObject*>::iterator iter = m_vecChildren.begin();
+	for (; iter != m_vecChildren.end(); )
 	{
-		m_vecChildren[i]->FinalTick();
+		// 자식이 죽었어도 finaltick은 돌려야함 (죽은놈 처리를 위해)
+		(*iter)->FinalTick();
+
+		if ((*iter)->IsDead())
+			iter = m_vecChildren.erase(iter);
+		else
+			++iter;
 	}
 }
 
