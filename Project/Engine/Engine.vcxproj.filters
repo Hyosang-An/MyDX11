@@ -142,6 +142,8 @@
     <ClInclude Include="CFlipBookComponent.h">
       <Filter>08. Component\04. FlipBookComponent</Filter>
     </ClInclude>
+    <ClInclude Include="CTileMap.h" />
+    <ClInclude Include="CStructuredBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -261,6 +263,8 @@
     <ClCompile Include="CFlipBookComponent.cpp">
       <Filter>08. Component\04. FlipBookComponent</Filter>
     </ClCompile>
+    <ClCompile Include="CTileMap.cpp" />
+    <ClCompile Include="CStructuredBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="01. Header">
@@ -404,6 +408,9 @@
     <Filter Include="08. Component\04. FlipBookComponent">
       <UniqueIdentifier>{dae971dd-7986-4fa8-bef6-07a0e8780303}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Device\StructuredBuffer">
+      <UniqueIdentifier>{2e4bab79-0730-41a3-b6b7-5fdf6d4e72d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -421,6 +428,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="debug.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="tilemap.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

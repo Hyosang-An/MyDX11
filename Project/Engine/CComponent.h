@@ -24,11 +24,12 @@ public:
     virtual void Tick();
     virtual void FinalTick() = 0;
 
-    class CTransform* Transform() { return m_Owner->Transform(); }
-    class CMeshRender* MeshRender() { return m_Owner->MeshRender(); }
-    class CCamera* Camera() { return m_Owner->Camera(); }
-    class CCollider2D* Collider2D() { return m_Owner->Collider2D(); }
+    CTransform* Transform() { return m_Owner->Transform(); }
+    CMeshRender* MeshRender() { return m_Owner->MeshRender(); }
+    CCamera* Camera() { return m_Owner->Camera(); }
+    CCollider2D* Collider2D() { return m_Owner->Collider2D(); }
     CFlipBookComponent* FlipBookComponent() { return m_Owner->FlipBookComponent(); }
+    
 
 
 private:

@@ -35,5 +35,5 @@ void CMeshRender::Render()
 	GetMaterial()->Binding();
 
 	// 버텍스버퍼, 인덱스버퍼 바인딩 및 렌더링 호출
-	GetMesh()->render();
+	GetMesh()->Render();
 }

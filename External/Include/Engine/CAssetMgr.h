@@ -66,7 +66,7 @@ Ptr<T> CAssetMgr::Load(const wstring& _Key, const wstring& _RelativePath)
 	// 로딩 실패 시 예외처리
 	if (FAILED(Asset->Load(strFilePath)))
 	{
-		MessageBox(nullptr, L"알 수 없는 텍스쳐 포맷", L"텍스쳐 로딩 실패", MB_OK);
+		MessageBox(nullptr, L"애셋 로딩 실패", L"텍스쳐 로딩 실패", MB_OK);
 		return nullptr;
 	}
 

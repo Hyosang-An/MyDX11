@@ -110,24 +110,43 @@ void CLevelMgr::Init()
 
 	m_CurLevel->AddObject(3, pObject);
 
-	// Monster Object
-	CGameObject* pMonster = new CGameObject;
-	pMonster->SetName(L"Monster");
+	//// Monster Object
+	//CGameObject* pMonster = new CGameObject;
+	//pMonster->SetName(L"Monster");
 
-	pMonster->AddComponent(new CTransform);
-	pMonster->AddComponent(new CMeshRender);
-	pMonster->AddComponent(new CCollider2D);
+	//pMonster->AddComponent(new CTransform);
+	//pMonster->AddComponent(new CMeshRender);
+	//pMonster->AddComponent(new CCollider2D);
 
-	pMonster->Transform()->SetRelativePos(-400.f, 0.f, 100.f);
-	pMonster->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
+	//pMonster->Transform()->SetRelativePos(-400.f, 0.f, 100.f);
+	//pMonster->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
 
-	pMonster->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
-	pMonster->Collider2D()->SetScale(Vec3(1.2f, 1.2f, 1.f));
+	//pMonster->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	//pMonster->Collider2D()->SetScale(Vec3(1.2f, 1.2f, 1.f));
 
-	pMonster->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pMonster->MeshRender()->SetMaterial(pMtrl);
+	//pMonster->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	//pMonster->MeshRender()->SetMaterial(pMtrl);
 
-	m_CurLevel->AddObject(4, pMonster);
+	//m_CurLevel->AddObject(4, pMonster);
+
+
+	// TileMap Object
+	CGameObject* pTileMapObj = new CGameObject;
+	pTileMapObj->SetName(L"TileMap");
+
+	pTileMapObj->AddComponent(new CTransform);
+	pTileMapObj->AddComponent(new CTileMap);
+
+	pTileMapObj->Transform()->SetRelativePos(Vec3(-500.f, 250.f, 500.f));
+
+	pTileMapObj->TileMap()->SetRowCol(4, 4);
+	pTileMapObj->TileMap()->SetTileSize(Vec2(64.f, 64.f));
+
+	Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->Load<CTexture>(L"TileAtlasTex", L"texture\\TILE.bmp");
+	pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas);
+	pTileMapObj->TileMap()->SetAtlasTileResolution(Vec2(64.f, 64.f));
+
+	m_CurLevel->AddObject(2, pTileMapObj);
 
 	// 충돌 지정
 	CCollisionMgr::GetInst()->CollisionCheck(3, 4); // Player vs Monster

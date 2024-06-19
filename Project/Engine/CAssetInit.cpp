@@ -188,9 +188,12 @@ void CAssetMgr::CreateEngineSprite()
 
 
 	// 저장된 FlipBook 불러오기	================================================
-	Ptr<CFlipBook> pFilpBook = new CFlipBook;
+	/*Ptr<CFlipBook> pFilpBook = new CFlipBook;
 	pFilpBook->Load(strContentsPath + L"Animation\\" + L"Link_MoveDown" + L".flip");
-	AddAsset(L"Link_MoveDown", pFilpBook);
+	AddAsset(L"Link_MoveDown", pFilpBook);*/
+
+
+	Load<CFlipBook>(L"Link_MoveDown", L"Animation\\Link_MoveDown.flip");
 }
 
 void CAssetMgr::CreateEngineGraphicShader()
@@ -210,6 +213,7 @@ void CAssetMgr::CreateEngineGraphicShader()
 
 	AddAsset(L"Std2DShader", pShader);
 
+
 	// Std2DAlphaBlend
 	pShader = new CGraphicShader;
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
@@ -222,6 +226,7 @@ void CAssetMgr::CreateEngineGraphicShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
 	AddAsset(L"Std2DAlphaBlendShader", pShader);
+
 
 	// DebugShapeShader
 	pShader = new CGraphicShader;
@@ -237,6 +242,21 @@ void CAssetMgr::CreateEngineGraphicShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEBUG);
 
 	AddAsset(L"DebugShapeShader", pShader);
+
+
+	// TileMapShader
+	pShader = new CGraphicShader;
+
+	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
+	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
+
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASKED);
+
+	AddAsset(L"TileMapShader", pShader);
 }
 
 void CAssetMgr::CreateEngineComputeShader()
@@ -261,4 +281,9 @@ void CAssetMgr::CreateEngineMaterial()
 	pMtrl = new CMaterial();
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"DebugShapeShader"));
 	AddAsset(L"DebugShapeMtrl", pMtrl);
+
+	// TileMapMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"TileMapShader"));
+	AddAsset(L"TileMapMtrl", pMtrl);
 }

@@ -80,7 +80,5 @@ Texture2DArray g_texarr_1 : register(t9);
 
 Texture2D g_AtlasTex : register(t10);
 
-StructuredBuffer<float4> g_Buffer : register(t11);
-
 #endif
 
