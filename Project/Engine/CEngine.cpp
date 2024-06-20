@@ -70,6 +70,6 @@ void CEngine::ChangeWindowScale(UINT _width, UINT _height)
 		bMenu = true;
 
 	RECT rt{ 0,0, (int)_width, (int)_height };
-	AdjustWindowRect(&rt, WS_OVERLAPPED, bMenu);
+	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, bMenu);
 	SetWindowPos(m_hWnd, nullptr, 0, 0, rt.right - rt.left, rt.bottom - rt.top, 0);
 }
