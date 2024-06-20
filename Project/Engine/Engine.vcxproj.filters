@@ -104,10 +104,10 @@
       <Filter>08. Component\09. Script</Filter>
     </ClInclude>
     <ClInclude Include="CPlayerScript.h">
-      <Filter>Script</Filter>
+      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="CCameraMoveScript.h">
-      <Filter>Script</Filter>
+      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="CShader.h">
       <Filter>06. Asset\Shader</Filter>
@@ -128,7 +128,7 @@
       <Filter>04. Manager\TaskMgr</Filter>
     </ClInclude>
     <ClInclude Include="CMissileScript.h">
-      <Filter>Script</Filter>
+      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="CSprite.h">
       <Filter>06. Asset\07. Sprite</Filter>
@@ -226,10 +226,10 @@
       <Filter>08. Component\09. Script</Filter>
     </ClCompile>
     <ClCompile Include="CCameraMoveScript.cpp">
-      <Filter>Script</Filter>
+      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="CPlayerScript.cpp">
-      <Filter>Script</Filter>
+      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="CShader.cpp">
       <Filter>06. Asset\Shader</Filter>
@@ -256,7 +256,7 @@
       <Filter>04. Manager\TaskMgr</Filter>
     </ClCompile>
     <ClCompile Include="CMissileScript.cpp">
-      <Filter>Script</Filter>
+      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="CSprite.cpp">
       <Filter>06. Asset\07. Sprite</Filter>
@@ -401,9 +401,6 @@
     <Filter Include="08. Component\08. RenderComponent\06. LandScape">
       <UniqueIdentifier>{5a35c13d-92a8-40c7-b904-d87d2e6bd887}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Script">
-      <UniqueIdentifier>{1f9f0ffa-5e11-448c-9c53-eb7b0173fb96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04. Manager\07. CollisionMgr">
       <UniqueIdentifier>{f6d37147-521c-4cc9-a8f6-d3cff387ceb6}</UniqueIdentifier>
     </Filter>
@@ -418,6 +415,9 @@
     </Filter>
     <Filter Include="03. Device\StructuredBuffer">
       <UniqueIdentifier>{2e4bab79-0730-41a3-b6b7-5fdf6d4e72d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{1f9f0ffa-5e11-448c-9c53-eb7b0173fb96}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

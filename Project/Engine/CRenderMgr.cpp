@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CRenderMgr.h"
 
+#include "CDevice.h"
+
 #include "CCamera.h"
 #include "CTimeMgr.h"
 #include "CAssetMgr.h"
@@ -38,6 +40,11 @@ void CRenderMgr::Tick()
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
 	if (nullptr == pCurLevel)
 		return;
+
+	// 렌더타겟 지정
+	Ptr<CTexture> pRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"RenderTargetTex");
+	Ptr<CTexture> pDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"DepthStencilTex");
+	CONTEXT->OMSetRenderTargets(1, pRTTex->GetRTV().GetAddressOf(), pDSTex->GetDSV().Get());
 
 	// Level 이 Player 상태인 경우, Level 내에 있는 카메라 시점으로 렌더링하기
 	if (PLAY == pCurLevel->GetState())
@@ -116,7 +123,7 @@ void CRenderMgr::RenderDebugShape()
 
 
 		// 수명이 다한 디버그 정보를 삭제
-		(*iter).Age += DT;
+		(*iter).Age += EngineDT;
 		if ((*iter).LifeTime < (*iter).Age)
 		{
 			iter = m_DebugShapeList.erase(iter);
