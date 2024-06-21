@@ -126,21 +126,21 @@ void CCameraMoveScript::PerspectiveMove()
 
 
 
-	if (KEY_JUST_PRESSED(KEY::RBTN))
-	{
-		CKeyMgr::GetInst()->MouseCapture(true);
-	}
+	//if (KEY_JUST_PRESSED(KEY::RBTN))
+	//{
+	//	CKeyMgr::GetInst()->MouseCapture(true);
+	//}
 
-	else if (KEY_RELEASED(KEY::RBTN))
-	{
-		CKeyMgr::GetInst()->MouseCapture(false);
-	}
+	//else if (KEY_RELEASED(KEY::RBTN))
+	//{
+	//	CKeyMgr::GetInst()->MouseCapture(false);
+	//}
 
 	Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
 
 	Vec3 vRot = Transform()->GetRelativeRoatation();
-	vRot.y += vDir.x * XM_PI * DT * 10.f;
-	vRot.x += vDir.y * XM_PI * DT * 10.f;
+	vRot.y += vDir.x * XM_PI * EngineDT * 10.f;
+	vRot.x += vDir.y * XM_PI * EngineDT * 10.f;
 	Transform()->SetRelativeRotation(vRot);
 	
 

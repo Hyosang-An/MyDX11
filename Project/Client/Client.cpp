@@ -37,7 +37,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // 메모리 누수 확인
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    //_CrtSetBreakAlloc(492);
+    //_CrtSetBreakAlloc(2682);
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -78,7 +78,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 #ifdef _DEBUG
             CEditorMgr::GetInst()->Tick();
 #endif
-            // ImGui가 새로운 윈도우에 렌더타겟을 잡고 렌더링 한 경우 기존의 렌더타겟 텍스쳐도 같이 화면에 쏴줘야됨
+            // ImGui가 새로운 윈도우에 렌더타겟을 잡고 렌더링 한 경우 기존의 렌더타겟 텍스쳐를 다시 잡아주고 화면에 쏴줘야됨
             CDevice::GetInst()->Present();
         }
     }

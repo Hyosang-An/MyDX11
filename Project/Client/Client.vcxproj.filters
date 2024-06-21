@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Default">
-      <UniqueIdentifier>{d8b29972-6e93-44b6-8b73-f26b87b8e1c7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameObjectEx">
       <UniqueIdentifier>{5ce110e2-7ca7-478c-bd2b-9c70af924e9d}</UniqueIdentifier>
     </Filter>
@@ -18,6 +15,24 @@
     </Filter>
     <Filter Include="Manager\01. EditorMgr\ImGui">
       <UniqueIdentifier>{3b7a5241-bd5d-4fd4-85a2-5e65e37b8142}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI">
+      <UniqueIdentifier>{e3bbd68b-5599-411c-804b-d468f2bd7043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector">
+      <UniqueIdentifier>{d52f1454-9ba2-4426-8efb-601b65846a76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\02. Content">
+      <UniqueIdentifier>{fad7baab-3a8a-4e50-9c94-ba0d053c66bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>{d8b29972-6e93-44b6-8b73-f26b87b8e1c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\03. Outliner">
+      <UniqueIdentifier>{211982fc-a2c2-4f63-b6af-f6bf8f1dae95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\ComponentUI">
+      <UniqueIdentifier>{07262cda-a999-4296-806a-953c58d8b78e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +84,27 @@
     <ClInclude Include="CEditorCameraScript.h">
       <Filter>GameObjectEx\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="EditorUI.h">
+      <Filter>EditorUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentUI.h">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformUI.h">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider2DUI.h">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Inspector.h">
+      <Filter>EditorUI\01. Inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="Content.h">
+      <Filter>EditorUI\02. Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Outliner.h">
+      <Filter>EditorUI\03. Outliner</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -104,6 +140,33 @@
     </ClCompile>
     <ClCompile Include="CEditorCameraScript.cpp">
       <Filter>GameObjectEx\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CEditorMgr_EditorObject.cpp">
+      <Filter>Manager\01. EditorMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CEditorMgr_EditorUI.cpp">
+      <Filter>Manager\01. EditorMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorUI.cpp">
+      <Filter>EditorUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUI.cpp">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider2DUI.cpp">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformUI.cpp">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Inspector.cpp">
+      <Filter>EditorUI\01. Inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="Content.cpp">
+      <Filter>EditorUI\02. Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Outliner.cpp">
+      <Filter>EditorUI\03. Outliner</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

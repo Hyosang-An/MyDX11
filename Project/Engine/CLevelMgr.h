@@ -1,6 +1,7 @@
 #pragma once
 
 class CLevel;
+class CGameObject;
 
 class CLevelMgr :
 	public CSingleton<CLevelMgr>
@@ -15,6 +16,7 @@ private:
 
 public:
 	CLevel* GetCurrentLevel() { return m_CurLevel; }
+	CGameObject* FindObjectByName(const wstring& _Name);
 
 public:
 	void Init();

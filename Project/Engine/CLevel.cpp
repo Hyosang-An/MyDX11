@@ -2,6 +2,7 @@
 #include "CLevel.h"
 
 #include "CLayer.h"
+#include "CGameObject.h"
 
 CLevel::CLevel() :
 	m_Layer{}
@@ -44,6 +45,42 @@ void CLevel::FinalTick()
 void CLevel::AddObject(int LayerIdx, CGameObject* _Object, bool _bMoveChild)
 {
 	m_Layer[LayerIdx]->AddObject(_Object, _bMoveChild);
+}
+
+CGameObject* CLevel::FindObjectByName(const wstring& _Name)
+{
+	for (UINT layerIndex = 0; layerIndex < MAX_LAYER; ++layerIndex)
+	{
+		const vector<CGameObject*>& vecParent = m_Layer[layerIndex]->GetParentObjects();
+
+		for (size_t parentIndex = 0; parentIndex < vecParent.size(); ++parentIndex)
+		{
+			// BFS 탐색
+			list<CGameObject*> objectList;
+			objectList.push_back(vecParent[parentIndex]);
+
+			while (!objectList.empty())
+			{
+				CGameObject* pObject = objectList.front();
+				objectList.pop_front();
+
+				// 먼저 현재 객체의 이름을 확인
+				if (_Name == pObject->GetName())
+				{
+					return pObject;
+				}
+
+				// 자식 객체들을 리스트에 추가
+				const vector<CGameObject*>& vecChild = pObject->GetChildren();
+				for (size_t childIndex = 0; childIndex < vecChild.size(); ++childIndex)
+				{
+					objectList.push_back(vecChild[childIndex]);
+				}
+			}
+		}
+	}
+
+	return nullptr;
 }
 
 void CLevel::ClearObject()
