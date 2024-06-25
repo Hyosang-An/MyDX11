@@ -126,15 +126,15 @@ void CCameraMoveScript::PerspectiveMove()
 
 
 
-	//if (KEY_JUST_PRESSED(KEY::RBTN))
-	//{
-	//	CKeyMgr::GetInst()->MouseCapture(true);
-	//}
+	if (KEY_JUST_PRESSED(KEY::RBTN))
+	{
+		CKeyMgr::GetInst()->MouseCapture(true);
+	}
 
-	//else if (KEY_RELEASED(KEY::RBTN))
-	//{
-	//	CKeyMgr::GetInst()->MouseCapture(false);
-	//}
+	else if (KEY_RELEASED(KEY::RBTN))
+	{
+		CKeyMgr::GetInst()->MouseCapture(false);
+	}
 
 	Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
 

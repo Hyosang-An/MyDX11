@@ -20,6 +20,7 @@ CGameObject::~CGameObject()
 {
 	Delete_Array(m_arrCom);
 	Delete_Vec(m_vecScript);
+	Delete_Vec(m_vecChildren);
 }
 
 void CGameObject::AddComponent(CComponent* _Comopnent)

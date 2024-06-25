@@ -107,22 +107,39 @@ void CEditorCameraScript::PerspectiveMove()
 
 	Transform()->SetRelativePos(vPos);
 
-	if (KEY_PRESSED(KEY::RBTN))
+	//if (KEY_PRESSED(KEY::RBTN))
+	//{
+	//	CKeyMgr::GetInst()->MouseCapture(true);
+
+	//	// 마우스가 이동하는 방향
+	//	//vDir.x; ==> y축 회전;
+	//	//vDir.y; ==> x축 회전
+	//	Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
+
+	//	Vec3 vRot = Transform()->GetRelativeRoatation();
+	//	vRot.y += vDir.x * XM_PI * EngineDT * 10.f;
+	//	vRot.x += vDir.y * XM_PI * EngineDT * 10.f;
+	//	Transform()->SetRelativeRotation(vRot);
+	//}
+	//else if (KEY_RELEASED(KEY::RBTN))
+	//{
+	//	CKeyMgr::GetInst()->MouseCapture(false);
+	//}
+
+	if (KEY_JUST_PRESSED(KEY::RBTN))
 	{
 		CKeyMgr::GetInst()->MouseCapture(true);
-
-		// 마우스가 이동하는 방향
-		//vDir.x; ==> y축 회전;
-		//vDir.y; ==> x축 회전
-		Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
-
-		Vec3 vRot = Transform()->GetRelativeRoatation();
-		vRot.y += vDir.x * XM_PI * EngineDT * 10.f;
-		vRot.x += vDir.y * XM_PI * EngineDT * 10.f;
-		Transform()->SetRelativeRotation(vRot);
 	}
+
 	else if (KEY_RELEASED(KEY::RBTN))
 	{
 		CKeyMgr::GetInst()->MouseCapture(false);
 	}
+
+	Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
+
+	Vec3 vRot = Transform()->GetRelativeRoatation();
+	vRot.y += vDir.x * XM_PI * EngineDT * 10.f;
+	vRot.x += vDir.y * XM_PI * EngineDT * 10.f;
+	Transform()->SetRelativeRotation(vRot);
 }
