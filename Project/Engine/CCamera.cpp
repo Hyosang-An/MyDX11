@@ -67,16 +67,18 @@ void CCamera::FinalTick()
 	// View 행렬은 World Space -> View Space 로 변경할때 사용하는 행렬		
 	Matrix matTrans = XMMatrixTranslation(-Transform()->GetRelativePos().x, -Transform()->GetRelativePos().y, -Transform()->GetRelativePos().z);
 
-	Matrix matRot;
 	Vec3 vR = Transform()->GetWorldDir(DIR::RIGHT);
 	Vec3 vU = Transform()->GetWorldDir(DIR::UP);
 	Vec3 vF = Transform()->GetWorldDir(DIR::FRONT);
 
-	//matRot.Transpose()
+	Matrix matRot;
+	matRot = Matrix(vR, vU, vF); // row 3개로 만들기
+	matRot = matRot.Transpose();
 
-	matRot._11 = vR.x; matRot._12 = vU.x; matRot._13 = vF.x;
-	matRot._21 = vR.y; matRot._22 = vU.y; matRot._23 = vF.y;
-	matRot._31 = vR.z; matRot._32 = vU.z; matRot._33 = vF.z;
+	// 요소 하나씩 써서 만드는 방법
+	//matRot._11 = vR.x; matRot._12 = vU.x; matRot._13 = vF.x;
+	//matRot._21 = vR.y; matRot._22 = vU.y; matRot._23 = vF.y;
+	//matRot._31 = vR.z; matRot._32 = vU.z; matRot._33 = vF.z;
 
 	m_matView = matTrans * matRot;
 
