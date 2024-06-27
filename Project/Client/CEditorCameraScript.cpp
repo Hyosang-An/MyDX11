@@ -69,6 +69,15 @@ void CEditorCameraScript::OrthoGraphicMove()
 	}
 
 	Transform()->SetRelativePos(vPos);
+
+	float Scale = Camera()->GetScale();
+	if (KEY_PRESSED(KEY::_8))
+		Scale += EngineDT;
+
+	if (KEY_PRESSED(KEY::_9))
+		Scale -= EngineDT;
+
+	Camera()->SetScale(Scale);
 }
 
 void CEditorCameraScript::PerspectiveMove()

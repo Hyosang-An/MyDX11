@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CameraUI.h" />
     <ClInclude Include="CEditorCameraScript.h" />
     <ClInclude Include="CEditorMgr.h" />
     <ClInclude Include="CGameObjectEx.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="ComponentUI.h" />
     <ClInclude Include="Content.h" />
     <ClInclude Include="EditorUI.h" />
+    <ClInclude Include="FlipBookComUI.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -166,13 +168,18 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Inspector.h" />
+    <ClInclude Include="ListUI.h" />
+    <ClInclude Include="MeshRenderUI.h" />
     <ClInclude Include="Outliner.h" />
+    <ClInclude Include="ParticleSystemUI.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TileMapUI.h" />
     <ClInclude Include="TransformUI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraUI.cpp" />
     <ClCompile Include="CEditorCameraScript.cpp" />
     <ClCompile Include="CEditorMgr.cpp" />
     <ClCompile Include="CEditorMgr_EditorObject.cpp" />
@@ -183,6 +190,7 @@
     <ClCompile Include="ComponentUI.cpp" />
     <ClCompile Include="Content.cpp" />
     <ClCompile Include="EditorUI.cpp" />
+    <ClCompile Include="FlipBookComUI.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -191,13 +199,17 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Inspector.cpp" />
+    <ClCompile Include="ListUI.cpp" />
+    <ClCompile Include="MeshRenderUI.cpp" />
     <ClCompile Include="Outliner.cpp" />
+    <ClCompile Include="ParticleSystemUI.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TileMapUI.cpp" />
     <ClCompile Include="TransformUI.cpp" />
   </ItemGroup>
   <ItemGroup>

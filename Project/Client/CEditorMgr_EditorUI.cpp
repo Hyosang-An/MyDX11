@@ -9,6 +9,7 @@
 #include "Inspector.h"
 #include "Content.h"
 #include "Outliner.h"
+#include "ListUI.h"
 
 void CEditorMgr::InitImGui()
 {
@@ -70,10 +71,7 @@ void CEditorMgr::CreateEditorUI()
 {
     EditorUI* pUI = nullptr;
 
-    // Inspector
-    pUI = new Inspector;
-    pUI->SetName("Inspector");
-    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
 
     // Content
     pUI = new Content;
@@ -84,6 +82,18 @@ void CEditorMgr::CreateEditorUI()
     pUI = new Outliner;
     pUI->SetName("Outliner");
     m_mapUI.insert(make_pair(pUI->GetFullName(), pUI));
+
+    // ListUI
+    pUI = new ListUI;
+    pUI->SetName("List");
+    pUI->Deactivate();
+    m_mapUI.insert(make_pair(pUI->GetFullName(), pUI));
+
+
+    // Inspector
+    pUI = new Inspector;
+    pUI->SetName("Inspector");
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 }
 
 

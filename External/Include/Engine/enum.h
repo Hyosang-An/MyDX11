@@ -27,6 +27,9 @@ enum class ASSET_TYPE
 	END
 };
 
+extern const char* ASSET_TYPE_STRING[(UINT)ASSET_TYPE::END];
+const char* ToString(ASSET_TYPE _Type);
+
 
 enum class COMPONENT_TYPE
 {
@@ -51,6 +54,9 @@ enum class COMPONENT_TYPE
 	// Script 컴포넌트는 따로 관리
 	SCRIPT
 };
+
+extern const char* COMPONENT_TYPE_STRING[(UINT)COMPONENT_TYPE::END];
+const char* ToString(COMPONENT_TYPE _Type);
 
 enum DIR
 {

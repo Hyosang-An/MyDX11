@@ -29,6 +29,7 @@ private:
     float       m_Far;          // 카메라가 볼 수 있는 시야 거리
 
     float       m_FOV; // Field Of View (시야 범위, 시야 각)
+    float       m_ProjectionScale = 1.f;
 
     Matrix      m_matView;
     Matrix      m_matProj;
@@ -49,11 +50,35 @@ public:
     }
     void SetLayerAll() { m_LayerCheck = 0xffffffff; }
 
+    bool GetLayerCheck(UINT _LayerIdx) { return m_LayerCheck & (1 << _LayerIdx); }
+
     void SetProjType(PROJ_TYPE _type) { m_ProjType = _type; }
     PROJ_TYPE GetProjType() { return m_ProjType; }
 
+    void SetWidth(float _Width)
+    {
+        m_Width = _Width;
+        m_AspectRatio = m_Width / m_Height;
+    }
+
+    void SetHeight(float _Height)
+    {
+        m_Height = _Height;
+        m_AspectRatio = m_Width / m_Height;
+    }
+
+    float GetWidth() { return m_Width; }
+    float GetHeight() { return m_Height; }
+    float GetAspectRatio() { return m_AspectRatio; }
+
     void SetFar(float _Far) { m_Far = _Far; }
     float GetFar() { return m_Far; }
+
+    void SetFOV(float _FOV) { m_FOV = _FOV; }
+    float GetFOV() { return m_FOV; }
+
+    void SetScale(float _Scale) { m_ProjectionScale = _Scale; }
+    float GetScale() { return m_ProjectionScale; }
 
 private:
     void SortGameObject();

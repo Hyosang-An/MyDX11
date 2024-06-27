@@ -9,6 +9,11 @@
 
 #include "TransformUI.h"
 #include "Collider2DUI.h"
+#include "CameraUI.h"
+#include "MeshRenderUI.h"
+#include "FlipBookComUI.h"
+#include "TileMapUI.h"
+#include "ParticleSystemUI.h"
 
 Inspector::Inspector()
 	: m_TargetObject(nullptr)
@@ -23,6 +28,32 @@ Inspector::Inspector()
 	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D]->SetName("Collider2DUI");
 	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D]->SetChildSize(ImVec2(0.f, 100.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D]);
+
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA] = new CameraUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]->SetName("CameraUI");
+	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]->SetChildSize(ImVec2(0.f, 200.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOKCOMPONENT] = new FlipBookComUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOKCOMPONENT]->SetName("FlipBookComUI");
+	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOKCOMPONENT]->SetChildSize(ImVec2(0.f, 100.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOKCOMPONENT]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER] = new MeshRenderUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetName("MeshRenderUI");
+	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetChildSize(ImVec2(0.f, 100.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP] = new TileMapUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP]->SetName("TileMapUI");
+	m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP]->SetChildSize(ImVec2(0.f, 100.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP]);
+
+	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLE_SYSTEM] = new ParticleSystemUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLE_SYSTEM]->SetName("ParticleSystemUI");
+	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLE_SYSTEM]->SetChildSize(ImVec2(0.f, 100.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLE_SYSTEM]);
 }
 
 Inspector::~Inspector()
@@ -46,7 +77,8 @@ void Inspector::Update()
 {
 	if (nullptr == m_TargetObject)
 	{
-		SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"Player"));
+		//SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"Player"));
+		SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"MainCamera"));
 		return;
 	}
 
@@ -55,7 +87,7 @@ void Inspector::Update()
 	// ===========
 	string strObjectName = string(m_TargetObject->GetName().begin(), m_TargetObject->GetName().end());
 	ImGui::Text("Object Name");
-	ImGui::SameLine(100);
+	ImGui::SameLine(108);
 	ImGui::InputText("##ObjectName", (char*)strObjectName.c_str(), strObjectName.length(), ImGuiInputTextFlags_ReadOnly);
 
 	// ======
@@ -74,6 +106,6 @@ void Inspector::Update()
 		sprintf_s(buffer, 50, "%d : %s", LayerIdx, LayerName.c_str());
 
 	ImGui::Text("Layer");
-	ImGui::SameLine(100);
+	ImGui::SameLine(108);
 	ImGui::InputText("##LayerName", buffer, strlen(buffer), ImGuiInputTextFlags_ReadOnly);
 }

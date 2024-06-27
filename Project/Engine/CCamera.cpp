@@ -28,6 +28,7 @@ CCamera::CCamera()
 	Vec2 vResolution = CDevice::GetInst()->GetResolution();
 	m_Width = vResolution.x;
 	m_Height = vResolution.y;
+	m_AspectRatio = m_Width / m_Height;
 }
 
 CCamera::~CCamera()
@@ -89,14 +90,13 @@ void CCamera::FinalTick()
 		// 1. 직교투영 (Orthographic)
 		// 투영을 일직선으로
 		// 시야 범위를 NDC 로 압축
-		m_matProj = XMMatrixOrthographicLH(m_Width, m_Height, 1.f, m_Far);
+		m_matProj = XMMatrixOrthographicLH(m_Width * m_ProjectionScale, m_Height * m_ProjectionScale, 1.f, m_Far);
 	}
 
 	else
 	{
 		// 2. 원근투영 (Perspective)
-		float AspectRatio = m_Width / m_Height;
-		m_matProj = XMMatrixPerspectiveFovLH(m_FOV, AspectRatio, 1.f, m_Far);
+		m_matProj = XMMatrixPerspectiveFovLH(m_FOV, m_AspectRatio, 1.f, m_Far);
 	}
 }
 

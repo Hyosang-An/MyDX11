@@ -35,6 +35,7 @@ public:
     void SetWorldMatrix(const Matrix& matWorld) { m_matWorld = matWorld; }
 
     void SetIndependentScale(bool _Set) { m_IndependentScale = _Set; }
+    bool IsIndependentScale() { return m_IndependentScale; }
 
     Vec3 GetRelativePos() { return m_RelativePos; }
     Vec3 GetWorldPos() { return m_matWorld.Translation(); }
