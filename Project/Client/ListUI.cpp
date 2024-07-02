@@ -26,7 +26,7 @@ void ListUI::Update()
 			Flag |= ImGuiTreeNodeFlags_Selected;
 		}
 
-		if (ImGui::TreeNodeEx(szID, Flag))
+		if (ImGui::TreeNodeEx(szID, Flag)) // ImGuiTreeNodeFlags_Leaf 플래그면 무조건 반환값이 true
 		{
 			ImGui::TreePop();
 		}
