@@ -75,48 +75,21 @@ void CameraUI::Update()
     float FOV = pCam->GetFOV();
     FOV = (FOV / XM_PI) * 180.f;
 
-    if (pCam->GetProjType() != PROJ_TYPE::PERSPECTIVE)
-    {
-        ImGui::BeginDisabled();
-
-        ImGui::Text("FOV");
-        ImGui::SameLine(100);
-        ImGui::InputFloat("##FOV", &FOV);
-
-        ImGui::EndDisabled();
-    }
-    else
-    {
-        ImGui::Text("FOV");
-        ImGui::SameLine(100);
-        ImGui::InputFloat("##FOV", &FOV);
-    }
-
-    FOV = (FOV / 180.f) * XM_PI;
-    pCam->SetFOV(FOV);
+    bool IsPerspective = pCam->GetProjType() == PROJ_TYPE::PERSPECTIVE;
+    ImGui::BeginDisabled(!IsPerspective);
+    ImGui::Text("FOV");
+    ImGui::SameLine(100);
+    ImGui::InputFloat("##FOV", &FOV);
+    ImGui::EndDisabled();
 
 
-    // Orthograhpic Àü¿ë
-    if (pCam->GetProjType() != PROJ_TYPE::ORTHOGRAPHIC)
-    {
-        ImGui::BeginDisabled();
-
-        float Scale = pCam->GetScale();
-        ImGui::Text("Scale");
-        ImGui::SameLine(100);
-        ImGui::InputFloat("##Scale", &Scale);
-        pCam->SetScale(Scale);
-
-        ImGui::EndDisabled();
-    }
-    else
-    {
-        float Scale = pCam->GetScale();
-        ImGui::Text("Scale");
-        ImGui::SameLine(100);
-        ImGui::InputFloat("##Scale", &Scale);
-        pCam->SetScale(Scale);
-    }
+    ImGui::BeginDisabled(IsPerspective);
+    float Scale = pCam->GetScale();
+    ImGui::Text("Scale");
+    ImGui::SameLine(100);
+    ImGui::InputFloat("##Scale", &Scale);
+    pCam->SetScale(Scale);
+    ImGui::EndDisabled();
 }
 
 void CameraUI::LayerCheck()

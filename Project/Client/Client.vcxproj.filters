@@ -114,9 +114,6 @@
     <ClInclude Include="EditorUI.h">
       <Filter>EditorUI</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentUI.h">
-      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
-    </ClInclude>
     <ClInclude Include="Inspector.h">
       <Filter>EditorUI\01. Inspector</Filter>
     </ClInclude>
@@ -149,6 +146,12 @@
     </ClInclude>
     <ClInclude Include="TileMapUI.h">
       <Filter>EditorUI\01. Inspector\ComponentUI\06. TileMapUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Light2DUI.h">
+      <Filter>EditorUI\01. Inspector\ComponentUI\08. Light2DUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentUI.h">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -195,9 +198,6 @@
     <ClCompile Include="EditorUI.cpp">
       <Filter>EditorUI</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentUI.cpp">
-      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
-    </ClCompile>
     <ClCompile Include="Inspector.cpp">
       <Filter>EditorUI\01. Inspector</Filter>
     </ClCompile>
@@ -230,6 +230,12 @@
     </ClCompile>
     <ClCompile Include="TileMapUI.cpp">
       <Filter>EditorUI\01. Inspector\ComponentUI\06. TileMapUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Light2DUI.cpp">
+      <Filter>EditorUI\01. Inspector\ComponentUI\08. Light2DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUI.cpp">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

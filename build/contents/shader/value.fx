@@ -1,6 +1,8 @@
 #ifndef _VALUE
 #define _VALUE
 
+#include "struct.fx"
+
 // 4096
 cbuffer OBJECT_POS : register(b0)
 {
@@ -79,6 +81,9 @@ Texture2DArray g_texarr_0 : register(t8);
 Texture2DArray g_texarr_1 : register(t9);
 
 Texture2D g_AtlasTex : register(t10);
+
+StructuredBuffer<tLightInfo> g_Light2D : register(t11);
+StructuredBuffer<tLightInfo> g_Light3D : register(t12);
 
 #endif
 

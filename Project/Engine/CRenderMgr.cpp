@@ -14,14 +14,21 @@
 #include "CLevelMgr.h"
 #include "CLevel.h"
 
+#include "CLight2D.h"
+#include "CStructuredBuffer.h"
+
 CRenderMgr::CRenderMgr()
 {
+	m_Light2DBuffer = new CStructuredBuffer;
 }
 
 CRenderMgr::~CRenderMgr()
 {
 	if (nullptr != m_DebugObject)
 		delete m_DebugObject;
+
+	if (nullptr != m_Light2DBuffer)
+		delete m_Light2DBuffer;
 }
 
 
@@ -41,10 +48,7 @@ void CRenderMgr::Tick()
 	if (nullptr == pCurLevel)
 		return;
 
-	// 렌더타겟 지정
-	Ptr<CTexture> pRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"RenderTargetTex");
-	Ptr<CTexture> pDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"DepthStencilTex");
-	CONTEXT->OMSetRenderTargets(1, pRTTex->GetRTV().GetAddressOf(), pDSTex->GetDSV().Get());
+	RenderStart();
 
 	// Level 이 Player 상태인 경우, Level 내에 있는 카메라 시점으로 렌더링하기
 	if (PLAY == pCurLevel->GetState())
@@ -67,7 +71,12 @@ void CRenderMgr::Tick()
 		}
 	}
 
+	// Debug Render
 	RenderDebugShape();
+
+
+	// Clear
+	Clear();
 }
 
 void CRenderMgr::RegisterCamera(CCamera* _cam, int _camPriority)
@@ -78,6 +87,34 @@ void CRenderMgr::RegisterCamera(CCamera* _cam, int _camPriority)
 
 	// 카메라 우선순위에 맞는 위치에 넣는다
 	m_vecCam[_camPriority] = _cam;
+}
+
+void CRenderMgr::RenderStart()
+{
+	// 렌더타겟 지정
+	Ptr<CTexture> pRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"RenderTargetTex");
+	Ptr<CTexture> pDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"DepthStencilTex");
+	CONTEXT->OMSetRenderTargets(1, pRTTex->GetRTV().GetAddressOf(), pDSTex->GetDSV().Get());
+
+	// Light2D 정보 업데이트 및 바인딩
+	vector<tLightInfo> vecLight2DInfo;
+	for (size_t i = 0; i < m_vecLight2D.size(); ++i)
+	{
+		vecLight2DInfo.push_back(m_vecLight2D[i]->GetLightInfo());
+	}
+
+	if (m_Light2DBuffer->GetElementCount() < vecLight2DInfo.size())
+	{
+		m_Light2DBuffer->Create(sizeof(tLightInfo), vecLight2DInfo.size());
+	}
+
+	m_Light2DBuffer->SetData(vecLight2DInfo.data());
+	m_Light2DBuffer->Binding(11);
+}
+
+void CRenderMgr::Clear()
+{
+	m_vecLight2D.clear();
 }
 
 void CRenderMgr::RenderDebugShape()

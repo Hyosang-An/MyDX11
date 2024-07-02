@@ -16,6 +16,7 @@ private:
 
 	ImVec2				m_ChildSize;	// 자식 창의 크기
 
+	bool				m_Modal = false;
 	bool				m_ChildBorder;	// 자식 구분선 표기 유무
 
 
@@ -33,12 +34,18 @@ public:
 	const string& GetFullName() { return m_FullName; }
 
 	bool IsActive() { return m_Active; }
-	void Activate() { m_Active = true; }
-	void Deactivate() { m_Active = false; }
 
 	void SetChildBorder(bool _Set) { m_ChildBorder = _Set; }
 	void SetChildSize(ImVec2 _Size) { m_ChildSize = _Size; }
 
+	void SetActive(bool _Active);
+
+	void SetModal(bool _Modal) { m_Modal = _Modal; }
+	bool IsModal() { return m_Modal; }
+
+private:
+	virtual void Activate() {}
+	virtual void Deactivate() {}
 
 public:
 	virtual void Tick();
@@ -46,6 +53,11 @@ public:
 
 public:
 	EditorUI();
-	~EditorUI();
+	virtual ~EditorUI();
 };
+
+typedef void(EditorUI::* DELEGATE_0)(void);
+typedef void(EditorUI::* DELEGATE_1)(DWORD_PTR);
+typedef void(EditorUI::* DELEGATE_2)(DWORD_PTR, DWORD_PTR);
+typedef void(EditorUI::* DELEGATE_3)(DWORD_PTR, DWORD_PTR, DWORD_PTR);
 

@@ -18,6 +18,8 @@ private:
 public:
 	void Init();
 
+	void GetAssetNames(ASSET_TYPE _Type, vector<string>& _vecOut);
+
 	template<typename T>
 	Ptr<T> Load(const wstring& _Key, const wstring& _RelativePath);
 

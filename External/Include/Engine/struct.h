@@ -27,6 +27,23 @@ struct tTask
 	DWORD_PTR	Param_1;
 };
 
+struct tLight
+{
+	Vec4	Color;		// 빛의 색상
+	Vec4	Ambient;	// 환경광 (빛을 받고있지 않은 상태에서도 보이는 사물의 색)
+};
+
+struct tLightInfo
+{
+	tLight		light;		// 광원 색상정보
+	Vec3		WorldPos;	// 광원 위치
+	Vec3		WorldDir;	// 광윈이 진행하는 방향
+	float		Radius;		// 광원의 반경
+	float		Angle;		// 광원 범위 각도
+	LIGHT_TYPE	Type;		// 광원 종류
+	int			padding[3]; // 패딩
+};
+
 // ===================
 // 상수버퍼 연동 구조체
 // ===================

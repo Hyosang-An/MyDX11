@@ -95,13 +95,13 @@
       <Filter>06. Asset</Filter>
     </ClInclude>
     <ClInclude Include="CMeshRender.h">
-      <Filter>08. Component\08. RenderComponent\01. MeshRenderer</Filter>
+      <Filter>08. Component\RenderComponent\01. MeshRenderer</Filter>
     </ClInclude>
     <ClInclude Include="CRenderComponent.h">
-      <Filter>08. Component\08. RenderComponent</Filter>
+      <Filter>08. Component\RenderComponent</Filter>
     </ClInclude>
     <ClInclude Include="CScript.h">
-      <Filter>08. Component\09. Script</Filter>
+      <Filter>08. Component\Script</Filter>
     </ClInclude>
     <ClInclude Include="CPlayerScript.h">
       <Filter>Scripts</Filter>
@@ -140,13 +140,16 @@
       <Filter>08. Component\04. FlipBookComponent</Filter>
     </ClInclude>
     <ClInclude Include="define.h">
-      <Filter>08. Component\08. RenderComponent\02. TileMap</Filter>
+      <Filter>08. Component\RenderComponent\02. TileMap</Filter>
     </ClInclude>
     <ClInclude Include="CTileMap.h">
-      <Filter>08. Component\08. RenderComponent\02. TileMap</Filter>
+      <Filter>08. Component\RenderComponent\02. TileMap</Filter>
     </ClInclude>
     <ClInclude Include="CStructuredBuffer.h">
       <Filter>03. Device\StructuredBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="CLight2D.h">
+      <Filter>08. Component\08. Light2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -217,13 +220,13 @@
       <Filter>06. Asset\Shader\08. ComputeShader</Filter>
     </ClCompile>
     <ClCompile Include="CMeshRender.cpp">
-      <Filter>08. Component\08. RenderComponent\01. MeshRenderer</Filter>
+      <Filter>08. Component\RenderComponent\01. MeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="CRenderComponent.cpp">
-      <Filter>08. Component\08. RenderComponent</Filter>
+      <Filter>08. Component\RenderComponent</Filter>
     </ClCompile>
     <ClCompile Include="CScript.cpp">
-      <Filter>08. Component\09. Script</Filter>
+      <Filter>08. Component\Script</Filter>
     </ClCompile>
     <ClCompile Include="CCameraMoveScript.cpp">
       <Filter>Scripts</Filter>
@@ -268,10 +271,13 @@
       <Filter>08. Component\04. FlipBookComponent</Filter>
     </ClCompile>
     <ClCompile Include="CTileMap.cpp">
-      <Filter>08. Component\08. RenderComponent\02. TileMap</Filter>
+      <Filter>08. Component\RenderComponent\02. TileMap</Filter>
     </ClCompile>
     <ClCompile Include="CStructuredBuffer.cpp">
       <Filter>03. Device\StructuredBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="CLight2D.cpp">
+      <Filter>08. Component\08. Light2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,12 +356,6 @@
     <Filter Include="08. Component\07. Camera">
       <UniqueIdentifier>{54accae9-b889-4bbd-afdf-30ffc9f72867}</UniqueIdentifier>
     </Filter>
-    <Filter Include="08. Component\08. RenderComponent">
-      <UniqueIdentifier>{8d4f7f06-cfc7-4087-89e0-751fe3c80ca1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. Component\09. Script">
-      <UniqueIdentifier>{2a90f398-6bef-44b2-9815-1c7e0ddb8f41}</UniqueIdentifier>
-    </Filter>
     <Filter Include="06. Asset\01. Mesh">
       <UniqueIdentifier>{4f897358-7e9b-4081-932d-345f16087d54}</UniqueIdentifier>
     </Filter>
@@ -383,24 +383,6 @@
     <Filter Include="06. Asset\Shader\08. ComputeShader">
       <UniqueIdentifier>{6e77819b-eae1-4541-beb1-64537c0f8b6b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="08. Component\08. RenderComponent\01. MeshRenderer">
-      <UniqueIdentifier>{c7334aa4-4d2e-410e-9cfe-dda80e320ad6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. Component\08. RenderComponent\02. TileMap">
-      <UniqueIdentifier>{176247bc-06bb-46c0-b4eb-f1c52fec37dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. Component\08. RenderComponent\03. ParticleSystem">
-      <UniqueIdentifier>{48941e9a-1c85-4993-b876-d14c805bdd36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. Component\08. RenderComponent\04. Decal">
-      <UniqueIdentifier>{390fb3ae-92b7-4875-ab5c-0654405897c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. Component\08. RenderComponent\05. SkyBox">
-      <UniqueIdentifier>{d62afbf9-4b96-40c8-91c1-7821756bb572}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. Component\08. RenderComponent\06. LandScape">
-      <UniqueIdentifier>{5a35c13d-92a8-40c7-b904-d87d2e6bd887}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04. Manager\07. CollisionMgr">
       <UniqueIdentifier>{f6d37147-521c-4cc9-a8f6-d3cff387ceb6}</UniqueIdentifier>
     </Filter>
@@ -418,6 +400,33 @@
     </Filter>
     <Filter Include="Scripts">
       <UniqueIdentifier>{1f9f0ffa-5e11-448c-9c53-eb7b0173fb96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\RenderComponent">
+      <UniqueIdentifier>{8d4f7f06-cfc7-4087-89e0-751fe3c80ca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\RenderComponent\01. MeshRenderer">
+      <UniqueIdentifier>{c7334aa4-4d2e-410e-9cfe-dda80e320ad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\RenderComponent\02. TileMap">
+      <UniqueIdentifier>{176247bc-06bb-46c0-b4eb-f1c52fec37dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\RenderComponent\03. ParticleSystem">
+      <UniqueIdentifier>{48941e9a-1c85-4993-b876-d14c805bdd36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\RenderComponent\04. Decal">
+      <UniqueIdentifier>{390fb3ae-92b7-4875-ab5c-0654405897c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\RenderComponent\05. SkyBox">
+      <UniqueIdentifier>{d62afbf9-4b96-40c8-91c1-7821756bb572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\RenderComponent\06. LandScape">
+      <UniqueIdentifier>{5a35c13d-92a8-40c7-b904-d87d2e6bd887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\Script">
+      <UniqueIdentifier>{2a90f398-6bef-44b2-9815-1c7e0ddb8f41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Component\08. Light2D">
+      <UniqueIdentifier>{3794311c-54c4-4348-aa13-2acd9f036c7f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -439,6 +448,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="tilemap.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="struct.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
