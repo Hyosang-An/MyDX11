@@ -99,9 +99,9 @@ StyleCopReport.xml
 *.scc
 
 # Library files
+External/Library/**
 *.idb
 *.lib
-External/Library/*
 # 예외
 !External/Library/DirectXTex/
 !External/Library/DirectXTex/**
