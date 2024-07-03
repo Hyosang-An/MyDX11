@@ -100,6 +100,11 @@ StyleCopReport.xml
 
 # Library files
 *.idb
+*.lib
+External/Library/*
+# 예외
+!External/Library/DirectXTex/
+!External/Library/DirectXTex/**
 
 # Chutzpah Test files
 _Chutzpah*
