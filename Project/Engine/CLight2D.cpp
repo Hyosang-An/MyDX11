@@ -13,6 +13,13 @@ CLight2D::CLight2D()
 
 CLight2D::~CLight2D()
 {
+	CRenderMgr::GetInst()->DeregisterLight2D(this);
+}
+
+void CLight2D::Begin()
+{
+	// 자신을 RenderMgr 에 등록시킴
+	CRenderMgr::GetInst()->RegisterLight2D(this);
 }
 
 void CLight2D::FinalTick()
@@ -20,8 +27,8 @@ void CLight2D::FinalTick()
 	m_Info.WorldPos = Transform()->GetWorldPos();
 	m_Info.WorldDir = Transform()->GetWorldDir(DIR::RIGHT);
 
-	// 자신을 RenderMgr 에 등록시킴
-	CRenderMgr::GetInst()->RegisterLight2D(this);
+	//// 자신을 RenderMgr 에 등록시킴
+	//CRenderMgr::GetInst()->RegisterLight2D(this);
 }
 
 void CLight2D::SetLightType(LIGHT_TYPE _Type)

@@ -84,15 +84,7 @@ void CRenderMgr::Tick()
 	Clear();
 }
 
-void CRenderMgr::RegisterCamera(CCamera* _cam, int _camPriority)
-{
-	// 카메라 우선순위에 따라서 벡터의 공간의 마련되어야 한다.
-	if (m_vecCam.size() <= _camPriority + 1)
-		m_vecCam.resize(_camPriority + 1);
 
-	// 카메라 우선순위에 맞는 위치에 넣는다
-	m_vecCam[_camPriority] = _cam;
-}
 
 void CRenderMgr::RenderStart()
 {
@@ -133,7 +125,7 @@ void CRenderMgr::RenderStart()
 void CRenderMgr::Clear()
 {
 	//m_vecLight2D.clear();
-	m_vecLight2D.resize(0);
+	//m_vecLight2D.resize(0);
 }
 
 void CRenderMgr::RenderDebugShape()
@@ -188,5 +180,33 @@ void CRenderMgr::RenderDebugShape()
 		{
 			++iter;
 		}
+	}
+}
+
+void CRenderMgr::RegisterCamera(CCamera* _cam, int _camPriority)
+{
+	// 카메라 우선순위에 따라서 벡터의 공간의 마련되어야 한다.
+	if (m_vecCam.size() <= _camPriority + 1)
+		m_vecCam.resize(_camPriority + 1);
+
+	// 카메라 우선순위에 맞는 위치에 넣는다
+	m_vecCam[_camPriority] = _cam;
+}
+
+void CRenderMgr::RegisterLight2D(CLight2D* _light)
+{
+	// 중복 등록 방지
+	if (std::find(m_vecLight2D.begin(), m_vecLight2D.end(), _light) == m_vecLight2D.end())
+	{
+		m_vecLight2D.push_back(_light);
+	}
+}
+
+void CRenderMgr::DeregisterLight2D(CLight2D* _light)
+{
+	auto it = std::find(m_vecLight2D.begin(), m_vecLight2D.end(), _light);
+	if (it != m_vecLight2D.end())
+	{
+		m_vecLight2D.erase(it);
 	}
 }
