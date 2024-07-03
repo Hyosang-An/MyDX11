@@ -17,6 +17,8 @@ struct VTX_OUT
     float4 vPosition : SV_Position;
     float4 vColor : COLOR;
     float2 vUV : TEXCOORD;
+    
+    float3 vWorldPos : POSITION;
 };
 
 VTX_OUT VS_Std2D(VTX_IN _in)
@@ -30,6 +32,8 @@ VTX_OUT VS_Std2D(VTX_IN _in)
     output.vPosition = mul(float4(_in.vPos, 1.f), matWVP);
     output.vColor = _in.vColor;
     output.vUV = _in.vUV;
+    
+    output.vWorldPos = mul(float4(_in.vPos, 1.f), matWorld);
     
     return output;
 }
@@ -75,6 +79,18 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
     {
         discard;
     }
+    
+
+    // 광원 적용      
+    tLight Light = (tLight) 0.f;
+    
+    for (int i = 0; i < g_Light2DCount; ++i)
+    {
+        CalculateLight2D(i, _in.vWorldPos, Light); // 광원들만 독립적으로 누적
+    }
+    
+    vColor.rgb = vColor.rgb * Light.Color.rgb 
+               + vColor.rgb * Light.Ambient.rgb;
     
     return vColor;
 }

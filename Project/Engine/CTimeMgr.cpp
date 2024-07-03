@@ -11,7 +11,9 @@ CTimeMgr::CTimeMgr() :
 	m_llFrequency{},
 	m_FPS(0),
 	m_DeltaTime(0.f),
-	m_Time(0.f)
+	m_Time(0.f),
+	m_E_DeltaTime(0.f),
+	m_E_Time(0.f)
 {
 }
 
@@ -75,4 +77,10 @@ void CTimeMgr::Tick()
 	}
 
 	m_Time += m_DeltaTime;
+
+	// GlobalData
+	g_GlobalData.g_DT = m_DeltaTime;
+	g_GlobalData.g_EngineDT = m_E_DeltaTime;
+	g_GlobalData.g_Time = m_Time;
+	g_GlobalData.g_EngineTime = m_E_Time;
 }

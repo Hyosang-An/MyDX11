@@ -66,7 +66,7 @@ void Light2DUI::Update()
 
 	ImGui::Text("Light Radius");
 	ImGui::SameLine(100);
-	ImGui::DragFloat("##DragRadius", (float*)&info.Radius, 0.1f);
+	ImGui::DragFloat("##DragRadius", (float*)&info.Radius, 1.f);
 
 	ImGui::EndDisabled();
 

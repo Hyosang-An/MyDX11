@@ -78,3 +78,20 @@ struct tSpriteInfo
 	int	 UseFlipbook;
 	int  Padding[3];	// 16바이트 단위 맞추기 위해
 };
+
+struct tGlobalData
+{
+	// 시간 관련 정보
+	float   g_DT;
+	float   g_EngineDT;
+	float   g_Time;
+	float   g_EngineTime;
+
+	// 렌더타겟의 해상도 정보
+	Vec2	g_Resolution;
+
+	// 바인딩 된 구조화버퍼에 광원이 몇개 들어있는지
+	int     g_Light2DCount;
+	int     g_Light3DCount;
+};
+extern tGlobalData g_GlobalData;
