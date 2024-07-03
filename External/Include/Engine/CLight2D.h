@@ -23,6 +23,7 @@ public:
     const tLightInfo& GetLightInfo() { return m_Info; }
 
 public:
+    virtual void Begin() override;
     virtual void FinalTick() override;
 
 public:
