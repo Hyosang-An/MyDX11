@@ -13,12 +13,13 @@ private:
 	~CAssetMgr();
 
 private:
-	map<wstring, Ptr<CAsset>> m_mapAsset[(UINT)ASSET_TYPE::END];
+	map<wstring, Ptr<CAsset>> m_arrAssetMap[(UINT)ASSET_TYPE::END];
 
 public:
 	void Init();
 
 	void GetAssetNames(ASSET_TYPE _Type, vector<string>& _vecOut);
+	const map<wstring, Ptr<CAsset>>& GetAssets(ASSET_TYPE _Type) { return m_arrAssetMap[(UINT)_Type]; }
 
 	template<typename T>
 	Ptr<T> Load(const wstring& _Key, const wstring& _RelativePath);
@@ -78,7 +79,7 @@ Ptr<T> CAssetMgr::Load(const wstring& _Key, const wstring& _RelativePath)
 
 	// 맵에 등록
 	ASSET_TYPE type = GetAssetType<T>();
-	m_mapAsset[(UINT)type].insert(make_pair(_Key, Asset.Get()));
+	m_arrAssetMap[(UINT)type].insert(make_pair(_Key, Asset.Get()));
 
 	// 로딩된 에셋 주소 반환
 	return Asset;
@@ -89,9 +90,9 @@ Ptr<T> CAssetMgr::FindAsset(const wstring& _Key)
 {
 	ASSET_TYPE Type = GetAssetType<T>();
 
-	map<wstring, Ptr<CAsset>>::iterator iter = m_mapAsset[(UINT)Type].find(_Key);
+	map<wstring, Ptr<CAsset>>::iterator iter = m_arrAssetMap[(UINT)Type].find(_Key);
 
-	if (iter == m_mapAsset[(UINT)Type].end())
+	if (iter == m_arrAssetMap[(UINT)Type].end())
 		return nullptr;
 
 	//Ptr<CAsset> pAsset;
@@ -108,7 +109,7 @@ void CAssetMgr::AddAsset(const wstring& _Key, Ptr<T> _Asset)
 	assert(!FindAsset(Type, _Key).Get());
 
 	_Asset->SetKey(_Key);
-	m_mapAsset[(UINT)Type].insert(make_pair(_Key, _Asset.Get()));
+	m_arrAssetMap[(UINT)Type].insert(make_pair(_Key, _Asset.Get()));
 }
 
 // File 에 Asset 참조정보 저장 불러오기

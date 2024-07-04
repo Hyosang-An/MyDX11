@@ -61,6 +61,9 @@
     <Filter Include="EditorUI\01. Inspector\ComponentUI\08. Light2DUI">
       <UniqueIdentifier>{9ee0aa0b-67d1-4de4-8e2d-43e4c288cb12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorUI\05. TreeUI">
+      <UniqueIdentifier>{84d156f8-20fe-49c3-8210-db8619ad4c1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -153,6 +156,7 @@
     <ClInclude Include="ComponentUI.h">
       <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
     </ClInclude>
+    <ClInclude Include="TreeUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -237,6 +241,7 @@
     <ClCompile Include="ComponentUI.cpp">
       <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
     </ClCompile>
+    <ClCompile Include="TreeUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

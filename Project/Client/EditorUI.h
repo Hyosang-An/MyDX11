@@ -9,15 +9,15 @@ private:
 	string				m_Name;			// 창에 표시될 이름
 	const UINT			m_ID;			// UI 고유 아이디
 	string				m_FullName;		// UI 고유 아이디를 이용한 키 name
-	bool				m_Active;
+	bool				m_Active = true;
 
-	EditorUI*			m_Parent;
+	EditorUI*			m_Parent = nullptr;
 	vector<EditorUI*>	m_vecChildUI;
 
 	ImVec2				m_ChildSize;	// 자식 창의 크기
 
 	bool				m_Modal = false;
-	bool				m_ChildBorder;	// 자식 구분선 표기 유무
+	bool				m_ChildBorder = false;	// 자식 구분선 표기 유무 
 
 
 public:

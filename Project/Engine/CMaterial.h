@@ -7,6 +7,7 @@ class CMaterial :
 public:
     CMaterial();
     ~CMaterial();
+    virtual CMaterial* Clone() { return new CMaterial(*this); } // Material은 기본 복사생성자 써도 됨
 
 private:
     Ptr<CGraphicShader>     m_Shader;
@@ -26,8 +27,8 @@ public:
     void Binding();
 
 public:
-    virtual int Load(const wstring& _FilePath) override { return S_OK; };
-    virtual int Save(const wstring& _FilePath) override { return S_OK; };
+    virtual int Load(const wstring& _FilePath) override;
+    virtual int Save(const wstring& _RelativePath) override;
 };
 
 template<typename T>

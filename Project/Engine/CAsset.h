@@ -40,6 +40,6 @@ private:
     }
 
     virtual int Load(const wstring& _FilePath) = 0;
-    virtual int Save(const wstring& _FilePath) = 0;
+    virtual int Save(const wstring& _RelativePath) = 0;
 };
 

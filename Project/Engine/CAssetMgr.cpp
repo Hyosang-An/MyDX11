@@ -18,9 +18,9 @@ CAssetMgr::~CAssetMgr()
 
 Ptr<CAsset> CAssetMgr::FindAsset(ASSET_TYPE _Type, const wstring& _Key)
 {
-	map<wstring, Ptr<CAsset>>::iterator iter = m_mapAsset[(UINT)_Type].find(_Key);
+	map<wstring, Ptr<CAsset>>::iterator iter = m_arrAssetMap[(UINT)_Type].find(_Key);
 
-	if (iter == m_mapAsset[(UINT)_Type].end())
+	if (iter == m_arrAssetMap[(UINT)_Type].end())
 	{
 		return nullptr;
 	}
@@ -43,7 +43,7 @@ Ptr<CTexture> CAssetMgr::CreateTexture(wstring _strKey, UINT _Width, UINT _Heigh
 	}
 
 	pTexture->m_Key = _strKey;
-	m_mapAsset[(UINT)ASSET_TYPE::TEXTURE].insert(make_pair(_strKey, pTexture.Get()));
+	m_arrAssetMap[(UINT)ASSET_TYPE::TEXTURE].insert(make_pair(_strKey, pTexture.Get()));
 
 	return pTexture;
 }
@@ -62,7 +62,7 @@ Ptr<CTexture> CAssetMgr::CreateTexture(wstring _strKey, ComPtr<ID3D11Texture2D> 
 	}
 
 	pTexture->m_Key = _strKey;
-	m_mapAsset[(UINT)ASSET_TYPE::TEXTURE].insert(make_pair(_strKey, pTexture.Get()));
+	m_arrAssetMap[(UINT)ASSET_TYPE::TEXTURE].insert(make_pair(_strKey, pTexture.Get()));
 
 	return pTexture;
 }
@@ -70,7 +70,7 @@ Ptr<CTexture> CAssetMgr::CreateTexture(wstring _strKey, ComPtr<ID3D11Texture2D> 
 
 void CAssetMgr::GetAssetNames(ASSET_TYPE _Type, vector<string>& _vecOut)
 {
-	for (const auto& pair : m_mapAsset[(UINT)_Type])
+	for (const auto& pair : m_arrAssetMap[(UINT)_Type])
 	{
 		_vecOut.push_back(string(pair.first.begin(), pair.first.end()));
 	}

@@ -178,6 +178,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TileMapUI.h" />
     <ClInclude Include="TransformUI.h" />
+    <ClInclude Include="TreeUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraUI.cpp" />
@@ -213,6 +214,7 @@
     </ClCompile>
     <ClCompile Include="TileMapUI.cpp" />
     <ClCompile Include="TransformUI.cpp" />
+    <ClCompile Include="TreeUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

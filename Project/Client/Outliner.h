@@ -3,6 +3,9 @@
 class Outliner :
     public EditorUI
 {
+private:
+    class TreeUI* m_Tree;
+
 public:
     virtual void Update() override;
 

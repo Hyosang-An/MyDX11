@@ -9,6 +9,8 @@ CLight2D::CLight2D()
 	: CComponent(COMPONENT_TYPE::LIGHT2D)
 	, m_Info{}
 {
+	// 자신을 RenderMgr 에 등록시킴
+	CRenderMgr::GetInst()->RegisterLight2D(this);
 }
 
 CLight2D::~CLight2D()
@@ -18,8 +20,7 @@ CLight2D::~CLight2D()
 
 void CLight2D::Begin()
 {
-	// 자신을 RenderMgr 에 등록시킴
-	CRenderMgr::GetInst()->RegisterLight2D(this);
+
 }
 
 void CLight2D::FinalTick()

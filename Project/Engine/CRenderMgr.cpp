@@ -113,8 +113,11 @@ void CRenderMgr::RenderStart()
 		m_Light2DBuffer->Create(sizeof(tLightInfo), vecLight2DInfo.size());
 	}
 
-	m_Light2DBuffer->SetData(vecLight2DInfo.data());
-	m_Light2DBuffer->Binding(11);
+	if (!vecLight2DInfo.empty())
+	{
+		m_Light2DBuffer->SetData(vecLight2DInfo.data());
+		m_Light2DBuffer->Binding(11);
+	}
 
 	// GlobalData ¹ÙÀÎµù
 	static CConstBuffer* pGlobalCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::GLOBAL);

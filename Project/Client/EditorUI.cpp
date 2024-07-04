@@ -6,10 +6,7 @@
 UINT EditorUI::m_GlobalID = 0;
 
 EditorUI::EditorUI()
-	: m_Active(true)
-	, m_Parent(nullptr)
-	, m_ID(m_GlobalID++)
-	, m_ChildBorder(false)
+	: m_ID(m_GlobalID++)
 {
 
 }
