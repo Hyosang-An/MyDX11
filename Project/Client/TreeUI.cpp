@@ -39,7 +39,10 @@ void TreeNode::Update()
 		Flag |= ImGuiTreeNodeFlags_Leaf;
 		//sprintf_s(Name, 255, "   %s##%d", m_Name.c_str(), m_ID);
 
-		strName = "   " + m_Name + "##" + std::to_string(reinterpret_cast<uintptr_t>(this));
+		if (m_Frame)
+			strName = "   " + m_Name + "##" + std::to_string(reinterpret_cast<uintptr_t>(this));
+		else
+			strName = m_Name + "##" + std::to_string(reinterpret_cast<uintptr_t>(this));
 	}
 	else
 	{
@@ -50,10 +53,20 @@ void TreeNode::Update()
 
 
 
+	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.4f, 0.4f, 0.4f, 1.0f)); // Gray color for normal state
+	ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Red color on hover
+	ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));  // Green color on active
+
 	if (ImGui::TreeNodeEx(strName.c_str(), Flag))
 	{
-		// 해당 노드가 클릭된 경우
+		// 해당 노드가 클릭된 경우 (왼쪽 버튼이 눌린 순간)
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+		{
+			m_Owner->SetClickedNode(this);
+		}
+
+		// 해당 노드가 클릭되어있고 왼쪽 버튼이 떼진 순간
+		if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left) && (this == m_Owner->GetClickedNode()))
 		{
 			m_Owner->SetSelectedNode(this);
 		}
@@ -65,6 +78,8 @@ void TreeNode::Update()
 
 		ImGui::TreePop();
 	}
+
+	ImGui::PopStyleColor(3);
 }
 
 
@@ -72,19 +87,12 @@ void TreeNode::Update()
 // TreeUI
 // ======
 TreeUI::TreeUI()
-	: m_Root(nullptr)
-	, m_SelectedNode(nullptr)
-	, m_NodeID(0)
-	, m_ShowRoot(false)
-	, m_ClickedInst(nullptr)
-	, m_ClickedFunc(nullptr)
 {
 }
 
 TreeUI::~TreeUI()
 {
-	if (nullptr != m_Root)
-		delete m_Root;
+	Clear();
 }
 
 void TreeUI::Update()
@@ -103,7 +111,7 @@ void TreeUI::Update()
 	}
 }
 
-TreeNode* TreeUI::AddNode(TreeNode* _Parent, const string& _Name, DWORD_PTR _Data)
+TreeNode* TreeUI::AddNode(TreeNode* _ParentNode, const string& _Name, DWORD_PTR _Data)
 {
 	// _Data 기본값 0
 	
@@ -114,7 +122,7 @@ TreeNode* TreeUI::AddNode(TreeNode* _Parent, const string& _Name, DWORD_PTR _Dat
 	pNode->m_Data = _Data;
 
 	// 부모가 지정되지 않으면 노드를 루트로 삼겠다.
-	if (nullptr == _Parent)
+	if (nullptr == _ParentNode)
 	{
 		assert(!m_Root);
 
@@ -122,10 +130,15 @@ TreeNode* TreeUI::AddNode(TreeNode* _Parent, const string& _Name, DWORD_PTR _Dat
 	}
 	else
 	{
-		_Parent->AddChildNode(pNode);
+		_ParentNode->AddChildNode(pNode);
 	}
 
 	return pNode;
+}
+
+void TreeUI::SetClickedNode(TreeNode* _node)
+{
+	m_ClickedNode = _node;
 }
 
 void TreeUI::SetSelectedNode(TreeNode* _Node)
@@ -142,9 +155,18 @@ void TreeUI::SetSelectedNode(TreeNode* _Node)
 	{
 		m_SelectedNode->m_Selected = true;
 
-		if (m_ClickedInst && m_ClickedFunc)
+		if (m_SelectedUI && m_SelectedFunc)
 		{
-			(m_ClickedInst->*m_ClickedFunc)((DWORD_PTR)m_SelectedNode);
+			(m_SelectedUI->*m_SelectedFunc)((DWORD_PTR)m_SelectedNode);
 		}
+	}
+}
+
+void TreeUI::Clear()
+{
+	if (nullptr != m_Root)
+	{
+		delete m_Root;
+		m_Root = nullptr;
 	}
 }

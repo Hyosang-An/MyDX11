@@ -64,6 +64,39 @@
     <Filter Include="EditorUI\05. TreeUI">
       <UniqueIdentifier>{84d156f8-20fe-49c3-8210-db8619ad4c1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI">
+      <UniqueIdentifier>{4e3a1308-1856-4877-b8b3-58ae9e1dda1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\01. MeshUI">
+      <UniqueIdentifier>{49f7101c-0bf8-43f9-b81d-66d453b14ad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\03. MaterialUI">
+      <UniqueIdentifier>{61ba5074-ed94-41aa-9188-50f49021287d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\04. PrefabUI">
+      <UniqueIdentifier>{3bd95857-d847-4eb1-ac6e-12d398b0c785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\05. TextureUI">
+      <UniqueIdentifier>{fb88a6d1-f65a-4d03-92c6-0cec24e47849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\06. SpriteUI">
+      <UniqueIdentifier>{3fc759d3-6952-4e3d-aba7-fe3c57109e16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\07. FlipBookUI">
+      <UniqueIdentifier>{b4021d32-e8a8-46ce-ad83-9e7f9a60a46a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\08. SoundUI">
+      <UniqueIdentifier>{1a05fee6-7091-4b64-a3e2-7a145734f55e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\09. GraphicShaderUI">
+      <UniqueIdentifier>{e01c49ed-4ff1-4741-93b5-9260c7895bba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\10. ComputeShaderUI">
+      <UniqueIdentifier>{1798c73b-777c-4b9c-a264-22dff800e592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\01. Inspector\AssetUI\02. MeshDataUI">
+      <UniqueIdentifier>{04206035-40cf-4ce6-a292-b6ebde9ea494}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -156,7 +189,48 @@
     <ClInclude Include="ComponentUI.h">
       <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
     </ClInclude>
-    <ClInclude Include="TreeUI.h" />
+    <ClInclude Include="TreeUI.h">
+      <Filter>EditorUI\05. TreeUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShaderUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\10. ComputeShaderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="FlipBookUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\07. FlipBookUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicShaderUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\09. GraphicShaderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\03. MaterialUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshDataUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\02. MeshDataUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\01. MeshUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PrefabUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\04. PrefabUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\08. SoundUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\06. SpriteUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureUI.h">
+      <Filter>EditorUI\01. Inspector\AssetUI\05. TextureUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentUIs.h">
+      <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetUIs.h">
+      <Filter>EditorUI\01. Inspector\AssetUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -241,7 +315,42 @@
     <ClCompile Include="ComponentUI.cpp">
       <Filter>EditorUI\01. Inspector\ComponentUI</Filter>
     </ClCompile>
-    <ClCompile Include="TreeUI.cpp" />
+    <ClCompile Include="TreeUI.cpp">
+      <Filter>EditorUI\05. TreeUI</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShaderUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\10. ComputeShaderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="FlipBookUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\07. FlipBookUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicShaderUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\09. GraphicShaderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\03. MaterialUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshDataUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\02. MeshDataUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\01. MeshUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PrefabUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\04. PrefabUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\08. SoundUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\06. SpriteUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureUI.cpp">
+      <Filter>EditorUI\01. Inspector\AssetUI\05. TextureUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

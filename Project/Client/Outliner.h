@@ -9,6 +9,11 @@ private:
 public:
     virtual void Update() override;
 
+private:
+    void RenewLevel();
+    void GameObjectSelected(DWORD_PTR _Param);
+    void AddGameObject(class TreeNode* pNode, class CGameObject* _Object);
+
 public:
     Outliner();
     ~Outliner();

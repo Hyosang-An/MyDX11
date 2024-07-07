@@ -102,26 +102,29 @@ void CLevelMgr::Init()
 	m_CurLevel->AddObject(0, pObject);
 
 	// 플레이어 오브젝트
-	pObject = new CGameObject;
-	pObject->SetName(L"Player");
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CCollider2D);
-	pObject->AddComponent(new CFlipBookComponent);
-	pObject->AddComponent(new CPlayerScript);
+	CGameObject* pPlayer = new CGameObject;
+	pPlayer->SetName(L"Player");
+	pPlayer->AddComponent(new CTransform);
+	pPlayer->AddComponent(new CMeshRender);
+	pPlayer->AddComponent(new CCollider2D);
+	pPlayer->AddComponent(new CFlipBookComponent);
+	pPlayer->AddComponent(new CPlayerScript);
 
-	pObject->Transform()->SetRelativePos(0.f, 0.f, 100.f);
-	pObject->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
+	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+	pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
 
-	pObject->Collider2D()->SetIndependentScale(false);
-	pObject->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
-	pObject->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
+	pPlayer->Collider2D()->SetIndependentScale(false);
+	pPlayer->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	pPlayer->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
 
-	pObject->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetMaterial(pMtrl);
+	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pPlayer->MeshRender()->SetMaterial(pMtrl);
 
-	pObject->FlipBookComponent()->AddFlipBook(5, CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"Link_MoveDown"));
-	pObject->FlipBookComponent()->Play(5, 10, true);
+	pPlayer->FlipBookComponent()->AddFlipBook(5, CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"Link_MoveDown"));
+	pPlayer->FlipBookComponent()->Play(5, 10, true);
+
+	m_CurLevel->AddObject(3, pPlayer);
+
 
 	//// Child Object
 	//CGameObject* pChild = new CGameObject;
@@ -143,7 +146,7 @@ void CLevelMgr::Init()
 
 	//pObject->AddChild(pChild);
 
-	m_CurLevel->AddObject(3, pObject);
+
 
 	//// Monster Object
 	//CGameObject* pMonster = new CGameObject;

@@ -148,6 +148,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AssetUI.h" />
+    <ClInclude Include="AssetUIs.h" />
+    <ClInclude Include="ComponentUIs.h" />
     <ClInclude Include="CameraUI.h" />
     <ClInclude Include="CEditorCameraScript.h" />
     <ClInclude Include="CEditorMgr.h" />
@@ -155,10 +158,13 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Collider2DUI.h" />
     <ClInclude Include="ComponentUI.h" />
+    <ClInclude Include="ComputeShaderUI.h" />
     <ClInclude Include="Content.h" />
     <ClInclude Include="EditorUI.h" />
     <ClInclude Include="FlipBookComUI.h" />
+    <ClInclude Include="FlipBookUI.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GraphicShaderUI.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -170,17 +176,25 @@
     <ClInclude Include="Inspector.h" />
     <ClInclude Include="Light2DUI.h" />
     <ClInclude Include="ListUI.h" />
+    <ClInclude Include="MaterialUI.h" />
+    <ClInclude Include="MeshDataUI.h" />
     <ClInclude Include="MeshRenderUI.h" />
+    <ClInclude Include="MeshUI.h" />
     <ClInclude Include="Outliner.h" />
     <ClInclude Include="ParticleSystemUI.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PrefabUI.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SoundUI.h" />
+    <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TextureUI.h" />
     <ClInclude Include="TileMapUI.h" />
     <ClInclude Include="TransformUI.h" />
     <ClInclude Include="TreeUI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssetUI.cpp" />
     <ClCompile Include="CameraUI.cpp" />
     <ClCompile Include="CEditorCameraScript.cpp" />
     <ClCompile Include="CEditorMgr.cpp" />
@@ -190,9 +204,12 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Collider2DUI.cpp" />
     <ClCompile Include="ComponentUI.cpp" />
+    <ClCompile Include="ComputeShaderUI.cpp" />
     <ClCompile Include="Content.cpp" />
     <ClCompile Include="EditorUI.cpp" />
     <ClCompile Include="FlipBookComUI.cpp" />
+    <ClCompile Include="FlipBookUI.cpp" />
+    <ClCompile Include="GraphicShaderUI.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -203,7 +220,10 @@
     <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="Light2DUI.cpp" />
     <ClCompile Include="ListUI.cpp" />
+    <ClCompile Include="MaterialUI.cpp" />
+    <ClCompile Include="MeshDataUI.cpp" />
     <ClCompile Include="MeshRenderUI.cpp" />
+    <ClCompile Include="MeshUI.cpp" />
     <ClCompile Include="Outliner.cpp" />
     <ClCompile Include="ParticleSystemUI.cpp" />
     <ClCompile Include="pch.cpp">
@@ -212,6 +232,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PrefabUI.cpp" />
+    <ClCompile Include="SoundUI.cpp" />
+    <ClCompile Include="SpriteUI.cpp" />
+    <ClCompile Include="TextureUI.cpp" />
     <ClCompile Include="TileMapUI.cpp" />
     <ClCompile Include="TransformUI.cpp" />
     <ClCompile Include="TreeUI.cpp" />

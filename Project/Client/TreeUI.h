@@ -4,7 +4,7 @@
 class TreeNode
 {
 private:
-    class TreeUI* m_Owner;
+    class TreeUI*       m_Owner;
 
     string              m_Name;
     TreeNode*           m_ParentNode;
@@ -42,22 +42,27 @@ class TreeUI :
     public EditorUI
 {
 private:
-    TreeNode*   m_Root;
-    TreeNode*   m_SelectedNode;
+    TreeNode*   m_Root = nullptr;
+    TreeNode*   m_ClickedNode = nullptr;
+    TreeNode*   m_SelectedNode = nullptr;
 
-    UINT        m_NodeID;
-    bool        m_ShowRoot;
+    UINT        m_NodeID = 0;
+    bool        m_ShowRoot = false;
 
-    EditorUI*   m_ClickedInst;
-    DELEGATE_1  m_ClickedFunc;
+    EditorUI*   m_SelectedUI = nullptr;
+    DELEGATE_1  m_SelectedFunc = nullptr;
 
 
 public:
     TreeNode* AddNode(TreeNode* _Parent, const string& _Name, DWORD_PTR _Data = 0);
     void ShowRoot(bool _Show) { m_ShowRoot = _Show; }
     bool IsShowRoot() { return m_ShowRoot; }
+    TreeNode* GetClickedNode() { return m_ClickedNode; }
+
+    void SetClickedNode(TreeNode* _node);
     void SetSelectedNode(TreeNode* _Node);
-    void AddClickedDelegate(EditorUI* _Inst, DELEGATE_1 _Func) { m_ClickedInst = _Inst; m_ClickedFunc = _Func; }
+    void AddClickedDelegate(EditorUI* _Inst, DELEGATE_1 _Func) { m_SelectedUI = _Inst; m_SelectedFunc = _Func; }
+    void Clear();
 
 public:
     virtual void Update() override;

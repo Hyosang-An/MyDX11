@@ -19,7 +19,7 @@ public:
 	void Init();
 
 	void GetAssetNames(ASSET_TYPE _Type, vector<string>& _vecOut);
-	const map<wstring, Ptr<CAsset>>& GetAssets(ASSET_TYPE _Type) { return m_arrAssetMap[(UINT)_Type]; }
+	const map<wstring, Ptr<CAsset>>& GetAssetMap(ASSET_TYPE _Type) { return m_arrAssetMap[(UINT)_Type]; }
 
 	template<typename T>
 	Ptr<T> Load(const wstring& _Key, const wstring& _RelativePath);

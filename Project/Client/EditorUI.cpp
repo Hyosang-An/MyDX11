@@ -141,3 +141,8 @@ void EditorUI::SetActive(bool _Active)
 	else
 		Deactivate();
 }
+
+void EditorUI::SetFocus()
+{
+	ImGui::SetWindowFocus(m_FullName.c_str());
+}

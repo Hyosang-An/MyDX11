@@ -20,4 +20,3 @@ public:
     ComponentUI(COMPONENT_TYPE _Type);
     ~ComponentUI();
 };
-

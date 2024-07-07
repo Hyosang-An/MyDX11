@@ -7,22 +7,126 @@
 #include <Engine/CGameObject.h>
 #include <Engine/components.h>
 
-#include "TransformUI.h"
-#include "Collider2DUI.h"
-#include "Light2DUI.h"
-#include "CameraUI.h"
-#include "MeshRenderUI.h"
-#include "FlipBookComUI.h"
-#include "TileMapUI.h"
-#include "ParticleSystemUI.h"
+#include "ComponentUI.h"
+#include "AssetUI.h"
 
-Inspector::Inspector()
-	: m_TargetObject(nullptr)
-	, m_arrComUI{}
+#include "ComponentUIs.h"
+#include "AssetUIs.h"
+
+
+Inspector::Inspector() :
+	m_TargetObject(nullptr),
+	m_arrComUI{},
+	m_arrAssetUI{}
+{
+}
+
+Inspector::~Inspector()
+{
+}
+
+void Inspector::Init()
+{
+	CreateComponentUI();
+
+	CreateAssetUI();
+
+
+	if (nullptr == m_TargetObject)
+	{
+		SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"Player"));
+		//SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"MainCamera"));
+		//SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"PointLight 1"));
+		return;
+	}
+}
+
+void Inspector::SetTargetObject(CGameObject* _Object)
+{
+	m_TargetObject = _Object;
+	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
+	{
+		if (nullptr == m_arrComUI[i])
+			continue;
+
+		m_arrComUI[i]->SetTargetObject(_Object);
+	}
+
+	m_TargetAsset = nullptr;
+	for (UINT i = 0; i < (UINT)ASSET_TYPE::END; ++i)
+	{
+		if (nullptr == m_arrAssetUI[i])
+			continue;
+
+		m_arrAssetUI[i]->SetAsset(nullptr);
+	}
+}
+
+void Inspector::SetTargetAsset(Ptr<CAsset> _Asset)
+{
+	if (nullptr == _Asset)
+		return;
+
+	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
+	{
+		if (nullptr == m_arrComUI[i])
+			continue;
+
+		m_arrComUI[i]->SetTargetObject(nullptr);
+	}
+
+	m_TargetAsset = _Asset;
+
+	for (UINT i = 0; i < (UINT)ASSET_TYPE::END; ++i)
+	{
+		if (nullptr == m_arrAssetUI[i])
+			continue;
+
+		m_arrAssetUI[i]->SetAsset(m_TargetAsset);
+	}
+}
+
+void Inspector::Update()
+{
+	if (nullptr == m_TargetObject)
+	{
+		return;
+	}
+
+	// ===========
+	// Object Name
+	// ===========
+	string strObjectName = string(m_TargetObject->GetName().begin(), m_TargetObject->GetName().end());
+	ImGui::Text("Object Name");
+	ImGui::SameLine(108);
+	ImGui::InputText("##ObjectName", (char*)strObjectName.c_str(), strObjectName.length(), ImGuiInputTextFlags_ReadOnly);
+
+	// ======
+	// Layer
+	// ======
+	int LayerIdx = m_TargetObject->GetLayerIdx();
+	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+	CLayer* pLayer = pCurLevel->GetLayer(LayerIdx);
+	string LayerName = string(pLayer->GetName().begin(), pLayer->GetName().end());
+
+	char buffer[50] = {};
+
+	if (LayerName.empty())
+		sprintf_s(buffer, 50, "%d : %s", LayerIdx, "None");
+	else
+		sprintf_s(buffer, 50, "%d : %s", LayerIdx, LayerName.c_str());
+
+	ImGui::Text("Layer");
+	ImGui::SameLine(108);
+	ImGui::InputText("##LayerName", buffer, strlen(buffer), ImGuiInputTextFlags_ReadOnly);
+}
+
+
+void Inspector::CreateComponentUI()
 {
 	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM] = new TransformUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]->SetName("TransformUI");
-	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]->SetChildSize(ImVec2(0.f, 100.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]->SetChildSize(ImVec2(0.f, 130.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::TRANSFORM]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D] = new Collider2DUI;
@@ -61,57 +165,59 @@ Inspector::Inspector()
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLE_SYSTEM]);
 }
 
-Inspector::~Inspector()
+void Inspector::CreateAssetUI()
 {
-}
+	AssetUI* UI = nullptr;
 
-void Inspector::SetTargetObject(CGameObject* _Object)
-{
-	m_TargetObject = _Object;
+	UI = new MeshUI;
+	UI->SetName("MeshUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::MESH] = UI;
 
-	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
-	{
-		if (nullptr == m_arrComUI[i])
-			continue;
+	UI = new MeshDataUI;
+	UI->SetName("MeshDataUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::MESH_DATA] = UI;
 
-		m_arrComUI[i]->SetTargetObject(_Object);
-	}
-}
+	UI = new MaterialUI;
+	UI->SetName("MaterialUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::MATERIAL] = UI;
 
-void Inspector::Update()
-{
-	if (nullptr == m_TargetObject)
-	{
-		SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"Player"));
-		//SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"MainCamera"));
-		//SetTargetObject(CLevelMgr::GetInst()->FindObjectByName(L"PointLight 1"));
-		return;
-	}
+	UI = new PrefabUI;
+	UI->SetName("PrefabUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::PREFAB] = UI;
 
-	// ===========
-	// Object Name
-	// ===========
-	string strObjectName = string(m_TargetObject->GetName().begin(), m_TargetObject->GetName().end());
-	ImGui::Text("Object Name");
-	ImGui::SameLine(108);
-	ImGui::InputText("##ObjectName", (char*)strObjectName.c_str(), strObjectName.length(), ImGuiInputTextFlags_ReadOnly);
+	UI = new TextureUI;
+	UI->SetName("TextureUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::TEXTURE] = UI;
 
-	// ======
-	// Layer
-	// ======
-	int LayerIdx = m_TargetObject->GetLayerIdx();
-	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
-	CLayer* pLayer = pCurLevel->GetLayer(LayerIdx);
-	string LayerName = string(pLayer->GetName().begin(), pLayer->GetName().end());
+	UI = new SoundUI;
+	UI->SetName("SoundUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::SOUND] = UI;
 
-	char buffer[50] = {};
+	UI = new GraphicShaderUI;
+	UI->SetName("GraphicShaderUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::GRAPHIC_SHADER] = UI;
 
-	if (LayerName.empty())
-		sprintf_s(buffer, 50, "%d : %s", LayerIdx, "None");
-	else
-		sprintf_s(buffer, 50, "%d : %s", LayerIdx, LayerName.c_str());
+	UI = new ComputeShaderUI;
+	UI->SetName("ComputeShaderUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::COMPUTE_SHADER] = UI;
 
-	ImGui::Text("Layer");
-	ImGui::SameLine(108);
-	ImGui::InputText("##LayerName", buffer, strlen(buffer), ImGuiInputTextFlags_ReadOnly);
+	UI = new SpriteUI;
+	UI->SetName("SpriteUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::SPRITE] = UI;
+
+	UI = new FlipBookUI;
+	UI->SetName("FlipBookUI");
+	AddChild(UI);
+	m_arrAssetUI[(UINT)ASSET_TYPE::FLIPBOOK] = UI;
+
+
 }

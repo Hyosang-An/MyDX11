@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Content.h"
 
+#include "CEditorMgr.h"
+#include "Inspector.h"
 #include "TreeUI.h"
 
 #include <Engine/CAssetMgr.h>
@@ -31,6 +33,9 @@ void Content::Update()
 
 void Content::RenewContent()
 {
+	// 트리의 내용을 전부 제거
+	m_Tree->Clear();
+
 	// 부모노드를 지정하지 않음 == 루트노드 입력
 	TreeNode* pRoot = m_Tree->AddNode(nullptr, "Root");
 
@@ -39,9 +44,9 @@ void Content::RenewContent()
 		TreeNode* pNode = m_Tree->AddNode(pRoot, ToString((ASSET_TYPE)i));
 		pNode->SetFrame(true);
 
-		const map<wstring, Ptr<CAsset>>& mapAsset = CAssetMgr::GetInst()->GetAssets((ASSET_TYPE)i);
+		const map<wstring, Ptr<CAsset>>& assetMap = CAssetMgr::GetInst()->GetAssetMap((ASSET_TYPE)i);
 
-		for (const auto& pair : mapAsset)
+		for (const auto& pair : assetMap)
 		{
 			// Asset의 주소값을 Data로 넣어준다. 이때, pair가 const & 이므로, pair.second.Get() 도 const 함수여야 한다.
 			m_Tree->AddNode(pNode, string(pair.first.begin(), pair.first.end()), (DWORD_PTR)pair.second.Get());
@@ -53,5 +58,14 @@ void Content::AssetClicked(DWORD_PTR _Param)
 {
 	// _Param은 SelectedNode이다.
 	TreeNode* pNode = (TreeNode*)_Param;
+	if (pNode->IsFrame())
+		return;
+
 	Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
+
+	Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+	pInspector->SetTargetAsset(pAsset);
+
+	// GUI윈도우 포커스 해제
+	ImGui::SetWindowFocus(nullptr);
 }
