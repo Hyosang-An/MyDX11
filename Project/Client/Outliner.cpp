@@ -13,12 +13,28 @@
 Outliner::Outliner()
 {
 	m_Tree = new TreeUI;
-	m_Tree->SetName("OltlinerTree");
+	m_Tree->SetName("OutlinerTree");
 	AddChild(m_Tree);
 
 	// 트리 옵션 세팅
-	m_Tree->ShowRoot(false); // 루트 보이지 않기
-	m_Tree->AddClickedDelegate(this, (DELEGATE_1)&Outliner::GameObjectSelected);
+	// 루트 보이지 않기
+	m_Tree->ShowRoot(false); 
+
+	// Selected Delegate 등록
+	m_Tree->AddSelectedDelegate(this, (DELEGATE_1)&Outliner::GameObjectSelected);
+
+	// Drag, Drop On
+	m_Tree->UseDrag(true);
+	m_Tree->UseDrop(true);
+
+	// Self DragDrop Delegate 등록
+	m_Tree->AddDragDropDelegate(this, (DELEGATE_2)&Outliner::GameObjectAddChild);
+
+	// 외부 드랍 Delegate 등록
+	m_Tree->AddDropDelegate(this, (DELEGATE_2)&Outliner::DroppedFromOuter);
+	m_Tree->SetDropPayLoadName("ContentTree"); // 드롭 받을 외부 TreeUI
+
+
 
 	// Asset 상태를 Content 의 TreeUI 에 반영
 	RenewLevel();
@@ -72,7 +88,6 @@ void Outliner::AddGameObject(TreeNode* _ParentNode, CGameObject* _Object)
 	}
 }
 
-
 void Outliner::GameObjectSelected(DWORD_PTR _Param)
 {
 	TreeNode* pSelectedNode = (TreeNode*)_Param;
@@ -82,4 +97,20 @@ void Outliner::GameObjectSelected(DWORD_PTR _Param)
 	Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
 	pInspector->SetTargetObject(pObject);
 	ImGui::SetWindowFocus(nullptr);
+}
+
+void Outliner::GameObjectAddChild(DWORD_PTR _Param1, DWORD_PTR _Param2)
+{
+	TreeNode* pDragNode = (TreeNode*)_Param1;
+	TreeNode* pDropNode = (TreeNode*)_Param2;
+
+	// TODO
+}
+
+void Outliner::DroppedFromOuter(DWORD_PTR _OuterData, DWORD_PTR _DropNode)
+{
+	TreeNode* ContentNode = *((TreeNode**)_OuterData);
+	TreeNode* DropNode = (TreeNode*)_DropNode;
+
+	// TODO
 }

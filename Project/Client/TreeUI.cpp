@@ -66,10 +66,19 @@ void TreeNode::Update()
 		}
 
 		// 해당 노드가 클릭되어있고 왼쪽 버튼이 떼진 순간
-		if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left) && (this == m_Owner->GetClickedNode()))
+		if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 		{
-			m_Owner->SetSelectedNode(this);
+			if (this == m_Owner->GetClickedNode())
+				m_Owner->SetSelectedNode(this);
+			else
+				m_Owner->SetClickedNode(nullptr);
 		}
+
+		// Drag 체크	
+		DragCheck();
+
+		// Drop 체크
+		DropCheck();
 
 		for (size_t i = 0; i < m_vecChildNode.size(); ++i)
 		{
@@ -82,10 +91,42 @@ void TreeNode::Update()
 	ImGui::PopStyleColor(3);
 }
 
+void TreeNode::DragCheck()
+{
+	if (m_Owner->IsDrag())
+	{
+		if (ImGui::BeginDragDropSource())
+		{
+			TreeNode* pThis = this;
 
-// ======
+			// 해당 트리 노드의 주소값을 전달
+			ImGui::SetDragDropPayload(m_Owner->GetName().c_str(), &pThis, sizeof(TreeNode*));
+			ImGui::Text(m_Name.c_str());
+			ImGui::EndDragDropSource();
+
+			m_Owner->SetDragedNode(this);
+		}
+	}
+}
+
+
+void TreeNode::DropCheck()
+{
+	if (!m_Owner->IsDrop())
+		return;
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		m_Owner->SetDroppedNode(this);
+
+		ImGui::EndDragDropTarget();
+	}
+}
+
+
+// ======================================================================================================
 // TreeUI
-// ======
+// ======================================================================================================
 TreeUI::TreeUI()
 {
 }
@@ -108,6 +149,12 @@ void TreeUI::Update()
 		{
 			m_Root->m_vecChildNode[i]->Update();
 		}
+	}
+
+	// 마우스 왼쪽 버튼을 뗏을 때, 선택된 m_DroppedNode, m_DragedNode 해제
+	if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+	{
+		m_DroppedNode = m_DragedNode = nullptr;
 	}
 }
 
@@ -158,6 +205,42 @@ void TreeUI::SetSelectedNode(TreeNode* _Node)
 		if (m_SelectedUI && m_SelectedFunc)
 		{
 			(m_SelectedUI->*m_SelectedFunc)((DWORD_PTR)m_SelectedNode);
+		}
+	}
+}
+
+void TreeUI::SetDragedNode(TreeNode* _Node)
+{
+	m_DragedNode = _Node;
+}
+
+void TreeUI::SetDroppedNode(TreeNode* _Node)
+{
+	// 현재 트리에서 Drag 된 노드가 없는 경우 ( 외부 데이터가 트리로 드랍된 경우 )
+	if (nullptr == m_DragedNode)
+	{
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(m_DropPayLoadName.c_str());
+		if (payload)
+		{
+			m_DroppedNode = _Node;
+
+			if (m_DropInst && m_DropFunc)
+				(m_DropInst->*m_DropFunc)((DWORD_PTR)payload->Data, (DWORD_PTR)m_DroppedNode);
+		}
+	}
+
+	// Self Drag Drop 된 상황
+	else
+	{
+		assert(m_DragedNode->m_Owner == this);
+
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(GetName().c_str());
+		if (payload)
+		{
+			m_DroppedNode = _Node;
+
+			if (m_SelfDragDropInst && m_SelfDragDropFunc)
+				(m_SelfDragDropInst->*m_SelfDragDropFunc)((DWORD_PTR)m_DragedNode, (DWORD_PTR)m_DroppedNode);
 		}
 	}
 }

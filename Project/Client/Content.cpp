@@ -16,7 +16,8 @@ Content::Content()
 
 	// 트리 옵션 세팅
 	m_Tree->ShowRoot(false); // 루트 보이지 않기
-	m_Tree->AddClickedDelegate(this, (DELEGATE_1)&Content::AssetClicked);
+	m_Tree->UseDrag(true);	 // Tree Drag 기능 ON
+	m_Tree->AddSelectedDelegate(this, (DELEGATE_1)&Content::AssetClicked);
 
 	// Asset 상태를 Content 의 TreeUI 에 반영
 	RenewContent();
