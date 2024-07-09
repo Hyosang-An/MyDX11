@@ -31,7 +31,7 @@ void TreeNode::Update()
 	if (m_Selected)
 		Flag |= ImGuiTreeNodeFlags_Selected;
 
-	char Name[255] = {};
+	//char Name[255] = {};
 	string strName;
 
 	if (m_vecChildNode.empty())
@@ -52,6 +52,12 @@ void TreeNode::Update()
 	}
 
 
+	// NameOnly (폴더 경로 및 확장자를 뺀 파일 이름만 노출)
+	if (m_Owner->IsShowNameOnly())
+	{
+		path Path = strName;
+		strName = Path.stem().string();
+	}
 
 	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.4f, 0.4f, 0.4f, 1.0f)); // Gray color for normal state
 	ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Red color on hover

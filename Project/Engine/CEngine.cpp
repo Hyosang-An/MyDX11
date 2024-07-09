@@ -50,6 +50,7 @@ void CEngine::Progress()
 	// Manager
 	CKeyMgr::GetInst()->Tick();
 	CTimeMgr::GetInst()->Tick();
+	CAssetMgr::GetInst()->Tick();
 	CLevelMgr::GetInst()->Progress();
 
 	// Collision

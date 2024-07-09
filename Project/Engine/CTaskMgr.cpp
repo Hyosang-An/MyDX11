@@ -5,7 +5,7 @@
 #include "CLevel.h"
 #include "CLayer.h"
 #include "CGameObject.h"
-
+#include "CAssetMgr.h"
 
 CTaskMgr::CTaskMgr()
 {}
@@ -71,6 +71,12 @@ void CTaskMgr::ExecuteTask()
 			case TASK_TYPE::CHANGE_LEVEL:
 			{
 
+			}
+			break;
+
+			case TASK_TYPE::ASSET_CHANGED:
+			{
+				CAssetMgr::GetInst()->m_Changed = true;
 			}
 			break;
 		}

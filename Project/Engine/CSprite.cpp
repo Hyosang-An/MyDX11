@@ -51,10 +51,20 @@ void CSprite::Create(Ptr<CTexture> _Atlas, Vec2 _LeftTopPixel, Vec2 _SlicePixel)
 	m_SliceUV = Vec2(_SlicePixel.x / (float)width, _SlicePixel.y / (float)height);
 }
 
-int CSprite::Save(const wstring& _FilePath)
+int CSprite::Save(const wstring& _RelativePath)
 {
+	// 어디에 저장해뒀는지 알고 있는게 좋음
+	SetRelativePath(_RelativePath);
+
+	wstring strFilePath = CPathMgr::GetInst()->GetContentsPath();
+	strFilePath += _RelativePath;
+
+	std::filesystem::path dir_path = strFilePath;
+	if (!std::filesystem::exists(dir_path.parent_path()))
+		std::filesystem::create_directories(dir_path.parent_path());
+
 	FILE* File = nullptr;
-	_wfopen_s(&File, _FilePath.c_str(), L"wb");
+	_wfopen_s(&File, strFilePath.c_str(), L"wb");
 
 	if (nullptr == File)
 		return E_FAIL;

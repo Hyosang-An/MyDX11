@@ -53,6 +53,7 @@ private:
 
     UINT        m_NodeID = 0;
     bool        m_ShowRoot = false;
+    bool        m_ShowNameOnly = false;
     bool        m_UseDrag = false;
     bool        m_UseDrop = false;
 
@@ -71,6 +72,9 @@ public:
     TreeNode* AddNode(TreeNode* _Parent, const string& _Name, DWORD_PTR _Data = 0);
     void ShowRoot(bool _Show) { m_ShowRoot = _Show; }
     bool IsShowRoot() { return m_ShowRoot; }
+    bool IsShowNameOnly() { return m_ShowNameOnly; }
+    void ShowNameOnly(bool _NameOnly) { m_ShowNameOnly = _NameOnly; }
+
     TreeNode* GetClickedNode() { return m_ClickedNode; }
 
     void SetClickedNode(TreeNode* _node);

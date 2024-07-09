@@ -14,6 +14,11 @@ CAssetMgr::~CAssetMgr()
 
 }
 
+void CAssetMgr::Tick()
+{
+	if (m_Changed)
+		m_Changed = false;
+}
 
 
 Ptr<CAsset> CAssetMgr::FindAsset(ASSET_TYPE _Type, const wstring& _Key)

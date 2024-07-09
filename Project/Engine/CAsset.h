@@ -25,10 +25,11 @@ public:
     const wstring& GetRelativePath() { return m_RelativePath; }
     ASSET_TYPE GetAssetType() { return m_Type; }
 
-private:
+protected:
     void SetKey(const wstring& _Key) { m_Key = _Key; }
     void SetRelativePath(const wstring& _path) { m_RelativePath = _path; }
 
+private:
     void AddRef() { ++m_RefCount; }
     void Release()
     {

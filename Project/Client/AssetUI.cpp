@@ -29,9 +29,9 @@ void AssetUI::Title()
 	// Áú¹® ?
 	ImGui::PushID((int)m_Type);
 
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(38, 98, 241, 255));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(38, 98, 241, 255));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(38, 98, 241, 255));
+	ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(38, 98, 241, 255));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(38, 98, 241, 255));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(38, 98, 241, 255));
 
 	ImGui::Button(ToString(m_Type));
 

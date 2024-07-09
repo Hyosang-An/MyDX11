@@ -122,6 +122,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -177,6 +178,7 @@
     <ClInclude Include="Light2DUI.h" />
     <ClInclude Include="ListUI.h" />
     <ClInclude Include="MaterialUI.h" />
+    <ClInclude Include="MenuUI.h" />
     <ClInclude Include="MeshDataUI.h" />
     <ClInclude Include="MeshRenderUI.h" />
     <ClInclude Include="MeshUI.h" />
@@ -221,6 +223,7 @@
     <ClCompile Include="Light2DUI.cpp" />
     <ClCompile Include="ListUI.cpp" />
     <ClCompile Include="MaterialUI.cpp" />
+    <ClCompile Include="MenuUI.cpp" />
     <ClCompile Include="MeshDataUI.cpp" />
     <ClCompile Include="MeshRenderUI.cpp" />
     <ClCompile Include="MeshUI.cpp" />

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CPathMgr.h"
+#include "CTaskMgr.h"
 
 class CAsset;
 
@@ -9,17 +10,22 @@ class CAssetMgr
 {
 private:
 	friend class CSingleton<CAssetMgr>;
+	friend class CTaskMgr;
+
 	CAssetMgr();
 	~CAssetMgr();
 
 private:
-	map<wstring, Ptr<CAsset>> m_arrAssetMap[(UINT)ASSET_TYPE::END];
+	map<wstring, Ptr<CAsset>>	m_arrAssetMap[(UINT)ASSET_TYPE::END];
+	bool						m_Changed = false;
 
 public:
 	void Init();
+	void Tick();
 
 	void GetAssetNames(ASSET_TYPE _Type, vector<string>& _vecOut);
 	const map<wstring, Ptr<CAsset>>& GetAssetMap(ASSET_TYPE _Type) { return m_arrAssetMap[(UINT)_Type]; }
+	bool IsChanged() { return m_Changed; }
 
 	template<typename T>
 	Ptr<T> Load(const wstring& _Key, const wstring& _RelativePath);
@@ -39,6 +45,8 @@ public:
 		, D3D11_USAGE _Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT);
 
 	Ptr<CTexture> CreateTexture(wstring _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
+
+
 
 private:
 	void CreateEngineMesh();
@@ -73,13 +81,11 @@ Ptr<T> CAssetMgr::Load(const wstring& _Key, const wstring& _RelativePath)
 		return nullptr;
 	}
 
-	// Asset 이 자신의 키값과 경로를 알게 함
-	Asset->m_Key = _Key;
+	// Asset 이 자신의 경로를 알게 함
 	Asset->m_RelativePath = _RelativePath;
 
 	// 맵에 등록
-	ASSET_TYPE type = GetAssetType<T>();
-	m_arrAssetMap[(UINT)type].insert(make_pair(_Key, Asset.Get()));
+	AddAsset(_Key, Asset);
 
 	// 로딩된 에셋 주소 반환
 	return Asset;
@@ -110,6 +116,9 @@ void CAssetMgr::AddAsset(const wstring& _Key, Ptr<T> _Asset)
 
 	_Asset->SetKey(_Key);
 	m_arrAssetMap[(UINT)Type].insert(make_pair(_Key, _Asset.Get()));
+
+	// Asset 변경 알림	
+	CTaskMgr::GetInst()->AddTask(tTask{ ASSET_CHANGED });
 }
 
 // File 에 Asset 참조정보 저장 불러오기

@@ -97,6 +97,9 @@
     <Filter Include="EditorUI\01. Inspector\AssetUI\02. MeshDataUI">
       <UniqueIdentifier>{04206035-40cf-4ce6-a292-b6ebde9ea494}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorUI\06. MenuUI">
+      <UniqueIdentifier>{3973e816-595d-4ac4-849c-8cfe3387b8f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -231,6 +234,9 @@
     <ClInclude Include="AssetUIs.h">
       <Filter>EditorUI\01. Inspector\AssetUI</Filter>
     </ClInclude>
+    <ClInclude Include="MenuUI.h">
+      <Filter>EditorUI\06. MenuUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -350,6 +356,9 @@
     </ClCompile>
     <ClCompile Include="TextureUI.cpp">
       <Filter>EditorUI\01. Inspector\AssetUI\05. TextureUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuUI.cpp">
+      <Filter>EditorUI\06. MenuUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
