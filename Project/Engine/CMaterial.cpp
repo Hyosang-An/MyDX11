@@ -42,7 +42,6 @@ void CMaterial::Binding()
 	pCB->Binding();
 
 	m_Shader->Binding();
-
 }
 
 int CMaterial::Save(const wstring& _RelativePath)

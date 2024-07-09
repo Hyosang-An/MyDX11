@@ -61,7 +61,7 @@ void CGameObject::AddChild(CGameObject* _ChildObject)
 	// 자식으로 들어오는 오브젝트가 이미 부모가 있는 경우
 	if (_ChildObject->GetParent())
 	{
-		_ChildObject->DeregisterChild();
+		_ChildObject->DeregisterThisChildFromParent();
 	}
 	// 자식으로 들어오는 오브젝트가 최상위 부모 오브젝트인 경우
 	else
@@ -72,13 +72,28 @@ void CGameObject::AddChild(CGameObject* _ChildObject)
 			if (nullptr != pCurLevel)
 			{
 				CLayer* pLayer = pCurLevel->GetLayer(_ChildObject->m_LayerIdx);
-				pLayer->DeregisterObjectAsParent(_ChildObject);
+				pLayer->DeregisterAsParent(_ChildObject);
 			}
 		}
 	}
 
 	m_vecChildren.push_back(_ChildObject);
 	_ChildObject->m_Parent = this;
+}
+
+bool CGameObject::IsAncestor(CGameObject* _Object)
+{
+	CGameObject* ancestor = m_Parent;
+
+	while (ancestor)
+	{
+		if (ancestor == _Object)
+			return true;
+		else
+			ancestor = ancestor->GetParent();
+	}
+
+	return false;
 }
 
 void CGameObject::DisconnectWithLayer()
@@ -93,7 +108,7 @@ void CGameObject::DisconnectWithLayer()
 	m_LayerIdx = -1;
 }
 
-void CGameObject::DeregisterChild()
+void CGameObject::DeregisterThisChildFromParent()
 {
 	vector<CGameObject*>::iterator iter = m_Parent->m_vecChildren.begin();
 

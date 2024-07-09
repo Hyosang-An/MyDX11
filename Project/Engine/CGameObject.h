@@ -40,12 +40,13 @@ public:
     int GetLayerIdx() { return m_LayerIdx; }
     const vector<CScript*> GetScripts() { return m_vecScript; }
 
+    bool IsAncestor(CGameObject* _Object);
     bool IsDead() { return m_Dead; }
     void DisconnectWithLayer();
 
     // Unregister : 등록을 취소하다, 등록하는 행위를 취소하다
     // Deregister : 등록된것을 취소하다
-    void DeregisterChild();
+    void DeregisterThisChildFromParent();
 
     class CTransform* Transform() { return (CTransform*)GetComponent(COMPONENT_TYPE::TRANSFORM); }
     class CMeshRender* MeshRender() { return (CMeshRender*)GetComponent(COMPONENT_TYPE::MESHRENDER); }

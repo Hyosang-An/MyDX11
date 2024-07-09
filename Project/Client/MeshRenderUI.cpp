@@ -35,6 +35,7 @@ void MeshRenderUI::Update()
 	ImGui::InputText("##MeshKey", (char*)MeshName.c_str(), ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
 	if (ImGui::BeginDragDropTarget())
 	{
+		// 데이터를 드랍 받을 트리 이름 : ContentTree
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ContentTree");
 		if (payload)
 		{

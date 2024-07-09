@@ -28,7 +28,7 @@ Outliner::Outliner()
 	m_Tree->UseDrop(true);
 
 	// Self DragDrop Delegate 등록
-	m_Tree->AddDragDropDelegate(this, (DELEGATE_2)&Outliner::GameObjectAddChild);
+	m_Tree->AddSelfDragDropDelegate(this, (DELEGATE_2)&Outliner::GameObjectAddChild);
 
 	// 외부 드랍 Delegate 등록
 	m_Tree->AddDropDelegate(this, (DELEGATE_2)&Outliner::DroppedFromOuter);
@@ -104,7 +104,37 @@ void Outliner::GameObjectAddChild(DWORD_PTR _Param1, DWORD_PTR _Param2)
 	TreeNode* pDragNode = (TreeNode*)_Param1;
 	TreeNode* pDropNode = (TreeNode*)_Param2;
 
-	// TODO
+	CGameObject* pDragObject = (CGameObject*)pDragNode->GetData();
+	CGameObject* pDropObject = nullptr;
+
+	// Drag 오브젝트를 Drop 오브젝트의 자식으로 넣어준다.
+	if (pDropNode)
+	{
+		pDropObject = (CGameObject*)pDropNode->GetData();
+
+		// 자식으로 들어갈 오브젝트가 부모(조상) 중 하나였다면 무시한다.
+		if (pDropObject->IsAncestor(pDragObject))
+			return;
+
+		pDropObject->AddChild(pDragObject);
+	}
+
+	// Drop 목적지가 없기 때문에, Drag 오브젝트를 최상위 부모로 만들어준다.
+	else
+	{
+		// 이미 최상위 부모인 경우
+		if (!pDragObject->GetParent())
+			return;
+
+		// 부모오브젝트랑 연결을 끊고
+		pDragObject->DeregisterThisChildFromParent();
+
+		// 본인 소속 레이어에 최상위 부모로서 재등록 한다.
+		CLevelMgr::GetInst()->GetCurrentLevel()->RegisterAsParent(pDragObject->GetLayerIdx(), pDragObject);
+	}
+
+	// 트리내용 갱신
+	RenewLevel();
 }
 
 void Outliner::DroppedFromOuter(DWORD_PTR _OuterData, DWORD_PTR _DropNode)

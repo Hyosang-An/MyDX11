@@ -66,6 +66,8 @@ struct tMtrlConst
 	Vec2	v2Arr[4];
 	Vec4	v4Arr[4];
 	Matrix	matArr[4];
+
+	// Texture가 있는지 없는지 (0 : 없음, 그 외 : 있음)
 	int		btex[TEX_PARAM::END + 2]; // 16바이트 단위로 만들어야 하므로.
 };
 

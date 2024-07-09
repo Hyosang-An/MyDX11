@@ -76,7 +76,10 @@ int CTexture::Save(const wstring& _RelativePath)
 	return 0;
 }
 
-
+// 가능한 Flag 조합
+// RENDER_TARGET | SHADER_RESOURCE
+// DEPTH_STENCIL (단독으로만 사용 가능)
+// SHADER_RESOURCE | UNORDERED_ACESS
 int CTexture::Create(UINT _Width, UINT _Height, DXGI_FORMAT _PixelFormat, UINT _Flags, D3D11_USAGE _Usage)
 {
 	m_Desc.Width = _Width; // DepthStencil 텍스쳐는 렌더타겟 해상도와 반드시 일치해야한다.

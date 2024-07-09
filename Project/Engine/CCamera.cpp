@@ -141,6 +141,9 @@ void CCamera::SortGameObject()
 				case DOMAIN_PARTICLE:
 					m_vecParticles.push_back(vecObjects[j]);
 					break;
+				case DOMAIN_POSTPROCESS:
+					m_vecPostProcess.push_back(vecObjects[j]);
+					break;
 			}
 		}
 	}
@@ -179,8 +182,16 @@ void CCamera::Render()
 		m_vecParticles[i]->Render();
 	}
 
+	// PostProcess 
+	for (size_t i = 0; i < m_vecPostProcess.size(); ++i)
+	{
+		CRenderMgr::GetInst()->PostProcessCopy();
+		m_vecPostProcess[i]->Render();
+	}
+
 	m_vecOpaque.clear();
 	m_vecMasked.clear();
 	m_vecTransparent.clear();
 	m_vecParticles.clear();
+	m_vecPostProcess.clear();
 }

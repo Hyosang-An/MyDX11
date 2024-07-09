@@ -5,24 +5,24 @@
 #include "CGameObject.h"
 
 CLevel::CLevel() :
-	m_Layer{}
+	m_vecLayer{}
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		m_Layer[i] = new CLayer(i);
+		m_vecLayer[i] = new CLayer(i);
 	}
 }
 
 CLevel::~CLevel()
 {
-	Delete_Array(m_Layer);
+	Delete_Array(m_vecLayer);
 }
 
 void CLevel::Begin()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		m_Layer[i]->Begin();
+		m_vecLayer[i]->Begin();
 	}
 }
 
@@ -30,7 +30,7 @@ void CLevel::Tick()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		m_Layer[i]->Tick();
+		m_vecLayer[i]->Tick();
 	}
 }
 
@@ -38,20 +38,25 @@ void CLevel::FinalTick()
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
-		m_Layer[i]->FinalTick();
+		m_vecLayer[i]->FinalTick();
 	}
 }
 
 void CLevel::AddObject(int LayerIdx, CGameObject* _Object, bool _bMoveChild)
 {
-	m_Layer[LayerIdx]->AddObject(_Object, _bMoveChild);
+	m_vecLayer[LayerIdx]->AddObject(_Object, _bMoveChild);
+}
+
+void CLevel::RegisterAsParent(int LayerIdx, CGameObject* _Object)
+{
+	m_vecLayer[LayerIdx]->RegisterAsParent(_Object);
 }
 
 CGameObject* CLevel::FindObjectByName(const wstring& _Name)
 {
 	for (UINT layerIndex = 0; layerIndex < MAX_LAYER; ++layerIndex)
 	{
-		const vector<CGameObject*>& vecParent = m_Layer[layerIndex]->GetParentObjects();
+		const vector<CGameObject*>& vecParent = m_vecLayer[layerIndex]->GetParentObjects();
 
 		for (size_t parentIndex = 0; parentIndex < vecParent.size(); ++parentIndex)
 		{
@@ -87,7 +92,7 @@ void CLevel::ClearObject()
 {
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
-		m_Layer[i]->ClearObject();
+		m_vecLayer[i]->ClearObject();
 	}
 }
 

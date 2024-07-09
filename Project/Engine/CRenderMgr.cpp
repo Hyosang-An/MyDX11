@@ -40,6 +40,9 @@ CRenderMgr::~CRenderMgr()
 
 void CRenderMgr::Init()
 {
+	// AssetMgr 가 초기화될때 만들어둔 후처리용 텍스쳐를 참조한다.
+	m_PostProcessTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessTex");
+
 	// 디버그 렌더링용 게임 오브젝트
 	m_DebugObject = new CGameObject;
 	m_DebugObject->AddComponent(new CTransform);
@@ -194,6 +197,13 @@ void CRenderMgr::RegisterCamera(CCamera* _cam, int _camPriority)
 
 	// 카메라 우선순위에 맞는 위치에 넣는다
 	m_vecCam[_camPriority] = _cam;
+}
+
+void CRenderMgr::PostProcessCopy()
+{
+	// RenderTarget -> PostProcessTex
+	Ptr<CTexture> pRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"RenderTargetTex");
+	CONTEXT->CopyResource(m_PostProcessTex->GetTex2D().Get(), pRTTex->GetTex2D().Get());
 }
 
 void CRenderMgr::RegisterLight2D(CLight2D* _light)

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CAssetMgr.h"
+#include "CDevice.h"
 
 void CAssetMgr::Init()
 {
@@ -111,6 +112,10 @@ void CAssetMgr::CreateEngineMesh()
 
 void CAssetMgr::CreateEngineTexture()
 {
+	// PostProcess 용도 텍스쳐 생성
+	Vec2 Resolution = CDevice::GetInst()->GetResolution();
+	CreateTexture(L"PostProcessTex", (UINT)Resolution.x, (UINT)Resolution.y
+		, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
 }
 
 void CAssetMgr::CreateEngineSprite()
@@ -257,6 +262,17 @@ void CAssetMgr::CreateEngineGraphicShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASKED);
 
 	AddAsset(L"TileMapShader", pShader);
+
+
+	// GrayFilterShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_GrayFilter");
+	pShader->CreatePixelShader(L"shader\\postprocess.fx", "PS_GrayFilter");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE); // 후처리는 항상 모든 픽셀에 깊이 관계없이 적용되어야 하므로.
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"GrayFilterShader", pShader);
 }
 
 void CAssetMgr::CreateEngineComputeShader()
@@ -286,4 +302,10 @@ void CAssetMgr::CreateEngineMaterial()
 	pMtrl = new CMaterial();
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"TileMapShader"));
 	AddAsset(L"TileMapMtrl", pMtrl);
+
+	// GrayFilterMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"GrayFilterShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessTex"));
+	AddAsset(L"GrayFilterMtrl", pMtrl);
 }

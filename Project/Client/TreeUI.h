@@ -60,7 +60,7 @@ private:
     EditorUI*   m_SelectedUI = nullptr;
     DELEGATE_1  m_SelectedFunc = nullptr;
 
-    EditorUI*   m_SelfDragDropInst = nullptr;
+    EditorUI*   m_SelfDragDropUI = nullptr;
     DELEGATE_2  m_SelfDragDropFunc = nullptr;
 
     EditorUI*   m_DropInst = nullptr;
@@ -92,7 +92,7 @@ public:
     const string GetDropPayLoadName() { return m_DropPayLoadName; }
 
     void AddSelectedDelegate(EditorUI* _Inst, DELEGATE_1 _Func) { m_SelectedUI = _Inst; m_SelectedFunc = _Func; }
-    void AddDragDropDelegate(EditorUI* _Inst, DELEGATE_2 _Func) { m_SelfDragDropInst = _Inst; m_SelfDragDropFunc = _Func; }
+    void AddSelfDragDropDelegate(EditorUI* _Inst, DELEGATE_2 _Func) { m_SelfDragDropUI = _Inst; m_SelfDragDropFunc = _Func; }
     void AddDropDelegate(EditorUI* _Inst, DELEGATE_2 _Func) { m_DropInst = _Inst; m_DropFunc = _Func; }
 
     void Clear();

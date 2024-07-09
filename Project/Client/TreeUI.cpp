@@ -160,6 +160,15 @@ void TreeUI::Update()
 	// 마우스 왼쪽 버튼을 뗏을 때, 선택된 m_DroppedNode, m_DragedNode 해제
 	if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 	{
+		// 현재 창 위에서 어떤 노드를 드래그한 상태인데 현재 창의 노드가 아닌 부분에서 마우스를 뗀 경우
+		if (ImGui::IsWindowHovered() && m_DragedNode && !m_DroppedNode)
+		{
+			if (m_SelfDragDropUI && m_SelfDragDropFunc)
+			{
+				(m_SelfDragDropUI->*m_SelfDragDropFunc)((DWORD_PTR)m_DragedNode, 0);
+			}
+		}
+
 		m_DroppedNode = m_DragedNode = nullptr;
 	}
 }
@@ -245,8 +254,8 @@ void TreeUI::SetDroppedNode(TreeNode* _Node)
 		{
 			m_DroppedNode = _Node;
 
-			if (m_SelfDragDropInst && m_SelfDragDropFunc)
-				(m_SelfDragDropInst->*m_SelfDragDropFunc)((DWORD_PTR)m_DragedNode, (DWORD_PTR)m_DroppedNode);
+			if (m_SelfDragDropUI && m_SelfDragDropFunc)
+				(m_SelfDragDropUI->*m_SelfDragDropFunc)((DWORD_PTR)m_DragedNode, (DWORD_PTR)m_DroppedNode);
 		}
 	}
 }

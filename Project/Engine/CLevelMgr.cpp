@@ -186,11 +186,22 @@ void CLevelMgr::Init()
 
 	m_CurLevel->AddObject(2, pTileMapObj);
 
+
+	// PostProcess Object
+	CGameObject* pGrayFilterObj = new CGameObject;
+	pGrayFilterObj->SetName(L"GrayFilter");
+	pGrayFilterObj->AddComponent(new CTransform);
+	pGrayFilterObj->AddComponent(new CMeshRender);
+
+	pGrayFilterObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"GrayFilterMtrl"));
+
+	m_CurLevel->AddObject(0, pGrayFilterObj);
+
 	// 충돌 지정
 	CCollisionMgr::GetInst()->CollisionCheck(3, 4); // Player vs Monster
 	CCollisionMgr::GetInst()->CollisionCheck(5, 4); // Player Projectile vs Monster
 
-	pMtrl->Save(L"material\\std2d.mtrl");
 
 	// 레벨 시작
 	//m_CurLevel->Begin();

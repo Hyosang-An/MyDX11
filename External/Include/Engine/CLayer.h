@@ -30,7 +30,9 @@ public:
     void ClearObject() { m_vecObjects.clear(); }
     void RegisterGameObject(CGameObject* _Object) { m_vecObjects.push_back(_Object); }
     void DisconnectWithObject(CGameObject* _Object);
-    void DeregisterObjectAsParent(CGameObject* _Object);
+
+    void RegisterAsParent(CGameObject* _Object);
+    void DeregisterAsParent(CGameObject* _Object);
     void DeregisterObject(CGameObject* _Object);
 
 

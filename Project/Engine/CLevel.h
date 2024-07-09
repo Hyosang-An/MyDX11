@@ -13,7 +13,7 @@ public:
     virtual CLevel* Clone() { return new CLevel(*this); }
 
 private:
-    CLayer*         m_Layer[MAX_LAYER];
+    CLayer*         m_vecLayer[MAX_LAYER];
     LEVEL_STATE     m_State = LEVEL_STATE::STOP;
 
 
@@ -24,7 +24,9 @@ private:
 
 public:
     void AddObject(int LayerIdx, CGameObject* _Object, bool _bMoveChild = false);
-    CLayer* GetLayer(int _LayerIdx) { return m_Layer[_LayerIdx]; }
+    void RegisterAsParent(int LayerIdx, CGameObject* _Object);
+
+    CLayer* GetLayer(int _LayerIdx) { return m_vecLayer[_LayerIdx]; }
     LEVEL_STATE GetState() { return m_State; }
     CGameObject* FindObjectByName(const wstring& _Name);
 
