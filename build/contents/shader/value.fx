@@ -59,9 +59,9 @@ cbuffer MATERIAL : register(b1)
 
 cbuffer SPRITE_INFO : register(b2)
 {
-    float2 LeftTopUV;
-    float2 SliceUV;
-    float2 BackGroundUV;
+    float2 LeftTopInAtlasUV;
+    float2 SliceSizeInAtlasUV;
+    float2 BackGroundSizeInAtlasUV;
     float2 OffsetUV;
     int UseFlipbook;
     int3 SpriteInfoPadding;

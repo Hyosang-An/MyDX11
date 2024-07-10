@@ -73,9 +73,9 @@ struct tMtrlConst
 
 struct tSpriteInfo
 {
-	Vec2 LeftTopUV;
-	Vec2 SliceUV;
-	Vec2 BackGroundUV;
+	Vec2 LeftTopInAtlasUV;
+	Vec2 SliceSizeInAtlasUV;
+	Vec2 BackGroundSizeInAtlasUV;
 	Vec2 OffsetUV;
 	int	 UseFlipbook;
 	int  Padding[3];	// 16바이트 단위 맞추기 위해

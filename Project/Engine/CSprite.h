@@ -5,9 +5,9 @@ class CSprite :
 {
 private:
     Ptr<CTexture>   m_Atlas;
-    Vec2            m_LeftTopUV;      // UV ÁÂÇ¥°è
-    Vec2            m_SliceUV;        // UV ÁÂÇ¥°è
-    Vec2            m_BackgroundUV;
+    Vec2            m_LeftTopInAtlasUV;      // UV ÁÂÇ¥°è
+    Vec2            m_SliceSizeInAtlasUV;        // UV ÁÂÇ¥°è
+    Vec2            m_BackgroundSizeInAtlasUV;
     Vec2            m_OffsetUV;
 
 
@@ -19,9 +19,9 @@ public:
     void SetBackground(Vec2 _Background);
     void SetOffset(Vec2 _Offset);
 
-    Vec2 GetLeftTopUV() { return m_LeftTopUV; }
-    Vec2 GetSliceUV() { return m_SliceUV; }
-    Vec2 GetBackgroundUV() { return m_BackgroundUV; }
+    Vec2 GetLeftTopInAtlasUV() { return m_LeftTopInAtlasUV; }
+    Vec2 GetSliceSizeInAtlasUV() { return m_SliceSizeInAtlasUV; }
+    Vec2 GetBackgroundSizeInAtlasUV() { return m_BackgroundSizeInAtlasUV; }
     Vec2 GetOffsetUV() { return m_OffsetUV; }
 
 

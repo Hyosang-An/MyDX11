@@ -100,9 +100,9 @@ void CFlipBookComponent::Binding()
 		// 현재 표시해야하는 Sprite 의 정보를 Sprite 전용 상수버퍼를 통해서 GPU 에 전달
 		tSpriteInfo tInfo = {};
 
-		tInfo.LeftTopUV = m_CurFrmSprite->GetLeftTopUV();
-		tInfo.SliceUV = m_CurFrmSprite->GetSliceUV();
-		tInfo.BackGroundUV = m_CurFrmSprite->GetBackgroundUV();
+		tInfo.LeftTopInAtlasUV = m_CurFrmSprite->GetLeftTopInAtlasUV();
+		tInfo.SliceSizeInAtlasUV = m_CurFrmSprite->GetSliceSizeInAtlasUV();
+		tInfo.BackGroundSizeInAtlasUV = m_CurFrmSprite->GetBackgroundSizeInAtlasUV();
 		tInfo.OffsetUV = m_CurFrmSprite->GetOffsetUV();
 		tInfo.UseFlipbook = 1;
 

@@ -17,19 +17,19 @@ CSprite::~CSprite()
 void CSprite::SetLeftTop(Vec2 _LeftTop)
 {
 	Vec2 AtlasResolution = Vec2((float)m_Atlas->Width(), (float)m_Atlas->Height());
-	m_LeftTopUV = _LeftTop / AtlasResolution;
+	m_LeftTopInAtlasUV = _LeftTop / AtlasResolution;
 }
 
 void CSprite::SetSlice(Vec2 _Slice)
 {
 	Vec2 AtlasResolution = Vec2((float)m_Atlas->Width(), (float)m_Atlas->Height());
-	m_SliceUV = _Slice / AtlasResolution;
+	m_SliceSizeInAtlasUV = _Slice / AtlasResolution;
 }
 
 void CSprite::SetBackground(Vec2 _Background)
 {
 	Vec2 AtlasResolution = Vec2((float)m_Atlas->Width(), (float)m_Atlas->Height());
-	m_BackgroundUV = _Background / AtlasResolution;
+	m_BackgroundSizeInAtlasUV = _Background / AtlasResolution;
 }
 
 void CSprite::SetOffset(Vec2 _Offset)
@@ -47,8 +47,8 @@ void CSprite::Create(Ptr<CTexture> _Atlas, Vec2 _LeftTopPixel, Vec2 _SlicePixel)
 	UINT width = m_Atlas->Width();
 	UINT height = m_Atlas->Height();
 
-	m_LeftTopUV = Vec2(_LeftTopPixel.x / (float)width, _LeftTopPixel.y / (float)height);
-	m_SliceUV = Vec2(_SlicePixel.x / (float)width, _SlicePixel.y / (float)height);
+	m_LeftTopInAtlasUV = Vec2(_LeftTopPixel.x / (float)width, _LeftTopPixel.y / (float)height);
+	m_SliceSizeInAtlasUV = Vec2(_SlicePixel.x / (float)width, _SlicePixel.y / (float)height);
 }
 
 int CSprite::Save(const wstring& _RelativePath)
@@ -72,9 +72,9 @@ int CSprite::Save(const wstring& _RelativePath)
 	// Atlas 참조정보 저장
 	SaveAssetRef(m_Atlas, File);
 
-	fwrite(&m_LeftTopUV, sizeof(Vec2), 1, File);
-	fwrite(&m_SliceUV, sizeof(Vec2), 1, File);
-	fwrite(&m_BackgroundUV, sizeof(Vec2), 1, File);
+	fwrite(&m_LeftTopInAtlasUV, sizeof(Vec2), 1, File);
+	fwrite(&m_SliceSizeInAtlasUV, sizeof(Vec2), 1, File);
+	fwrite(&m_BackgroundSizeInAtlasUV, sizeof(Vec2), 1, File);
 	fwrite(&m_OffsetUV, sizeof(Vec2), 1, File);
 
 	fclose(File);
@@ -95,9 +95,9 @@ int CSprite::Load(const wstring& _FilePath)
 	// Atlas 키, 경로 불러오기
 	LoadAssetRef(m_Atlas, File);
 
-	fread(&m_LeftTopUV, sizeof(Vec2), 1, File);
-	fread(&m_SliceUV, sizeof(Vec2), 1, File);
-	fread(&m_BackgroundUV, sizeof(Vec2), 1, File);
+	fread(&m_LeftTopInAtlasUV, sizeof(Vec2), 1, File);
+	fread(&m_SliceSizeInAtlasUV, sizeof(Vec2), 1, File);
+	fread(&m_BackgroundSizeInAtlasUV, sizeof(Vec2), 1, File);
 	fread(&m_OffsetUV, sizeof(Vec2), 1, File);
 
 	fclose(File);

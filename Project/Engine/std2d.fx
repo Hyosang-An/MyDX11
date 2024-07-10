@@ -29,6 +29,7 @@ VTX_OUT VS_Std2D(VTX_IN _in)
     // float3 x float4x4(matrix)
     // float3 를 float4 로 차수를 맞추어준다.
     // 동차좌표를 1 로 설정, 상태행렬 4행에 들어있는 이동을 적용받겠다는 뜻
+    
     output.vPosition = mul(float4(_in.vPos, 1.f), matWVP);
     output.vColor = _in.vColor;
     output.vUV = _in.vUV;
@@ -41,19 +42,19 @@ VTX_OUT VS_Std2D(VTX_IN _in)
 float4 PS_Std2D(VTX_OUT _in) : SV_Target
 {
     float4 vColor = float4(0.f, 0.f, 0.f, 1.f);
-     
+    
     // FlipBook 을 사용한다.
     if (UseFlipbook)
     {
         // _in.vUV : 스프라이를 참조할 위치를 비율로 환산한 값                
-        float2 BackGroundLeftTop = LeftTopUV - (BackGroundUV - SliceUV) / 2.f;
-        float2 vSpriteUV = BackGroundLeftTop + (_in.vUV * BackGroundUV);
-        vSpriteUV -= OffsetUV;
+        float2 BackGroundLeftTopInAtlasUV = LeftTopInAtlasUV - (BackGroundSizeInAtlasUV - SliceSizeInAtlasUV) / 2.f;
+        float2 vSpriteInAtlasUV = BackGroundLeftTopInAtlasUV + (_in.vUV * BackGroundSizeInAtlasUV);
+        vSpriteInAtlasUV -= OffsetUV;
                 
-        if (LeftTopUV.x <= vSpriteUV.x && vSpriteUV.x <= LeftTopUV.x + SliceUV.x
-            && LeftTopUV.y <= vSpriteUV.y && vSpriteUV.y <= LeftTopUV.y + SliceUV.y)
+        if (LeftTopInAtlasUV.x <= vSpriteInAtlasUV.x && vSpriteInAtlasUV.x <= LeftTopInAtlasUV.x + SliceSizeInAtlasUV.x
+            && LeftTopInAtlasUV.y <= vSpriteInAtlasUV.y && vSpriteInAtlasUV.y <= LeftTopInAtlasUV.y + SliceSizeInAtlasUV.y)
         {
-            vColor = g_AtlasTex.Sample(g_sam_1, vSpriteUV);
+            vColor = g_AtlasTex.Sample(g_sam_1, vSpriteInAtlasUV);
         }
         else
         {
