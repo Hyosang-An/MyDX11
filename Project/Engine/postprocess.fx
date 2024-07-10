@@ -31,7 +31,7 @@ VS_OUT VS_GrayFilter(VS_IN _in)
     
     // Proj 행렬을 곱한 결과는 각 xyz 에 자신의 ViewZ 가 곱혀져있는 형태이다.
     // W 자리에 자신의 ViewZ 가 출력되기 때문에 이것으로 각 xyz 를 나누어야 실제 Proj 좌표가 나온다.
-    // 따라서 Rasterizer State 에 투영행렬을 곱한 결과를 전달하면 각 xyz 를 w 로 나누어서 사용한다.    
+    // 따라서 Rasterizer State 에 투영행렬을 곱한 결과를 전달하면 각 xyz 를 w 로 나누어서 사용한다.
     output.vPosition = float4(_in.vPos.xy * 2.f, 0.f, 1.f);
     output.vUV = _in.vUV;
     
@@ -87,6 +87,11 @@ float4 PS_Distortion(VS_OUT _in) : SV_Target
 {
     // 1. 렌더타겟 해상도 정보 (전역 상수버퍼)    
     // 2. 픽셀쉐이더의 픽셀 좌표
+    
+    //버텍스 쉐이더에서 출력된 클립 좌표는 렌더링 파이프라인을 통해 다음 단계인 뷰포트 변환으로 전달됩니다. 
+    //이 과정에서 클립 좌표는 정규 장치 좌표(NDC)로 변환되고, 다시 뷰포트 좌표로 변환됩니다. 
+    //뷰포트 좌표는 렌더 타겟의 해상도에 기반한 좌표입니다.
+
     float2 vScreenUV = _in.vPosition.xy / g_Resolution;
         
     // GrayFilter
