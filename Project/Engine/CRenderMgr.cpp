@@ -41,7 +41,8 @@ CRenderMgr::~CRenderMgr()
 void CRenderMgr::Init()
 {
 	// AssetMgr 가 초기화될때 만들어둔 후처리용 텍스쳐를 참조한다.
-	m_PostProcessTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessTex");
+	m_PostProcessRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessRTTex");
+	m_PostProcessDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessDSTex");
 
 	// 디버그 렌더링용 게임 오브젝트
 	m_DebugObject = new CGameObject;
@@ -201,9 +202,13 @@ void CRenderMgr::RegisterCamera(CCamera* _cam, int _camPriority)
 
 void CRenderMgr::PostProcessCopy()
 {
-	// RenderTarget -> PostProcessTex
+	// RenderTarget -> PostProcessRTTex
 	Ptr<CTexture> pRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"RenderTargetTex");
-	CONTEXT->CopyResource(m_PostProcessTex->GetTex2D().Get(), pRTTex->GetTex2D().Get());
+	CONTEXT->CopyResource(m_PostProcessRTTex->GetTex2D().Get(), pRTTex->GetTex2D().Get());
+
+	// DepthStencilTex -> PostProcessDSTex
+	Ptr<CTexture> pDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"DepthStencilTex");
+	CONTEXT->CopyResource(m_PostProcessDSTex->GetTex2D().Get(), pDSTex->GetTex2D().Get());
 }
 
 void CRenderMgr::RegisterLight2D(CLight2D* _light)

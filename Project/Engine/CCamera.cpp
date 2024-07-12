@@ -83,6 +83,8 @@ void CCamera::FinalTick()
 
 	m_matView = matTrans * matRot;
 
+	// 아래 방법도 가능
+	//m_matView = XMMatrixLookAtLH(Transform()->GetRelativePos(), vF, vU);
 
 	// Projection Space 투영 좌표계 (NDC)
 	if (PROJ_TYPE::ORTHOGRAPHIC == m_ProjType)

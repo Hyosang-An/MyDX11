@@ -183,11 +183,13 @@ void CLevelMgr::Init()
 	pGrayFilterObj->AddComponent(new CTransform);
 	pGrayFilterObj->AddComponent(new CMeshRender);
 
+	pGrayFilterObj->Transform()->SetRelativePos(0, 0, 450);
 	pGrayFilterObj->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
+
 
 	pGrayFilterObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 	//pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"GrayFilterMtrl"));
-	pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DistortionMtrl"));
+	pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ConvexLensMtrl"));
 
 	m_CurLevel->AddObject(0, pGrayFilterObj);
 

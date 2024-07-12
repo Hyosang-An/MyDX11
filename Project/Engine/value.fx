@@ -14,6 +14,12 @@ cbuffer OBJECT_POS : register(b0)
     
     row_major matrix matWV;
     row_major matrix matWVP;
+    
+    float3 rightDir;
+    float3 upDir;
+    float3 frontDir;
+    
+    int3 padding;
 };
 
 cbuffer MATERIAL : register(b1)

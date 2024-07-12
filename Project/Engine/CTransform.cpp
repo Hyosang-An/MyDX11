@@ -3,6 +3,7 @@
 
 #include "CDevice.h"
 #include "CConstBuffer.h"
+#include "CEngine.h"
 
 CTransform::CTransform()
 	: CComponent(COMPONENT_TYPE::TRANSFORM)
@@ -87,9 +88,33 @@ void CTransform::Binding()
 	g_Trans.matWV = g_Trans.matWorld * g_Trans.matView;
 	g_Trans.matWVP = g_Trans.matWV * g_Trans.matProj;
 
+	for (int i = 0; i < 3; ++i)
+	{
+		g_Trans.worldDir[i] = m_WorldDir[i];
+	}
+
 	CConstBuffer* pTransformCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::TRANSFORM);
 	pTransformCB->SetData(&g_Trans);
 	pTransformCB->Binding();
+
+
+
+	//// NDC ÁÂÇ¥ µð¹ö±ë
+	//Vec4 worldpos(m_matWorld._41, m_matWorld._42, m_matWorld._43, 1.0f);
+	//Vec4 viewPosition = XMVector3Transform(worldpos, g_Trans.matView);
+	//Vec4 clipPosition = XMVector3Transform(viewPosition, g_Trans.matProj);
+
+	//XMFLOAT4 clippos;
+	//XMStoreFloat4(&clippos, clipPosition);
+
+	//Vec3 NDC = Vec3(clippos.x, clippos.y, clippos.z) / clippos.w;
+
+	//wstring strNDC ;
+	//if (GetOwner()->GetName() == L"Player")
+	//{
+	//	strNDC = std::to_wstring(NDC.x) + L" ," + std::to_wstring(NDC.y) + L" ," + std::to_wstring(NDC.z) + L" ,";
+	//	int a = 1;
+	//}
 }
 
 Vec3 CTransform::GetWorldScale()

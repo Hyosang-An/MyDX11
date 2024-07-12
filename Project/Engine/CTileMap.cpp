@@ -12,17 +12,17 @@ CTileMap::CTileMap()
 	, m_Col(1)
 	, m_AtlasMaxRow(0)
 	, m_AtlasMaxCol(0)
-	, m_Buffer(nullptr)
+	, m_structuredBuffer(nullptr)
 {
 	SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 	SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"TileMapMtrl"));
 
-	m_Buffer = new CStructuredBuffer;
+	m_structuredBuffer = new CStructuredBuffer;
 }
 
 CTileMap::~CTileMap()
 {
-	delete m_Buffer;
+	delete m_structuredBuffer;
 }
 
 void CTileMap::FinalTick()
@@ -37,8 +37,8 @@ void CTileMap::Render()
 	}
 
 	// 타일의 정보를 구조화버퍼를 통해서 t 레지스터에 바인딩 시킨다.
-	m_Buffer->SetData(m_vecTileInfo.data(), sizeof(tTileInfo) * m_Row * m_Col);
-	m_Buffer->Binding(15);
+	m_structuredBuffer->SetData(m_vecTileInfo.data(), sizeof(tTileInfo) * m_Row * m_Col);
+	m_structuredBuffer->Binding(15);
 
 	GetMaterial()->SetTexParam(TEX_0, m_TileAtlas);
 	GetMaterial()->SetScalarParam(INT_1, m_AtlasMaxRow);
@@ -67,9 +67,9 @@ void CTileMap::SetRowCol(UINT _Row, UINT _Col)
 	}
 
 	// 타일정보를 전달받아서 t 레지스터에 전달시킬 구조화버퍼가 타일 전체 데이터 사이즈보다 작으면 리사이즈
-	if (m_Buffer->GetElementSize() < sizeof(tTileInfo) * TileCount)
+	if (m_structuredBuffer->GetElementSize() < sizeof(tTileInfo) * TileCount)
 	{
-		m_Buffer->Create(sizeof(tTileInfo), TileCount);
+		m_structuredBuffer->Create(sizeof(tTileInfo), TileCount);
 	}
 
 	//for (int i = 0; i < m_vecTileInfo.size(); i++)

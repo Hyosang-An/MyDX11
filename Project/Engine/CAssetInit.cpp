@@ -114,8 +114,12 @@ void CAssetMgr::CreateEngineTexture()
 {
 	// PostProcess 용도 텍스쳐 생성
 	Vec2 Resolution = CDevice::GetInst()->GetResolution();
-	CreateTexture(L"PostProcessTex", (UINT)Resolution.x, (UINT)Resolution.y
+	CreateTexture(L"PostProcessRTTex", (UINT)Resolution.x, (UINT)Resolution.y
 		, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
+
+	// PostProcess 용도 DepthStencil 텍스쳐 생성
+	CreateTexture(L"PostProcessDSTex", (UINT)Resolution.x, (UINT)Resolution.y
+		, DXGI_FORMAT_R24_UNORM_X8_TYPELESS , D3D11_BIND_SHADER_RESOURCE);
 
 	// Noise Texture
 	Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
@@ -288,6 +292,16 @@ void CAssetMgr::CreateEngineGraphicShader()
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
 	AddAsset(L"DistortionShader", pShader);
+
+	// ConvexLensShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_ConvexLens");
+	pShader->CreatePixelShader(L"shader\\postprocess.fx", "PS_ConvexLens");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"ConvexLensShader", pShader);
 }
 
 void CAssetMgr::CreateEngineComputeShader()
@@ -321,7 +335,7 @@ void CAssetMgr::CreateEngineMaterial()
 	// GrayFilterMtrl
 	pMtrl = new CMaterial();
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"GrayFilterShader"));
-	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessTex"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"texture\\noise\\noise_01.png"));
 	pMtrl->SetTexParam(TEX_2, FindAsset<CTexture>(L"texture\\noise\\noise_02.png"));
 	pMtrl->SetTexParam(TEX_3, FindAsset<CTexture>(L"texture\\noise\\noise_03.jpg"));
@@ -330,9 +344,16 @@ void CAssetMgr::CreateEngineMaterial()
 	// DistortionMtrl
 	pMtrl = new CMaterial();
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"DistortionShader"));
-	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessTex"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"texture\\noise\\noise_01.png"));
 	pMtrl->SetTexParam(TEX_2, FindAsset<CTexture>(L"texture\\noise\\noise_02.png"));
 	pMtrl->SetTexParam(TEX_3, FindAsset<CTexture>(L"texture\\noise\\noise_03.jpg"));
 	AddAsset(L"DistortionMtrl", pMtrl);
+
+	// ConvexLensMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"ConvexLensShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex"));
+	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessDSTex"));
+	AddAsset(L"ConvexLensMtrl", pMtrl);
 }
