@@ -187,7 +187,9 @@ void CCamera::Render()
 	// PostProcess 
 	for (size_t i = 0; i < m_vecPostProcess.size(); ++i)
 	{
-		CRenderMgr::GetInst()->PostProcessCopy();
+		
+
+		CRenderMgr::GetInst()->PostProcessCopy(i);
 		m_vecPostProcess[i]->Render();
 	}
 

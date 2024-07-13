@@ -41,14 +41,27 @@ CRenderMgr::~CRenderMgr()
 void CRenderMgr::Init()
 {
 	// AssetMgr 가 초기화될때 만들어둔 후처리용 텍스쳐를 참조한다.
-	m_PostProcessRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessRTTex");
-	m_PostProcessDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessDSTex");
+	SetPostProcessTex();
+
 
 	// 디버그 렌더링용 게임 오브젝트
 	m_DebugObject = new CGameObject;
 	m_DebugObject->AddComponent(new CTransform);
 	m_DebugObject->AddComponent(new CMeshRender);
 	m_DebugObject->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DebugShapeMtrl"));
+}
+
+
+void CRenderMgr::SetPostProcessTex()
+{
+	for (int i = 0; i < CAssetMgr::GetInst()->GetPostProcessTextCnt(); i++)
+	{
+		wstring texName = L"PostProcessRTTex_" + std::to_wstring(i);
+
+		m_vecPostProcessRTTex.push_back(CAssetMgr::GetInst()->FindAsset<CTexture>(texName));
+	}
+
+	m_PostProcessDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessDSTex");
 }
 
 void CRenderMgr::Tick()
@@ -87,6 +100,7 @@ void CRenderMgr::Tick()
 	// Clear
 	Clear();
 }
+
 
 
 
@@ -200,11 +214,13 @@ void CRenderMgr::RegisterCamera(CCamera* _cam, int _camPriority)
 	m_vecCam[_camPriority] = _cam;
 }
 
-void CRenderMgr::PostProcessCopy()
+void CRenderMgr::PostProcessCopy(int _postProcessRTTex_index)
 {
+	assert(m_vecPostProcessRTTex.size() > _postProcessRTTex_index);
+
 	// RenderTarget -> PostProcessRTTex
 	Ptr<CTexture> pRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"RenderTargetTex");
-	CONTEXT->CopyResource(m_PostProcessRTTex->GetTex2D().Get(), pRTTex->GetTex2D().Get());
+	CONTEXT->CopyResource(m_vecPostProcessRTTex[_postProcessRTTex_index]->GetTex2D().Get(), pRTTex->GetTex2D().Get());
 
 	// DepthStencilTex -> PostProcessDSTex
 	Ptr<CTexture> pDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"DepthStencilTex");

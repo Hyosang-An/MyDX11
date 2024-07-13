@@ -19,6 +19,8 @@ private:
 	map<wstring, Ptr<CAsset>>	m_arrAssetMap[(UINT)ASSET_TYPE::END];
 	bool						m_Changed = false;
 
+	int							m_PostProcessTextCnt = 4;
+
 public:
 	void Init();
 	void Tick();
@@ -26,6 +28,8 @@ public:
 	void GetAssetNames(ASSET_TYPE _Type, vector<string>& _vecOut);
 	const map<wstring, Ptr<CAsset>>& GetAssetMap(ASSET_TYPE _Type) { return m_arrAssetMap[(UINT)_Type]; }
 	bool IsChanged() { return m_Changed; }
+
+	int GetPostProcessTextCnt() { return m_PostProcessTextCnt; }
 
 	template<typename T>
 	Ptr<T> Load(const wstring& _Key, const wstring& _RelativePath);

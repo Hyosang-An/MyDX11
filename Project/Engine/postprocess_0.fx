@@ -27,13 +27,13 @@ struct VS_OUT
     float3 vWorldPos : POSITION;
 };
 
-VS_OUT VS_GrayFilter(VS_IN _in)
+VS_OUT VS_Screen(VS_IN _in)
 {
     VS_OUT output = (VS_OUT) 0.f;
     
     // Proj 행렬을 곱한 결과는 각 xyz 에 자신의 ViewZ 가 곱혀져있는 형태이다.
     // W 자리에 자신의 ViewZ 가 출력되기 때문에 이것으로 각 xyz 를 나누어야 실제 Proj 좌표가 나온다.
-    // 따라서 Rasterizer State 에 투영행렬을 곱한 결과를 전달하면 각 xyz 를 w 로 나누어서 사용한다.
+    // 따라서 Rasterizer State 에 투영행렬을 곱한 결과를 전달하면 이후 렌더링 파이프라인에서 각 xyz 를 w 로 나누어서 NDC좌표로 만들어 사용한다.
     output.vPosition = float4(_in.vPos.xy * 2.f, 0.f, 1.f);
     output.vUV = _in.vUV;
     
@@ -48,12 +48,15 @@ float4 PS_GrayFilter(VS_OUT _in) : SV_Target
     //float Average = (vColor.x + vColor.y + vColor.z) / 3.f;
     //vColor = float4(Average, Average, Average, 1.f); 
     
+    //===========================================================================
     // Cos Distortion
     //float2 vUV = _in.vUV;    
     //vUV.y += cos( (vUV.x + g_EngineTime * 0.1f) * PI * 12.f) * 0.01;    
     //float4 vColor = g_tex_0.Sample(g_sam_0, vUV);
     
-    // Noise
+    //===========================================================================
+    //Noise
+
     float2 vUV = _in.vUV;
     vUV.x += g_EngineTime * 0.1;
     float4 vNoise = g_tex_1.Sample(g_sam_0, vUV);
@@ -63,6 +66,9 @@ float4 PS_GrayFilter(VS_OUT _in) : SV_Target
     vColor.b *= 1.5f;
     
     return vColor;
+    
+    //===========================================================================
+  
 }
 
 
@@ -189,6 +195,28 @@ float4 PS_ConvexLens(VS_OUT _in) : SV_Target
     float2 voriginalScreenUV = _in.vPosition.xy / g_Resolution;
     float4 vColor = g_tex_0.Sample(g_sam_0, vScreenUV);
     
+    return vColor;
+}
+
+
+//======================================================================================================
+//ExtractBright
+
+float4 PS_ExtractBright(VS_OUT _in) : SV_Target
+{
+    float2 vScreenUV = _in.vPosition.xy / g_Resolution;
+    
+    float threshold = 0.5;
+    
+    float4 originalColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    float brightness = dot(originalColor.rgb, float3(0.2126, 0.7152, 0.0722)); //https://en.wikipedia.org/wiki/Relative_luminance
+    
+    float4 vColor = float4(0.f, 0.f, 0.f, 1.f);
+    if (brightness > threshold)
+    {
+        vColor = g_tex_0.Sample(g_sam_0, vScreenUV);
+    }
+
     return vColor;
 }
 

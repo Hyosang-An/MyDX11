@@ -43,6 +43,7 @@ void CLevelMgr::Init()
 	Ptr<CMaterial> pDebugShapeMtrl = CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DebugShapeMtrl");
 
 	Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//Character.png");
+	//Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//bloomTest.png");
 	pAlphaBlendMtrl->SetTexParam(TEX_0, pTexture);
 
 	// Level 생성
@@ -177,21 +178,43 @@ void CLevelMgr::Init()
 	m_CurLevel->AddObject(2, pTileMapObj);
 
 
-	// PostProcess Object
-	CGameObject* pGrayFilterObj = new CGameObject;
-	pGrayFilterObj->SetName(L"GrayFilter");
-	pGrayFilterObj->AddComponent(new CTransform);
-	pGrayFilterObj->AddComponent(new CMeshRender);
+	// PostProcess0 Object
+	CGameObject* pPostProcess_1_Obj = new CGameObject;
+	pPostProcess_1_Obj->SetName(L"PostProcess_0");
+	pPostProcess_1_Obj->AddComponent(new CTransform);
+	pPostProcess_1_Obj->AddComponent(new CMeshRender);
 
-	pGrayFilterObj->Transform()->SetRelativePos(0, 0, 450);
-	pGrayFilterObj->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
+	pPostProcess_1_Obj->Transform()->SetRelativePos(0, 0, 450);
+	pPostProcess_1_Obj->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
 
 
-	pGrayFilterObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	//pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"GrayFilterMtrl"));
-	pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ConvexLensMtrl"));
+	pPostProcess_1_Obj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pPostProcess_1_Obj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ExtractBrightMtrl"));
+	//pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ConvexLensMtrl"));
 
-	m_CurLevel->AddObject(0, pGrayFilterObj);
+	//m_CurLevel->AddObject(0, pPostProcess_1_Obj);
+
+
+	// PostProcess Object2 (GaussianBlur)
+	CGameObject* pGaussianBlurObj = new CGameObject;
+	pGaussianBlurObj->SetName(L"PostProcess_1");
+	pGaussianBlurObj->AddComponent(new CTransform);
+	pGaussianBlurObj->AddComponent(new CMeshRender);
+
+	pGaussianBlurObj->Transform()->SetRelativePos(0, 0, 450);
+	pGaussianBlurObj->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
+
+
+	pGaussianBlurObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pGaussianBlurObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"BloomMtrl"));
+
+	//m_CurLevel->AddObject(0, pGaussianBlurObj);
+
+
+
+
+
+
 
 	// 충돌 지정
 	CCollisionMgr::GetInst()->CollisionCheck(3, 4); // Player vs Monster

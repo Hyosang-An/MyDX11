@@ -55,75 +55,20 @@ float4 PS_GrayFilter(VS_OUT _in) : SV_Target
     //float4 vColor = g_tex_0.Sample(g_sam_0, vUV);
     
     //===========================================================================
-    // Noise
-    //float2 vUV = _in.vUV;
-    //vUV.x += g_EngineTime * 0.1;
-    //float4 vNoise = g_tex_1.Sample(g_sam_0, vUV);
-    //vNoise = (vNoise * 2.f - 1.f) * 0.01f;
-    //vUV = _in.vUV + vNoise.xy;
-    //float4 vColor = g_tex_0.Sample(g_sam_0, vUV);
-    //vColor.b *= 1.5f;
+    //Noise
+
+    float2 vUV = _in.vUV;
+    vUV.x += g_EngineTime * 0.1;
+    float4 vNoise = g_tex_1.Sample(g_sam_0, vUV);
+    vNoise = (vNoise * 2.f - 1.f) * 0.01f;
+    vUV = _in.vUV + vNoise.xy;
+    float4 vColor = g_tex_0.Sample(g_sam_0, vUV);
+    vColor.b *= 1.5f;
     
-    //return vColor;
-    
+    return vColor;
     
     //===========================================================================
-    // Bloom
-    float2 vUV = _in.vUV;
-    
-    float threshold = 0.5;
-    float g_BloomIntensity = 1;
-    
-    float2 texelSize = float2(1 / g_Resolution.x, 1 / g_Resolution.y);
-    
-    float4 originalColor = g_tex_0.Sample(g_sam_0, vUV);
-    float brightness = dot(originalColor.rgb, float3(0.2126, 0.7152, 0.0722)); //https://en.wikipedia.org/wiki/Relative_luminance
-    
-    float4 vColor = float4(0.f, 0.f, 0.f, 1.f);
-    
-    // 기준값보다 밝으면 가우시안 블러 적용, 밝지 않으면 원래 색상 그대로 출력
-    //if (brightness > threshold)
-    if (1)
-    {
-        // 가우시안 블러
-        #define KERNEL_SIZE 5
-        float weights[KERNEL_SIZE][KERNEL_SIZE] =
-        {
-            { 0.0030, 0.0133, 0.0219, 0.0133, 0.0030 },
-            { 0.0133, 0.0596, 0.0983, 0.0596, 0.0133 },
-            { 0.0219, 0.0983, 0.1621, 0.0983, 0.0219 },
-            { 0.0133, 0.0596, 0.0983, 0.0596, 0.0133 },
-            { 0.0030, 0.0133, 0.0219, 0.0133, 0.0030 }
-        };
-        
-        float offsets[KERNEL_SIZE] =
-        {
-            -2.0, -1.0, 0.0, 1.0, 2.0
-        };
-        
-        float4 blurColor = float4(0.f, 0.f, 0.f, 1.f);
-        
-        // blur
-        for (int i = 0; i < KERNEL_SIZE; i++)
-            for (int j = 0; j < KERNEL_SIZE; j++)
-            {
-                float2 offset = float2(offsets[i] * texelSize.x, offsets[j] * texelSize.y);
-                float2 samplingUV = clamp(vUV + offset, 0.0, 1.0);
-                blurColor += g_tex_0.Sample(g_sam_0, samplingUV) * weights[i][j];
-            }
-
-        //vColor = originalColor + blurColor * g_BloomIntensity;
-        vColor = blurColor * g_BloomIntensity;
-
-    }
-    else
-    {
-        vColor = originalColor;
-    }
-    
-    
-
-    return vColor;
+  
 }
 
 
@@ -261,7 +206,7 @@ float4 PS_ExtractBright(VS_OUT _in) : SV_Target
 {
     float2 vScreenUV = _in.vPosition.xy / g_Resolution;
     
-    float threshold = 0.8;
+    float threshold = 0.5;
     
     float4 originalColor = g_tex_0.Sample(g_sam_0, _in.vUV);
     float brightness = dot(originalColor.rgb, float3(0.2126, 0.7152, 0.0722)); //https://en.wikipedia.org/wiki/Relative_luminance

@@ -453,7 +453,10 @@
     <FxCompile Include="struct.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="postprocess.fx">
+    <FxCompile Include="postprocess_0.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="postprocess_1.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
