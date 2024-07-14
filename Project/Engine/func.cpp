@@ -33,6 +33,17 @@ void ChangeLevelState(LEVEL_STATE _NextState)
 	CTaskMgr::GetInst()->AddTask(task);
 }
 
+void ChangeLevel(CLevel* _nextLevel, LEVEL_STATE _nextLevelState)
+{
+	tTask task = {};
+	task.Type = TASK_TYPE::CHANGE_LEVEL;
+
+	task.Param_0 = (DWORD_PTR)_nextLevel;
+	task.Param_1 = (DWORD_PTR)_nextLevelState;
+
+	CTaskMgr::GetInst()->AddTask(task);
+}
+
 bool IsValid(CGameObject*& _Object)
 {
 	if (nullptr == _Object)

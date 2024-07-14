@@ -90,6 +90,7 @@ VS_OUT VS_ScreenZoom(VS_IN _in)
     // 따라서 Rasterizer State 에 투영행렬을 곱한 결과를 전달하면 이후 렌더링 파이프라인에서 각 xyz 를 w 로 나누어서 NDC좌표로 만들어 사용한다.
     output.vPosition = float4(_in.vPos.xy * 2.f, 0.f, 1.f);
 
+    // Normalized UV with zoom
     float2 nUV = _in.vUV - 0.5;
     nUV *= 0.9;
     nUV += 0.5;

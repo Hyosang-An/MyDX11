@@ -79,6 +79,8 @@ void CGameObject::AddChild(CGameObject* _ChildObject)
 
 	m_vecChildren.push_back(_ChildObject);
 	_ChildObject->m_Parent = this;
+
+	CLevelMgr::GetInst()->LevelChanged();
 }
 
 bool CGameObject::IsAncestor(CGameObject* _Object)
@@ -123,6 +125,8 @@ void CGameObject::DeregisterThisChildFromParent()
 	}
 
 	assert(nullptr);
+
+	CLevelMgr::GetInst()->LevelChanged();
 }
 
 void CGameObject::Begin()

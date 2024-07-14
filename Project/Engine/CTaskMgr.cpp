@@ -20,6 +20,11 @@ void CTaskMgr::Tick()
 	ExecuteTask();
 }
 
+void CTaskMgr::AddTask(const tTask& _Task)
+{
+	m_vecTask.push_back(_Task);
+}
+
 void CTaskMgr::ClearGC()
 {
 	Delete_Vec(m_GC);
@@ -70,7 +75,12 @@ void CTaskMgr::ExecuteTask()
 
 			case TASK_TYPE::CHANGE_LEVEL:
 			{
+				// Param_0 : Level Adress, Param_1 : Level State
+				CLevel* pLevel = (CLevel*)task.Param_0;
+				LEVEL_STATE NextState = (LEVEL_STATE)task.Param_1;
 
+				CLevelMgr::GetInst()->ChangeLevel(pLevel);
+				pLevel->ChangeState(NextState);
 			}
 			break;
 
@@ -79,6 +89,11 @@ void CTaskMgr::ExecuteTask()
 				CAssetMgr::GetInst()->m_Changed = true;
 			}
 			break;
+
+			case TASK_TYPE::LEVEL_CHANGED:
+			{
+				CLevelMgr::GetInst()->m_LevelChanged = true;
+			}
 		}
 	}
 
