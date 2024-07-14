@@ -310,6 +310,16 @@ void CAssetMgr::CreateEngineGraphicShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
 	AddAsset(L"ConvexLensShader", pShader);
 
+	// RippleEffectShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_ScreenZoom");
+	pShader->CreatePixelShader(L"shader\\postprocess_0.fx", "PS_RippleEffect");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"RippleEffectShader", pShader);
+
 	// ExtractBrightShader
 	pShader = new CGraphicShader;
 	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_Screen");
@@ -393,6 +403,13 @@ void CAssetMgr::CreateEngineMaterial()
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessDSTex"));
 	AddAsset(L"ConvexLensMtrl", pMtrl);
+
+	// RippleEffectMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"RippleEffectShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
+	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessDSTex"));
+	AddAsset(L"RippleEffectMtrl", pMtrl);
 
 	// ExtractBrightMtrl
 	pMtrl = new CMaterial();

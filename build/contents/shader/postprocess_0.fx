@@ -35,6 +35,7 @@ VS_OUT VS_Screen(VS_IN _in)
     // W 자리에 자신의 ViewZ 가 출력되기 때문에 이것으로 각 xyz 를 나누어야 실제 Proj 좌표가 나온다.
     // 따라서 Rasterizer State 에 투영행렬을 곱한 결과를 전달하면 이후 렌더링 파이프라인에서 각 xyz 를 w 로 나누어서 NDC좌표로 만들어 사용한다.
     output.vPosition = float4(_in.vPos.xy * 2.f, 0.f, 1.f);
+    
     output.vUV = _in.vUV;
     
     return output;
@@ -72,7 +73,62 @@ float4 PS_GrayFilter(VS_OUT _in) : SV_Target
 }
 
 
-// ==========================
+// ==============================================================================
+// Convex Shader
+// Mesh     : RectMesh
+// DSTYPE   : NO_TEST_NO_WRITE
+// g_tex_0  : PostProcessRTTex_0
+// g_tex_1  : PostProcessDSTex
+// ===============================================================================
+
+VS_OUT VS_ScreenZoom(VS_IN _in)
+{
+    VS_OUT output = (VS_OUT) 0.f;
+    
+    // Proj 행렬을 곱한 결과는 각 xyz 에 자신의 ViewZ 가 곱혀져있는 형태이다.
+    // W 자리에 자신의 ViewZ 가 출력되기 때문에 이것으로 각 xyz 를 나누어야 실제 Proj 좌표가 나온다.
+    // 따라서 Rasterizer State 에 투영행렬을 곱한 결과를 전달하면 이후 렌더링 파이프라인에서 각 xyz 를 w 로 나누어서 NDC좌표로 만들어 사용한다.
+    output.vPosition = float4(_in.vPos.xy * 2.f, 0.f, 1.f);
+
+    float2 nUV = _in.vUV - 0.5;
+    nUV *= 0.9;
+    nUV += 0.5;
+    
+    output.vUV = nUV;
+    
+    return output;
+}
+
+float4 PS_RippleEffect(VS_OUT _in) : SV_Target
+{
+    // Normalize coordinates to screen height
+    float2 cPos = _in.vPosition.xy / g_Resolution.y;
+    cPos = cPos * 2.0 - float2(g_Resolution.x / g_Resolution.y, 1);
+    
+    // Calculate distance from center
+    float cLength = length(cPos);
+    
+    if (cLength < 0.001)
+        return g_tex_0.Sample(g_sam_0, _in.vUV);
+    
+    // Ripple effect
+    float2 ripple = (cPos / cLength) * cos(cLength * 12.0 - g_EngineTime * 4.0) * 0.012;
+
+    // Adjust UV coordinates and clamp
+    float2 uv = clamp(_in.vUV + ripple, 0.0, 1.0);
+
+    // Check for edge cases
+    if (uv.x == 0.0 || uv.y == 0.0 || uv.x == 1.0 || uv.y == 1.0)
+        return float4(0, 0, 0, 1);
+    
+    // Sample texture
+    float4 col = g_tex_0.Sample(g_sam_0, uv);
+
+    return col;
+}
+
+
+// ==============================================================================
 // Distortion Shader
 // Mesh     : RectMesh
 // DSTYPE   : NO_TEST_NO_WRITE
@@ -80,7 +136,7 @@ float4 PS_GrayFilter(VS_OUT _in) : SV_Target
 // g_tex_1  : NoiseTexture 1
 // g_tex_2  : NoiseTexture 2
 // g_tex_3  : NoiseTexture 3
-// ===========================
+// ===============================================================================
 VS_OUT VS_Distortion(VS_IN _in)
 {
     VS_OUT output = (VS_OUT) 0.f;
@@ -116,15 +172,13 @@ float4 PS_Distortion(VS_OUT _in) : SV_Target
 }
 
 
-// ==========================
-// Distortion Shader
+// ==============================================================================
+// Convex Shader
 // Mesh     : RectMesh
 // DSTYPE   : NO_TEST_NO_WRITE
-// g_tex_0  : TargetCopyTex
-// g_tex_1  : NoiseTexture 1
-// g_tex_2  : NoiseTexture 2
-// g_tex_3  : NoiseTexture 3
-// ===========================
+// g_tex_0  : PostProcessRTTex_0
+// g_tex_1  : PostProcessDSTex
+// ===============================================================================
 VS_OUT VS_ConvexLens(VS_IN _in)
 {
     VS_OUT output = (VS_OUT) 0.f;

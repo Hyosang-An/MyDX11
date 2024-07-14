@@ -192,7 +192,7 @@ void CLevelMgr::Init()
 	pPostProcess_1_Obj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ExtractBrightMtrl"));
 	//pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ConvexLensMtrl"));
 
-	//m_CurLevel->AddObject(0, pPostProcess_1_Obj);
+	m_CurLevel->AddObject(0, pPostProcess_1_Obj);
 
 
 	// PostProcess Object2 (GaussianBlur)
