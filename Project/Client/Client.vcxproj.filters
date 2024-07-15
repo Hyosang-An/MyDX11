@@ -103,6 +103,9 @@
     <Filter Include="Manager\02. TestLevel">
       <UniqueIdentifier>{63a03ae6-7de8-4589-838a-50e1fad4c2b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorUI\07. Module">
+      <UniqueIdentifier>{1ca599b4-68cd-4932-9607-282100e9567d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -243,6 +246,7 @@
     <ClInclude Include="CTestLevel.h">
       <Filter>Manager\02. TestLevel</Filter>
     </ClInclude>
+    <ClInclude Include="ParamUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -369,6 +373,7 @@
     <ClCompile Include="CTestLevel.cpp">
       <Filter>Manager\02. TestLevel</Filter>
     </ClCompile>
+    <ClCompile Include="ParamUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

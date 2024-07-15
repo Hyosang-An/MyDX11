@@ -31,7 +31,7 @@ void CTestLevel::CreateTestLevel()
 	CLevel* TestLevel = new CLevel;
 
 	// 레벨 지정
-	ChangeLevel(TestLevel, LEVEL_STATE::PLAY);
+	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
 
 
 	// 아래 부분은 CLevel 생성자에서 해주는게 낫지 않을까하는 생각이...
@@ -133,26 +133,26 @@ void CTestLevel::CreateTestLevel()
 
 
 	pPostProcess_1_Obj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pPostProcess_1_Obj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ExtractBrightMtrl"));
+	pPostProcess_1_Obj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DistortionMtrl"));
 	//pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ConvexLensMtrl"));
 
 	TestLevel->AddObject(0, pPostProcess_1_Obj);
 
 
-	// PostProcess Object2 (GaussianBlur)
-	CGameObject* pGaussianBlurObj = new CGameObject;
-	pGaussianBlurObj->SetName(L"PostProcess_1");
-	pGaussianBlurObj->AddComponent(new CTransform);
-	pGaussianBlurObj->AddComponent(new CMeshRender);
+	//// PostProcess Object2 (GaussianBlur)
+	//CGameObject* pGaussianBlurObj = new CGameObject;
+	//pGaussianBlurObj->SetName(L"PostProcess_1");
+	//pGaussianBlurObj->AddComponent(new CTransform);
+	//pGaussianBlurObj->AddComponent(new CMeshRender);
 
-	pGaussianBlurObj->Transform()->SetRelativePos(0, 0, 450);
-	pGaussianBlurObj->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
+	//pGaussianBlurObj->Transform()->SetRelativePos(0, 0, 450);
+	//pGaussianBlurObj->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
 
 
-	pGaussianBlurObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pGaussianBlurObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"BloomMtrl"));
+	//pGaussianBlurObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	//pGaussianBlurObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"BloomMtrl"));
 
-	//m_CurLevel->AddObject(0, pGaussianBlurObj);
+	//TestLevel->AddObject(0, pGaussianBlurObj);
 
 
 	// 충돌 지정

@@ -26,6 +26,7 @@ public:
 
 public:
     virtual void Update() override;
+    virtual void Activate() override;
     virtual void Deactivate() override;
 
 public:

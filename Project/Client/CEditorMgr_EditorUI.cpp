@@ -12,6 +12,8 @@
 #include "ListUI.h"
 #include "MenuUI.h"
 
+#include "ParamUI.h"
+
 void CEditorMgr::InitImGui()
 {
     // Setup Dear ImGui context
@@ -112,6 +114,9 @@ void CEditorMgr::ImGuiProgress()
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
+    // ParamUI ID Reset
+    ParamUI::ResetID();
 
     // ImGui Tick
     ImGuiTick();
