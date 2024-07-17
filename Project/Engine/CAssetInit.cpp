@@ -112,10 +112,21 @@ void CAssetMgr::CreateEngineMesh()
 
 void CAssetMgr::CreateEngineTexture()
 {
-	// PostProcess 용도 텍스쳐 생성
+	// PostProcess 용도 텍스쳐 생성 -> RenderMgr로 옮겼음
 	Vec2 Resolution = CDevice::GetInst()->GetResolution();
-	CreateTexture(L"PostProcessTex", (UINT)Resolution.x, (UINT)Resolution.y
-		, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
+	for (int i = 0; i < m_PostProcessTextCnt; i++)
+	{
+		//// PostProcess 용도 텍스쳐 생성
+		wstring texName = L"PostProcessRTTex_" + std::to_wstring(i);
+		CAssetMgr::CreateTexture(texName, (UINT)Resolution.x, (UINT)Resolution.y
+			, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
+	}
+
+	// PostProcess 용도 DepthStencil 텍스쳐 생성
+	CreateTexture(L"PostProcessDSTex", (UINT)Resolution.x, (UINT)Resolution.y
+		, DXGI_FORMAT_R24_UNORM_X8_TYPELESS , D3D11_BIND_SHADER_RESOURCE);
+
+
 
 	// Noise Texture
 	Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
@@ -221,6 +232,10 @@ void CAssetMgr::CreateEngineGraphicShader()
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASKED);
 
+	pShader->AddScalarParam(INT_0, "Test Parameter");
+	pShader->AddScalarParam(VEC2_0, "Test Vector Parameter 0");
+	//pShader->AddTexParam(TEX_0, "OutputTexture");
+
 	AddAsset(L"Std2DShader", pShader);
 
 
@@ -271,8 +286,8 @@ void CAssetMgr::CreateEngineGraphicShader()
 
 	// GrayFilterShader
 	pShader = new CGraphicShader;
-	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_GrayFilter");
-	pShader->CreatePixelShader(L"shader\\postprocess.fx", "PS_GrayFilter");
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_Screen");
+	pShader->CreatePixelShader(L"shader\\postprocess_0.fx", "PS_GrayFilter");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE); // 후처리는 항상 모든 픽셀에 깊이 관계없이 적용되어야 하므로.
 	pShader->SetBSType(BS_TYPE::DEFAULT);
@@ -281,13 +296,63 @@ void CAssetMgr::CreateEngineGraphicShader()
 
 	// DistortionShader
 	pShader = new CGraphicShader;
-	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_Distortion");
-	pShader->CreatePixelShader(L"shader\\postprocess.fx", "PS_Distortion");
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_Distortion");
+	pShader->CreatePixelShader(L"shader\\postprocess_0.fx", "PS_Distortion");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
 	AddAsset(L"DistortionShader", pShader);
+
+	// ConvexLensShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_ConvexLens");
+	pShader->CreatePixelShader(L"shader\\postprocess_0.fx", "PS_ConvexLens");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"ConvexLensShader", pShader);
+
+	// RippleEffectShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_ScreenZoom");
+	pShader->CreatePixelShader(L"shader\\postprocess_0.fx", "PS_RippleEffect");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"RippleEffectShader", pShader);
+
+	// ExtractBrightShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_Screen");
+	pShader->CreatePixelShader(L"shader\\postprocess_0.fx", "PS_ExtractBright");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"ExtractBrightShader", pShader);
+
+	// GaussianBlurShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_Screen");
+	pShader->CreatePixelShader(L"shader\\postprocess_1.fx", "PS_GaussianBlur");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"GaussianBlurShader", pShader);
+
+	// BloomShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_Screen");
+	pShader->CreatePixelShader(L"shader\\postprocess_1.fx", "PS_Bloom");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"BloomShader", pShader);
 }
 
 void CAssetMgr::CreateEngineComputeShader()
@@ -321,7 +386,7 @@ void CAssetMgr::CreateEngineMaterial()
 	// GrayFilterMtrl
 	pMtrl = new CMaterial();
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"GrayFilterShader"));
-	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessTex"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"texture\\noise\\noise_01.png"));
 	pMtrl->SetTexParam(TEX_2, FindAsset<CTexture>(L"texture\\noise\\noise_02.png"));
 	pMtrl->SetTexParam(TEX_3, FindAsset<CTexture>(L"texture\\noise\\noise_03.jpg"));
@@ -330,9 +395,43 @@ void CAssetMgr::CreateEngineMaterial()
 	// DistortionMtrl
 	pMtrl = new CMaterial();
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"DistortionShader"));
-	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessTex"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"texture\\noise\\noise_01.png"));
 	pMtrl->SetTexParam(TEX_2, FindAsset<CTexture>(L"texture\\noise\\noise_02.png"));
 	pMtrl->SetTexParam(TEX_3, FindAsset<CTexture>(L"texture\\noise\\noise_03.jpg"));
 	AddAsset(L"DistortionMtrl", pMtrl);
+
+	// ConvexLensMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"ConvexLensShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
+	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessDSTex"));
+	AddAsset(L"ConvexLensMtrl", pMtrl);
+
+	// RippleEffectMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"RippleEffectShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
+	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessDSTex"));
+	AddAsset(L"RippleEffectMtrl", pMtrl);
+
+	// ExtractBrightMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"ExtractBrightShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
+	AddAsset(L"ExtractBrightMtrl", pMtrl);
+
+	// GaussianBlurMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"GaussianBlurShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
+	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessRTTex_1"));
+	AddAsset(L"GaussianBlurMtrl", pMtrl);
+
+	// GaussianBlurMtrl
+	pMtrl = new CMaterial();
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"BloomShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
+	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessRTTex_1"));
+	AddAsset(L"BloomMtrl", pMtrl);
 }

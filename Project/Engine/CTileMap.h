@@ -27,7 +27,7 @@ private:
 
 
     vector<tTileInfo>       m_vecTileInfo;      // 각각의 타일의 정보
-    CStructuredBuffer*      m_Buffer;           // 각각의 타일정보를 t 레지스터로 전달하기 위한 구조화버퍼
+    CStructuredBuffer*      m_structuredBuffer;           // 각각의 타일정보를 t 레지스터로 전달하기 위한 구조화버퍼
 
 
 public:

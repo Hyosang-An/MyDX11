@@ -9,6 +9,7 @@
 
 #include <Engine/CDevice.h>
 #include "ImGui/imgui_impl_win32.h"
+#include "CTestLevel.h"
 
 
 #define MAX_LOADSTRING 100
@@ -37,7 +38,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // 메모리 누수 확인
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    //_CrtSetBreakAlloc(2682);
+    //_CrtSetBreakAlloc(1721);
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -148,6 +149,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
        MessageBox(nullptr, L"CEngine 초기화 실패", L"엔진 초기화 실패", MB_OK);
        return 0;
    }
+
+   // 테스트용 레벨 초기상태 만들기
+   CTestLevel::CreateTestLevel();
 
 #ifdef _DEBUG
    // CEditorMgr 초기화

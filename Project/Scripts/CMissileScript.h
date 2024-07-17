@@ -1,5 +1,5 @@
 #pragma once
-#include "CScript.h"
+#include "Engine/CScript.h"
 class CMissileScript :
     public CScript
 {

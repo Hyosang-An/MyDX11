@@ -145,10 +145,19 @@ void CEditorCameraScript::PerspectiveMove()
 		CKeyMgr::GetInst()->MouseCapture(false);
 	}
 
-	Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
+	static bool mousecontrol = false;
+	if (KEY_JUST_PRESSED(KEY::ESC))
+		mousecontrol = !mousecontrol;
 
-	Vec3 vRot = Transform()->GetRelativeRoatation();
-	vRot.y += vDir.x * XM_PI * EngineDT * 10.f;
-	vRot.x += vDir.y * XM_PI * EngineDT * 10.f;
-	Transform()->SetRelativeRotation(vRot);
+	if (mousecontrol)
+	{
+		Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
+
+		Vec3 vRot = Transform()->GetRelativeRoatation();
+		vRot.y += vDir.x * XM_PI * EngineDT * 1.f;
+		vRot.x += vDir.y * XM_PI * EngineDT * 1.f;
+		Transform()->SetRelativeRotation(vRot);
+	}
+
+
 }

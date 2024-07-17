@@ -49,12 +49,16 @@ struct tLightInfo
 // ===================
 struct tTransform
 {
-	Matrix matWorld;
-	Matrix matView;
-	Matrix matProj;
+	Matrix	matWorld;
+	Matrix	matView;
+	Matrix	matProj;
 
-	Matrix matWV;
-	Matrix matWVP;
+	Matrix	matWV;
+	Matrix	matWVP;
+
+	Vec3	worldDir[3];
+
+	int		Padding[3];
 };
 
 extern tTransform g_Trans;

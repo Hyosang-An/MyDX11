@@ -103,12 +103,6 @@
     <ClInclude Include="CScript.h">
       <Filter>08. Component\Script</Filter>
     </ClInclude>
-    <ClInclude Include="CPlayerScript.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="CCameraMoveScript.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="CShader.h">
       <Filter>06. Asset\Shader</Filter>
     </ClInclude>
@@ -126,9 +120,6 @@
     </ClInclude>
     <ClInclude Include="CTaskMgr.h">
       <Filter>04. Manager\TaskMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="CMissileScript.h">
-      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="CSprite.h">
       <Filter>06. Asset\07. Sprite</Filter>
@@ -228,12 +219,6 @@
     <ClCompile Include="CScript.cpp">
       <Filter>08. Component\Script</Filter>
     </ClCompile>
-    <ClCompile Include="CCameraMoveScript.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="CPlayerScript.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="CShader.cpp">
       <Filter>06. Asset\Shader</Filter>
     </ClCompile>
@@ -257,9 +242,6 @@
     </ClCompile>
     <ClCompile Include="CTaskMgr.cpp">
       <Filter>04. Manager\TaskMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="CMissileScript.cpp">
-      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="CSprite.cpp">
       <Filter>06. Asset\07. Sprite</Filter>
@@ -398,9 +380,6 @@
     <Filter Include="03. Device\StructuredBuffer">
       <UniqueIdentifier>{2e4bab79-0730-41a3-b6b7-5fdf6d4e72d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts">
-      <UniqueIdentifier>{1f9f0ffa-5e11-448c-9c53-eb7b0173fb96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="08. Component\RenderComponent">
       <UniqueIdentifier>{8d4f7f06-cfc7-4087-89e0-751fe3c80ca1}</UniqueIdentifier>
     </Filter>
@@ -453,7 +432,10 @@
     <FxCompile Include="struct.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="postprocess.fx">
+    <FxCompile Include="postprocess_0.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="postprocess_1.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

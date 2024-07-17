@@ -55,6 +55,11 @@ void ListUI::Update()
 	}
 }
 
+void ListUI::Activate()
+{
+	m_vecList.insert(m_vecList.begin(), 1, "None");
+}
+
 void ListUI::AddItem(const string& _item)
 {
 	m_vecList.push_back(_item);

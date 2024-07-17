@@ -1,21 +1,19 @@
 #pragma once
-#include "CScript.h"
-class CPlayerScript :
+#include "Engine/CScript.h"
+class CMissileScript :
     public CScript
 {
-public:
-    CPlayerScript();
-    ~CPlayerScript();
-    virtual CPlayerScript* Clone() { return new CPlayerScript(*this); }
-
 private:
     float   m_Speed;
 
-public:
-    virtual void Begin() override;
-    virtual void Tick() override;
 
+public:
+    virtual void Tick() override;
     virtual void BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider) override;
 
+public:
+    virtual CMissileScript* Clone() { return new CMissileScript(*this); }
+    CMissileScript();
+    ~CMissileScript();
 };
 

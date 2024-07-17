@@ -83,6 +83,8 @@ void CCamera::FinalTick()
 
 	m_matView = matTrans * matRot;
 
+	// 아래 방법도 가능
+	//m_matView = XMMatrixLookAtLH(Transform()->GetRelativePos(), vF, vU);
 
 	// Projection Space 투영 좌표계 (NDC)
 	if (PROJ_TYPE::ORTHOGRAPHIC == m_ProjType)
@@ -144,6 +146,9 @@ void CCamera::SortGameObject()
 				case DOMAIN_POSTPROCESS:
 					m_vecPostProcess.push_back(vecObjects[j]);
 					break;
+				case DOMAIN_UI:
+					m_vecUI.push_back(vecObjects[j]);
+					break;
 			}
 		}
 	}
@@ -185,7 +190,9 @@ void CCamera::Render()
 	// PostProcess 
 	for (size_t i = 0; i < m_vecPostProcess.size(); ++i)
 	{
-		CRenderMgr::GetInst()->PostProcessCopy();
+		
+
+		CRenderMgr::GetInst()->PostProcessCopy(i);
 		m_vecPostProcess[i]->Render();
 	}
 
@@ -194,4 +201,5 @@ void CCamera::Render()
 	m_vecTransparent.clear();
 	m_vecParticles.clear();
 	m_vecPostProcess.clear();
+	m_vecUI.clear();
 }

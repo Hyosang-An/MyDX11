@@ -25,7 +25,8 @@ private:
 	CStructuredBuffer*		m_Light2DBuffer = nullptr;
 
 	// PostProcess
-	Ptr<CTexture>           m_PostProcessTex;
+	vector<Ptr<CTexture>>   m_vecPostProcessRTTex;
+	Ptr<CTexture>			m_PostProcessDSTex;
 
 public:
 	void RegisterCamera(CCamera* _cam, int _camPriority);
@@ -34,9 +35,10 @@ public:
 	void RegisterLight2D(CLight2D* _light);
 	void DeregisterLight2D(CLight2D* _light);
 
-	void PostProcessCopy();
+	void PostProcessCopy(int _postProcessRTTex_index);
 
 private:
+	void SetPostProcessTex();
 	void RenderStart();
 	void Clear();
 
