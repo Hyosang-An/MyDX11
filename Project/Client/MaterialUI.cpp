@@ -91,6 +91,8 @@ void MaterialUI::ShaderParameter()
 	const vector<tScalarParam>& vecScalarParam = pShader->GetScalarParamVec();
 	const vector<tTexParam>& vecTexParam = pShader->GetTexParamVec();
 
+
+	// Scalar 파라미터 대응
 	for (size_t i = 0; i < vecScalarParam.size(); ++i)
 	{
 		switch (vecScalarParam[i].ParamType)
@@ -156,8 +158,20 @@ void MaterialUI::ShaderParameter()
 		}
 	}
 
-	vecTexParam;
+
+	// Texture 파라미터 대응
+	for (size_t i = 0; i < vecTexParam.size(); ++i)
+	{
+		Ptr<CTexture> pCurTex = pMtrl->GetTexParam(vecTexParam[i].ParamType);
+
+		if (ParamUI::InputTexture(pCurTex, vecTexParam[i].strDesc, this, (DELEGATE_1)&MaterialUI::ChangeTexture))
+		{
+			pMtrl->SetTexParam(vecTexParam[i].ParamType, pCurTex);
+			m_SelectTexParam = vecTexParam[i].ParamType;
+		}
+	}
 }
+
 
 void MaterialUI::SelectShader(DWORD_PTR _ListUI)
 {
@@ -166,16 +180,41 @@ void MaterialUI::SelectShader(DWORD_PTR _ListUI)
 	ListUI* pListUI = (ListUI*)_ListUI;
 	string strName = pListUI->GetSelectName();
 
-	if (strName == "None")
+	if ("None" == strName)
 	{
 		pMtrl->SetShader(nullptr);
 		return;
 	}
 
 	wstring strAssetName = wstring(strName.begin(), strName.end());
+
 	Ptr<CGraphicShader> pShader = CAssetMgr::GetInst()->FindAsset<CGraphicShader>(strAssetName);
 
 	assert(pShader.Get());
 
 	pMtrl->SetShader(pShader);
+}
+
+void MaterialUI::ChangeTexture(DWORD_PTR Param)
+{
+	// 텍스쳐 파라미터를 입력받을 재질
+	Ptr<CMaterial> pMtrl = (CMaterial*)GetAsset().Get();
+
+	// 마지막으로 선택한 항목이 무엇인지 ListUI 를 통해서 알아냄
+	ListUI* pListUI = (ListUI*)Param;
+	string strName = pListUI->GetSelectName();
+
+	if ("None" == strName)
+	{
+		pMtrl->SetTexParam(m_SelectTexParam, nullptr);
+		return;
+	}
+
+	wstring strAssetName = wstring(strName.begin(), strName.end());
+
+	Ptr<CTexture> pTex = CAssetMgr::GetInst()->FindAsset<CTexture>(strAssetName);
+
+	assert(pMtrl.Get());
+
+	pMtrl->SetTexParam(m_SelectTexParam, pTex);
 }

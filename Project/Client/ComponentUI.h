@@ -13,6 +13,8 @@ public:
     void SetTargetObject(CGameObject* _Object);
     CGameObject* GetTargetObject() { return m_TargetObject; }
 
+    COMPONENT_TYPE GetComponentUIType() { return m_Type; }
+
 protected:
     void Title();
 

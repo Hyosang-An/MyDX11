@@ -99,7 +99,7 @@ void TreeNode::Update()
 
 void TreeNode::DragCheck()
 {
-	if (m_Owner->IsDrag())
+	if (m_Owner->IsUsingDrag())
 	{
 		if (ImGui::BeginDragDropSource())
 		{
@@ -118,7 +118,7 @@ void TreeNode::DragCheck()
 
 void TreeNode::DropCheck()
 {
-	if (!m_Owner->IsDrop())
+	if (!m_Owner->IsUsingDrop())
 		return;
 
 	if (ImGui::BeginDragDropTarget())

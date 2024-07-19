@@ -12,7 +12,7 @@ public:
 private:
     void RenewContent();
 
-    void AssetClicked(DWORD_PTR _Param);
+    void AssetSelected(DWORD_PTR _Param);
 
 public:
     Content();

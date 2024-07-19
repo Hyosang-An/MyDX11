@@ -120,13 +120,16 @@ void CGameObject::DeregisterThisChildFromParent()
 		{
 			m_Parent->m_vecChildren.erase(iter);
 			m_Parent = nullptr;
+
+			CLevelMgr::GetInst()->LevelChanged();
+
 			return;
 		}
 	}
 
 	assert(nullptr);
 
-	CLevelMgr::GetInst()->LevelChanged();
+	
 }
 
 void CGameObject::Begin()

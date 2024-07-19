@@ -9,7 +9,8 @@ public:
     virtual CPlayerScript* Clone() { return new CPlayerScript(*this); }
 
 private:
-    float   m_Speed;
+    float           m_Speed;
+    Ptr<CTexture>   m_Texture;
 
 public:
     virtual void Begin() override;

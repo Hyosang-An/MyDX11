@@ -19,4 +19,6 @@
 #include <Engine/global.h>
 #include <Engine/CEngine.h>
 
+#include "CScriptMgr.h"
+
 #endif //PCH_H

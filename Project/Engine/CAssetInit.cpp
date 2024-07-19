@@ -102,7 +102,7 @@ void CAssetMgr::CreateEngineMesh()
 	vecIdx.clear();
 	for (size_t i = 1; i < vecVtx.size(); ++i)
 	{
-		vecIdx.push_back(i);
+		vecIdx.push_back((UINT)i);
 	}
 
 	pMesh = new CMesh;
@@ -232,9 +232,7 @@ void CAssetMgr::CreateEngineGraphicShader()
 
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASKED);
 
-	pShader->AddScalarParam(INT_0, "Test Parameter");
-	pShader->AddScalarParam(VEC2_0, "Test Vector Parameter 0");
-	//pShader->AddTexParam(TEX_0, "OutputTexture");
+	pShader->AddTexParam(TEX_0, "OutputTexture");
 
 	AddAsset(L"Std2DShader", pShader);
 

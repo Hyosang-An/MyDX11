@@ -19,7 +19,7 @@ Content::Content()
 	m_Tree->UseDrag(true);		// Tree Drag 기능 ON
 	m_Tree->ShowNameOnly(true); // 노드의 이름에서 경로 및 확장자는 제외하고 파일이름만 보이기
 
-	m_Tree->AddSelectedDelegate(this, (DELEGATE_1)&Content::AssetClicked);
+	m_Tree->AddSelectedDelegate(this, (DELEGATE_1)&Content::AssetSelected);
 
 	// Asset 상태를 Content 의 TreeUI 에 반영
 	RenewContent();
@@ -61,7 +61,7 @@ void Content::RenewContent()
 	}
 }
 
-void Content::AssetClicked(DWORD_PTR _Param)
+void Content::AssetSelected(DWORD_PTR _Param)
 {
 	// _Param은 SelectedNode이다.
 	TreeNode* pNode = (TreeNode*)_Param;

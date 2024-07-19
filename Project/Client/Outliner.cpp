@@ -42,11 +42,13 @@ Outliner::Outliner()
 
 Outliner::~Outliner()
 {
-	// 자식 트리노드만 Update하면 됨. 자기 자신은 따로 해줄 것 없음.
+	
 }
 
 void Outliner::Update()
 {
+	// 자식 트리노드만 Update하면 됨. 자기 자신은 따로 해줄 것 없음.
+
 	if (CLevelMgr::GetInst()->IsLevelChanged())
 		RenewLevel();
 }

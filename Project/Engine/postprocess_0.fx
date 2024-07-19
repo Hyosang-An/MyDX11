@@ -186,7 +186,7 @@ VS_OUT VS_ConvexLens(VS_IN _in)
     
     output.vPosition = mul(float4(_in.vPos, 1.f), matWVP);
     output.vUV = _in.vUV;
-    output.vWorldPos = mul(float4(_in.vPos, 1.f), matWorld);
+    output.vWorldPos = mul(float4(_in.vPos, 1.f), matWorld).xyz;
     
     return output;
 }

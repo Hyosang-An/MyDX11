@@ -3,9 +3,12 @@
 
 #include "CMissileScript.h"
 
-CPlayerScript::CPlayerScript()
-	: m_Speed(400.f)
+CPlayerScript::CPlayerScript() :
+	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT)),
+	m_Speed(400.f)
 {
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "PlayerSpeed", &m_Speed);
+	AddScriptParam(SCRIPT_PARAM_TYPE::TEXTURE, "Test", &m_Texture);
 }
 
 CPlayerScript::~CPlayerScript()

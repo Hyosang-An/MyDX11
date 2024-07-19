@@ -106,6 +106,9 @@
     <Filter Include="EditorUI\07. Module">
       <UniqueIdentifier>{1ca599b4-68cd-4932-9607-282100e9567d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorUI\01. Inspector\ComponentUI\09. ScriptUI">
+      <UniqueIdentifier>{d408b240-5cf2-4657-8b9f-935d015861c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -246,7 +249,12 @@
     <ClInclude Include="CTestLevel.h">
       <Filter>Manager\02. TestLevel</Filter>
     </ClInclude>
-    <ClInclude Include="ParamUI.h" />
+    <ClInclude Include="ParamUI.h">
+      <Filter>EditorUI\07. Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptUI.h">
+      <Filter>EditorUI\01. Inspector\ComponentUI\09. ScriptUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -373,7 +381,12 @@
     <ClCompile Include="CTestLevel.cpp">
       <Filter>Manager\02. TestLevel</Filter>
     </ClCompile>
-    <ClCompile Include="ParamUI.cpp" />
+    <ClCompile Include="ParamUI.cpp">
+      <Filter>EditorUI\07. Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptUI.cpp">
+      <Filter>EditorUI\01. Inspector\ComponentUI\09. ScriptUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

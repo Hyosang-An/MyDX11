@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "CCameraMoveScript.h"
 
-CCameraMoveScript::CCameraMoveScript()
-	: m_CamSpeed(500.f)
+CCameraMoveScript::CCameraMoveScript() :
+	CScript((UINT)SCRIPT_TYPE::CAMERAMOVESCRIPT),
+	m_CamSpeed(500.f)
 {
 }
 

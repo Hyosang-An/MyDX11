@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "CEditorCameraScript.h"
 
-CEditorCameraScript::CEditorCameraScript()
-	: m_Speed(500.f)
+CEditorCameraScript::CEditorCameraScript() :
+	CScript(-1),
+	m_Speed(500.f)
 {
 
 }

@@ -22,7 +22,7 @@ public:
     void SetShader(Ptr<CGraphicShader> _Shader) { m_Shader = _Shader; }
 
     void* GetScalarParam(SCALAR_PARAM _Param);
-    Ptr<CTexture> GetTexParamVec(TEX_PARAM _Param) { return m_arrTex[(UINT)_Param]; }
+    Ptr<CTexture> GetTexParam(TEX_PARAM _Param) { return m_arrTex[(UINT)_Param]; }
 
 
     Ptr<CGraphicShader> GetShader() { return m_Shader; }

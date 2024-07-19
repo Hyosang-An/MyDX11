@@ -85,8 +85,8 @@ public:
     void UseDrag(bool _Drag) { m_UseDrag = _Drag; }
     void UseDrop(bool _Drop) { m_UseDrop = _Drop; }
 
-    bool IsDrag() { return m_UseDrag; }
-    bool IsDrop() { return m_UseDrop; }
+    bool IsUsingDrag() { return m_UseDrag; }
+    bool IsUsingDrop() { return m_UseDrop; }
 
     void SetDropPayLoadName(const string& _Name) { m_DropPayLoadName = _Name; }
     const string GetDropPayLoadName() { return m_DropPayLoadName; }

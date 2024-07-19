@@ -31,7 +31,7 @@ void CTestLevel::CreateTestLevel()
 	CLevel* TestLevel = new CLevel;
 
 	// 레벨 지정
-	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
+	ChangeLevel(TestLevel, LEVEL_STATE::PLAY);
 
 
 	// 아래 부분은 CLevel 생성자에서 해주는게 낫지 않을까하는 생각이...
@@ -84,7 +84,7 @@ void CTestLevel::CreateTestLevel()
 	pPlayer->AddComponent(new CTransform);
 	pPlayer->AddComponent(new CMeshRender);
 	pPlayer->AddComponent(new CCollider2D);
-	pPlayer->AddComponent(new CFlipBookComponent);
+	//pPlayer->AddComponent(new CFlipBookComponent);
 	pPlayer->AddComponent(new CPlayerScript);
 
 	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
@@ -97,8 +97,8 @@ void CTestLevel::CreateTestLevel()
 	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 	pPlayer->MeshRender()->SetMaterial(pMtrl);
 
-	pPlayer->FlipBookComponent()->AddFlipBook(5, CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"Link_MoveDown"));
-	pPlayer->FlipBookComponent()->Play(5, 10, true);
+	//pPlayer->FlipBookComponent()->AddFlipBook(5, CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"Link_MoveDown"));
+	//pPlayer->FlipBookComponent()->Play(5, 10, true);
 
 	TestLevel->AddObject(3, pPlayer);
 

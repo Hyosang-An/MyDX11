@@ -7,6 +7,9 @@
     <Filter Include="Scripts">
       <UniqueIdentifier>{db4d33b5-7440-4626-ae9e-ad1c0c41cae2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ScriptMgr">
+      <UniqueIdentifier>{7c27c79f-4f5a-49ec-9e27-bcfa9b8fcbd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -24,6 +27,9 @@
     <ClInclude Include="CPlayerScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="CScriptMgr.h">
+      <Filter>ScriptMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -40,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="CPlayerScript.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CScriptMgr.cpp">
+      <Filter>ScriptMgr</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

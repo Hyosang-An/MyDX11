@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "CMissileScript.h"
 
-CMissileScript::CMissileScript()
-	: m_Speed(1000.f)
+CMissileScript::CMissileScript() :
+	CScript((UINT)SCRIPT_TYPE::MISSILESCRIPT),
+	m_Speed(1000.f)
 {
 }
 

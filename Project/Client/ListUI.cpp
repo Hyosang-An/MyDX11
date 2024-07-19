@@ -33,7 +33,7 @@ void ListUI::Update()
 
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 		{
-			m_SelectedIdx = i;
+			m_SelectedIdx = (int)i;
 		}
 
 		if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))

@@ -51,7 +51,7 @@ VS_OUT VS_TileMap(VS_IN _in)
     
     output.vPosition = mul(float4(_in.vPos, 1.f), matWVP);
     output.vUV = _in.vUV * TileColRow;
-    output.vWorldPos = mul(float4(_in.vPos, 1.f), matWorld);
+    output.vWorldPos = mul(float4(_in.vPos, 1.f), matWorld).xyz;
     
     return output;
 }
