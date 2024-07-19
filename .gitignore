@@ -4,8 +4,10 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # 복사된 엔진 헤더파일
-External/Include/Engine/**
-
+External/Include/**
+# 예외
+!External/Include/DirectXTex/
+!External/Include/DirectXTex/**
 
 
 # User-specific files
