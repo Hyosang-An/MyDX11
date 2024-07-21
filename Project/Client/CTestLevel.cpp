@@ -31,7 +31,7 @@ void CTestLevel::CreateTestLevel()
 	CLevel* TestLevel = new CLevel;
 
 	// 레벨 지정
-	ChangeLevel(TestLevel, LEVEL_STATE::PLAY);
+	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
 
 
 	// 아래 부분은 CLevel 생성자에서 해주는게 낫지 않을까하는 생각이...
@@ -101,6 +101,7 @@ void CTestLevel::CreateTestLevel()
 	//pPlayer->FlipBookComponent()->Play(5, 10, true);
 
 	TestLevel->AddObject(3, pPlayer);
+
 
 
 	// TileMap Object

@@ -14,6 +14,7 @@ class CGameObject :
 
 public:
     CGameObject();
+    CGameObject(const CGameObject& _Origin);
     ~CGameObject();
     virtual CGameObject* Clone() { return new CGameObject(*this); }
 

@@ -130,9 +130,6 @@
     <ClInclude Include="CFlipBookComponent.h">
       <Filter>08. Component\04. FlipBookComponent</Filter>
     </ClInclude>
-    <ClInclude Include="define.h">
-      <Filter>08. Component\RenderComponent\02. TileMap</Filter>
-    </ClInclude>
     <ClInclude Include="CTileMap.h">
       <Filter>08. Component\RenderComponent\02. TileMap</Filter>
     </ClInclude>
@@ -141,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="CLight2D.h">
       <Filter>08. Component\08. Light2D</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>01. Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

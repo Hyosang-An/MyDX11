@@ -9,6 +9,7 @@ class CComponent :
     friend class CGameObject;
 public:
     CComponent(COMPONENT_TYPE _Type);
+    CComponent(const CComponent& _Origin);
     ~CComponent();
     virtual CComponent* Clone() = 0;
 

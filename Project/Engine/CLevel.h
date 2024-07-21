@@ -9,6 +9,7 @@ class CLevel :
 {
 public:
     CLevel();
+    CLevel(const CLevel& _Origin);
     ~CLevel();
     virtual CLevel* Clone() { return new CLevel(*this); }
 

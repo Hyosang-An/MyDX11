@@ -6,7 +6,9 @@ class CCollider2D :
 {
 public:
     CCollider2D();
+    CCollider2D(const CCollider2D& _Origin);
     ~CCollider2D();
+    virtual CCollider2D* Clone() { return new CCollider2D(*this); }
 
 private:
     Vec3    m_Offset;
@@ -37,6 +39,6 @@ public:
 public:
     virtual void FinalTick() override;
 
-    virtual CCollider2D* Clone() { return new CCollider2D(*this); }
+
 };
 

@@ -9,6 +9,7 @@ class CLayer :
 
 public:
     CLayer(int _LayerIdx);
+    CLayer(const CLayer& _Origin);
     ~CLayer();
     virtual CLayer* Clone() { return new CLayer(*this); }
 

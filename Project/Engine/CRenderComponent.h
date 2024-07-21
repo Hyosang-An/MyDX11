@@ -7,7 +7,9 @@ class CRenderComponent :
 {
 public:
     CRenderComponent(COMPONENT_TYPE _Type);
+    CRenderComponent(const CRenderComponent& _Origin);
     ~CRenderComponent();
+    virtual CRenderComponent* Clone() = 0;
 
 private:
     Ptr<CMesh>          m_Mesh;
@@ -31,6 +33,6 @@ public:
 public:
     virtual void FinalTick() = 0;
     virtual void Render() = 0;
-    virtual CRenderComponent* Clone() = 0;
+
 };
 

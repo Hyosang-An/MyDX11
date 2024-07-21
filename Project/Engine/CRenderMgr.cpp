@@ -72,7 +72,7 @@ void CRenderMgr::Tick()
 
 	RenderStart();
 
-	// Level 이 Player 상태인 경우, Level 내에 있는 카메라 시점으로 렌더링하기
+	// Level 이 Play 상태인 경우, Level 내에 있는 카메라 시점으로 렌더링하기
 	if (PLAY == pCurLevel->GetState())
 	{
 		for (size_t i = 0; i < m_vecCam.size(); ++i)

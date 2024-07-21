@@ -13,6 +13,29 @@ CFlipBookComponent::CFlipBookComponent()
 {
 }
 
+CFlipBookComponent::CFlipBookComponent(CFlipBookComponent& _Origin)
+	: CComponent(_Origin)
+	, m_vecFlipBook(_Origin.m_vecFlipBook)
+	, m_CurFlipBook(_Origin.m_CurFlipBook)
+	, m_CurFrmIdx(0)
+	, m_FPS(_Origin.m_FPS)
+	, m_AccTime(0.f)
+	, m_Repeat(_Origin.m_Repeat)
+	, m_Finish(false)
+{
+	if (nullptr != m_CurFlipBook)
+	{
+		int FlipBookIdx = 0;
+		for (; FlipBookIdx < (int)m_vecFlipBook.size(); ++FlipBookIdx)
+		{
+			if (m_CurFlipBook == m_vecFlipBook[FlipBookIdx])
+				break;
+		}
+
+		Play(FlipBookIdx, m_FPS, m_Repeat);
+	}
+}
+
 CFlipBookComponent::~CFlipBookComponent()
 {
 }

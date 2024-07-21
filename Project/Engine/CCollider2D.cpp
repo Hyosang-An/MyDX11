@@ -11,6 +11,15 @@ CCollider2D::CCollider2D()
 {
 }
 
+CCollider2D::CCollider2D(const CCollider2D& _Origin) :
+	CComponent(_Origin),
+	m_Offset(_Origin.m_Offset),
+	m_Scale(_Origin.m_Scale),
+	m_OverlapCount(0),
+	m_IndependentScale(_Origin.m_IndependentScale)
+{
+}
+
 CCollider2D::~CCollider2D()
 {
 }

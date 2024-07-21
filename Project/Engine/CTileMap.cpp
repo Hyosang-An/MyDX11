@@ -20,6 +20,26 @@ CTileMap::CTileMap()
 	m_structuredBuffer = new CStructuredBuffer;
 }
 
+CTileMap::CTileMap(const CTileMap& _Origin) :
+	CRenderComponent(_Origin),
+	m_Row(_Origin.m_Row),
+	m_Col(_Origin.m_Col),
+	m_TileSize(_Origin.m_TileSize),
+	m_TileAtlas(_Origin.m_TileAtlas),
+	m_AtlasResolution(_Origin.m_AtlasResolution),
+	m_AtlasTileResolution(_Origin.m_AtlasTileResolution),
+	m_AtlasTileSliceUV(_Origin.m_AtlasTileSliceUV),
+	m_AtlasMaxRow(_Origin.m_AtlasMaxRow),
+	m_AtlasMaxCol(_Origin.m_AtlasMaxCol),
+	m_vecTileInfo(_Origin.m_vecTileInfo),
+	m_structuredBuffer(nullptr)
+{
+	m_structuredBuffer = new CStructuredBuffer;
+
+	// 행, 렬 설정해서 구조화버퍼 크기 조정
+	SetRowCol(m_Row, m_Col);
+}
+
 CTileMap::~CTileMap()
 {
 	delete m_structuredBuffer;
@@ -31,11 +51,6 @@ void CTileMap::FinalTick()
 
 void CTileMap::Render()
 {
-	for (int i = 0; i < m_vecTileInfo.size(); i++)
-	{
-		m_vecTileInfo[i].ImgIdx = i;
-	}
-
 	// 타일의 정보를 구조화버퍼를 통해서 t 레지스터에 바인딩 시킨다.
 	m_structuredBuffer->SetData(m_vecTileInfo.data(), sizeof(tTileInfo) * m_Row * m_Col);
 	m_structuredBuffer->Binding(15);
@@ -67,15 +82,18 @@ void CTileMap::SetRowCol(UINT _Row, UINT _Col)
 	}
 
 	// 타일정보를 전달받아서 t 레지스터에 전달시킬 구조화버퍼가 타일 전체 데이터 사이즈보다 작으면 리사이즈
-	if (m_structuredBuffer->GetElementSize() < sizeof(tTileInfo) * TileCount)
+	auto elementsize = m_structuredBuffer->GetElementSize();
+	auto tileinfosize = sizeof(tTileInfo) * TileCount;
+	if (m_structuredBuffer->GetBufferSize() < sizeof(tTileInfo) * TileCount)
 	{
 		m_structuredBuffer->Create(sizeof(tTileInfo), TileCount);
 	}
 
-	//for (int i = 0; i < m_vecTileInfo.size(); i++)
-	//{
-	//	m_vecTileInfo[i].ImgIdx = i;
-	//}
+	// 타일 종류별로 한개씩 순서대로 넣기
+	for (int i = 0; i < m_vecTileInfo.size(); i++)
+	{
+		m_vecTileInfo[i].ImgIdx = i;
+	}
 }
 
 void CTileMap::SetTileSize(Vec2 _Size)

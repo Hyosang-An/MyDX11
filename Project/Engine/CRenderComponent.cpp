@@ -11,6 +11,25 @@ CRenderComponent::CRenderComponent(COMPONENT_TYPE _Type)
 {
 }
 
+CRenderComponent::CRenderComponent(const CRenderComponent& _Origin) :
+	CComponent(_Origin),
+	m_Mesh(_Origin.m_Mesh),
+	m_Mtrl(_Origin.m_Mtrl),
+	m_SharedMtrl(_Origin.m_SharedMtrl)
+{
+	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+	if (nullptr != pCurLevel)
+	{
+		assert(!(pCurLevel->GetState() != LEVEL_STATE::PLAY
+			&& nullptr != _Origin.m_DynamicMtrl));
+	}
+
+	if (nullptr != _Origin.m_DynamicMtrl)
+	{
+		GetDynamicMaterial();
+	}
+}
+
 CRenderComponent::~CRenderComponent()
 {
 }
