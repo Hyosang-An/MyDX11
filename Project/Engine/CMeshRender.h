@@ -11,6 +11,9 @@ public:
     virtual void Render() override;
     virtual CMeshRender* Clone() { return new CMeshRender(*this); }
 
+    virtual void SaveToFile(FILE* _File) override;
+    virtual void LoadFromFile(FILE* _File) override;
+
 public:
     CMeshRender();
     ~CMeshRender();

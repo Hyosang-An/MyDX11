@@ -16,6 +16,8 @@
 #include <Scripts/CMissileScript.h>
 #include <Scripts/CCameraMoveScript.h>
 
+#include "CLevelSaveLoad.h"
+
 void CTestLevel::CreateTestLevel()
 {
 	// Material
@@ -27,11 +29,12 @@ void CTestLevel::CreateTestLevel()
 	//Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//bloomTest.png");
 	pAlphaBlendMtrl->SetTexParam(TEX_0, pTexture);
 
+
+	CreatePrefab();
+
+
 	// Level 생성
 	CLevel* TestLevel = new CLevel;
-
-	// 레벨 지정
-	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
 
 
 	// 아래 부분은 CLevel 생성자에서 해주는게 낫지 않을까하는 생각이...
@@ -84,7 +87,7 @@ void CTestLevel::CreateTestLevel()
 	pPlayer->AddComponent(new CTransform);
 	pPlayer->AddComponent(new CMeshRender);
 	pPlayer->AddComponent(new CCollider2D);
-	//pPlayer->AddComponent(new CFlipBookComponent);
+	pPlayer->AddComponent(new CFlipBookComponent);
 	pPlayer->AddComponent(new CPlayerScript);
 
 	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
@@ -97,10 +100,12 @@ void CTestLevel::CreateTestLevel()
 	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 	pPlayer->MeshRender()->SetMaterial(pMtrl);
 
-	//pPlayer->FlipBookComponent()->AddFlipBook(5, CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"Link_MoveDown"));
-	//pPlayer->FlipBookComponent()->Play(5, 10, true);
+	pPlayer->FlipBookComponent()->AddFlipBook(5, CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"Link_MoveDown"));
+	pPlayer->FlipBookComponent()->Play(5, 10, true);
 
 	TestLevel->AddObject(3, pPlayer);
+
+
 
 
 
@@ -155,12 +160,32 @@ void CTestLevel::CreateTestLevel()
 
 	//TestLevel->AddObject(0, pGaussianBlurObj);
 
+	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
 
 	// 충돌 지정
 	CCollisionMgr::GetInst()->CollisionCheck(3, 4); // Player vs Monster
 	CCollisionMgr::GetInst()->CollisionCheck(5, 4); // Player Projectile vs Monster
 
 
-	// 레벨 시작
-	//m_CurLevel->Begin();
+	
+
+}
+
+void CTestLevel::CreatePrefab()
+{
+	CGameObject* pProto = new CGameObject;
+
+	pProto->AddComponent(new CTransform);
+	pProto->AddComponent(new CMeshRender);
+	pProto->AddComponent(new CMissileScript);
+
+	pProto->Transform()->SetRelativeScale(100.f, 100.f, 1.f);
+
+	pProto->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pProto->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+
+	Ptr<CPrefab> pPrefab = new CPrefab;
+	pPrefab->SetProtoObject(pProto);
+
+	CAssetMgr::GetInst()->AddAsset<CPrefab>(L"MissilePref", pPrefab);
 }

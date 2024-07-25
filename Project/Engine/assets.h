@@ -7,6 +7,6 @@
 #include "CTexture.h"
 #include "CMaterial.h"
 //#include "CSound.h"
-//#include "CPrefab.h"
+#include "CPrefab.h"
 #include "CSprite.h"
 #include "CFlipBook.h"

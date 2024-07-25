@@ -21,7 +21,7 @@ CGameObject::CGameObject(const CGameObject& _Origin) :
 	m_arrCom{},
 	m_RenderCom(nullptr),
 	m_Parent(nullptr),
-	m_LayerIdx(_Origin.m_LayerIdx),
+	m_LayerIdx(-1),
 	m_Dead(false)
 {
 	// 컴포넌트 복사
@@ -53,23 +53,23 @@ CGameObject::~CGameObject()
 	Delete_Vec(m_vecChildren);
 }
 
-void CGameObject::AddComponent(CComponent* _Comopnent)
+void CGameObject::AddComponent(CComponent* _Component)
 {
-	COMPONENT_TYPE Type = _Comopnent->GetComponentType();
+	COMPONENT_TYPE Type = _Component->GetComponentType();
 
 	if (COMPONENT_TYPE::SCRIPT == Type)
 	{
-		m_vecScript.push_back((CScript*)_Comopnent);
-		_Comopnent->SetOwner(this);
+		m_vecScript.push_back((CScript*)_Component);
+		_Component->SetOwner(this);
 	}
 	else
 	{
 		assert(nullptr == m_arrCom[(UINT)Type]);
 
-		m_arrCom[(UINT)Type] = _Comopnent;
+		m_arrCom[(UINT)Type] = _Component;
 		m_arrCom[(UINT)Type]->SetOwner(this);
 
-		CRenderComponent* pRenderCom = dynamic_cast<CRenderComponent*>(_Comopnent);
+		CRenderComponent* pRenderCom = dynamic_cast<CRenderComponent*>(_Component);
 
 		assert(!(pRenderCom && m_RenderCom));
 
@@ -78,6 +78,8 @@ void CGameObject::AddComponent(CComponent* _Comopnent)
 			m_RenderCom = pRenderCom;
 		}
 	}
+	 
+	_Component->Init();
 }
 
 void CGameObject::AddChild(CGameObject* _ChildObject)

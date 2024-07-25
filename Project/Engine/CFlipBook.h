@@ -17,7 +17,7 @@ public:
     void FinalTick();
 
     virtual int Load(const wstring& _FilePath) override;
-    virtual int Save(const wstring& _FilePath) override;
+    virtual int Save(const wstring& _RelativePath) override;
 
 public:
     CFlipBook();

@@ -24,5 +24,7 @@ public:
 	static bool DragVec4(Vec4* _Data, float _Step, const string& _Desc);
 
 	static bool InputTexture(Ptr<CTexture>& _CurTex, const string& _Desc, EditorUI* _Inst = nullptr, DELEGATE_1 _MemFunc = nullptr);
+
+	static bool InputPrefab(Ptr<CPrefab>& _CurPrefab, const string& _Desc, EditorUI* _Inst = nullptr, DELEGATE_1 _MemFunc = nullptr);
 };
 

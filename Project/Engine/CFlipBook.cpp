@@ -19,7 +19,7 @@ void CFlipBook::FinalTick()
 
 int CFlipBook::Save(const wstring& _RelativePath)
 {
-	// 어디에 저장해뒀는지 알고 있는게 좋음
+	// 어디에 저장해뒀는지 알고 있어야 SaveAssetRef에 사용 가능
 	SetRelativePath(_RelativePath);
 
 	wstring strFilePath = CPathMgr::GetInst()->GetContentsPath();

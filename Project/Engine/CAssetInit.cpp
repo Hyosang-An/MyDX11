@@ -138,7 +138,7 @@ void CAssetMgr::CreateEngineSprite()
 {
 	wstring strContentsPath = CPathMgr::GetInst()->GetContentsPath();
 
-	Ptr<CTexture> pAtlasTex = Load<CTexture>(L"texture\\link_32.png", L"texture\\link.png");
+	Ptr<CTexture> pAtlasTex = Load<CTexture>(L"texture\\link_3.png", L"texture\\link.png");
 
 
 	//// Sprite 생성 및 저장	================================================
@@ -214,7 +214,9 @@ void CAssetMgr::CreateEngineSprite()
 	AddAsset(L"Link_MoveDown", pFilpBook);*/
 
 
-	Load<CFlipBook>(L"Link_MoveDown", L"Animation\\Link_MoveDown.flip");
+	auto flipbook = Load<CFlipBook>(L"Link_MoveDown", L"Animation\\Link_MoveDown.flip");
+
+	flipbook->Save(L"Test\\flipbook_Save_Test.flip");
 }
 
 void CAssetMgr::CreateEngineGraphicShader()

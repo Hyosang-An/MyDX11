@@ -51,4 +51,5 @@ using namespace std::filesystem;
 #include "define.h"
 #include "enum.h"
 #include "struct.h"
+#include "assets.h"
 #include "func.h"

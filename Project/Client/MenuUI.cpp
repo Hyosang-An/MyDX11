@@ -2,10 +2,14 @@
 #include "MenuUI.h"
 
 #include <Engine/CAssetMgr.h>
+#include <Engine/CLevelMgr.h>
+#include <Engine/CLevel.h>
 #include <Engine/assets.h>
 #include <Engine/CGameObject.h>
 #include <Engine/CScript.h>
 #include <Scripts/CScriptMgr.h>
+
+#include "CLevelSaveLoad.h"
 #include "Inspector.h"
 #include "CEditorMgr.h"
 
@@ -63,26 +67,53 @@ void MenuUI::File()
 
 void MenuUI::Level()
 {
+	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+
+	ImGui::BeginDisabled(!pCurLevel);
+
 	if (ImGui::BeginMenu("Level"))
 	{
+		auto curState = pCurLevel->GetState();
+
+		ImGui::BeginDisabled(LEVEL_STATE::PLAY == curState);
 		if (ImGui::MenuItem("Play"))
 		{
+			if (LEVEL_STATE::STOP == curState)
+			{
+				wstring strLevelPath = CPathMgr::GetInst()->GetContentsPath();
+				strLevelPath += L"level\\Temp.lv";
+				CLevelSaveLoad::SaveLevel(strLevelPath, pCurLevel);
+			}
 
+			ChangeLevelState(LEVEL_STATE::PLAY);
 		}
+		ImGui::EndDisabled();
 
-
+		ImGui::BeginDisabled(LEVEL_STATE::PLAY != curState);
 		if (ImGui::MenuItem("Pause"))
 		{
-
+			ChangeLevelState(LEVEL_STATE::PAUSE);
 		}
+		ImGui::EndDisabled();
 
+		ImGui::BeginDisabled(LEVEL_STATE::STOP == curState);
 		if (ImGui::MenuItem("Stop"))
 		{
+			wstring StrLevelLoadPath = CPathMgr::GetInst()->GetContentsPath();
+			StrLevelLoadPath += L"level\\Temp.lv";
+			CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(StrLevelLoadPath);
+			ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
 
+			// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
+			Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+			pInspector->SetTargetObject(nullptr);
+			pInspector->SetTargetAsset(nullptr);
 		}
+		ImGui::EndDisabled();
 
 		ImGui::EndMenu();
 	}
+	ImGui::EndDisabled();
 }
 
 void MenuUI::GameObject()

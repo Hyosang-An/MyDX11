@@ -21,9 +21,13 @@ public:
     COMPONENT_TYPE GetComponentType() { return m_Type; }
     CGameObject* GetOwner() { return m_Owner; }
 
+    virtual void Init() {}
     virtual void Begin();
     virtual void Tick();
     virtual void FinalTick() = 0;
+
+    virtual void SaveToFile(FILE* _File) = 0;   // 파일에 컴포넌트의 정보를 저장
+    virtual void LoadFromFile(FILE* _File) = 0; // 파일에 컴포넌트의 정보를 로드
 
     CTransform* Transform() { return m_Owner->Transform(); }
     CMeshRender* MeshRender() { return m_Owner->MeshRender(); }

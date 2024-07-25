@@ -42,6 +42,8 @@ private:
     vector<CGameObject*>    m_vecUI;   // UI 오브젝트
 
 public:
+    void Render();
+
     void SetPriority(int _Priority) { m_Priority = _Priority; }
     void SetLayer(UINT _LayerIdx, bool _bCheck)
     {
@@ -88,7 +90,10 @@ private:
 public:
     virtual void Begin() override;
     virtual void FinalTick() override;
-    void Render();
+
+    virtual void SaveToFile(FILE* _File) override;
+    virtual void LoadFromFile(FILE* _File) override;
+
 
 };
 

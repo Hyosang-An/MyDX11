@@ -37,3 +37,13 @@ void CMeshRender::Render()
 	// 버텍스버퍼, 인덱스버퍼 바인딩 및 렌더링 호출
 	GetMesh()->Render();
 }
+
+void CMeshRender::SaveToFile(FILE* _File)
+{
+	SaveDataToFile(_File);
+}
+
+void CMeshRender::LoadFromFile(FILE* _File)
+{
+	LoadDataFromFile(_File);
+}

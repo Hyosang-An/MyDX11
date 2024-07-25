@@ -36,9 +36,8 @@ public:
     virtual void Overlap(CCollider2D* _Other);
     virtual void EndOverlap(CCollider2D* _Other);
 
-public:
     virtual void FinalTick() override;
-
-
+    virtual void SaveToFile(FILE* _File) override;
+    virtual void LoadFromFile(FILE* _File) override;
 };
 

@@ -22,6 +22,10 @@ private:
 
 public:
     virtual void FinalTick() override;
+    virtual void SaveToFile(FILE* _File) override;
+    virtual void LoadFromFile(FILE* _File) override;
+
+public:
     void Binding();
 
     void SetRelativePos(Vec3 _Pos) { m_RelativePos = _Pos; }

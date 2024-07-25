@@ -11,6 +11,9 @@
 #include "Outliner.h"
 #include "ListUI.h"
 #include "MenuUI.h"
+#include "SpriteEditor.h"
+#include "SE_AtlasView.h"
+#include "SE_Detail.h"
 
 #include "ParamUI.h"
 
@@ -104,6 +107,24 @@ void CEditorMgr::CreateEditorUI()
     pUI = new MenuUI;
     pUI->Init();
     pUI->SetName("MainMenu");
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    // SE_AtlasView
+    pUI = new SE_AtlasView;
+    pUI->Init();
+    pUI->SetName("SE_AtlasView");
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    // SE_Detail
+    pUI = new SE_Detail;
+    pUI->Init();
+    pUI->SetName("SE_Detail");
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    // SpriteEditor
+    pUI = new SpriteEditor;
+    pUI->Init();
+    pUI->SetName("SpriteEditor");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 }
 

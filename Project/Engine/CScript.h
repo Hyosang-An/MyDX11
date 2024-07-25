@@ -15,6 +15,7 @@ enum class SCRIPT_PARAM_TYPE
     VEC3,
     VEC4,
     TEXTURE,
+    PREFAB,
 };
 
 struct tScriptParam
@@ -42,15 +43,20 @@ protected:
     void AddScriptParam(SCRIPT_PARAM_TYPE _Type, const string& _Desc, void* _pData, DWORD_PTR _Param0 = 0, DWORD_PTR _Param1 = 0)
     {
         m_vecScriptParam.push_back(tScriptParam{ _Type,_pData, _Desc, _Param0, _Param1 });
-
     }
+
+    void Instantiate(Ptr<CPrefab> _Pref, int _LayerIdx, Vec3 _WorldPos, const wstring& _Name = L"");
 public:
+    //virtual void Begin() override {}
     virtual void Tick() = 0;
     virtual void FinalTick() final override {}
 
     virtual void BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider) {}
     virtual void Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider) {}
     virtual void EndOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider) {}
+
+    virtual void SaveToFile(FILE* _File) = 0;
+    virtual void LoadFromFile(FILE* _File) = 0;
 
 public:
     CScript(UINT _Type);

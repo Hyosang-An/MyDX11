@@ -109,6 +109,21 @@
     <Filter Include="EditorUI\01. Inspector\ComponentUI\09. ScriptUI">
       <UniqueIdentifier>{d408b240-5cf2-4657-8b9f-935d015861c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager\03. CLevelSaveLoad">
+      <UniqueIdentifier>{94a208c6-84ab-48bd-9362-d97aa12cf8d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\08. SpriteEditor">
+      <UniqueIdentifier>{eb3eeb56-a61e-4db7-ba20-c285305622d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\08. SpriteEditor\SE_Sub">
+      <UniqueIdentifier>{0b164b06-00b9-411a-9240-331405e82103}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\08. SpriteEditor\SE_Sub\SE_AtlasView">
+      <UniqueIdentifier>{ef1bef0a-e838-44e6-96cd-efab87eb585d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\08. SpriteEditor\SE_Sub\SE_Detail">
+      <UniqueIdentifier>{791248f4-e51d-4c00-8a65-d9b1281dd968}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -255,6 +270,19 @@
     <ClInclude Include="ScriptUI.h">
       <Filter>EditorUI\01. Inspector\ComponentUI\09. ScriptUI</Filter>
     </ClInclude>
+    <ClInclude Include="CLevelSaveLoad.h">
+      <Filter>Manager\03. CLevelSaveLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="SE_Sub.h">
+      <Filter>EditorUI\08. SpriteEditor\SE_Sub</Filter>
+    </ClInclude>
+    <ClInclude Include="SE_AtlasView.h">
+      <Filter>EditorUI\08. SpriteEditor\SE_Sub\SE_AtlasView</Filter>
+    </ClInclude>
+    <ClInclude Include="SE_Detail.h">
+      <Filter>EditorUI\08. SpriteEditor\SE_Sub\SE_Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -387,6 +415,19 @@
     <ClCompile Include="ScriptUI.cpp">
       <Filter>EditorUI\01. Inspector\ComponentUI\09. ScriptUI</Filter>
     </ClCompile>
+    <ClCompile Include="CLevelSaveLoad.cpp">
+      <Filter>Manager\03. CLevelSaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="SE_Sub.cpp">
+      <Filter>EditorUI\08. SpriteEditor\SE_Sub</Filter>
+    </ClCompile>
+    <ClCompile Include="SE_AtlasView.cpp">
+      <Filter>EditorUI\08. SpriteEditor\SE_Sub\SE_AtlasView</Filter>
+    </ClCompile>
+    <ClCompile Include="SE_Detail.cpp">
+      <Filter>EditorUI\08. SpriteEditor\SE_Sub\SE_Detail</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

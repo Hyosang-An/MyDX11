@@ -208,4 +208,70 @@ bool ParamUI::InputTexture(Ptr<CTexture>& _CurTex, const string& _Desc
 	return false;
 }
 
+bool ParamUI::InputPrefab(Ptr<CPrefab>& _CurPrefab, const string& _Desc, EditorUI* _Inst, DELEGATE_1 _MemFunc)
+{
+	Ptr<CPrefab> CurPrefab = _CurPrefab;
+
+	ImGui::Text(_Desc.c_str());
+	ImGui::SameLine(120);
+
+	string PrefabName;
+
+	if (CurPrefab.Get())
+		PrefabName = string(CurPrefab->GetKey().begin(), CurPrefab->GetKey().end());
+
+	char szID[255] = {};
+	sprintf_s(szID, 255, "##PrefabKey%d", g_ID++);
+
+	ImGui::SetNextItemWidth(150.f);
+	ImGui::InputText(szID, (char*)PrefabName.c_str(), ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ContentTree");
+		if (payload)
+		{
+			TreeNode** ppNode = (TreeNode**)payload->Data;
+			TreeNode* pNode = *ppNode;
+
+			Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
+			if (ASSET_TYPE::PREFAB == pAsset->GetAssetType())
+			{
+				_CurPrefab = ((CPrefab*)pAsset.Get());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
+	// DragDrop 으로 원본 텍스쳐가 바뀐경우
+	if (CurPrefab != _CurPrefab)
+		return true;
+
+
+	// List Button
+	if (nullptr == _Inst && nullptr == _MemFunc)
+	{
+		return false;
+	}
+
+	sprintf_s(szID, 255, "##InputBtn%d", g_ID++);
+
+	ImGui::SameLine();
+	if (ImGui::Button(szID, ImVec2(18.f, 18.f)))
+	{
+		ListUI* pListUI = (ListUI*)CEditorMgr::GetInst()->FindEditorUI("List");
+		pListUI->SetName("Prefab");
+		vector<string> vecPrefabName;
+		CAssetMgr::GetInst()->GetAssetNames(ASSET_TYPE::PREFAB, vecPrefabName);
+		pListUI->AddList(vecPrefabName);
+		pListUI->AddDelegate(_Inst, (DELEGATE_1)_MemFunc);
+		pListUI->SetActive(true);
+
+		return true;
+	}
+
+	return false;
+}
+
 
