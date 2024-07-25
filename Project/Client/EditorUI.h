@@ -19,6 +19,8 @@ private:
 	bool				m_Modal = false;
 	bool				m_ChildBorder = false;	// 자식 구분선 표기 유무 
 
+	bool				m_UseMenuBar = false;
+	bool				m_Move = true;
 
 public:
 	void AddChild(EditorUI* _UI);
@@ -34,6 +36,9 @@ public:
 	const string& GetFullName() { return m_FullName; }
 
 	bool IsActive() { return m_Active; }
+
+	void UseMenuBar(bool _Use) { m_UseMenuBar = _Use; }
+	void SetMove(bool _Move) { m_Move = _Move; }
 
 	void SetChildBorder(bool _Set) { m_ChildBorder = _Set; }
 	void SetChildSize(ImVec2 _Size) { m_ChildSize = _Size; }

@@ -186,6 +186,14 @@ void MenuUI::Assets()
 			pMtrl->Save(Key);
 		}
 
+		EditorUI* pSpriteEditor = CEditorMgr::GetInst()->FindEditorUI("SpriteEditor");
+		bool IsActive = pSpriteEditor->IsActive();
+
+		if (ImGui::MenuItem("Sprite Editor", nullptr, &IsActive))
+		{
+			CEditorMgr::GetInst()->FindEditorUI("SpriteEditor")->SetActive(IsActive);
+		}
+
 		ImGui::EndMenu();
 	}
 }

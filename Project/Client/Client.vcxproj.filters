@@ -282,7 +282,9 @@
     <ClInclude Include="SE_Detail.h">
       <Filter>EditorUI\08. SpriteEditor\SE_Sub\SE_Detail</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteEditor.h" />
+    <ClInclude Include="SpriteEditor.h">
+      <Filter>EditorUI\08. SpriteEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -427,7 +429,9 @@
     <ClCompile Include="SE_Detail.cpp">
       <Filter>EditorUI\08. SpriteEditor\SE_Sub\SE_Detail</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteEditor.cpp" />
+    <ClCompile Include="SpriteEditor.cpp">
+      <Filter>EditorUI\08. SpriteEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

@@ -48,6 +48,9 @@ void ListUI::Update()
 			SetActive(false);
 		}
 
+		if (ImGui::IsKeyPressed(ImGuiKey_Escape))
+			SetActive(false);
+
 		/*if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 		{
 			m_SelectedIdx = i;

@@ -23,13 +23,28 @@ void EditorUI::Tick()
 
 	bool bActive = m_Active;
 
+	int flags = 0;
+	if (m_UseMenuBar)
+		flags = ImGuiWindowFlags_MenuBar;
+	if (!m_Move)
+		flags |= ImGuiWindowFlags_NoMove;
+
 	// 최상위 부모 UI 인 경우
 	if (nullptr == m_Parent)
 	{
 		// Modaless
 		if (false == m_Modal)
 		{
-			ImGui::Begin(m_FullName.c_str(), &bActive);
+			// Test
+			//	// 최소 크기와 최대 크기 설정
+			//ImVec2 minWindowSize(300, 300);
+			//ImVec2 maxWindowSize(800, 800);
+
+			//// 다음 윈도우 크기 제한 설정
+			//ImGui::SetNextWindowSizeConstraints(minWindowSize, maxWindowSize);
+			// ~Test
+			
+			ImGui::Begin(m_FullName.c_str(), &bActive, flags);
 
 			if (m_Active != bActive)
 			{
