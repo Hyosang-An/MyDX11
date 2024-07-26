@@ -23,7 +23,7 @@ void EditorUI::Tick()
 
 	bool bActive = m_Active;
 
-	int flags = 0;
+	int flags = ImGuiWindowFlags_HorizontalScrollbar;
 	if (m_UseMenuBar)
 		flags = ImGuiWindowFlags_MenuBar;
 	if (!m_Move)

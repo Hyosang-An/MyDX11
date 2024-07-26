@@ -30,10 +30,7 @@ void SE_AtlasView::Update()
 	ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	ImVec4 border_col = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
 
-	// 실제 해상도 대비 출력 Image 의 비율
-	m_Ratio = (m_WidthSize * m_WheelScale) / m_AtlasTex->Width();
-
-	ImGui::Image(m_AtlasTex->GetSRV().Get(), ImVec2((m_WidthSize * m_WheelScale), m_AtlasTex->Height() * m_Ratio)
+	ImGui::Image(m_AtlasTex->GetSRV().Get(), ImVec2((m_AtlasTex->Width() * m_Ratio), m_AtlasTex->Height() * m_Ratio)
 		, uv_min, uv_max, tint_col, border_col);
 
 	// SelectCheck
@@ -50,29 +47,31 @@ void SE_AtlasView::SetAtlasTex(Ptr<CTexture> _Tex)
 
 	m_AtlasTex = _Tex;
 
-	m_WidthSize = m_AtlasTex->Width();
+	//m_WidthSize = m_AtlasTex->Width();
 }
 
 void SE_AtlasView::WheelCheck()
 {
 	if (0 < ImGui::GetIO().MouseWheel)
 	{
-		m_WheelScale += 0.05f;
+		m_Ratio += 0.05f;
 	}
 
 	if (0 > ImGui::GetIO().MouseWheel)
 	{
-		m_WheelScale -= 0.05f;
+		m_Ratio -= 0.05f;
 	}
 
-	if (3.f < m_WheelScale)
-		m_WheelScale = 3.f;
-	if (m_WheelScale < 0.1f)
-		m_WheelScale = 0.1f;
+	if (3.f < m_Ratio)
+		m_Ratio = 3.f;
+	if (m_Ratio < 0.1f)
+		m_Ratio = 0.1f;
 }
 
 void SE_AtlasView::SelectCheck()
 {
+	bool onImage = ImGui::IsItemHovered();
+
 	// Image 위젯 좌상단 좌표
 	m_imageRectMin = ImGui::GetItemRectMin();
 	auto imageRectMax = ImGui::GetItemRectMax();
@@ -92,13 +91,13 @@ void SE_AtlasView::SelectCheck()
 	float PixelPos[] = { vDiff.x, vDiff.y };
 	ImGui::InputFloat2("PixelPos", PixelPos);
 
-	if (m_imageRectMin.x <= ImGui::GetMousePos().x && ImGui::GetMousePos().x <= imageRectMax.x &&
-		m_imageRectMin.y <= ImGui::GetMousePos().y && ImGui::GetMousePos().y <= imageRectMax.y)
+	if (onImage)
 	{
 
-
-		// 마우스 왼쪽클릭 체크
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		// ========================================================
+		// 사각형 수동 만들기
+		// ========================================================
+		/*if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 		{
 			m_MouseLTonOrignalTex = ImGui::GetMousePos();
 			ImVec2 vDiff = ImVec2(m_MouseLTonOrignalTex.x - m_imageRectMin.x, m_MouseLTonOrignalTex.y - m_imageRectMin.y);
@@ -110,15 +109,109 @@ void SE_AtlasView::SelectCheck()
 			m_MouseRBonOriginalTex = ImGui::GetMousePos();
 			ImVec2 vDiff = ImVec2(m_MouseRBonOriginalTex.x - m_imageRectMin.x, m_MouseRBonOriginalTex.y - m_imageRectMin.y);
 			m_MouseRBonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+		}*/
+
+
+
+
+		// ========================================================
+		// 사각형 자동 만들기
+		// ========================================================
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		{
+			Vec2 vPixelPos = Vec2(ImGui::GetMousePos().x, ImGui::GetMousePos().y);
+			ImVec2 vDiff = ImVec2(vPixelPos.x - m_imageRectMin.x, vPixelPos.y - m_imageRectMin.y);
+			vPixelPos = Vec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+
+			if (0.f <= vPixelPos.x && vPixelPos.x < m_AtlasTex->Width()
+				&& 0.f <= vPixelPos.y && vPixelPos.y < m_AtlasTex->Height())
+			{
+				CalcSpriteSize(vPixelPos);
+			}
 		}
 	}
 }
 
 void SE_AtlasView::DrawSelectRect()
 {
-	ImVec2 MouseLTPos = ImVec2(m_MouseLTonOrignalTex.x * m_Ratio + m_imageRectMin.x, m_MouseLTonOrignalTex.y * m_Ratio + m_imageRectMin.y);
+	ImVec2 MouseLTPos = ImVec2(m_MouseLTonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_MouseLTonOriginalTex.y * m_Ratio + m_imageRectMin.y);
 	ImVec2 MouseRBPos = ImVec2(m_MouseRBonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_MouseRBonOriginalTex.y * m_Ratio + m_imageRectMin.y);
+
+	if (MouseLTPos.x == MouseRBPos.x && MouseLTPos.y == MouseRBPos.y)
+		return;
 
 	ImGui::GetWindowDrawList()->AddRect(MouseLTPos, MouseRBPos
 		, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0.f, 1.f);
+}
+
+
+void SE_AtlasView::CalcSpriteSize(Vec2 _PixelPos)
+{
+	Vec2 dirDelta[4]{ {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
+
+	//float minLeft = m_AtlasTex->Width() - 1.f;
+	//float minTop = m_AtlasTex->Height() - 1.f;
+	//float maxRight = 0.f;
+	//float maxBottom = 0.f;
+
+	float minLeft = _PixelPos.x;
+	float minTop = _PixelPos.y;
+	float maxRight = _PixelPos.x;
+	float maxBottom = _PixelPos.y;
+
+
+	// 등록아이디 검사용 Set Clear
+	//m_PixelID.clear();
+	set<Vec2>       visitedSet;
+
+	// Quene 에 클릭한 최초의 픽셀좌표 입력
+	list<Vec2>	queue;
+	queue.push_back(_PixelPos);
+	// 방문처리
+	visitedSet.insert(_PixelPos);
+
+	while (!queue.empty())
+	{
+		Vec2 vPixelPos = queue.front();
+		queue.pop_front();
+
+
+		// 작업
+		if (vPixelPos.x < minLeft)
+			minLeft = vPixelPos.x;
+		if (vPixelPos.x > maxRight)
+			maxRight = vPixelPos.x;
+		if (vPixelPos.y < minTop)
+			minTop = vPixelPos.y;
+		if (vPixelPos.y > maxBottom)
+			maxBottom = vPixelPos.y;
+
+
+		// 주변 픽셀 조건 확인 및 추가
+		for (int i = 0; i < 4; i++)
+		{
+			Vec2 nextPixelPos = vPixelPos + dirDelta[i];
+
+			// 해당 픽셀이 아틀라스 해상도 영역을 벗어난 좌표라면 건너뛰기
+			if (nextPixelPos.x < 0 || m_AtlasTex->Width() <= nextPixelPos.x
+				|| nextPixelPos.y < 0 || m_AtlasTex->Height() <= nextPixelPos.y)
+				continue;
+
+			// 이미 방문했다면 건너뛰기
+			if (visitedSet.find(nextPixelPos) != visitedSet.end())
+				continue;
+
+			// 해당 픽셀의 알파값이 0이라면 건너뛰기
+			int PixelIdx = m_AtlasTex->Width() * (int)nextPixelPos.y + (int)nextPixelPos.x;
+			if (0 == m_AtlasTex->GetPixels()[PixelIdx].a)
+				continue;
+
+			// 모든 조건을 만족하는 픽셀이면 큐에 넣고 방문처리
+			queue.push_back(nextPixelPos);
+			visitedSet.insert(nextPixelPos);
+		}
+	}
+
+	m_MouseLTonOriginalTex = ImVec2(minLeft, minTop);
+	m_MouseRBonOriginalTex = ImVec2(maxRight, maxBottom);
 }

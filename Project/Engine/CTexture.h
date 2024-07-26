@@ -24,6 +24,8 @@ public:
 
     const D3D11_TEXTURE2D_DESC          GetDesc() { return m_Desc; }
 
+    tPixel* GetPixels() { return (tPixel*)m_Image.GetPixels(); }
+
     UINT Width() { return m_Desc.Width; }
     UINT Height() { return m_Desc.Height; }
 
