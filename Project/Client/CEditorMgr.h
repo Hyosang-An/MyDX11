@@ -21,7 +21,7 @@ public:
 
 public:
     void Init();
-    void Tick();
+    void Progress();
 
 private:
 private:

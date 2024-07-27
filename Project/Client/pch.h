@@ -10,6 +10,9 @@
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
 
+// 파일 Save Load 윈도우 대화상자 관련 헤더
+#include <shobjidl.h> 
+
 // Engine
 #ifdef _DEBUG
 #pragma comment(lib, "Engine\\Engine_D")

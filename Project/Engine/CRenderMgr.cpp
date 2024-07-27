@@ -97,7 +97,7 @@ void CRenderMgr::Tick()
 	RenderDebugShape();
 
 
-	// Clear
+	// Lightvec Clear
 	Clear();
 }
 
@@ -145,8 +145,7 @@ void CRenderMgr::RenderStart()
 
 void CRenderMgr::Clear()
 {
-	//m_vecLight2D.clear();
-	//m_vecLight2D.resize(0);
+	m_vecLight2D.clear();
 }
 
 void CRenderMgr::RenderDebugShape()

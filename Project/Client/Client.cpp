@@ -77,7 +77,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             CEngine::GetInst()->Progress();
 
 #ifdef _DEBUG
-            CEditorMgr::GetInst()->Tick();
+            CEditorMgr::GetInst()->Progress();
 #endif
             // ImGui가 새로운 윈도우에 렌더타겟을 잡고 렌더링 한 경우 기존의 렌더타겟 텍스쳐를 다시 잡아주고 화면에 쏴줘야됨
             CDevice::GetInst()->Present();

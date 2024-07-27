@@ -46,14 +46,20 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
     // FlipBook 을 사용한다.
     if (UseFlipbook)
     {
-        // _in.vUV : 스프라이를 참조할 위치를 비율로 환산한 값                
+        // _in.vUV : 스프라이를 참조할 위치를 비율로 환산한 값        
+        
+        // 아틀라스 내에서 백그라운드의 왼쪽 위 UV 좌표를 계산합니다.
         float2 BackGroundLeftTopInAtlasUV = LeftTopInAtlasUV - (BackGroundSizeInAtlasUV - SliceSizeInAtlasUV) / 2.f;
+        
+        // 스프라이트가 아틀라스 내에서 참조될 위치를 계산합니다.
         float2 vSpriteInAtlasUV = BackGroundLeftTopInAtlasUV + (_in.vUV * BackGroundSizeInAtlasUV);
         vSpriteInAtlasUV -= OffsetUV;
                 
+        // 스프라이트의 UV 좌표가 유효한 범위 내에 있는지 검사합니다.
         if (LeftTopInAtlasUV.x <= vSpriteInAtlasUV.x && vSpriteInAtlasUV.x <= LeftTopInAtlasUV.x + SliceSizeInAtlasUV.x
             && LeftTopInAtlasUV.y <= vSpriteInAtlasUV.y && vSpriteInAtlasUV.y <= LeftTopInAtlasUV.y + SliceSizeInAtlasUV.y)
         {
+            // 유효한 범위 내에 있으면, 텍스처를 샘플링하여 색상을 가져옵니다.
             vColor = g_AtlasTex.Sample(g_sam_1, vSpriteInAtlasUV);
         }
         else

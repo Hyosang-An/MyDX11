@@ -11,7 +11,8 @@
 
 void CLevelSaveLoad::SaveLevel(const wstring& _FilePath, CLevel* _Level)
 {
-	assert(_Level && _Level->GetState() == LEVEL_STATE::STOP);
+	//assert(_Level && _Level->GetState() == LEVEL_STATE::STOP);
+	assert(_Level);
 
 	std::filesystem::path dir_path = _FilePath;
 	if (!std::filesystem::exists(dir_path.parent_path()))

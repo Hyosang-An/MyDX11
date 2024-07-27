@@ -41,7 +41,7 @@ void CEditorMgr::Init()
 }
 
 
-void CEditorMgr::Tick()
+void CEditorMgr::Progress()
 {
 	ShortCut();
 
