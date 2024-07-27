@@ -50,6 +50,7 @@ void SE_AtlasView::SetAtlasTex(Ptr<CTexture> _Tex)
 	//m_WidthSize = m_AtlasTex->Width();
 }
 
+
 void SE_AtlasView::WheelCheck()
 {
 	if (0 < ImGui::GetIO().MouseWheel)
@@ -99,16 +100,16 @@ void SE_AtlasView::SelectCheck()
 		// ========================================================
 		/*if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 		{
-			m_MouseLTonOrignalTex = ImGui::GetMousePos();
-			ImVec2 vDiff = ImVec2(m_MouseLTonOrignalTex.x - m_imageRectMin.x, m_MouseLTonOrignalTex.y - m_imageRectMin.y);
-			m_MouseLTonOrignalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+			m_stripeBoxLTonOriginalTex = ImGui::GetMousePos();
+			ImVec2 vDiff = ImVec2(m_stripeBoxLTonOriginalTex.x - m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y - m_imageRectMin.y);
+			m_stripeBoxLTonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
 		}
 
 		if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
 		{
-			m_MouseRBonOriginalTex = ImGui::GetMousePos();
-			ImVec2 vDiff = ImVec2(m_MouseRBonOriginalTex.x - m_imageRectMin.x, m_MouseRBonOriginalTex.y - m_imageRectMin.y);
-			m_MouseRBonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+			m_stripeBoxRBonOriginalTex = ImGui::GetMousePos();
+			ImVec2 vDiff = ImVec2(m_stripeBoxRBonOriginalTex.x - m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y - m_imageRectMin.y);
+			m_stripeBoxRBonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
 		}*/
 
 
@@ -134,11 +135,13 @@ void SE_AtlasView::SelectCheck()
 
 void SE_AtlasView::DrawSelectRect()
 {
-	ImVec2 MouseLTPos = ImVec2(m_MouseLTonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_MouseLTonOriginalTex.y * m_Ratio + m_imageRectMin.y);
-	ImVec2 MouseRBPos = ImVec2(m_MouseRBonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_MouseRBonOriginalTex.y * m_Ratio + m_imageRectMin.y);
+	ImVec2 MouseLTPos = ImVec2(m_stripeBoxLTonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y * m_Ratio + m_imageRectMin.y);
+	ImVec2 MouseRBPos = ImVec2(m_stripeBoxRBonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y * m_Ratio + m_imageRectMin.y);
 
 	if (MouseLTPos.x == MouseRBPos.x && MouseLTPos.y == MouseRBPos.y)
 		return;
+
+
 
 	ImGui::GetWindowDrawList()->AddRect(MouseLTPos, MouseRBPos
 		, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0.f, 1.f);
@@ -212,6 +215,12 @@ void SE_AtlasView::CalcSpriteSize(Vec2 _PixelPos)
 		}
 	}
 
-	m_MouseLTonOriginalTex = ImVec2(minLeft, minTop);
-	m_MouseRBonOriginalTex = ImVec2(maxRight, maxBottom);
+	m_stripeBoxLTonOriginalTex = ImVec2(minLeft, minTop);
+	m_stripeBoxRBonOriginalTex = ImVec2(maxRight, maxBottom);
+}
+
+
+std::pair<Vec2, Vec2> SE_AtlasView::GetStripeBoxPosOnOriginalTex()
+{
+	return std::pair<Vec2, Vec2>({ m_stripeBoxLTonOriginalTex.x, m_stripeBoxLTonOriginalTex.y }, {m_stripeBoxRBonOriginalTex.x, m_stripeBoxRBonOriginalTex.y});
 }

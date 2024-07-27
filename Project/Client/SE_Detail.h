@@ -13,13 +13,14 @@ private:
 private:
     void Atlas();
     void AtlasInfo();
+    void StripeInfo();
 
 public:
     void SetAtlasTex(Ptr<CTexture> _Tex);
 
 private:
     void SelectTexture(DWORD_PTR _ListUI);
-
+    
 
 
 public:

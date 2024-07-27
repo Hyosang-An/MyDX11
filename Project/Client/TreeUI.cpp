@@ -5,7 +5,7 @@
 // TreeNode
 // ========
 TreeNode::TreeNode(UINT _ID)
-	: m_Owner(nullptr)
+	: m_OwnerTree(nullptr)
 	, m_ParentNode(nullptr)
 	, m_ID(_ID)
 	, m_Data(0)
@@ -53,7 +53,7 @@ void TreeNode::Update()
 
 
 	// NameOnly (폴더 경로 및 확장자를 뺀 파일 이름만 노출)
-	if (m_Owner->IsShowNameOnly())
+	if (m_OwnerTree->IsShowNameOnly())
 	{
 		path Path = strName;
 		strName = Path.stem().string();
@@ -65,19 +65,49 @@ void TreeNode::Update()
 
 	if (ImGui::TreeNodeEx(strName.c_str(), Flag))
 	{
+		//// 우클릭 이벤트 감지
+		//if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+		//{
+		//	// 마우스 위치를 가져옴
+		//	ImVec2 mouse_pos = ImGui::GetMousePos();
+		//	ImGui::OpenPopup("RightClickMenu");
+		//	ImGui::SetNextWindowPos(mouse_pos);
+		//}
+
+		//// 팝업 메뉴를 시작
+		//if (ImGui::BeginPopup("RightClickMenu"))
+		//{
+		//	if (ImGui::MenuItem("Option 1"))
+		//	{
+		//		// Option 1 선택 시 실행할 코드
+		//	}
+		//	if (ImGui::MenuItem("Option 2"))
+		//	{
+		//		// Option 2 선택 시 실행할 코드
+		//	}
+		//	if (ImGui::MenuItem("Option 3"))
+		//	{
+		//		// Option 3 선택 시 실행할 코드
+		//	}
+		//	ImGui::EndPopup();
+		//}
+
+		m_OwnerTree->Popup(this);
+
+
 		// 해당 노드가 클릭된 경우 (왼쪽 버튼이 눌린 순간)
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 		{
-			m_Owner->SetClickedNode(this);
+			m_OwnerTree->SetClickedNode(this);
 		}
 
 		// 해당 노드가 클릭되어있고 왼쪽 버튼이 떼진 순간
 		if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 		{
-			if (this == m_Owner->GetClickedNode())
-				m_Owner->SetSelectedNode(this);
+			if (this == m_OwnerTree->GetClickedNode())
+				m_OwnerTree->SetSelectedNode(this);
 			else
-				m_Owner->SetClickedNode(nullptr);
+				m_OwnerTree->SetClickedNode(nullptr);
 		}
 
 		// Drag 체크	
@@ -94,23 +124,30 @@ void TreeNode::Update()
 		ImGui::TreePop();
 	}
 
+	// 트리 노드가 닫혀있을 때
+	else
+	{
+		// Drag 체크	
+		DragCheck();
+	}
+
 	ImGui::PopStyleColor(3);
 }
 
 void TreeNode::DragCheck()
 {
-	if (m_Owner->IsUsingDrag())
+	if (m_OwnerTree->IsUsingDrag())
 	{
 		if (ImGui::BeginDragDropSource())
 		{
 			TreeNode* pThis = this;
 
 			// 해당 트리 노드의 주소값을 전달
-			ImGui::SetDragDropPayload(m_Owner->GetName().c_str(), &pThis, sizeof(TreeNode*));
+			ImGui::SetDragDropPayload(m_OwnerTree->GetName().c_str(), &pThis, sizeof(TreeNode*));
 			ImGui::Text(m_Name.c_str());
-			ImGui::EndDragDropSource();
+			m_OwnerTree->SetDragedNode(this);
 
-			m_Owner->SetDragedNode(this);
+			ImGui::EndDragDropSource();
 		}
 	}
 }
@@ -118,12 +155,12 @@ void TreeNode::DragCheck()
 
 void TreeNode::DropCheck()
 {
-	if (!m_Owner->IsUsingDrop())
+	if (!m_OwnerTree->IsUsingDrop())
 		return;
 
 	if (ImGui::BeginDragDropTarget())
 	{
-		m_Owner->SetDroppedNode(this);
+		m_OwnerTree->SetDroppedNode(this);
 
 		ImGui::EndDragDropTarget();
 	}
@@ -156,19 +193,21 @@ void TreeUI::Update()
 			m_Root->m_vecChildNode[i]->Update();
 		}
 	}
+	// 모든 노드 순회 완료
 
-	// 마우스 왼쪽 버튼을 뗏을 때, 선택된 m_DroppedNode, m_DragedNode 해제
+	// 마우스 왼쪽 버튼을 뗏을 때
 	if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 	{
-		// 현재 창 위에서 어떤 노드를 드래그한 상태인데 현재 창의 노드가 아닌 부분에서 마우스를 뗀 경우
+		// 현재 창 위에서 어떤 노드를 드래그한 상태인데 현재 창의 노드가 아닌 부분에서 마우스를 뗀 경우 SelfDragDrop
 		if (ImGui::IsWindowHovered() && m_DragedNode && !m_DroppedNode)
 		{
-			if (m_SelfDragDropUI && m_SelfDragDropFunc)
+			if (m_OwnerUI && m_SelfDragDropFunc)
 			{
-				(m_SelfDragDropUI->*m_SelfDragDropFunc)((DWORD_PTR)m_DragedNode, 0);
+				(m_OwnerUI->*m_SelfDragDropFunc)((DWORD_PTR)m_DragedNode, 0);
 			}
 		}
 
+		//선택된 m_DroppedNode, m_DragedNode 해제
 		m_DroppedNode = m_DragedNode = nullptr;
 	}
 }
@@ -179,7 +218,7 @@ TreeNode* TreeUI::AddNode(TreeNode* _ParentNode, const string& _Name, DWORD_PTR 
 	
 	// 노드 생성 및 이름, ID 세팅
 	TreeNode* pNode = new TreeNode(m_NodeID++);
-	pNode->m_Owner = this;
+	pNode->m_OwnerTree = this;
 	pNode->SetName(_Name);
 	pNode->m_Data = _Data;
 
@@ -217,9 +256,9 @@ void TreeUI::SetSelectedNode(TreeNode* _Node)
 	{
 		m_SelectedNode->m_Selected = true;
 
-		if (m_SelectedUI && m_SelectedFunc)
+		if (m_OwnerUI && m_SelectFunc)
 		{
-			(m_SelectedUI->*m_SelectedFunc)((DWORD_PTR)m_SelectedNode);
+			(m_OwnerUI->*m_SelectFunc)((DWORD_PTR)m_SelectedNode);
 		}
 	}
 }
@@ -239,23 +278,40 @@ void TreeUI::SetDroppedNode(TreeNode* _Node)
 		{
 			m_DroppedNode = _Node;
 
-			if (m_DropInst && m_DropFunc)
-				(m_DropInst->*m_DropFunc)((DWORD_PTR)payload->Data, (DWORD_PTR)m_DroppedNode);
+			if (m_OwnerUI && m_DroppedFromOuterFunc)
+				(m_OwnerUI->*m_DroppedFromOuterFunc)((DWORD_PTR)payload->Data, (DWORD_PTR)m_DroppedNode);
 		}
 	}
 
 	// Self Drag Drop 된 상황
 	else
 	{
-		assert(m_DragedNode->m_Owner == this);
+		assert(m_DragedNode->m_OwnerTree == this);
 
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(GetName().c_str());
 		if (payload)
 		{
 			m_DroppedNode = _Node;
 
-			if (m_SelfDragDropUI && m_SelfDragDropFunc)
-				(m_SelfDragDropUI->*m_SelfDragDropFunc)((DWORD_PTR)m_DragedNode, (DWORD_PTR)m_DroppedNode);
+			if (m_OwnerUI && m_SelfDragDropFunc)
+				(m_OwnerUI->*m_SelfDragDropFunc)((DWORD_PTR)m_DragedNode, (DWORD_PTR)m_DroppedNode);
+		}
+	}
+}
+
+void TreeUI::Popup(TreeNode* _node)
+{
+	if (m_OwnerUI && m_PopUpFunc)
+	{
+		(m_OwnerUI->*m_PopUpFunc)((DWORD_PTR)_node);
+
+		// 우클릭 이벤트 감지
+		if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+		{
+			// 마우스 위치를 가져옴
+			ImVec2 mouse_pos = ImGui::GetMousePos();
+			ImGui::OpenPopup("RightClickMenu");
+			ImGui::SetNextWindowPos(mouse_pos);
 		}
 	}
 }

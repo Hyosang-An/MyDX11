@@ -12,6 +12,7 @@ Content::Content()
 {
 	m_Tree = new TreeUI;
 	m_Tree->SetName("ContentTree");
+	m_Tree->SetOwnerUI(this);
 	AddChild(m_Tree);
 
 	// 트리 옵션 세팅
@@ -19,7 +20,7 @@ Content::Content()
 	m_Tree->UseDrag(true);		// Tree Drag 기능 ON
 	m_Tree->ShowNameOnly(true); // 노드의 이름에서 경로 및 확장자는 제외하고 파일이름만 보이기
 
-	m_Tree->AddSelectedDelegate(this, (DELEGATE_1)&Content::AssetSelected);
+	m_Tree->AddSelectDelegate((DELEGATE_1)&Content::AssetSelected);
 
 	// Asset 상태를 Content 의 TreeUI 에 반영
 	RenewContent();

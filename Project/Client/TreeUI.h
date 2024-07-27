@@ -4,7 +4,7 @@
 class TreeNode
 {
 private:
-    class TreeUI*       m_Owner;
+    class TreeUI*       m_OwnerTree;
 
     string              m_Name;
     TreeNode*           m_ParentNode;
@@ -45,6 +45,8 @@ class TreeUI :
     public EditorUI
 {
 private:
+    EditorUI*   m_OwnerUI = nullptr;
+
     TreeNode*   m_Root = nullptr;
     TreeNode*   m_ClickedNode = nullptr;
     TreeNode*   m_SelectedNode = nullptr;
@@ -57,15 +59,14 @@ private:
     bool        m_UseDrag = false;
     bool        m_UseDrop = false;
 
-    EditorUI*   m_SelectedUI = nullptr;
-    DELEGATE_1  m_SelectedFunc = nullptr;
+    DELEGATE_1  m_SelectFunc = nullptr;
 
-    EditorUI*   m_SelfDragDropUI = nullptr;
     DELEGATE_2  m_SelfDragDropFunc = nullptr;
 
-    EditorUI*   m_DropInst = nullptr;
-    DELEGATE_2  m_DropFunc = nullptr;
     string      m_DropPayLoadName;
+    DELEGATE_2  m_DroppedFromOuterFunc = nullptr;
+
+    DELEGATE_1  m_PopUpFunc = nullptr;
 
 
 public:
@@ -82,6 +83,8 @@ public:
     void SetDragedNode(TreeNode* _Node);
     void SetDroppedNode(TreeNode* _Node);
 
+    void Popup(TreeNode* _node);
+
     void UseDrag(bool _Drag) { m_UseDrag = _Drag; }
     void UseDrop(bool _Drop) { m_UseDrop = _Drop; }
 
@@ -91,9 +94,12 @@ public:
     void SetDropPayLoadName(const string& _Name) { m_DropPayLoadName = _Name; }
     const string GetDropPayLoadName() { return m_DropPayLoadName; }
 
-    void AddSelectedDelegate(EditorUI* _Inst, DELEGATE_1 _Func) { m_SelectedUI = _Inst; m_SelectedFunc = _Func; }
-    void AddSelfDragDropDelegate(EditorUI* _Inst, DELEGATE_2 _Func) { m_SelfDragDropUI = _Inst; m_SelfDragDropFunc = _Func; }
-    void AddDropDelegate(EditorUI* _Inst, DELEGATE_2 _Func) { m_DropInst = _Inst; m_DropFunc = _Func; }
+    void SetOwnerUI(EditorUI* _OwnerUI) { m_OwnerUI = _OwnerUI; }
+
+    void AddSelectDelegate(DELEGATE_1 _Func) { m_SelectFunc = _Func; }
+    void AddSelfDragDropDelegate(DELEGATE_2 _Func) { m_SelfDragDropFunc = _Func; }
+    void AddDroppedFromOuterDelegate(DELEGATE_2 _Func) { m_DroppedFromOuterFunc = _Func; }
+    void AddPopUpDelegate(DELEGATE_1 _FUNC) { m_PopUpFunc = _FUNC; }
 
     void Clear();
 

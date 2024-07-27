@@ -27,6 +27,8 @@ void SE_Detail::Update()
 	Atlas();
 
 	AtlasInfo();
+
+	StripeInfo();
 }
 
 void SE_Detail::Atlas()
@@ -95,6 +97,41 @@ void SE_Detail::AtlasInfo()
 	ImGui::Text("Height");
 	ImGui::SameLine(100);
 	ImGui::InputText("##TextureHeight", (char*)std::to_string(height).c_str(), 50, ImGuiInputTextFlags_ReadOnly);
+}
+
+void SE_Detail::StripeInfo()
+{
+	ImGui::Separator();
+	auto stripeBoxPos = GetAtlasView()->GetStripeBoxPosOnOriginalTex();
+	if (stripeBoxPos.first == stripeBoxPos.second)
+	{
+		stripeBoxPos.first = Vec2();
+		stripeBoxPos.second = Vec2();
+	}
+
+	ImGui::PushID("Sprite Info");
+	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+
+	ImGui::Button("Sprite Info");
+
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
+
+
+
+	ImGui::Text("Left Top");
+	ImGui::SameLine(100);
+	ImGui::InputFloat2("##Left Top", stripeBoxPos.first, "%.0f", ImGuiInputTextFlags_ReadOnly);
+
+	ImGui::Text("Right Bottom");
+	ImGui::SameLine(100);
+	ImGui::InputFloat2("##Right Bottom", stripeBoxPos.second, "%.0f", ImGuiInputTextFlags_ReadOnly);
+
+	ImGui::Text("Size");
+	ImGui::SameLine(100);
+	ImGui::InputFloat2("##Right Bottom", stripeBoxPos.second - stripeBoxPos.first, "%.0f", ImGuiInputTextFlags_ReadOnly);
 }
 
 void SE_Detail::SetAtlasTex(Ptr<CTexture> _Tex)

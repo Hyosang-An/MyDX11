@@ -14,6 +14,7 @@ Outliner::Outliner()
 {
 	m_Tree = new TreeUI;
 	m_Tree->SetName("OutlinerTree");
+	m_Tree->SetOwnerUI(this);
 	AddChild(m_Tree);
 
 	// 트리 옵션 세팅
@@ -21,20 +22,21 @@ Outliner::Outliner()
 	m_Tree->ShowRoot(false); 
 
 	// Selected Delegate 등록
-	m_Tree->AddSelectedDelegate(this, (DELEGATE_1)&Outliner::GameObjectSelected);
+	m_Tree->AddSelectDelegate((DELEGATE_1)&Outliner::GameObjectSelected);
 
 	// Drag, Drop On
 	m_Tree->UseDrag(true);
 	m_Tree->UseDrop(true);
 
 	// Self DragDrop Delegate 등록
-	m_Tree->AddSelfDragDropDelegate(this, (DELEGATE_2)&Outliner::GameObjectAddChild);
+	m_Tree->AddSelfDragDropDelegate((DELEGATE_2)&Outliner::GameObjectAddChild);
 
 	// 외부 드랍 Delegate 등록
-	m_Tree->AddDropDelegate(this, (DELEGATE_2)&Outliner::DroppedFromOuter);
+	m_Tree->AddDroppedFromOuterDelegate((DELEGATE_2)&Outliner::DroppedFromOuter);
 	m_Tree->SetDropPayLoadName("ContentTree"); // 드롭 받을 외부 TreeUI
 
-
+	// TreeNode Popup Delegate 등록
+	m_Tree->AddPopUpDelegate((DELEGATE_1)&Outliner::PopUp);
 
 	// Asset 상태를 Content 의 TreeUI 에 반영
 	RenewLevel();
@@ -145,3 +147,28 @@ void Outliner::DroppedFromOuter(DWORD_PTR _OuterData, DWORD_PTR _DropNode)
 
 	// TODO
 }
+
+void Outliner::PopUp(DWORD_PTR _Param)
+{
+	TreeNode* pSelectedNode = (TreeNode*)_Param;
+
+	// 팝업 메뉴를 시작
+	if (ImGui::BeginPopup("RightClickMenu"))
+	{
+		if (ImGui::MenuItem("Option 1"))
+		{
+			// Option 1 선택 시 실행할 코드
+			int a = 0;
+		}
+		if (ImGui::MenuItem("Option 2"))
+		{
+			// Option 2 선택 시 실행할 코드
+		}
+		if (ImGui::MenuItem("Option 3"))
+		{
+			// Option 3 선택 시 실행할 코드
+		}
+		ImGui::EndPopup();
+	}
+}
+
