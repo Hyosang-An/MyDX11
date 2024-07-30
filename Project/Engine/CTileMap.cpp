@@ -112,18 +112,23 @@ void CTileMap::ChangeTileMapSize()
 	Transform()->SetRelativeScale(vSize.x, vSize.y, 1.f);
 }
 
-void CTileMap::SetAtlasTexture(Ptr<CTexture> _Atlas)
+void CTileMap::SetAtlasTexture(Ptr<CTexture> _Atlas, Vec2 _tileResolution)
 {
 	m_TileAtlas = _Atlas;
-	m_AtlasResolution = Vec2((float)_Atlas->Width(), (float)_Atlas->Height());
 
+	if (nullptr == m_TileAtlas)
+		m_AtlasResolution = Vec2(0.f, 0.f);
+	else
+		m_AtlasResolution = Vec2((float)_Atlas->Width(), (float)_Atlas->Height());
+
+	m_AtlasTileResolution = _tileResolution;
 	if (m_AtlasTileResolution != Vec2(0, 0))
 		SetAtlasTileResolution(m_AtlasTileResolution);
 }
 
-void CTileMap::SetAtlasTileResolution(Vec2 _TileSize)
+void CTileMap::SetAtlasTileResolution(Vec2 _TileResolution)
 {
-	m_AtlasTileResolution = _TileSize;
+	m_AtlasTileResolution = _TileResolution;
 
 	if (nullptr != m_TileAtlas)
 	{
@@ -176,6 +181,6 @@ void CTileMap::LoadFromFile(FILE* _File)
 	LoadAssetRef(m_TileAtlas, _File);
 	if (nullptr != m_TileAtlas)
 	{
-		SetAtlasTexture(m_TileAtlas);
+		SetAtlasTexture(m_TileAtlas, m_AtlasTileResolution);
 	}
 }

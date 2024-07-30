@@ -73,6 +73,8 @@ int CMesh::Create(Vtx* _VtxSysMem, UINT _VtxCount, UINT* _IdxSysMem, UINT _IdxCo
 		return E_FAIL;
 	}
 
+	SetEngineAsset();
+
 	return S_OK;
 }
 

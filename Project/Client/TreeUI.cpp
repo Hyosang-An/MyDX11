@@ -53,47 +53,20 @@ void TreeNode::Update()
 
 
 	// NameOnly (폴더 경로 및 확장자를 뺀 파일 이름만 노출)
-	if (m_OwnerTree->IsShowNameOnly())
-	{
-		path Path = strName;
-		strName = Path.stem().string();
-	}
+	//if (m_OwnerTree->IsShowNameOnly())
+	//{
+	//	path Path = strName;
+	//	strName = Path.stem().string();
+	//}
 
-	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.4f, 0.4f, 0.4f, 1.0f)); // Gray color for normal state
-	ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Red color on hover
-	ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));  // Green color on active
+	//ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.4f, 0.4f, 0.4f, 1.0f)); // Gray color for normal state
+	//ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Red color on hover
+	//ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));  // Green color on active
 
 	if (ImGui::TreeNodeEx(strName.c_str(), Flag))
 	{
-		//// 우클릭 이벤트 감지
-		//if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
-		//{
-		//	// 마우스 위치를 가져옴
-		//	ImVec2 mouse_pos = ImGui::GetMousePos();
-		//	ImGui::OpenPopup("RightClickMenu");
-		//	ImGui::SetNextWindowPos(mouse_pos);
-		//}
-
-		//// 팝업 메뉴를 시작
-		//if (ImGui::BeginPopup("RightClickMenu"))
-		//{
-		//	if (ImGui::MenuItem("Option 1"))
-		//	{
-		//		// Option 1 선택 시 실행할 코드
-		//	}
-		//	if (ImGui::MenuItem("Option 2"))
-		//	{
-		//		// Option 2 선택 시 실행할 코드
-		//	}
-		//	if (ImGui::MenuItem("Option 3"))
-		//	{
-		//		// Option 3 선택 시 실행할 코드
-		//	}
-		//	ImGui::EndPopup();
-		//}
-
+		// 우클릭 팝업메뉴
 		m_OwnerTree->Popup(this);
-
 
 		// 해당 노드가 클릭된 경우 (왼쪽 버튼이 눌린 순간)
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
@@ -131,7 +104,7 @@ void TreeNode::Update()
 		DragCheck();
 	}
 
-	ImGui::PopStyleColor(3);
+	//ImGui::PopStyleColor(3);
 }
 
 void TreeNode::DragCheck()
@@ -143,6 +116,7 @@ void TreeNode::DragCheck()
 			TreeNode* pThis = this;
 
 			// 해당 트리 노드의 주소값을 전달
+			// 포인터의 주소를 페이로드에 전달 (이중 포인터 사용해야함 / 해당 포인터가 가리키는 메모리에서 sizeof(TreeNode*)만큼 복사하여 페이로드로 저장) 
 			ImGui::SetDragDropPayload(m_OwnerTree->GetName().c_str(), &pThis, sizeof(TreeNode*));
 			ImGui::Text(m_Name.c_str());
 			m_OwnerTree->SetDragedNode(this);

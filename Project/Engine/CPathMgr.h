@@ -17,6 +17,7 @@ public:
 
 	const wstring& GetContentsPath() { return m_strContentsPath; }
 	const wstring& GetSolutionPath() { return m_strSolutionPath; }
+	wstring GetRelativePath(const wstring& _FilePath);
 
 private:
 	wstring GetParentPath(const wstring& _strPath);

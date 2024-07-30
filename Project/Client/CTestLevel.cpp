@@ -25,8 +25,7 @@ void CTestLevel::CreateTestLevel()
 	Ptr<CMaterial> pAlphaBlendMtrl = CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DAlphaBlendMtrl");
 	Ptr<CMaterial> pDebugShapeMtrl = CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DebugShapeMtrl");
 
-	Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//Character.png");
-	//Ptr<CTexture> pTexture = CAssetMgr::GetInst()->Load<CTexture>(L"PlayerTex", L"texture//bloomTest.png");
+	Ptr<CTexture> pTexture = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture//Character.png");
 	pAlphaBlendMtrl->SetTexParam(TEX_0, pTexture);
 
 
@@ -100,7 +99,7 @@ void CTestLevel::CreateTestLevel()
 	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 	pPlayer->MeshRender()->SetMaterial(pMtrl);
 
-	pPlayer->FlipBookComponent()->AddFlipBook(5, CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"Link_MoveDown"));
+	pPlayer->FlipBookComponent()->AddFlipBook(5, CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Link_MoveDown.flip"));
 	pPlayer->FlipBookComponent()->Play(5, 10, true);
 
 	TestLevel->AddObject(3, pPlayer);
@@ -121,9 +120,8 @@ void CTestLevel::CreateTestLevel()
 	pTileMapObj->TileMap()->SetRowCol(20, 20);
 	pTileMapObj->TileMap()->SetTileSize(Vec2(64.f, 64.f));
 
-	Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->Load<CTexture>(L"TileAtlasTex", L"texture\\TILE.bmp");
-	pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas);
-	pTileMapObj->TileMap()->SetAtlasTileResolution(Vec2(64.f, 64.f));
+	Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\TILE.bmp");
+	pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas, Vec2(64.f, 64.f));
 
 	TestLevel->AddObject(2, pTileMapObj);
 
@@ -173,19 +171,26 @@ void CTestLevel::CreateTestLevel()
 
 void CTestLevel::CreatePrefab()
 {
-	CGameObject* pProto = new CGameObject;
+	//CGameObject* pProto = new CGameObject;
 
-	pProto->AddComponent(new CTransform);
-	pProto->AddComponent(new CMeshRender);
-	pProto->AddComponent(new CMissileScript);
+	//pProto->AddComponent(new CTransform);
+	//pProto->AddComponent(new CMeshRender);
+	//pProto->AddComponent(new CMissileScript);
 
-	pProto->Transform()->SetRelativeScale(100.f, 100.f, 1.f);
+	//pProto->Transform()->SetRelativeScale(100.f, 100.f, 1.f);
 
-	pProto->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pProto->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+	//pProto->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	//pProto->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
 
-	Ptr<CPrefab> pPrefab = new CPrefab;
-	pPrefab->SetProtoObject(pProto);
+	//Ptr<CPrefab> pPrefab = new CPrefab;
+	//pPrefab->SetProtoObject(pProto);
 
-	CAssetMgr::GetInst()->AddAsset<CPrefab>(L"MissilePref", pPrefab);
+	//CAssetMgr::GetInst()->AddAsset<CPrefab>(L"MissilePref", pPrefab);
+
+
+
+
+	//wstring FilePath = CPathMgr::GetInst()->GetContentsPath();
+	//FilePath += L"prefab\\Missile.pref";
+	//pPrefab->Save(FilePath);
 }

@@ -47,7 +47,7 @@ void SE_AtlasView::SetAtlasTex(Ptr<CTexture> _Tex)
 
 	m_AtlasTex = _Tex;
 
-	//m_WidthSize = m_AtlasTex->Width();
+	//m_WidthSize = (float)m_AtlasTex->Width();
 }
 
 

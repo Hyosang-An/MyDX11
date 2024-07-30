@@ -132,6 +132,8 @@ int CTexture::Create(UINT _Width, UINT _Height, DXGI_FORMAT _PixelFormat, UINT _
 		DEVICE->CreateUnorderedAccessView(m_Tex2D.Get(), nullptr, m_UAV.GetAddressOf());
 	}
 
+	SetEngineAsset();
+
 	return S_OK;
 }
 
@@ -160,6 +162,8 @@ int CTexture::Create(ComPtr<ID3D11Texture2D> _Tex2D)
 	{
 		DEVICE->CreateUnorderedAccessView(m_Tex2D.Get(), nullptr, m_UAV.GetAddressOf());
 	}
+
+	SetEngineAsset();
 
 	return S_OK;
 }

@@ -129,16 +129,16 @@ void CAssetMgr::CreateEngineTexture()
 
 
 	// Noise Texture
-	Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
-	Load<CTexture>(L"texture\\noise\\noise_02.png", L"texture\\noise\\noise_02.png");
-	Load<CTexture>(L"texture\\noise\\noise_03.jpg", L"texture\\noise\\noise_03.jpg");
+	//Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
+	//Load<CTexture>(L"texture\\noise\\noise_02.png", L"texture\\noise\\noise_02.png");
+	//Load<CTexture>(L"texture\\noise\\noise_03.jpg", L"texture\\noise\\noise_03.jpg");
 }
 
 void CAssetMgr::CreateEngineSprite()
 {
-	wstring strContentsPath = CPathMgr::GetInst()->GetContentsPath();
+	//wstring strContentsPath = CPathMgr::GetInst()->GetContentsPath();
 
-	Ptr<CTexture> pAtlasTex = Load<CTexture>(L"texture\\link_3.png", L"texture\\link.png");
+	//Ptr<CTexture> pAtlasTex = Load<CTexture>(L"texture\\link_3.png", L"texture\\link.png");
 
 
 	//// Sprite 생성 및 저장	================================================
@@ -214,9 +214,9 @@ void CAssetMgr::CreateEngineSprite()
 	AddAsset(L"Link_MoveDown", pFilpBook);*/
 
 
-	auto flipbook = Load<CFlipBook>(L"Link_MoveDown", L"Animation\\Link_MoveDown.flip");
+	//auto flipbook = Load<CFlipBook>(L"Link_MoveDown", L"Animation\\Link_MoveDown.flip");
 
-	flipbook->Save(L"Test\\flipbook_Save_Test.flip");
+	//flipbook->Save(L"Test\\flipbook_Save_Test.flip");
 }
 
 void CAssetMgr::CreateEngineGraphicShader()
@@ -364,27 +364,27 @@ void CAssetMgr::CreateEngineMaterial()
 	Ptr<CMaterial>	pMtrl = nullptr;
 
 	// Std2DMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"Std2DShader"));
 	AddAsset(L"Std2DMtrl", pMtrl);
 
 	// Std2DAlphaBlendMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"Std2DAlphaBlendShader"));
 	AddAsset(L"Std2DAlphaBlendMtrl", pMtrl);
 
 	// DebugShapeMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"DebugShapeShader"));
 	AddAsset(L"DebugShapeMtrl", pMtrl);
 
 	// TileMapMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"TileMapShader"));
 	AddAsset(L"TileMapMtrl", pMtrl);
 
 	// GrayFilterMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"GrayFilterShader"));
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"texture\\noise\\noise_01.png"));
@@ -393,7 +393,7 @@ void CAssetMgr::CreateEngineMaterial()
 	AddAsset(L"GrayFilterMtrl", pMtrl);
 
 	// DistortionMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"DistortionShader"));
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"texture\\noise\\noise_01.png"));
@@ -402,36 +402,37 @@ void CAssetMgr::CreateEngineMaterial()
 	AddAsset(L"DistortionMtrl", pMtrl);
 
 	// ConvexLensMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"ConvexLensShader"));
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessDSTex"));
 	AddAsset(L"ConvexLensMtrl", pMtrl);
 
 	// RippleEffectMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"RippleEffectShader"));
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessDSTex"));
 	AddAsset(L"RippleEffectMtrl", pMtrl);
 
 	// ExtractBrightMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"ExtractBrightShader"));
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	AddAsset(L"ExtractBrightMtrl", pMtrl);
 
 	// GaussianBlurMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"GaussianBlurShader"));
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessRTTex_1"));
 	AddAsset(L"GaussianBlurMtrl", pMtrl);
 
 	// GaussianBlurMtrl
-	pMtrl = new CMaterial();
+	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"BloomShader"));
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessRTTex_1"));
 	AddAsset(L"BloomMtrl", pMtrl);
 }
+

@@ -33,7 +33,7 @@ private:
 public:
 	void SetRowCol(UINT _Row, UINT _Col);
 	void SetTileSize(Vec2 _Size);
-	void SetAtlasTexture(Ptr<CTexture> _Atlas);
+	void SetAtlasTexture(Ptr<CTexture> _Atlas, Vec2 _tileResolution = Vec2(0, 0));
 	void SetAtlasTileResolution(Vec2 _TileSize);
 
 

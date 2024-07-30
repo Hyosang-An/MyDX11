@@ -70,7 +70,22 @@ void CEditorMgr::InitImGui()
     CreateEditorUI();
 }
 
+void CEditorMgr::ObserveContent()
+{
+    // 지정된 상황이 발생했는지 확인
+    DWORD dwStatus = WaitForSingleObject(m_hNotifyHandle, 0);
 
+    // 컨텐츠 폴더에 변경점이 발생했다면,
+    if (dwStatus == WAIT_OBJECT_0)
+    {
+        // Content 폴더에 있는 모든 에셋과 메모리에 로딩되어있는 에셋을 동기화
+        Content* pContent = (Content*)FindEditorUI("Content");
+        pContent->Reload();
+
+        // 다시 Content 폴더에 변경점이 발생하는지 확인하도록 함
+        FindNextChangeNotification(m_hNotifyHandle);
+    }
+}
 
 
 void CEditorMgr::CreateEditorUI()
@@ -81,6 +96,7 @@ void CEditorMgr::CreateEditorUI()
 
     // Content
     pUI = new Content;
+    pUI->Init();
     pUI->SetName("Content");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
@@ -124,6 +140,7 @@ void CEditorMgr::CreateEditorUI()
     // SpriteEditor
     pUI = new SpriteEditor;
     pUI->Init();
+    pUI->SetActive(false);
     pUI->SetName("SpriteEditor");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 }
@@ -161,6 +178,7 @@ EditorUI* CEditorMgr::FindEditorUI(const string& _Name)
 
     if (iter == m_mapUI.end())
     {
+        MessageBox(nullptr, (wstring(_Name.begin(), _Name.end()) + L"UI를 찾지 못함").c_str(), L"Error", MB_OK);
         return nullptr;
     }
 

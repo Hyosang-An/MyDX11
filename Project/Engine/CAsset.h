@@ -17,17 +17,21 @@ private:
     wstring             m_Key;
     wstring             m_RelativePath;
     const ASSET_TYPE    m_Type;
-
     int                 m_RefCount;
+
+    bool                m_Engine = false;
 
 public:
     const wstring& GetKey() { return m_Key; }
     const wstring& GetRelativePath() { return m_RelativePath; }
     ASSET_TYPE GetAssetType() { return m_Type; }
+    UINT GetRefCount() { return m_RefCount; }
+    bool IsEngineAsset() { return m_Engine; }
 
 protected:
     void SetKey(const wstring& _Key) { m_Key = _Key; }
     void SetRelativePath(const wstring& _path) { m_RelativePath = _path; }
+    void SetEngineAsset() { m_Engine = true; }
 
 private:
     void AddRef() { ++m_RefCount; }

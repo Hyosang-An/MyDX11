@@ -10,6 +10,7 @@
 #include <Engine/CDevice.h>
 #include "ImGui/imgui_impl_win32.h"
 #include "CTestLevel.h"
+#include "CLevelSaveLoad.h"
 
 
 #define MAX_LOADSTRING 100
@@ -44,11 +45,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     //LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
 
-
-
     MyRegisterClass(hInstance);
 
-    // 애플리케이션 초기화를 수행합니다:
+    // 애플리케이션 초기화를 수행합니다: Engine -> EditorMgr -> TestLevel
     if (!InitInstance (hInstance, nCmdShow))
     {
         return FALSE;
@@ -144,19 +143,22 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
 
    // CEngine 객체 초기화
-   if (FAILED(CEngine::GetInst()->Init(hWnd, POINT{ 1280, 768 })))
+   if (FAILED(CEngine::GetInst()->Init(hWnd
+       , POINT{ 1280, 768 }
+       , (OBJECT_SAVE)&CLevelSaveLoad::SaveGameObject
+       , (OBJECT_LOAD)&CLevelSaveLoad::LoadGameObject)))
    {
        MessageBox(nullptr, L"CEngine 초기화 실패", L"엔진 초기화 실패", MB_OK);
        return 0;
    }
 
-   // 테스트용 레벨 초기상태 만들기
-   CTestLevel::CreateTestLevel();
-
 #ifdef _DEBUG
    // CEditorMgr 초기화
    CEditorMgr::GetInst()->Init();
 #endif
+
+   // 테스트용 레벨 초기상태 만들기
+   CTestLevel::CreateTestLevel();
 
    return TRUE;
 }

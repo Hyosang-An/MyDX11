@@ -5,7 +5,7 @@ class CMaterial :
     public CAsset
 {
 public:
-    CMaterial();
+    CMaterial(bool _IsEngine = false);
     ~CMaterial();
     virtual CMaterial* Clone() { return new CMaterial(*this); } // Material은 기본 복사생성자 써도 됨
 

@@ -11,6 +11,7 @@ CGraphicShader::CGraphicShader()
 	, m_DSType(DS_TYPE::LESS)
 	, m_BSType(BS_TYPE::DEFAULT)
 {
+	SetEngineAsset();
 }
 
 CGraphicShader::~CGraphicShader()

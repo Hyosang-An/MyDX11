@@ -59,6 +59,10 @@ private:
 	void CreateEngineGraphicShader();
 	void CreateEngineComputeShader();
 	void CreateEngineMaterial();
+
+private:
+	void DeleteAsset(ASSET_TYPE _Type, const wstring& _Key);
+
 };
 
 template<typename T>

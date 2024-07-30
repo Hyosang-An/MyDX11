@@ -11,6 +11,7 @@
 #include "CRenderMgr.h"
 #include "CCollisionMgr.h"
 #include "CTaskMgr.h"
+#include "CPrefab.h"
 
 CEngine::CEngine() :
 	m_hWnd{},
@@ -22,7 +23,7 @@ CEngine::~CEngine()
 {
 }
 
-int CEngine::Init(HWND _wnd, POINT _ptResolution)
+int CEngine::Init(HWND _wnd, POINT _ptResolution, OBJECT_SAVE _SaveFunc, OBJECT_LOAD _LoadFunc)
 {
 	m_hWnd = _wnd;
 	m_ptResolution = _ptResolution;
@@ -42,6 +43,10 @@ int CEngine::Init(HWND _wnd, POINT _ptResolution)
 	CRenderMgr::GetInst()->Init();	// AssetMgr에서 렌더링에 필요한 Texture들을 생성한 뒤 RenderMgr 초기화
 	
 	CLevelMgr::GetInst()->Init();
+
+	// Prefab Function 등록
+	CPrefab::g_ObjectSaveFunc = _SaveFunc;
+	CPrefab::g_ObjectLoadFunc = _LoadFunc;
 
 	return S_OK;
 }

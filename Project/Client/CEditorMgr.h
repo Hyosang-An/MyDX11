@@ -16,6 +16,8 @@ private:
     vector<CGameObject*>        m_vecEditorObject;
     map<string, EditorUI*>      m_mapUI;
 
+    HANDLE                      m_hNotifyHandle = nullptr;
+
 public:
     EditorUI* FindEditorUI(const string& Name);
 
@@ -33,6 +35,7 @@ private:
     void InitImGui();
     void ImGuiProgress();
     void ImGuiTick();
+    void ObserveContent();
 
     void CreateEditorUI();
 };

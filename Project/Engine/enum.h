@@ -159,6 +159,9 @@ enum TASK_TYPE
 	// Param_0 : Level Adress, Param_1 : Level State
 	CHANGE_LEVEL,
 
+	// Param_0 : AssetAdress
+	DEL_ASSET,
+
 	LEVEL_CHANGED,
 	ASSET_CHANGED,
 

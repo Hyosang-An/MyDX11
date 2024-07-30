@@ -12,6 +12,7 @@
 #include <Engine/CEngine.h>
 #include <Engine/CDevice.h>
 #include <Engine/CKeyMgr.h>
+#include <Engine/CPathMgr.h>
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_dx11.h"
@@ -38,6 +39,12 @@ void CEditorMgr::Init()
 	CreateEditorObject();
 
 	InitImGui();
+
+	// Content 폴더를 감시하는 커널 오브젝트 생성
+	wstring ContentsPath = CPathMgr::GetInst()->GetContentsPath();
+	m_hNotifyHandle = FindFirstChangeNotification(ContentsPath.c_str(), true
+		, FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME
+		| FILE_ACTION_ADDED | FILE_ACTION_REMOVED);
 }
 
 
@@ -48,6 +55,8 @@ void CEditorMgr::Progress()
 	EditorObjectProgress();
 
 	ImGuiProgress();
+
+	ObserveContent();
 }
 
 
