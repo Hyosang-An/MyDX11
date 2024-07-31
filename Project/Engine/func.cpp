@@ -5,10 +5,10 @@
 
 #include "CGameObject.h"
 
-void CreateObject(CGameObject* _NewObject, int _LayerIndex)
+void SpawnObject(CGameObject* _NewObject, int _LayerIndex)
 {
 	tTask task = {};
-	task.Type = TASK_TYPE::CREATE_OBJECT;
+	task.Type = TASK_TYPE::SPAWN_OBJECT;
 	task.Param_0 = _LayerIndex;
 	task.Param_1 = (DWORD_PTR)_NewObject;
 

@@ -22,6 +22,7 @@ CRenderComponent::CRenderComponent(const CRenderComponent& _Origin) :
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
 	if (nullptr != pCurLevel)
 	{
+		// 현재 Play 상태가 아닌데 동적 재질이 존재하면 안됨.
 		assert(!(pCurLevel->GetState() != LEVEL_STATE::PLAY
 			&& nullptr != _Origin.m_DynamicMtrl));
 	}

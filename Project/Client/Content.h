@@ -11,6 +11,8 @@ private:
     void RenewContent();
 
     void AssetSelected(DWORD_PTR _Param);
+    void PopupMenu(DWORD_PTR _Parma);
+
     void FindAssetName(const wstring& _FolderPath, const wstring& _Filter);
     void LoadAsset(const path& _Path);
 

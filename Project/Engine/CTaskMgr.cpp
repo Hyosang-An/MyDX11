@@ -37,7 +37,7 @@ void CTaskMgr::ExecuteTask()
 		tTask& task = m_vecTask[i];
 		switch (task.Type)
 		{
-			case TASK_TYPE::CREATE_OBJECT:
+			case TASK_TYPE::SPAWN_OBJECT:
 			{
 				CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
 				int LayerIndex = (int)task.Param_0;

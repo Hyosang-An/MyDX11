@@ -19,7 +19,7 @@ Outliner::Outliner()
 
 	// 트리 옵션 세팅
 	// 루트 보이지 않기
-	m_Tree->ShowRoot(false); 
+	m_Tree->ShowRoot(false);
 
 	// Selected Delegate 등록
 	m_Tree->AddSelectDelegate((DELEGATE_1)&Outliner::GameObjectSelected);
@@ -36,7 +36,7 @@ Outliner::Outliner()
 	m_Tree->SetDropPayLoadName("ContentTree"); // 드롭 받을 외부 TreeUI
 
 	// TreeNode Popup Delegate 등록
-	m_Tree->AddPopUpDelegate((DELEGATE_1)&Outliner::PopUp);
+	m_Tree->AddPopUpDelegate((DELEGATE_1)&Outliner::PopUpMenu);
 
 	// Asset 상태를 Content 의 TreeUI 에 반영
 	RenewLevel();
@@ -44,7 +44,7 @@ Outliner::Outliner()
 
 Outliner::~Outliner()
 {
-	
+
 }
 
 void Outliner::Update()
@@ -102,7 +102,6 @@ void Outliner::GameObjectSelected(DWORD_PTR _Param)
 
 	Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
 	pInspector->SetTargetObject(pObject);
-	ImGui::SetWindowFocus(nullptr);
 }
 
 void Outliner::GameObjectAddChild(DWORD_PTR _Param1, DWORD_PTR _Param2)
@@ -148,27 +147,24 @@ void Outliner::DroppedFromOuter(DWORD_PTR _OuterData, DWORD_PTR _DropNode)
 	// TODO
 }
 
-void Outliner::PopUp(DWORD_PTR _Param)
+void Outliner::PopUpMenu(DWORD_PTR _Param)
 {
-	TreeNode* pSelectedNode = (TreeNode*)_Param;
+	TreeNode* pTargetNode = (TreeNode*)_Param;
 
-	// 팝업 메뉴를 시작
-	if (ImGui::BeginPopup("RightClickMenu"))
+
+	if (ImGui::MenuItem("Option 1"))
 	{
-		if (ImGui::MenuItem("Option 1"))
-		{
-			// Option 1 선택 시 실행할 코드
-			int a = 0;
-		}
-		if (ImGui::MenuItem("Option 2"))
-		{
-			// Option 2 선택 시 실행할 코드
-		}
-		if (ImGui::MenuItem("Option 3"))
-		{
-			// Option 3 선택 시 실행할 코드
-		}
-		ImGui::EndPopup();
+		// Option 1 선택 시 실행할 코드
+		int a = 0;
 	}
+	if (ImGui::MenuItem("Option 2"))
+	{
+		// Option 2 선택 시 실행할 코드
+	}
+	if (ImGui::MenuItem("Option 3"))
+	{
+		// Option 3 선택 시 실행할 코드
+	}
+
 }
 

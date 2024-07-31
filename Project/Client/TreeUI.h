@@ -79,11 +79,10 @@ public:
     TreeNode* GetClickedNode() { return m_ClickedNode; }
 
     void SetClickedNode(TreeNode* _node);
-    void SetSelectedNode(TreeNode* _Node);
-    void SetDragedNode(TreeNode* _Node);
-    void SetDroppedNode(TreeNode* _Node);
-
-    void Popup(TreeNode* _node);
+    void SetSelectedNode(TreeNode* _node);
+    void SetDragedNode(TreeNode* _node);
+    void SetDroppedNode(TreeNode* _node);
+    void PopupMenu(TreeNode* _node);
 
     void UseDrag(bool _Drag) { m_UseDrag = _Drag; }
     void UseDrop(bool _Drop) { m_UseDrop = _Drop; }

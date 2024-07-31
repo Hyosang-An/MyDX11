@@ -21,7 +21,7 @@ struct tTileInfo
 #define AtlasMaxCol         g_int_2
 #define TileSliceUV         g_vec2_0
 #define TileColRow          g_vec2_1
-StructuredBuffer<tTileInfo> g_Buffer : register(t15);
+StructuredBuffer<tTileInfo> g_TileInfoBuffer : register(t15);
 // ===============================
 
 
@@ -67,10 +67,10 @@ float4 PS_TileMap(VS_OUT _in) : SV_Target
         float2 CurColRow = floor(_in.vUV);
         int Idx = TileColRow.x * CurColRow.y + CurColRow.x;
         
-        // 그 정보로 g_Buffer 에 전달된 각 타일정보중 본인의 정보에 접근해서 ImgIdx 를 알아낸다.
+        // 그 정보로 g_TileInfoBuffer 에 전달된 각 타일정보중 본인의 정보에 접근해서 ImgIdx 를 알아낸다.
         // 알아낸 ImgIdx 로 LeftTopUV 값을 계산한다.        
-        int row = g_Buffer[Idx].ImgIdx / AtlasMaxCol;
-        int col = g_Buffer[Idx].ImgIdx % AtlasMaxCol;
+        int row = g_TileInfoBuffer[Idx].ImgIdx / AtlasMaxCol;
+        int col = g_TileInfoBuffer[Idx].ImgIdx % AtlasMaxCol;
         float2 vLeftTopUV = float2(col, row) * TileSliceUV;
         
         float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;

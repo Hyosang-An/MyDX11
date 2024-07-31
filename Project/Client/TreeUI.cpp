@@ -66,7 +66,13 @@ void TreeNode::Update()
 	if (ImGui::TreeNodeEx(strName.c_str(), Flag))
 	{
 		// 우클릭 팝업메뉴
-		m_OwnerTree->Popup(this);
+		//m_OwnerTree->PopupMenu(this);
+
+		if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+		{
+			m_OwnerTree->PopupMenu(this);
+			ImGui::EndPopup();
+		}
 
 		// 해당 노드가 클릭된 경우 (왼쪽 버튼이 눌린 순간)
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
@@ -74,9 +80,10 @@ void TreeNode::Update()
 			m_OwnerTree->SetClickedNode(this);
 		}
 
-		// 해당 노드가 클릭되어있고 왼쪽 버튼이 떼진 순간
+		// 해당 노드위에서 마우스 왼쪽 버튼이 떼진 순간
 		if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 		{
+			// 해당 노드가 클릭 된 노드인 경우
 			if (this == m_OwnerTree->GetClickedNode())
 				m_OwnerTree->SetSelectedNode(this);
 			else
@@ -225,7 +232,7 @@ void TreeUI::SetSelectedNode(TreeNode* _Node)
 	// 새로운 노드를 선택된 노드로 갱신
 	m_SelectedNode = _Node;
 
-	// 새로운 노드를 선택된 상태로 만들어줌
+	// 새로운 노드를 OwnerUI에서 선택된 상태로 만들어줌
 	if (nullptr != m_SelectedNode)
 	{
 		m_SelectedNode->m_Selected = true;
@@ -273,21 +280,14 @@ void TreeUI::SetDroppedNode(TreeNode* _Node)
 	}
 }
 
-void TreeUI::Popup(TreeNode* _node)
+void TreeUI::PopupMenu(TreeNode* _node)
 {
 	if (m_OwnerUI && m_PopUpFunc)
 	{
 		(m_OwnerUI->*m_PopUpFunc)((DWORD_PTR)_node);
-
-		// 우클릭 이벤트 감지
-		if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
-		{
-			// 마우스 위치를 가져옴
-			ImVec2 mouse_pos = ImGui::GetMousePos();
-			ImGui::OpenPopup("RightClickMenu");
-			ImGui::SetNextWindowPos(mouse_pos);
-		}
 	}
+
+	SetSelectedNode(_node);
 }
 
 void TreeUI::Clear()

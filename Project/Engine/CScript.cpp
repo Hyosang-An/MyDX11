@@ -22,5 +22,5 @@ void CScript::Instantiate(Ptr<CPrefab> _Pref, int _LayerIdx, Vec3 _WorldPos, con
 	pInst->SetName(_Name);
 	pInst->Transform()->SetRelativePos(_WorldPos);
 
-	CreateObject(pInst, _LayerIdx);
+	SpawnObject(pInst, _LayerIdx);
 }

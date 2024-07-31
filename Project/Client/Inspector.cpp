@@ -98,13 +98,7 @@ void Inspector::SetTargetAsset(Ptr<CAsset> _Asset)
 	if (nullptr == _Asset)
 		return;
 
-	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
-	{
-		if (nullptr == m_arrComUI[i])
-			continue;
-
-		m_arrComUI[i]->SetTargetObject(nullptr);
-	}
+	SetTargetObject(nullptr);
 
 	m_TargetAsset = _Asset;
 
