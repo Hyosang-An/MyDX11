@@ -18,6 +18,8 @@
 
 #include "CLevelSaveLoad.h"
 
+#include <Engine/CSetColorCS.h>
+
 void CTestLevel::CreateTestLevel()
 {
 	// Material
@@ -30,6 +32,19 @@ void CTestLevel::CreateTestLevel()
 
 
 	CreatePrefab();
+
+
+
+	// 컴퓨트 쉐이더 테스트용 텍스쳐 생성
+	Ptr<CTexture> pTestTex = CAssetMgr::GetInst()->CreateTexture(L"ComputeShaderTestTex"
+		, 1026, 1026, DXGI_FORMAT_R8G8B8A8_UNORM
+		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+
+	CSetColorCS cs;
+	cs.SetTargetTexture(pTestTex);
+	cs.SetClearColor(Vec4(0.f, 1.f, 0.f, 1.f));
+	cs.Execute();
+	pMtrl->SetTexParam(TEX_0, pTestTex);
 
 
 	// Level 생성
@@ -105,7 +120,24 @@ void CTestLevel::CreateTestLevel()
 	TestLevel->AddObject(3, pPlayer);
 
 
+	// Monster Object
+	CGameObject* pMonster = new CGameObject;
+	pMonster->SetName(L"Monster");
 
+	pMonster->AddComponent(new CTransform);
+	pMonster->AddComponent(new CMeshRender);
+	pMonster->AddComponent(new CCollider2D);
+
+	pMonster->Transform()->SetRelativePos(-400.f, 0.f, 100.f);
+	pMonster->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
+
+	pMonster->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	pMonster->Collider2D()->SetScale(Vec3(1.2f, 1.2f, 1.f));
+
+	pMonster->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pMonster->MeshRender()->SetMaterial(pMtrl);
+
+	TestLevel->AddObject(4, pMonster);
 
 
 	// TileMap Object

@@ -17,6 +17,7 @@ public:
     int Create(CB_TYPE _type, UINT _bufferSize);
     void SetData(void* _pData);
     void Binding();
+    void Binding_CS();
 
     virtual CConstBuffer* Clone() { return nullptr; }
 };

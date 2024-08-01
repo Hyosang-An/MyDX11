@@ -189,10 +189,10 @@ bool ParamUI::InputTexture(Ptr<CTexture>& _CurTex, const string& _Desc
 	}
 
 	char szID[255] = {};
-	sprintf_s(szID, 255, "##InputBtn%d", g_ID++);
+	sprintf_s(szID, 255, "...##InputBtn%d", g_ID++);
 
 	ImGui::SameLine();
-	if (ImGui::Button(szID, ImVec2(18.f, 18.f)))
+	if (ImGui::Button(szID))
 	{
 		ListUI* pListUI = (ListUI*)CEditorMgr::GetInst()->FindEditorUI("List");
 		pListUI->SetName("Texture");

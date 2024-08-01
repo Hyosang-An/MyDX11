@@ -15,6 +15,8 @@ private:
 
     D3D11_TEXTURE2D_DESC                m_Desc;
 
+    UINT                                m_RecentBindingRegisterNum;
+
 public:
     ComPtr<ID3D11Texture2D>             GetTex2D() { return m_Tex2D; }
     ComPtr<ID3D11RenderTargetView>      GetRTV() { return m_RTV; }
@@ -35,7 +37,10 @@ public:
     int Create(ComPtr<ID3D11Texture2D> _Tex2D);
 
     void Binding(UINT _registerNum);
+    void Binding_CS_UAV(UINT _RegisterNum);
+
     static void Clear(UINT _registerNum);
+    void Clear_CS_UAV();
 
     virtual int Load(const wstring& _FilePath) override;
     virtual int Save(const wstring& _FilePath) override;

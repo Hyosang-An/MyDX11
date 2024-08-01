@@ -145,6 +145,12 @@
     <ClInclude Include="CPrefab.h">
       <Filter>06. Asset\04. Prefab</Filter>
     </ClInclude>
+    <ClInclude Include="CParticleSystem.h">
+      <Filter>08. Component\RenderComponent\03. ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CSetColorCS.h">
+      <Filter>HLSL\03. Compute\01. SetColorShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -266,6 +272,12 @@
     </ClCompile>
     <ClCompile Include="CPrefab.cpp">
       <Filter>06. Asset\04. Prefab</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticleSystem.cpp">
+      <Filter>08. Component\RenderComponent\03. ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CSetColorCS.cpp">
+      <Filter>HLSL\03. Compute\01. SetColorShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,6 +425,27 @@
     <Filter Include="08. Component\08. Light2D">
       <UniqueIdentifier>{3794311c-54c4-4348-aa13-2acd9f036c7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSL\01. Header">
+      <UniqueIdentifier>{5f4d8f39-c9f4-4efa-af27-10bc2897e12c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\02. Render">
+      <UniqueIdentifier>{868f8309-9d1b-459f-91f9-7e502a086874}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\03. Compute">
+      <UniqueIdentifier>{2b241f67-b290-461c-93a2-f3717c1712a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\02. Render\2D">
+      <UniqueIdentifier>{60303d7f-16cb-428e-af3a-2e15b53213cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\02. Render\3D">
+      <UniqueIdentifier>{0d21fd5e-631f-4a6e-af77-392b912366d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\02. Render\PostProcess">
+      <UniqueIdentifier>{de6b8aba-d95d-4afd-9c56-f218f1df726d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\03. Compute\01. SetColorShader">
+      <UniqueIdentifier>{76aebe77-65e0-4929-9a85-15c1f24aa6a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -420,29 +453,32 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="std2d.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="value.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
     <FxCompile Include="func.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="debug.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="tilemap.fx">
-      <Filter>HLSL</Filter>
+      <Filter>HLSL\01. Header</Filter>
     </FxCompile>
     <FxCompile Include="struct.fx">
-      <Filter>HLSL</Filter>
+      <Filter>HLSL\01. Header</Filter>
+    </FxCompile>
+    <FxCompile Include="value.fx">
+      <Filter>HLSL\01. Header</Filter>
+    </FxCompile>
+    <FxCompile Include="debug.fx">
+      <Filter>HLSL\02. Render\2D</Filter>
+    </FxCompile>
+    <FxCompile Include="std2d.fx">
+      <Filter>HLSL\02. Render\2D</Filter>
+    </FxCompile>
+    <FxCompile Include="tilemap.fx">
+      <Filter>HLSL\02. Render\2D</Filter>
     </FxCompile>
     <FxCompile Include="postprocess_0.fx">
-      <Filter>HLSL</Filter>
+      <Filter>HLSL\02. Render\PostProcess</Filter>
     </FxCompile>
     <FxCompile Include="postprocess_1.fx">
-      <Filter>HLSL</Filter>
+      <Filter>HLSL\02. Render\PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="setcolor.fx">
+      <Filter>HLSL\03. Compute\01. SetColorShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
