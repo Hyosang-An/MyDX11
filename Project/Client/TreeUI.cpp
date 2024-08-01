@@ -53,21 +53,24 @@ void TreeNode::Update()
 
 
 	// NameOnly (폴더 경로 및 확장자를 뺀 파일 이름만 노출)
-	//if (m_OwnerTree->IsShowNameOnly())
-	//{
-	//	path Path = strName;
-	//	strName = Path.stem().string();
-	//}
+	if (m_OwnerTree->IsShowNameOnly())
+	{
+		path Path = strName;
+		strName = Path.stem().string();
+	}
 
-	//ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.4f, 0.4f, 0.4f, 1.0f)); // Gray color for normal state
-	//ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Red color on hover
-	//ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));  // Green color on active
+	bool bColorPushed = false;
+
+	if (m_Folder)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0.4f, 1.0f)); // Gray color for text
+		bColorPushed = true;
+	}
+
 
 	if (ImGui::TreeNodeEx(strName.c_str(), Flag))
 	{
 		// 우클릭 팝업메뉴
-		//m_OwnerTree->PopupMenu(this);
-
 		if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 		{
 			m_OwnerTree->PopupMenu(this);
@@ -90,11 +93,17 @@ void TreeNode::Update()
 				m_OwnerTree->SetClickedNode(nullptr);
 		}
 
+		// Drag, Drop 체크는 하위노드 Update 전에 처리해야 한다!
 		// Drag 체크	
 		DragCheck();
-
 		// Drop 체크
 		DropCheck();
+
+		if (bColorPushed)
+		{
+			ImGui::PopStyleColor(1);
+			bColorPushed = false;
+		}
 
 		for (size_t i = 0; i < m_vecChildNode.size(); ++i)
 		{
@@ -109,9 +118,12 @@ void TreeNode::Update()
 	{
 		// Drag 체크	
 		DragCheck();
+		// Drop 체크
+		DropCheck();
 	}
 
-	//ImGui::PopStyleColor(3);
+	if (bColorPushed)
+		ImGui::PopStyleColor(1);
 }
 
 void TreeNode::DragCheck()

@@ -14,6 +14,7 @@ private:
 
     bool                m_Frame;
     bool                m_Selected;
+    bool                m_Folder = false;
 
 
 public:
@@ -23,10 +24,12 @@ public:
     void SetFrame(bool _Frame) { m_Frame = _Frame; }
     bool IsFrame() { return m_Frame; }
 
+    void SetFolder(bool _folder) { m_Folder = _folder; }
+
     DWORD_PTR GetData() { return m_Data; }
 
     void AddChildNode(TreeNode* _Node) { m_vecChildNode.push_back(_Node); }
-
+    const vector<TreeNode*>& GetVecChildNode() { return m_vecChildNode; }
     void DragCheck();
     void DropCheck();
 

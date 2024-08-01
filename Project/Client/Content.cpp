@@ -8,6 +8,7 @@
 #include <Engine/CAssetMgr.h>
 #include <Engine/assets.h>
 #include <Engine/CTaskMgr.h>
+#include <sstream>  // stringstream을 사용하기 위한 헤더 파일 추가
 
 Content::Content()
 {
@@ -47,6 +48,27 @@ void Content::Update()
 
 void Content::RenewContent()
 {
+	//// 트리의 내용을 전부 제거
+	//m_Tree->Clear();
+
+	//// 부모노드를 지정하지 않음 == 루트노드 입력
+	//TreeNode* pRoot = m_Tree->AddNode(nullptr, "Root");
+
+	//for (UINT i = 0; i < (UINT)ASSET_TYPE::END; ++i)
+	//{
+	//	TreeNode* pNode = m_Tree->AddNode(pRoot, ToString((ASSET_TYPE)i));
+	//	pNode->SetFrame(true);
+
+	//	const map<wstring, Ptr<CAsset>>& assetMap = CAssetMgr::GetInst()->GetAssetMap((ASSET_TYPE)i);
+
+	//	for (const auto& pair : assetMap)
+	//	{
+	//		// Asset의 주소값을 Data로 넣어준다. 이때, pair가 const & 이므로, pair.second.Get() 도 const 함수여야 한다.
+	//		m_Tree->AddNode(pNode, string(pair.first.begin(), pair.first.end()), (DWORD_PTR)pair.second.Get());
+	//	}
+	//}
+
+
 	// 트리의 내용을 전부 제거
 	m_Tree->Clear();
 
@@ -58,12 +80,43 @@ void Content::RenewContent()
 		TreeNode* pNode = m_Tree->AddNode(pRoot, ToString((ASSET_TYPE)i));
 		pNode->SetFrame(true);
 
-		const map<wstring, Ptr<CAsset>>& assetMap = CAssetMgr::GetInst()->GetAssetMap((ASSET_TYPE)i);
+		const std::map<std::wstring, Ptr<CAsset>>& mapAsset = CAssetMgr::GetInst()->GetAssetMap((ASSET_TYPE)i);
 
-		for (const auto& pair : assetMap)
+		for (const auto& pair : mapAsset)
 		{
-			// Asset의 주소값을 Data로 넣어준다. 이때, pair가 const & 이므로, pair.second.Get() 도 const 함수여야 한다.
-			m_Tree->AddNode(pNode, string(pair.first.begin(), pair.first.end()), (DWORD_PTR)pair.second.Get());
+			// 경로를 분석하여 폴더와 파일을 구분
+			std::string fullPath(pair.first.begin(), pair.first.end());
+			std::stringstream ss(fullPath);
+			std::string segment;
+			TreeNode* currentParent = pNode;
+
+			// 경로의 각 부분에 대해 노드를 추가
+			while (std::getline(ss, segment, '\\'))
+			{
+				// 만약 다음에 읽을 부분이 없다면, 이 segment가 파일 이름임을 의미
+				if (ss.eof())
+				{
+					m_Tree->AddNode(currentParent, fullPath, (DWORD_PTR)pair.second.Get());
+					break;
+				}
+
+				// 폴더 노드 생성
+
+				auto& vecChildNode = currentParent->GetVecChildNode();
+				auto it = std::find_if(vecChildNode.begin(), vecChildNode.end(),
+					[&segment](TreeNode* node) { return node->GetName() == segment; });
+
+				if (it == vecChildNode.end())
+				{
+					TreeNode* newNode = m_Tree->AddNode(currentParent, segment);
+					newNode->SetFolder(true);
+					currentParent = newNode;
+				}
+				else
+				{
+					currentParent = *it;
+				}
+			}
 		}
 	}
 }
@@ -137,29 +190,35 @@ void Content::FindAssetName(const wstring& _FolderPath, const wstring& _Filter)
 {
 	WIN32_FIND_DATA tFindData = {};
 
-	// 경로에 맞는 파일 및 폴더를 탐색할 수 있는 커널오브젝트 생성
+	// 경로에 맞는 파일 및 폴더를 탐색할 수 있는 커널 오브젝트 생성
 	wstring strFindPath = _FolderPath + _Filter;
 	HANDLE hFinder = FindFirstFile(strFindPath.c_str(), &tFindData);
-	assert(hFinder != INVALID_HANDLE_VALUE);
+	if (hFinder == INVALID_HANDLE_VALUE)
+	{
+		assert(!"파일을 찾을 수 없습니다");
+		return;
+	}
 
-	// 탐색 커널오브젝트를 이용해서 다음 파일을 반복해서 찾아나감
-	while (FindNextFile(hFinder, &tFindData))
+	do
 	{
 		wstring strFindName = tFindData.cFileName;
 
-		if (tFindData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
+		if (tFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
-			if (strFindName == L"..")
-				continue;
-
-			FindAssetName(_FolderPath + strFindName + L"\\", _Filter);
+			// 폴더면 재귀 호출
+			if (strFindName != L"." && strFindName != L"..")
+			{
+				FindAssetName(_FolderPath + strFindName + L"\\", _Filter);
+			}
 		}
+
+		// 파일이면 경로 추가
 		else
 		{
 			wstring RelativePath = CPathMgr::GetInst()->GetRelativePath(_FolderPath + strFindName);
 			m_vecAssetPath.push_back(RelativePath);
 		}
-	}
+	} while (FindNextFile(hFinder, &tFindData));
 
 	FindClose(hFinder);
 }
