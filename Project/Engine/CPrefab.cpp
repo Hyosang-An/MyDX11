@@ -2,6 +2,7 @@
 #include "CPrefab.h"
 
 #include "CGameObject.h"
+#include "CPathMgr.h"
 
 OBJECT_SAVE  CPrefab::g_ObjectSaveFunc = nullptr;
 OBJECT_LOAD  CPrefab::g_ObjectLoadFunc = nullptr;
@@ -24,9 +25,13 @@ CGameObject* CPrefab::Instantiate()
 
 int CPrefab::Save(const wstring& _FilePath)
 {
+    // 어디에 저장해뒀는지 알고 있는게 좋음
+    wstring relativePath = CPathMgr::GetInst()->GetRelativePath(_FilePath);
+    SetRelativePath(relativePath);
+
     std::filesystem::path dir_path = _FilePath;
     if (!std::filesystem::exists(dir_path.parent_path()))
-        std::filesystem::create_directories(dir_path.parent_path());
+        std::filesystem::create_directories(dir_path.parent_path()); // 중간 디렉토리 재귀적으로 생성
 
     FILE* File = nullptr;
     _wfopen_s(&File, _FilePath.c_str(), L"wb");

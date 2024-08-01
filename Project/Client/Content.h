@@ -5,7 +5,7 @@ class Content :
 {
 private:
     class TreeUI* m_Tree;
-    vector<wstring> m_vecAssetPath; // Contents 폴더에 있는 에셋 상대 경로
+    vector<wstring> m_vecAssetRelativePath; // Contents 폴더에 있는 에셋 상대 경로
 
 private:
     void RenewContent();

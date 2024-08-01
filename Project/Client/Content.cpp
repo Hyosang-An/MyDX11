@@ -141,9 +141,9 @@ void Content::Reload()
 	FindAssetName(ContentPath, L"*.*");
 
 	// 알아낸 에셋 파일들의 경로를 통해서 Asset 들을 상대경로를 Key값으로 AssetMgr 에 로딩한다.
-	for (size_t i = 0; i < m_vecAssetPath.size(); ++i)
+	for (size_t i = 0; i < m_vecAssetRelativePath.size(); ++i)
 	{
-		LoadAsset(m_vecAssetPath[i]);
+		LoadAsset(m_vecAssetRelativePath[i]);
 	}
 
 
@@ -195,7 +195,7 @@ void Content::FindAssetName(const wstring& _FolderPath, const wstring& _Filter)
 	HANDLE hFinder = FindFirstFile(strFindPath.c_str(), &tFindData);
 	if (hFinder == INVALID_HANDLE_VALUE)
 	{
-		assert(!"파일을 찾을 수 없습니다");
+		assert(!"해당 경로를 찾을 수 없습니다");
 		return;
 	}
 
@@ -216,7 +216,7 @@ void Content::FindAssetName(const wstring& _FolderPath, const wstring& _Filter)
 		else
 		{
 			wstring RelativePath = CPathMgr::GetInst()->GetRelativePath(_FolderPath + strFindName);
-			m_vecAssetPath.push_back(RelativePath);
+			m_vecAssetRelativePath.push_back(RelativePath);
 		}
 	} while (FindNextFile(hFinder, &tFindData));
 

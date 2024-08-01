@@ -127,3 +127,29 @@ void LoadWString(wstring& _String, FILE* _File)
 	_String.resize(len);
 	fread((wchar_t*)_String.c_str(), sizeof(wchar_t), len, _File);
 }
+
+wstring incrementTrailingNumber(const std::wstring& input)
+{
+	size_t length = input.length();
+	size_t pos = length; // 숫자가 아닌 부분의 위치
+
+	// 문자열의 끝에서부터 숫자가 아닌 부분을 찾습니다.
+	while (pos > 0 && std::isdigit(input[pos - 1])) {
+		--pos;
+	}
+
+	// 숫자가 아닌 부분과 숫자 부분을 분리합니다.
+	std::wstring nonNumberPart = input.substr(0, pos);
+	std::wstring numberPart = input.substr(pos);
+
+	// 숫자가 있는 경우 숫자를 증가시킵니다.
+	if (!numberPart.empty()) {
+		int number = std::stoi(numberPart);  // 숫자로 변환
+		number++;  // 숫자 증가
+		return nonNumberPart + std::to_wstring(number);  // 증가된 숫자와 결합
+	}
+	else {
+		// 숫자가 없는 경우 숫자 1을 추가합니다.
+		return nonNumberPart + L"_1";
+	}
+}

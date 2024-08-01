@@ -29,6 +29,6 @@ public:
     void* GetVtxSysMem() { return m_VtxSysMem; }
 
     virtual int Load(const wstring& _FilePath) { return S_OK; }
-    virtual int Save(const wstring& _RelativePath) { return S_OK; }
+    virtual int Save(const wstring& _FilePath) { return S_OK; }
 };
 

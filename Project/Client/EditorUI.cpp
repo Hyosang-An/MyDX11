@@ -34,16 +34,7 @@ void EditorUI::Tick()
 	{
 		// Modaless
 		if (false == m_Modal)
-		{
-			// Test
-			//	// 최소 크기와 최대 크기 설정
-			//ImVec2 minWindowSize(300, 300);
-			//ImVec2 maxWindowSize(800, 800);
-
-			//// 다음 윈도우 크기 제한 설정
-			//ImGui::SetNextWindowSizeConstraints(minWindowSize, maxWindowSize);
-			// ~Test
-			
+		{			
 			ImGui::Begin(m_FullName.c_str(), &bActive, flags);
 
 			if (m_Active != bActive)

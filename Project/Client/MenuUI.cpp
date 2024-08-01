@@ -23,7 +23,7 @@ MenuUI::~MenuUI()
 
 void MenuUI::Init()
 {
-	m_lastSaveDirectory = CPathMgr::GetInst()->GetContentsPath() + L"level";
+	m_lastSaveDirectory = CPathMgr::GetInst()->GetContentsPath() + L"level\\";
 }
 
 void MenuUI::Tick()
@@ -296,7 +296,7 @@ void MenuUI::Assets()
 			// Key는 저장 상대경로
 			wstring relativePathKey = CreateRelativePathAssetKey(ASSET_TYPE::MATERIAL, L"Default Material");
 			CAssetMgr::GetInst()->AddAsset<CMaterial>(relativePathKey, pMtrl);
-			pMtrl->Save(relativePathKey);
+			pMtrl->Save(CPathMgr::GetInst()->GetContentsPath() + relativePathKey);
 		}
 
 		EditorUI* pSpriteEditor = CEditorMgr::GetInst()->FindEditorUI("SpriteEditor");

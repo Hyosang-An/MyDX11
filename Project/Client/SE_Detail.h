@@ -7,13 +7,17 @@ public:
     SE_Detail();
     ~SE_Detail();
 
-private:
     Ptr<CTexture>   m_AtlasTex;
+    Vec2            m_SpriteLT;
+    Vec2            m_SpriteSize;
+
+    wstring         m_lastFileName;
+    wstring         m_lastSaveDirectory;
 
 private:
     void Atlas();
     void AtlasInfo();
-    void StripeInfo();
+    void SpriteInfo();
 
 public:
     void SetAtlasTex(Ptr<CTexture> _Tex);
@@ -21,6 +25,7 @@ public:
 private:
     void SelectTexture(DWORD_PTR _ListUI);
     
+    void SaveSprite();
 
 
 public:

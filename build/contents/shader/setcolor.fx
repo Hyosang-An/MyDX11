@@ -26,7 +26,7 @@ void CS_SetColor(int3 _ID : SV_DispatchThreadID)
     else if (500 <= _ID.x && _ID.x <= 524)
         g_TargetTex[_ID.xy] = g_vec4_0;
     else
-        g_TargetTex[_ID.xy] = float4(0.f, 0.f, 0.f, 0.f);
+        g_TargetTex[_ID.xy] = float4(0.f, 0.f, 0.f, 1.f);
 }
 
 #endif

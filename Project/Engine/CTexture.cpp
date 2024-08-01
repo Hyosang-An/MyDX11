@@ -71,7 +71,7 @@ int CTexture::Load(const wstring& _FilePath)
 	return S_OK;
 }
 
-int CTexture::Save(const wstring& _RelativePath)
+int CTexture::Save(const wstring& _FilePath)
 {
 	return 0;
 }

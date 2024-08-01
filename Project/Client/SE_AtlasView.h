@@ -23,7 +23,7 @@ private:
 
 public:
     void SetAtlasTex(Ptr<CTexture> _Tex);
-    std::pair<Vec2, Vec2> GetStripeBoxPosOnOriginalTex();
+    std::pair<Vec2, Vec2> GetSpriteBoxPosOnOriginalTex();
 
 private:
     void WheelCheck();

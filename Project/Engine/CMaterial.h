@@ -32,7 +32,7 @@ public:
 
 public:
     virtual int Load(const wstring& _FilePath) override;
-    virtual int Save(const wstring& _RelativePath) override;
+    virtual int Save(const wstring& _FilePath) override;
 };
 
 template<typename T>

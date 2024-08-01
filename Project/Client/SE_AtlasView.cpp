@@ -53,6 +53,9 @@ void SE_AtlasView::SetAtlasTex(Ptr<CTexture> _Tex)
 
 void SE_AtlasView::WheelCheck()
 {
+	if (ImGui::IsWindowHovered() == false || ImGui::IsKeyDown(ImGuiKey_LeftCtrl) == false)
+		return;
+
 	if (0 < ImGui::GetIO().MouseWheel)
 	{
 		m_Ratio += 0.05f;
@@ -220,7 +223,7 @@ void SE_AtlasView::CalcSpriteSize(Vec2 _PixelPos)
 }
 
 
-std::pair<Vec2, Vec2> SE_AtlasView::GetStripeBoxPosOnOriginalTex()
+std::pair<Vec2, Vec2> SE_AtlasView::GetSpriteBoxPosOnOriginalTex()
 {
 	return std::pair<Vec2, Vec2>({ m_stripeBoxLTonOriginalTex.x, m_stripeBoxLTonOriginalTex.y }, {m_stripeBoxRBonOriginalTex.x, m_stripeBoxRBonOriginalTex.y});
 }
