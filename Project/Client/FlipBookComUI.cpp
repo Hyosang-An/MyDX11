@@ -2,7 +2,7 @@
 #include "FlipBookComUI.h"
 
 FlipBookComUI::FlipBookComUI()
-	: ComponentUI(COMPONENT_TYPE::FLIPBOOKCOMPONENT)
+	: ComponentUI(COMPONENT_TYPE::FLIPBOOK_COMPONENT)
 {
 }
 

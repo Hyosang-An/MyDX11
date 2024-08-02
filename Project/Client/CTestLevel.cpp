@@ -20,6 +20,8 @@
 
 #include <Engine/CSetColorCS.h>
 
+#include <Engine/CStructuredBuffer.h>
+
 void CTestLevel::CreateTestLevel()
 {
 	// Material
@@ -45,6 +47,21 @@ void CTestLevel::CreateTestLevel()
 	cs.SetClearColor(Vec4(0.f, 1.f, 0.f, 1.f));
 	cs.Execute();
 	pMtrl->SetTexParam(TEX_0, pTestTex);
+
+
+	// 바뀐 구조화 버퍼 테스트
+	CStructuredBuffer* pBuffer = new CStructuredBuffer;
+	pBuffer->Create(sizeof(tParticle), 1, SB_TYPE::SRV_UAV, true);
+
+	tParticle Particle = {};
+	tParticle Particle2 = {};
+
+	Particle.Active = true;
+	Particle.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
+	pBuffer->SetData(&Particle);
+
+	pBuffer->GetData(&Particle2);
+	delete pBuffer;
 
 
 	// Level 생성

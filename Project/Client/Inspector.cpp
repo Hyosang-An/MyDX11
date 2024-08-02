@@ -118,6 +118,12 @@ void Inspector::Update()
 		return;
 	}
 
+	if (m_TargetObject->IsDead())
+	{
+		SetTargetObject(nullptr);
+		return;
+	}
+
 	SetTargetObject(m_TargetObject);
 
 	// ===========
@@ -171,10 +177,10 @@ void Inspector::CreateComponentUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]->SetChildSize(ImVec2(0.f, 200.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::CAMERA]);
 
-	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOKCOMPONENT] = new FlipBookComUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOKCOMPONENT]->SetName("FlipBookComUI");
-	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOKCOMPONENT]->SetChildSize(ImVec2(0.f, 100.f));
-	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOKCOMPONENT]);
+	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOK_COMPONENT] = new FlipBookComUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOK_COMPONENT]->SetName("FlipBookComUI");
+	m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOK_COMPONENT]->SetChildSize(ImVec2(0.f, 100.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::FLIPBOOK_COMPONENT]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER] = new MeshRenderUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetName("MeshRenderUI");

@@ -75,7 +75,9 @@ void Outliner::RenewLevel()
 
 		for (size_t i = 0; i < vecParentObjects.size(); ++i)
 		{
-			AddGameObject(pRootNode, vecParentObjects[i]);
+			// 오브젝트가 살아있는 것만
+			if (!vecParentObjects[i]->IsDead())
+				AddGameObject(pRootNode, vecParentObjects[i]);
 		}
 	}
 }

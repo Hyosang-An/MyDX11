@@ -9,7 +9,7 @@
 
 
 CFlipBookComponent::CFlipBookComponent()
-	: CComponent(COMPONENT_TYPE::FLIPBOOKCOMPONENT)
+	: CComponent(COMPONENT_TYPE::FLIPBOOK_COMPONENT)
 	, m_CurFlipBook(nullptr)
 	, m_CurFrmIdx(0)
 {

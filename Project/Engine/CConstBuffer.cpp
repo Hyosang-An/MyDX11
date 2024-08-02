@@ -14,6 +14,8 @@ CConstBuffer::~CConstBuffer()
 
 int CConstBuffer::Create(CB_TYPE _type, UINT _bufferSize)
 {
+    assert(0 == (_bufferSize % 16));
+
     m_CBType = _type;
 
     m_Desc.ByteWidth = _bufferSize;

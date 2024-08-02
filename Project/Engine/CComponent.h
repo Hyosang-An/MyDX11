@@ -35,6 +35,7 @@ public:
     CCollider2D* Collider2D() { return m_Owner->Collider2D(); }
     CFlipBookComponent* FlipBookComponent() { return m_Owner->FlipBookComponent(); }
     CLight2D* Light2D() { return m_Owner->Light2D(); }
+    CParticleSystem* ParticleSystem() { return m_Owner->ParticleSystem(); }
     
 
 

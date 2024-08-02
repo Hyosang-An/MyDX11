@@ -2,6 +2,7 @@
 
 #include "CRenderMgr.h"
 #include "CTaskMgr.h"
+#include "CLevelMgr.h"
 
 #include "CGameObject.h"
 
@@ -22,6 +23,8 @@ void DeleteObject(CGameObject* _DeleteObject)
 	task.Param_0 = (DWORD_PTR)_DeleteObject;
 
 	CTaskMgr::GetInst()->AddTask(task);
+
+	CLevelMgr::GetInst()->LevelChanged();
 }
 
 void ChangeLevelState(LEVEL_STATE _NextState)

@@ -229,7 +229,7 @@ CComponent* CLevelSaveLoad::GetComponent(COMPONENT_TYPE _Type)
 		case COMPONENT_TYPE::LIGHT3D:
 			break;
 
-		case COMPONENT_TYPE::FLIPBOOKCOMPONENT:
+		case COMPONENT_TYPE::FLIPBOOK_COMPONENT:
 			return new CFlipBookComponent;
 
 		case COMPONENT_TYPE::ANIMATOR3D:
