@@ -4,12 +4,12 @@
 class SE_AtlasView;
 class SE_Detail;
 
-class SpriteEditor :
+class SpriteCreator :
     public EditorUI
 {
 public:
-    SpriteEditor();
-    ~SpriteEditor();
+    SpriteCreator();
+    ~SpriteCreator();
 
 private:
     SE_AtlasView* m_AtlasView = nullptr;

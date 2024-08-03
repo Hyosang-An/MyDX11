@@ -1,21 +1,21 @@
 #include "pch.h"
-#include "SpriteEditor.h"
+#include "SpriteCreator.h"
 
 
 #include "CEditorMgr.h"
 #include "SE_AtlasView.h"
 #include "SE_Detail.h"
 
-SpriteEditor::SpriteEditor()
+SpriteCreator::SpriteCreator()
 {
 	UseMenuBar(true);
 }
 
-SpriteEditor::~SpriteEditor()
+SpriteCreator::~SpriteCreator()
 {
 }
 
-void SpriteEditor::Init()
+void SpriteCreator::Init()
 {
 	m_AtlasView = (SE_AtlasView*)CEditorMgr::GetInst()->FindEditorUI("SE_AtlasView");
 	m_Detail = (SE_Detail*)CEditorMgr::GetInst()->FindEditorUI("SE_Detail");
@@ -29,7 +29,7 @@ void SpriteEditor::Init()
 	m_Detail->SetAtlasTex(CAssetMgr::GetInst()->Load<CTexture>(L"texture\\link.png", L"texture\\link.png"));
 }
 
-void SpriteEditor::Update()
+void SpriteCreator::Update()
 {
 	if (ImGui::BeginMenuBar())
 	{
@@ -55,13 +55,13 @@ void SpriteEditor::Update()
 	}
 }
 
-void SpriteEditor::Activate()
+void SpriteCreator::Activate()
 {
 	m_AtlasView->SetActive(true);
 	m_Detail->SetActive(true);
 }
 
-void SpriteEditor::Deactivate()
+void SpriteCreator::Deactivate()
 {
 	m_AtlasView->SetActive(false);
 	m_Detail->SetActive(false);
@@ -125,7 +125,7 @@ ImVec2 Splitter(float thickness, float* leftSize, float* rightSize, float min_le
 	return remainRegionAvail;
 }
 
-//void SpriteEditor::Update()
+//void SpriteCreator::Update()
 //{
 //	ImVec2 available_size = ImGui::GetContentRegionAvail();
 //	available_size.x -= 8.f;

@@ -289,6 +289,7 @@ void MenuUI::Assets()
 {
 	if (ImGui::BeginMenu("Assets"))
 	{
+		// Create Empty Material
 		if (ImGui::MenuItem("Create Empty Material"))
 		{
 			Ptr<CMaterial> pMtrl = new CMaterial;
@@ -299,12 +300,22 @@ void MenuUI::Assets()
 			pMtrl->Save(CPathMgr::GetInst()->GetContentsPath() + relativePathKey);
 		}
 
-		EditorUI* pSpriteEditor = CEditorMgr::GetInst()->FindEditorUI("SpriteEditor");
+		// SpriteCreator
+		EditorUI* pSpriteEditor = CEditorMgr::GetInst()->FindEditorUI("SpriteCreator");
 		bool IsActive = pSpriteEditor->IsActive();
 
-		if (ImGui::MenuItem("Sprite Editor", nullptr, &IsActive))
+		if (ImGui::MenuItem("Create Sprite", nullptr, &IsActive))
 		{
-			CEditorMgr::GetInst()->FindEditorUI("SpriteEditor")->SetActive(IsActive);
+			CEditorMgr::GetInst()->FindEditorUI("SpriteCreator")->SetActive(IsActive);
+		}
+
+		// FlipBook Editor
+		EditorUI* pFlipBookEditor = CEditorMgr::GetInst()->FindEditorUI("FlipBookEditor");
+		IsActive = pFlipBookEditor->IsActive();
+
+		if (ImGui::MenuItem("Edit FlipBook", nullptr, &IsActive))
+		{
+			CEditorMgr::GetInst()->FindEditorUI("FlipBookEditor")->SetActive(IsActive);
 		}
 
 		ImGui::EndMenu();

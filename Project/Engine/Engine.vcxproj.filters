@@ -465,7 +465,8 @@
     <FxCompile Include="debug.fx">
       <Filter>HLSL\02. Render\2D</Filter>
     </FxCompile>
-    <FxCompile Include="std2d.fx">
+    <FxCompile Include="
+               .fx">
       <Filter>HLSL\02. Render\2D</Filter>
     </FxCompile>
     <FxCompile Include="tilemap.fx">

@@ -11,9 +11,10 @@
 #include "Outliner.h"
 #include "ListUI.h"
 #include "MenuUI.h"
-#include "SpriteEditor.h"
+#include "SpriteCreator.h"
 #include "SE_AtlasView.h"
 #include "SE_Detail.h"
+#include "FlipBookEditor.h"
 
 #include "ParamUI.h"
 
@@ -137,11 +138,18 @@ void CEditorMgr::CreateEditorUI()
     pUI->SetName("SE_Detail");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
-    // SpriteEditor
-    pUI = new SpriteEditor;
+    // SpriteCreator
+    pUI = new SpriteCreator;
     pUI->Init();
     pUI->SetActive(false);
-    pUI->SetName("SpriteEditor");
+    pUI->SetName("SpriteCreator");
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    // FlipBookEditor
+    pUI = new FlipBookEditor;
+    pUI->Init();
+    pUI->SetActive(true);
+    pUI->SetName("FlipBookEditor");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 }
 
@@ -178,7 +186,7 @@ EditorUI* CEditorMgr::FindEditorUI(const string& _Name)
 
     if (iter == m_mapUI.end())
     {
-        MessageBox(nullptr, (wstring(_Name.begin(), _Name.end()) + L"UI를 찾지 못함").c_str(), L"Error", MB_OK);
+        MessageBox(nullptr, (wstring(_Name.begin(), _Name.end()) + L" UI를 찾지 못함").c_str(), L"Error", MB_OK);
         return nullptr;
     }
 

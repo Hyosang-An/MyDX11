@@ -10,6 +10,7 @@ public:
     Ptr<CTexture>   m_AtlasTex;
     Vec2            m_SpriteLT;
     Vec2            m_SpriteSize;
+    Vec2            m_BackgroundSize = { 200, 200 };
 
     wstring         m_lastFileName;
     wstring         m_lastSaveDirectory;

@@ -141,7 +141,10 @@ void SE_Detail::SpriteInfo()
 	ImGui::SameLine(100);
 	ImGui::InputFloat2("##Right Bottom", m_SpriteSize, "%.0f", ImGuiInputTextFlags_ReadOnly);
 
+	ImGui::NewLine();
 
+	ImGui::Text("Set Background Size");
+	ImGui::InputFloat2("##Set Background Size", m_BackgroundSize, "%.0f");
 
 	// "Save Sprite" ¹öÆ°
 	ImGui::BeginDisabled(m_SpriteSize.x * m_SpriteSize.y == 0 || m_AtlasTex == nullptr);
@@ -236,7 +239,7 @@ void SE_Detail::SaveSprite()
 
 						Ptr<CSprite> pSprite = new CSprite;
 						pSprite->Create(m_AtlasTex, m_SpriteLT, m_SpriteSize);
-						pSprite->SetBackground(Vec2(200.f, 200.f));
+						pSprite->SetBackground(m_BackgroundSize);
 
 						pSprite->Save(pszFilePath);
 						

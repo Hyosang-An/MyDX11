@@ -165,7 +165,10 @@
     <ClInclude Include="CTestLevel.h" />
     <ClInclude Include="EditorUI.h" />
     <ClInclude Include="FlipBookComUI.h" />
+    <ClInclude Include="FlipBookEditor.h" />
+    <ClInclude Include="FlipBookInspector.h" />
     <ClInclude Include="FlipBookUI.h" />
+    <ClInclude Include="FlipBookViewer.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GraphicShaderUI.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -195,7 +198,7 @@
     <ClInclude Include="SE_Detail.h" />
     <ClInclude Include="SE_Sub.h" />
     <ClInclude Include="SoundUI.h" />
-    <ClInclude Include="SpriteEditor.h" />
+    <ClInclude Include="SpriteCreator.h" />
     <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TextureUI.h" />
@@ -220,7 +223,10 @@
     <ClCompile Include="CTestLevel.cpp" />
     <ClCompile Include="EditorUI.cpp" />
     <ClCompile Include="FlipBookComUI.cpp" />
+    <ClCompile Include="FlipBookEditor.cpp" />
+    <ClCompile Include="FlipBookInspector.cpp" />
     <ClCompile Include="FlipBookUI.cpp" />
+    <ClCompile Include="FlipBookViewer.cpp" />
     <ClCompile Include="GraphicShaderUI.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
@@ -252,7 +258,7 @@
     <ClCompile Include="SE_Detail.cpp" />
     <ClCompile Include="SE_Sub.cpp" />
     <ClCompile Include="SoundUI.cpp" />
-    <ClCompile Include="SpriteEditor.cpp" />
+    <ClCompile Include="SpriteCreator.cpp" />
     <ClCompile Include="SpriteUI.cpp" />
     <ClCompile Include="TextureUI.cpp" />
     <ClCompile Include="TileMapUI.cpp" />

@@ -124,6 +124,15 @@
     <Filter Include="EditorUI\08. SpriteEditor\SE_Sub\SE_Detail">
       <UniqueIdentifier>{791248f4-e51d-4c00-8a65-d9b1281dd968}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditorUI\09. FlipBookEditor">
+      <UniqueIdentifier>{26a850a8-b161-4e1a-931f-3e69c8200f77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\09. FlipBookEditor\FlipBookViewer">
+      <UniqueIdentifier>{0920d4a7-aaf1-46bf-a918-6227a613ff88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\09. FlipBookEditor\FlipBookInspector">
+      <UniqueIdentifier>{e23f732a-3a68-4aa9-bf7b-86cc635563ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -282,8 +291,17 @@
     <ClInclude Include="SE_Detail.h">
       <Filter>EditorUI\08. SpriteEditor\SE_Sub\SE_Detail</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteEditor.h">
+    <ClInclude Include="SpriteCreator.h">
       <Filter>EditorUI\08. SpriteEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="FlipBookEditor.h">
+      <Filter>EditorUI\09. FlipBookEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="FlipBookViewer.h">
+      <Filter>EditorUI\09. FlipBookEditor\FlipBookViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="FlipBookInspector.h">
+      <Filter>EditorUI\09. FlipBookEditor\FlipBookInspector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -429,8 +447,17 @@
     <ClCompile Include="SE_Detail.cpp">
       <Filter>EditorUI\08. SpriteEditor\SE_Sub\SE_Detail</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteEditor.cpp">
+    <ClCompile Include="SpriteCreator.cpp">
       <Filter>EditorUI\08. SpriteEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="FlipBookEditor.cpp">
+      <Filter>EditorUI\09. FlipBookEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="FlipBookViewer.cpp">
+      <Filter>EditorUI\09. FlipBookEditor\FlipBookViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="FlipBookInspector.cpp">
+      <Filter>EditorUI\09. FlipBookEditor\FlipBookInspector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
