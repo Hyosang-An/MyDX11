@@ -69,6 +69,7 @@ void CMaterial::Binding()
 	if (!m_Shader)
 		return;
 
+	// Textrue 바인딩
 	for (int i = 0; i < TEX_PARAM::END; ++i)
 	{
 		if (m_arrTex[i] == nullptr)
@@ -83,10 +84,12 @@ void CMaterial::Binding()
 		}
 	}
 
+	// 상수버퍼 바인딩
 	CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::MATERIAL);
 	pCB->SetData(&m_Const);
 	pCB->Binding();
 
+	// 쉐이더 바인딩
 	m_Shader->Binding();
 }
 

@@ -84,6 +84,7 @@ enum class DS_TYPE
 	GREATER,
 
 	NO_TEST,
+	NO_WRITE,
 	NO_TEST_NO_WRITE,
 
 	END,

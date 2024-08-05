@@ -167,7 +167,7 @@ void CTestLevel::CreateTestLevel()
 	pTileMapObj->Transform()->SetRelativePos(Vec3(-500.f, 250.f, 500.f));
 
 	pTileMapObj->TileMap()->SetRowCol(20, 20);
-	pTileMapObj->TileMap()->SetTileSize(Vec2(64.f, 64.f));
+	pTileMapObj->TileMap()->SetTileSize(Vec2(64.f, 64.f)); // 해상도가 아닌 게임상 Scale
 
 	Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\TILE.bmp");
 	pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas, Vec2(64.f, 64.f));
@@ -190,6 +190,18 @@ void CTestLevel::CreateTestLevel()
 	//pGrayFilterObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ConvexLensMtrl"));
 
 	TestLevel->AddObject(0, pPostProcess_1_Obj);
+
+
+	// Particle Object
+	CGameObject* pParticleObj = new CGameObject;
+	pParticleObj->SetName(L"Particle");
+
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->AddComponent(new CParticleSystem);
+
+	pParticleObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+
+	TestLevel->AddObject(0, pParticleObj);
 
 
 	//// PostProcess Object2 (GaussianBlur)

@@ -19,6 +19,14 @@ struct tLightInfo
     int3 padding; // ÆÐµù
 };
 
-
+// Particle
+struct tParticle
+{
+    float3 vLocalPos;
+    float3 vWorldPos;
+    float4 vColor;
+    float Mass;
+    int Active;
+};
 
 #endif

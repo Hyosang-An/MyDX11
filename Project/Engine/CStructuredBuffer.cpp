@@ -80,43 +80,37 @@ int CStructuredBuffer::Create(UINT _ElementSize, UINT _ElementCount,
 	// 추가버퍼 생성
 	if (m_SysMemMove)
 	{
-		m_Desc.Usage = D3D11_USAGE_DYNAMIC;
-		m_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		m_Desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		//// Test
-		//D3D11_BUFFER_DESC bufferDesc = {};
-		//bufferDesc.Usage = D3D11_USAGE_DYNAMIC;          // 버퍼를 동적으로 사용하도록 설정
-		//bufferDesc.ByteWidth = _ElementSize * _ElementCount; // 버퍼의 총 크기 (바이트 단위)
-		//bufferDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE; // 셰이더에서 리소스를 참조하도록 설정
-		//bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // CPU가 버퍼를 쓸 수 있도록 설정
-		//bufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED; // 구조화된 버퍼로 설정
-		//bufferDesc.StructureByteStride = _ElementSize;   // 각 요소의 크기
+		D3D11_BUFFER_DESC tRWBufferDesc = m_Desc;
+
+		tRWBufferDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		tRWBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		tRWBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 		if (nullptr == _InitData)
 		{
-			hr = DEVICE->CreateBuffer(&m_Desc, nullptr, m_SB_Write.GetAddressOf());
+			hr = DEVICE->CreateBuffer(&tRWBufferDesc, nullptr, m_SB_Write.GetAddressOf());
 		}
 
 		else
 		{
 			D3D11_SUBRESOURCE_DATA sub = {};
 			sub.pSysMem = _InitData;
-			hr = DEVICE->CreateBuffer(&m_Desc, &sub, m_SB_Write.GetAddressOf());
+			hr = DEVICE->CreateBuffer(&tRWBufferDesc, &sub, m_SB_Write.GetAddressOf());
 		}
 
-		m_Desc.Usage = D3D11_USAGE_DEFAULT;
-		m_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+		tRWBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		tRWBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 
 		if (nullptr == _InitData)
 		{
-			hr = DEVICE->CreateBuffer(&m_Desc, nullptr, m_SB_Read.GetAddressOf());
+			hr = DEVICE->CreateBuffer(&tRWBufferDesc, nullptr, m_SB_Read.GetAddressOf());
 		}
 
 		else
 		{
 			D3D11_SUBRESOURCE_DATA sub = {};
 			sub.pSysMem = _InitData;
-			hr = DEVICE->CreateBuffer(&m_Desc, &sub, m_SB_Read.GetAddressOf());
+			hr = DEVICE->CreateBuffer(&tRWBufferDesc, &sub, m_SB_Read.GetAddressOf());
 		}
 	}
 

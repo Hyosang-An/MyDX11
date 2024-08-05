@@ -2,6 +2,8 @@
 #include "CAssetMgr.h"
 #include "CDevice.h"
 
+#include "CParticleTickCS.h"
+
 void CAssetMgr::Init()
 {
 	CreateEngineMesh();
@@ -284,6 +286,17 @@ void CAssetMgr::CreateEngineGraphicShader()
 	AddAsset(L"TileMapShader", pShader);
 
 
+	// ParticleShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\particle.fx", "VS_Particle");
+	pShader->CreatePixelShader(L"shader\\particle.fx", "PS_Particle");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_PARTICLE);
+	AddAsset(L"ParticleRenderShader", pShader);
+
+
 	// GrayFilterShader
 	pShader = new CGraphicShader;
 	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_Screen");
@@ -357,6 +370,11 @@ void CAssetMgr::CreateEngineGraphicShader()
 
 void CAssetMgr::CreateEngineComputeShader()
 {
+	// ParticleTick
+	Ptr<CComputeShader> pCS = nullptr;
+
+	pCS = new CParticleTickCS;
+	AddAsset<CComputeShader>(L"ParticleTickCS", pCS);
 }
 
 void CAssetMgr::CreateEngineMaterial()
@@ -382,6 +400,11 @@ void CAssetMgr::CreateEngineMaterial()
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"TileMapShader"));
 	AddAsset(L"TileMapMtrl", pMtrl);
+
+	// ParticleRenderMtrl
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"ParticleRenderShader"));
+	AddAsset(L"ParticleRenderMtrl", pMtrl);
 
 	// GrayFilterMtrl
 	pMtrl = new CMaterial(true);
