@@ -23,7 +23,9 @@ int CStructuredBuffer::Create(UINT _ElementSize, UINT _ElementCount,
 	// _InitData 기본값: nullptr
 
 	assert(0 == (_ElementSize % 16));	// 구조화 버퍼의 단위는 16바이트이어야 한다.
-	
+
+	m_Type = _Type;
+
 	// CreateBuffer 또는 CreateShaderResourceView를 할 때, 이미 m_SB나 m_SRV가 존재한다면 이를 nullptr로 가리키게 하여 참조 카운트를 줄여줘야한다.
 	m_SB = nullptr;
 	m_SB_Write = nullptr;
@@ -126,7 +128,7 @@ int CStructuredBuffer::Create(UINT _ElementSize, UINT _ElementCount,
 	}
 
 	// UAV 생성
-	if (m_Type == SB_TYPE::SRV_UAV)
+	if (_Type == SB_TYPE::SRV_UAV)
 	{
 		D3D11_UNORDERED_ACCESS_VIEW_DESC Desc = {};
 
@@ -200,4 +202,40 @@ void CStructuredBuffer::Binding(UINT _RegisterNum)
 	CONTEXT->DSSetShaderResources(_RegisterNum, 1, m_SRV.GetAddressOf());
 	CONTEXT->GSSetShaderResources(_RegisterNum, 1, m_SRV.GetAddressOf());
 	CONTEXT->PSSetShaderResources(_RegisterNum, 1, m_SRV.GetAddressOf());
+}
+
+void CStructuredBuffer::Clear(UINT _RegisterNum)
+{
+	ID3D11ShaderResourceView* pSRV = nullptr;
+	CONTEXT->VSSetShaderResources(_RegisterNum, 1, &pSRV);
+	CONTEXT->HSSetShaderResources(_RegisterNum, 1, &pSRV);
+	CONTEXT->DSSetShaderResources(_RegisterNum, 1, &pSRV);
+	CONTEXT->GSSetShaderResources(_RegisterNum, 1, &pSRV);
+	CONTEXT->PSSetShaderResources(_RegisterNum, 1, &pSRV);
+}
+
+void CStructuredBuffer::Binding_CS_SRV(UINT _RegisterNum)
+{
+	m_RecentRegisterNum = _RegisterNum;
+	CONTEXT->CSSetShaderResources(_RegisterNum, 1, m_SRV.GetAddressOf());
+}
+
+void CStructuredBuffer::Clear_CS_SRV()
+{
+	ID3D11ShaderResourceView* pSRV = nullptr;
+	CONTEXT->CSSetShaderResources(m_RecentRegisterNum, 1, &pSRV);
+}
+
+void CStructuredBuffer::Binding_CS_UAV(UINT _RegisterNum)
+{
+	m_RecentRegisterNum = _RegisterNum;
+	UINT i = -1;
+	CONTEXT->CSSetUnorderedAccessViews(_RegisterNum, 1, m_UAV.GetAddressOf(), &i);
+}
+
+void CStructuredBuffer::Clear_CS_UAV()
+{
+	ID3D11UnorderedAccessView* pUAV = nullptr;
+	UINT i = 0;
+	CONTEXT->CSSetUnorderedAccessViews(m_RecentRegisterNum, 1, &pUAV, &i);
 }

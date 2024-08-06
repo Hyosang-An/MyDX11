@@ -12,8 +12,13 @@ struct tParticle
 	Vec3	vWorldPos;
 	Vec4	vColor;
 
-	float	Mass;
-	int		Active;
+    Vec3	vForce;
+    Vec3	vVelocity;
+
+    float	Mass;
+    int		Active;
+
+    int		Padding[2];
 };
 
 class CParticleSystem :
@@ -24,8 +29,10 @@ private:
     int                     m_MaxParticleCount;
     Ptr<CParticleTickCS>    m_TickCS;
 
+    Ptr<CTexture>           m_ParticleTex;
 
-
+public:
+    void SetParticleTexture(Ptr<CTexture> _Texture) { m_ParticleTex = _Texture; }
 
 public:
     virtual void FinalTick() override;

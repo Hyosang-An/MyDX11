@@ -7,7 +7,7 @@ class CParticleTickCS :
     public CComputeShader
 {
 private:
-    CStructuredBuffer* m_ParticleBuffer;
+    CStructuredBuffer* m_ParticleBuffer = nullptr;
 
 
 public:

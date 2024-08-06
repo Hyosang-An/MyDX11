@@ -93,6 +93,7 @@ enum class DS_TYPE
 enum class BS_TYPE
 {
 	DEFAULT,
+	ALPHABLEND_COVERAGE,
 	ALPHABLEND,
 	ONE_ONE,
 	END,

@@ -308,8 +308,30 @@ int CDevice::CreateBlendState()
 	m_BSState[(UINT)BS_TYPE::DEFAULT] = nullptr;
 
 
+	// AlphaBlend - Coverage
+	Desc.AlphaToCoverageEnable = true;	// AlphaToCoverageEnable가 true면, 알파값이 0.5이하인 부분을 렌더링 할 때, 무시한다. -> 경계가 뚜렷한 캐릭터같은 텍스쳐를 렌더링할 때 주로 사용
+	Desc.IndependentBlendEnable = false;
+
+	Desc.RenderTarget[0].BlendEnable = true;
+	Desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	// Src(Pixel RGB) * A     +      Dest(RenderTarget RGB) * (1 - A)
+	Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA; // 계수
+	Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA; // 계수
+
+	Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+
+	if (FAILED(DEVICE->CreateBlendState(&Desc, m_BSState[(UINT)BS_TYPE::ALPHABLEND_COVERAGE].GetAddressOf())))
+	{
+		return E_FAIL;
+	}
+
+
 	// AlphaBlend
-	Desc.AlphaToCoverageEnable = true;
+	Desc.AlphaToCoverageEnable = false;
 	Desc.IndependentBlendEnable = false;
 
 	Desc.RenderTarget[0].BlendEnable = true;
@@ -328,7 +350,6 @@ int CDevice::CreateBlendState()
 	{
 		return E_FAIL;
 	}
-
 
 
 	// One - One Blend

@@ -19,7 +19,7 @@ int CParticleTickCS::Binding()
 	if (nullptr == m_ParticleBuffer)
 		return E_FAIL;
 
-	//m_ParticleBuffer->Bind_CS_UAV(0);
+	m_ParticleBuffer->Binding_CS_UAV(0);
 	m_Const.iArr[0] = m_ParticleBuffer->GetElementCount();
 
 	return S_OK;
@@ -38,5 +38,6 @@ void CParticleTickCS::CalcGroupNum()
 
 void CParticleTickCS::Clear()
 {
-
+	m_ParticleBuffer->Clear_CS_UAV();
+	m_ParticleBuffer = nullptr;
 }

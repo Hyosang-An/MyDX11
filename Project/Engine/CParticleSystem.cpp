@@ -10,7 +10,7 @@
 CParticleSystem::CParticleSystem()
 	: CRenderComponent(COMPONENT_TYPE::PARTICLE_SYSTEM)
 	, m_ParticleBuffer(nullptr)
-	, m_MaxParticleCount(100)
+	, m_MaxParticleCount(30)
 {
 	// Mesh / Material 
 	SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
@@ -20,18 +20,23 @@ CParticleSystem::CParticleSystem()
 	m_TickCS = (CParticleTickCS*)CAssetMgr::GetInst()->FindAsset<CComputeShader>(L"ParticleTickCS").Get();
 
 
+	// Test용 Texture
+	m_ParticleTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\particle\\CartoonSmoke.png");
+	GetMaterial()->SetTexParam(TEX_0, m_ParticleTex);
+
 	// 파티클 100개 초기 설정
 	tParticle arrParticle[100] = {};
-	Vec2 vResolution = CDevice::GetInst()->GetResolution();
-	Vec3 vStart = Vec3(-vResolution.x / 2.f, 0.f, 100.f);
-	float step = vResolution.x / (float)m_MaxParticleCount;
+
+	float Angle = XM_2PI / m_MaxParticleCount;
 
 	for (int i = 0; i < m_MaxParticleCount; ++i)
 	{
-		arrParticle[i].Active = true;
+		arrParticle[i].Active = false;
 		arrParticle[i].Mass = 1.f;
 		arrParticle[i].vLocalPos = Vec3(0.f, 0.f, 0.f);
-		arrParticle[i].vWorldPos = vStart + Vec3(step * (float)i, 0.f, 0.f);
+		arrParticle[i].vWorldPos = Vec3(0.f, 0.f, 0.f);
+		arrParticle[i].vColor = Vec4(0.9f, 0.34f, 0.5f, 1.f);
+		arrParticle[i].vVelocity = Vec3(cosf(Angle * (float)i), sinf(Angle * (float)i), 0.f) * 200.f;
 	}
 
 	m_ParticleBuffer = new CStructuredBuffer;
@@ -56,13 +61,16 @@ void CParticleSystem::Render()
 	Transform()->Binding();
 
 	// 파티클 버퍼 바인딩
-	m_ParticleBuffer->Binding(20);
+	m_ParticleBuffer->Binding(20);	// t20
 
 	// 재질정보 바인딩
 	GetMaterial()->Binding();
 
 	// 렌더링
 	GetMesh()->Render_Particle(m_MaxParticleCount);
+
+	// 파티클 버퍼 바인딩 해제
+	m_ParticleBuffer->Clear(20);	// t20
 }
 
 void CParticleSystem::SaveToFile(FILE* _File)
