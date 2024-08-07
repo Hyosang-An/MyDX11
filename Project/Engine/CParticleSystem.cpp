@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CParticleSystem.h"
 
+#include "CTimeMgr.h"
+
 #include "CDevice.h"
 #include "CAssetMgr.h"
 #include "CStructuredBuffer.h"
@@ -9,11 +11,9 @@
 
 CParticleSystem::CParticleSystem()
 	: CRenderComponent(COMPONENT_TYPE::PARTICLE_SYSTEM)
-	, m_ParticleBuffer(nullptr)
-	, m_MaxParticleCount(30)
 {
 	// Mesh / Material 
-	SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"PointMesh"));
 	SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"ParticleRenderMtrl"));
 
 	// ParticleTick ComputeShader
@@ -21,7 +21,7 @@ CParticleSystem::CParticleSystem()
 
 
 	// Test용 Texture
-	m_ParticleTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\particle\\CartoonSmoke.png");
+	m_ParticleTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\particle\\TX_GlowScene_2.png");
 	GetMaterial()->SetTexParam(TEX_0, m_ParticleTex);
 
 	// 파티클 100개 초기 설정
@@ -31,16 +31,20 @@ CParticleSystem::CParticleSystem()
 
 	for (int i = 0; i < m_MaxParticleCount; ++i)
 	{
-		arrParticle[i].Active = false;
+		arrParticle[i].Active = true;
 		arrParticle[i].Mass = 1.f;
 		arrParticle[i].vLocalPos = Vec3(0.f, 0.f, 0.f);
 		arrParticle[i].vWorldPos = Vec3(0.f, 0.f, 0.f);
 		arrParticle[i].vColor = Vec4(0.9f, 0.34f, 0.5f, 1.f);
-		arrParticle[i].vVelocity = Vec3(cosf(Angle * (float)i), sinf(Angle * (float)i), 0.f) * 200.f;
+		arrParticle[i].vWorldScale = Vec3(20.f, 20.f, 0.f);
+		arrParticle[i].vVelocity = Vec3(cosf(Angle * (float)i), sinf(Angle * (float)i), 0.f) * 10.f;
 	}
 
 	m_ParticleBuffer = new CStructuredBuffer;
 	m_ParticleBuffer->Create(sizeof(tParticle), m_MaxParticleCount, SB_TYPE::SRV_UAV, true, arrParticle);
+
+	m_SpawnCountBuffer = new CStructuredBuffer;
+	m_SpawnCountBuffer->Create(sizeof(tSpawnCount), 1, SB_TYPE::SRV_UAV, true, nullptr);
 }
 
 CParticleSystem::~CParticleSystem()
@@ -51,7 +55,18 @@ CParticleSystem::~CParticleSystem()
 
 void CParticleSystem::FinalTick()
 {
+	// SpawnCount
+	m_Time += EngineDT;
+	if (1.f <= m_Time)
+	{
+		tSpawnCount count = {};
+		count.iSpawnCount = 1;
+		m_SpawnCountBuffer->SetData(&count);
+		m_Time = 0.f;
+	}
+
 	m_TickCS->SetParticleBuffer(m_ParticleBuffer);
+	m_TickCS->SetSpawnCount(m_SpawnCountBuffer);
 	m_TickCS->Execute();
 }
 

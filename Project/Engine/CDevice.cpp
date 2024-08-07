@@ -309,7 +309,9 @@ int CDevice::CreateBlendState()
 
 
 	// AlphaBlend - Coverage
-	Desc.AlphaToCoverageEnable = true;	// AlphaToCoverageEnable가 true면, 알파값이 0.5이하인 부분을 렌더링 할 때, 무시한다. -> 경계가 뚜렷한 캐릭터같은 텍스쳐를 렌더링할 때 주로 사용
+	// AlphaToCoverageEnable가 true면, 알파값이 0.5이하인 부분을 렌더링 할 때, 무시한다. -> 경계가 뚜렷한 캐릭터같은 텍스쳐를 렌더링할 때 주로 사용
+	// 이걸 쓰지 않고 그냥 AlphaBlend를 하면 앞에 보이는 텍스쳐의 투명한 부분에 뒤에 그려지는 물체들이 가려지는 현상이 발생.
+	Desc.AlphaToCoverageEnable = true;	
 	Desc.IndependentBlendEnable = false;
 
 	Desc.RenderTarget[0].BlendEnable = true;

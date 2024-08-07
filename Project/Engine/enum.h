@@ -136,6 +136,8 @@ enum SHADER_DOMAIN
 	DOMAIN_UI,			// UI
 
 	DOMAIN_DEBUG,		// 디버그
+
+	DOMAIN_NONE,		// 미설정
 };
 
 enum class DEBUG_SHAPE
