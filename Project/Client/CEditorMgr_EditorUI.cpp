@@ -148,7 +148,7 @@ void CEditorMgr::CreateEditorUI()
     // FlipBookEditor
     pUI = new FlipBookEditor;
     pUI->Init();
-    pUI->SetActive(false);
+    pUI->SetActive(true);
     pUI->SetName("FlipBookEditor");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 }

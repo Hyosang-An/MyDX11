@@ -23,6 +23,10 @@ void FlipBookEditor::Init()
 {
 	m_Viewer = new FlipBookViewer;
 	m_Inspector = new FlipBookInspector;
+
+	m_Viewer->Init();
+	m_Inspector->Init();
+
 }
 
 void FlipBookEditor::Update()
@@ -32,8 +36,8 @@ void FlipBookEditor::Update()
 	available_width -= splitterThickness;
 
 
-	static float left_pane_width = available_width * 0.2f;
-	static float right_pane_width = available_width * 0.8f;
+	static float left_pane_width = available_width * 0.8f;
+	static float right_pane_width = available_width - left_pane_width;
 
 	// ¸Þ´º¹Ù
 	bool viewerOpen = m_Viewer->IsActive();
@@ -186,7 +190,8 @@ ImVec2 FlipBookEditor::Splitter(float thickness, float* leftSize, float* rightSi
 		initial_size2 = *rightSize;
 	}
 
-	//ImGui::SetItemAllowOverlap();
+	//ImGui::
+	// ();
 
 	if (ImGui::IsItemActive())
 	{
