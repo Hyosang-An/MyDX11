@@ -75,48 +75,68 @@ void FlipBookInspector::Update()
 			SelectFlipBook();
 		}
 
-		vector<Ptr<CSprite>> spriteVecInFlipBook;
-		if (flipBook.Get())
-			spriteVecInFlipBook = flipBook->GetSpriteVec();
 
 		// FlipBook의 Sprite 리스트
 		ImGui::BeginChild("Sprite List", ImVec2(0, 200), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
-
-		static float maxWidth = 0;
-		static bool firstLoop = true;
-		
-		for (int i = 0; i < spriteVecInFlipBook.size(); i++)
+		if (flipBook.Get())
 		{
-			bool b = false;
+			vector<Ptr<CSprite>> &spriteVecInFlipBook = flipBook->GetSpriteVec();
+			static float maxWidth = 0;
+			static bool firstLoop = true;
 
-			Ptr<CSprite>& pSprite = spriteVecInFlipBook[i];
-			wstring wstrKey = pSprite->GetKey();
-			string strKey = string(wstrKey.begin(), wstrKey.end());
-
-			string spriteName = path(strKey).stem().string();
-
-			float selectableWidth = 0;
-			if (firstLoop == false)
-				selectableWidth = maxWidth;
-
-			//ImGui::SetNextItemAllowOverlap();
-			ImGui::Selectable(spriteName.c_str(), &b, ImGuiSelectableFlags_None, { selectableWidth, 0 });
-			ImGui::SameLine();
-
-			if (firstLoop)
+			for (int i = 0; i < spriteVecInFlipBook.size(); i++)
 			{
-				auto pos = ImGui::GetCursorPos();
+				static int selected_index = -1;
 
-				maxWidth = max(pos.x, maxWidth);
+				Ptr<CSprite>& pSprite = spriteVecInFlipBook[i];
+				wstring wstrKey = pSprite->GetKey();
+				string strKey = string(wstrKey.begin(), wstrKey.end());
+
+				string spriteName = path(strKey).stem().string();
+
+				float selectableWidth = 0;
+				if (firstLoop == false)
+					selectableWidth = maxWidth;
+
+				if (ImGui::Selectable(spriteName.c_str(), (selected_index == i), ImGuiSelectableFlags_None, { selectableWidth, 0 }))
+				{
+					selected_index = i;
+
+					// TODO
+					// viewer에 선택한 sprite 전달 (index 전달이 나을듯)
+				}
+
+				if (ImGui::IsItemActive() && !ImGui::IsItemHovered()) // 아이템이 활성화되어 있으나 호버되지 않은 경우
+				{
+					// 드래그 방향에 따른 아이템 이동
+					int i_next = i + (ImGui::GetMouseDragDelta(ImGuiMouseButton_Left).y < 0.f ? -1 : 1);
+					if (i_next >= 0 && i_next < spriteVecInFlipBook.size())
+					{
+						// 현재 인덱스와 다음 인덱스가 다르면 아이템 위치 교환
+						if (i != i_next) {
+							std::swap(spriteVecInFlipBook[i], spriteVecInFlipBook[i_next]);
+							ImGui::ResetMouseDragDelta(); // 드래그 변화량 리셋
+						}
+					}
+				}
+
+				ImGui::SameLine();
+
+				if (firstLoop)
+				{
+					auto pos = ImGui::GetCursorPos();
+
+					maxWidth = max(pos.x, maxWidth);
+				}
+
+				if (ImGui::SmallButton("-"))
+				{
+
+				}
+
+				if (i == spriteVecInFlipBook.size() - 1)
+					firstLoop = false;
 			}
-
-			if (ImGui::SmallButton("-"))
-			{
-
-			}
-
-			if (i == spriteVecInFlipBook.size() - 1)
-				firstLoop = false;
 		}
 		ImGui::EndChild();
 
@@ -124,8 +144,8 @@ void FlipBookInspector::Update()
 	ImGui::EndChild();
 
 
-
-
+	//================================================================================================================================================================================
+	//================================================================================================================================================================================
 
 
 	// 스프라이트 폴더 선택 버튼
@@ -134,7 +154,7 @@ void FlipBookInspector::Update()
 	{
 		if (SUCCEEDED(SelectSpriteFolderPath()))
 		{
-			FindSprites(m_selectedDirectory);
+			FindSprites(m_selectedSpriteDirectory);
 		}
 
 		m_vecSpriteInFolder;
@@ -143,7 +163,7 @@ void FlipBookInspector::Update()
 	ImGui::Text("Selected Folder");
 	ImGui::SameLine();
 
-	wstring relativePath = CPathMgr::GetInst()->GetRelativePath(m_selectedDirectory);
+	wstring relativePath = CPathMgr::GetInst()->GetRelativePath(m_selectedSpriteDirectory);
 	auto strPath = string(relativePath.begin(), relativePath.end());
 
 	// 텍스트 크기 계산
@@ -166,7 +186,7 @@ void FlipBookInspector::Update()
 
 		for (int i = 0; i < m_vecSpriteInFolder.size(); i++)
 		{
-			bool b = false;
+			bool bSelected = false;
 
 			Ptr<CSprite>& pSprite = m_vecSpriteInFolder[i];
 			wstring wstrKey = pSprite->GetKey();
@@ -179,7 +199,7 @@ void FlipBookInspector::Update()
 				selectableWidth = maxWidth;
 
 			//ImGui::SetNextItemAllowOverlap();
-			ImGui::Selectable(spriteName.c_str(), &b, ImGuiSelectableFlags_None, { selectableWidth, 0 });
+			ImGui::Selectable(spriteName.c_str(), &bSelected, ImGuiSelectableFlags_None, { selectableWidth, 0 });
 			ImGui::SameLine();
 
 			if (firstLoop)
@@ -248,17 +268,18 @@ void FlipBookInspector::Update()
 		"Item One", "Item Two", "Item Three", "Item Four", "Item Five"
 	};
 
-	int highlight_index = 2; // 색상을 다르게 설정할 항목의 인덱스
+	//int selected_index = 2; // 색상을 다르게 설정할 항목의 인덱스
 
 	for (int n = 0; n < item_names.size(); n++)
 	{
 		const std::string& item = item_names[n];
 
-		bool isSelected = false;
-		if (n == highlight_index)
-			isSelected = true;
+		static int selected_index = -1;
 
-		ImGui::Selectable(item.c_str(), &isSelected); // 항목 표시, 선택된 항목은 ImGuiCol_Header 색으로 표현됨.
+		if (ImGui::Selectable(item.c_str(), selected_index == n)) // 항목 표시, 선택된 항목은 ImGuiCol_Header 색으로 표현됨.
+		{
+			selected_index = n;
+		}
 
 		if (ImGui::IsItemActive() && !ImGui::IsItemHovered()) // 아이템이 활성화되어 있으나 호버되지 않은 경우
 		{
@@ -300,10 +321,10 @@ HRESULT FlipBookInspector::SelectSpriteFolderPath()
 			// 마지막 경로를 초기 폴더로 설정
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
-			if (m_selectedDirectory.empty())
+			if (m_selectedSpriteDirectory.empty())
 				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
 			else
-				defaultDirectory = m_selectedDirectory;
+				defaultDirectory = m_selectedSpriteDirectory;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
 			if (SUCCEEDED(hr) && psiFolder) {
 				pFolderOpen->SetFolder(psiFolder);
@@ -325,7 +346,7 @@ HRESULT FlipBookInspector::SelectSpriteFolderPath()
 					if (SUCCEEDED(hr))
 					{
 
-						m_selectedDirectory = pszFolderPath;
+						m_selectedSpriteDirectory = pszFolderPath;
 
 						// 경로 사용 후 메모리 해제
 						CoTaskMemFree(pszFolderPath);
@@ -361,10 +382,10 @@ void FlipBookInspector::SelectFlipBook()
 
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
-			if (m_selectedDirectory.empty())
+			if (m_lastFlipBookDirectory.empty())
 				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
 			else
-				defaultDirectory = m_selectedDirectory;
+				defaultDirectory = m_lastFlipBookDirectory;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
 			if (SUCCEEDED(hr) && psiFolder) {
 				pFileOpen->SetFolder(psiFolder);
@@ -385,7 +406,7 @@ void FlipBookInspector::SelectFlipBook()
 						m_owner->SetFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(CPathMgr::GetInst()->GetRelativePath(pszFilePath)));
 
 						path filePath = pszFilePath;
-						m_selectedDirectory = filePath.parent_path().wstring();
+						m_lastFlipBookDirectory = filePath.parent_path().wstring();
 
 						CoTaskMemFree(pszFilePath);
 					}

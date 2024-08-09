@@ -13,7 +13,8 @@ public:
 private:
     FlipBookEditor*         m_owner = nullptr;
 
-    wstring                 m_selectedDirectory;
+    wstring                 m_lastFlipBookDirectory;
+    wstring                 m_selectedSpriteDirectory;
     vector<Ptr<CSprite>>    m_vecSpriteInFolder;
 
 private:
