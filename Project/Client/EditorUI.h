@@ -19,8 +19,10 @@ protected:
 	bool				m_Modal = false;
 	bool				m_ChildBorder = false;	// 자식 구분선 표기 유무 
 
+	bool				m_HorizontalScrollbar = false;
 	bool				m_UseMenuBar = false;
 	bool				m_Move = true;
+
 
 	bool				m_isSizeConstrained = false;
 	ImVec2				m_minSize;

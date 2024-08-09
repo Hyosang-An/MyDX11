@@ -6,6 +6,7 @@
 
 SE_AtlasView::SE_AtlasView()
 {
+	m_HorizontalScrollbar = true;
 }
 
 SE_AtlasView::~SE_AtlasView()

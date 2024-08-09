@@ -9,6 +9,7 @@ private:
 public:
     void AddSprite(Ptr<CSprite> _Sprite) { m_vecSprite.push_back(_Sprite); }
 
+    vector<Ptr<CSprite>>& GetSpriteVec() { return m_vecSprite; }
     Ptr<CSprite> GetSprite(int _Idx) { return m_vecSprite[_Idx]; }
     int GetMaxFrameCount() { return (int)m_vecSprite.size(); }
 

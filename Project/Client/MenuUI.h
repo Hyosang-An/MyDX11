@@ -4,7 +4,7 @@ class MenuUI :
     public EditorUI
 {
 private:
-    std::wstring m_lastSaveDirectory; // 초기 경로 설정
+    std::wstring m_lastSaveLoadDirectory; // 초기 경로 설정
 
 
 public:

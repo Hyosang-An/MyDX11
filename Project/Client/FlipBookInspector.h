@@ -14,10 +14,11 @@ private:
     FlipBookEditor*         m_owner = nullptr;
 
     wstring                 m_selectedDirectory;
-    vector<Ptr<CSprite>>    m_vecSprite;
+    vector<Ptr<CSprite>>    m_vecSpriteInFolder;
 
 private:
-    HRESULT GetSpriteFolderPath();
+    HRESULT SelectSpriteFolderPath();
+    void    SelectFlipBook();
     void    FindSprites(wstring _folderPath);
 
 public:

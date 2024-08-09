@@ -9,6 +9,7 @@
 SpriteCreator::SpriteCreator()
 {
 	UseMenuBar(true);
+	m_HorizontalScrollbar = true;
 }
 
 SpriteCreator::~SpriteCreator()
