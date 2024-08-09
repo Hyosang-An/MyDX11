@@ -13,13 +13,12 @@ struct tParticle
     Vec3	vWorldScale;
 	Vec4	vColor;
 
-    Vec3	vForce;
     Vec3	vVelocity;
 
-    float	Mass;
-    int		Active;
-
-    int		Padding[3];
+    float   Age;
+    float   Life;
+    float   NormalizedAge;
+    int     Active;
 };
 
 struct tSpawnCount
@@ -39,7 +38,7 @@ private:
     Ptr<CTexture>           m_ParticleTex;
     float                   m_Time = 0;                 // 누적시간
 
-    int                     m_MaxParticleCount = 100;
+    int                     m_MaxParticleCount = 1000;
 
 public:
     void SetParticleTexture(Ptr<CTexture> _Texture) { m_ParticleTex = _Texture; }

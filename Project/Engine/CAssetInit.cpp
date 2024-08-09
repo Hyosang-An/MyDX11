@@ -143,9 +143,9 @@ void CAssetMgr::CreateEngineTexture()
 
 
 	// Noise Texture
-	//Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
-	//Load<CTexture>(L"texture\\noise\\noise_02.png", L"texture\\noise\\noise_02.png");
-	//Load<CTexture>(L"texture\\noise\\noise_03.jpg", L"texture\\noise\\noise_03.jpg");
+	Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
+	Load<CTexture>(L"texture\\noise\\noise_02.png", L"texture\\noise\\noise_02.png");
+	Load<CTexture>(L"texture\\noise\\noise_03.jpg", L"texture\\noise\\noise_03.jpg");
 }
 
 void CAssetMgr::CreateEngineSprite()
