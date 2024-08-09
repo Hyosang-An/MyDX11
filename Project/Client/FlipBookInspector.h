@@ -5,11 +5,14 @@
 class FlipBookInspector :
     public FlipBookEditor
 {
+    friend class FlipBookEditor;
 public:
     FlipBookInspector();
     ~FlipBookInspector();
 
 private:
+    FlipBookEditor*         m_owner = nullptr;
+
     wstring                 m_selectedDirectory;
     vector<Ptr<CSprite>>    m_vecSprite;
 

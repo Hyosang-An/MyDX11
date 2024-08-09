@@ -2,6 +2,8 @@
 #include "FlipBookInspector.h"
 #include <Engine/CAssetMgr.h>
 
+#include "TreeUI.h"
+
 FlipBookInspector::FlipBookInspector()
 {
 }
@@ -20,12 +22,56 @@ void FlipBookInspector::Update()
 {
 	ImGui::Text("This is the FlipBookInspector.");
 
+	// 현재 선택된 FlipBook
+
+	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+
+	ImGui::Button("Current FlipBook");
+
+	ImGui::PopStyleColor(3);
+
+	Ptr<CFlipBook> flipBook = m_owner->GetFlipBook();
+	string flipBookName;
+
+	if (flipBook.Get())
+	{
+		flipBookName = string(flipBook->GetKey().begin(), flipBook->GetKey().end());
+		flipBookName = path(flipBookName).stem().string();
+	}
+
+	ImGui::Text("FlipBook");
+	ImGui::SameLine(100);
+	ImGui::SetNextItemWidth(150.f);
+	ImGui::InputText("##FlipBookKey", (char*)flipBookName.c_str(), ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
+	if (ImGui::BeginDragDropTarget())
+	{
+		// 데이터를 드랍 받을 트리 이름 : ContentTree
+		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ContentTree");
+		if (payload)
+		{
+			// payload의 Data는 TreeNode*를 가리키는 포인터
+			TreeNode** ppNode = (TreeNode**)payload->Data;
+			TreeNode* pNode = *ppNode;
+
+			Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
+			if (ASSET_TYPE::FLIPBOOK == pAsset->GetAssetType())
+			{
+				m_owner->SetFlipBook((CFlipBook*)pAsset.Get());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
 
 
-	// 
 
 
-	// 특정 폴더 내의 스프라이트 목록 보여주기
+
+
+
+	// 스프라이트 폴더 선택 버튼
 	ImGui::Separator();
 	if (ImGui::Button("Select Sprite Folder"))
 	{
@@ -52,16 +98,13 @@ void FlipBookInspector::Update()
 
 	// 계산된 크기를 사용하여 다음 항목의 너비 설정
 	ImGui::SetNextItemWidth(inputTextWidth);
-
 	ImGui::InputText("##Selected Sprite Folder Path", (char*)strPath.c_str(), strPath.length(), ImGuiInputTextFlags_ReadOnly);
 
 
 	// sprite벡터 리스트로 보여주고 추가 버튼 만들기
-
 	// 박스 영역 설정
 	ImVec2 boxSize = ImVec2(0, 200);  // 원하는 박스 크기
 	ImGui::BeginChild("Sprite Box", boxSize, ImGuiChildFlags_Border, ImGuiWindowFlags_None);
-
 
 	static float maxWidth = 0;
 	static bool firstLoop = true;

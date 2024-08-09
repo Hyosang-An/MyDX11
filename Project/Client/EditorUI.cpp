@@ -29,6 +29,12 @@ void EditorUI::Tick()
 	if (!m_Move)
 		flags |= ImGuiWindowFlags_NoMove;
 
+
+	// 창의 최소 크기 및 최대 크기를 설정
+	if (m_isSizeConstrained)
+		ImGui::SetNextWindowSizeConstraints(m_minSize, m_maxSize);
+	
+
 	// 최상위 부모 UI 인 경우
 	if (nullptr == m_Parent)
 	{
