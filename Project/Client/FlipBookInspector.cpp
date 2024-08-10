@@ -22,7 +22,7 @@ void FlipBookInspector::Update()
 {
 	ImGui::Text("This is the FlipBookInspector.");
 
-	
+
 
 	// 현재 선택된 FlipBook
 	ImGui::BeginChild("Selected Sprite", ImVec2(0, 300), ImGuiChildFlags_None, ImGuiWindowFlags_None);
@@ -77,10 +77,11 @@ void FlipBookInspector::Update()
 
 
 		// FlipBook의 Sprite 리스트
-		ImGui::BeginChild("Sprite List", ImVec2(0, 200), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
 		if (flipBook.Get())
 		{
-			vector<Ptr<CSprite>> &spriteVecInFlipBook = flipBook->GetSpriteVec();
+			ImGui::BeginChild("Sprite List", ImVec2(0, 200), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
+
+			vector<Ptr<CSprite>>& spriteVecInFlipBook = flipBook->GetSpriteVec();
 			static float maxWidth = 0;
 			static bool firstLoop = true;
 
@@ -151,8 +152,20 @@ void FlipBookInspector::Update()
 					}
 				}
 			}
+			ImGui::EndChild();
+
+
+			// 선택한 flipBook의 offset 설정
+			if (m_selectedSpriteIndex != -1)
+			{
+				ImGui::Text("Offset");
+				ImGui::SameLine();
+				Vec2 offsetPixel = flipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
+				ImGui::DragFloat2("##Sprite Offset FlipBookInspector", offsetPixel, 1, 0, 0, "%.0f");
+				flipBook->GetSprite(m_selectedSpriteIndex)->SetOffsetPixel(offsetPixel);
+			}
 		}
-		ImGui::EndChild();
+
 
 	}
 	ImGui::EndChild();
@@ -314,7 +327,7 @@ void FlipBookInspector::Update()
 
 
 
-	
+
 
 
 

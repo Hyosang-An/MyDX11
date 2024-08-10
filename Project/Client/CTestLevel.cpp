@@ -148,7 +148,7 @@ void CTestLevel::CreateTestLevel()
 	//pMonster->Transform()->SetRelativePos(-400.f, 0.f, 100.f);
 	//pMonster->Transform()->SetRelativeScale(150.f, 150.f, 1.f);
 
-	//pMonster->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	//pMonster->Collider2D()->SetOffsetPixel(Vec3(0.f, 0.f, 0.f));
 	//pMonster->Collider2D()->SetScale(Vec3(1.2f, 1.2f, 1.f));
 
 	//pMonster->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
@@ -192,16 +192,16 @@ void CTestLevel::CreateTestLevel()
 	//TestLevel->AddObject(0, pPostProcess_1_Obj);
 
 
-	// Particle Object
-	CGameObject* pParticleObj = new CGameObject;
-	pParticleObj->SetName(L"Particle");
+	//// Particle Object
+	//CGameObject* pParticleObj = new CGameObject;
+	//pParticleObj->SetName(L"Particle");
 
-	pParticleObj->AddComponent(new CTransform);
-	pParticleObj->AddComponent(new CParticleSystem);
+	//pParticleObj->AddComponent(new CTransform);
+	//pParticleObj->AddComponent(new CParticleSystem);
 
-	pParticleObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+	//pParticleObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
 
-	TestLevel->AddObject(0, pParticleObj);
+	//TestLevel->AddObject(0, pParticleObj);
 
 
 	//// PostProcess Object2 (GaussianBlur)

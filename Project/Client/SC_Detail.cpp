@@ -150,6 +150,7 @@ void SE_Detail::SpriteInfo()
 	ImGui::BeginDisabled(m_SpriteSize.x * m_SpriteSize.y == 0 || m_AtlasTex == nullptr);
 	if (ImGui::Button("Save Sprite")) 
 		SaveSprite();
+
 	ImGui::EndDisabled(); 
 
 
