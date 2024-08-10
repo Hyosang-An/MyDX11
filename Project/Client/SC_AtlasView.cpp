@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "SE_AtlasView.h"
+#include "SC_AtlasView.h"
 
-#include "SE_Detail.h"
+#include "SC_Detail.h"
 
 
 SE_AtlasView::SE_AtlasView()
@@ -34,8 +34,8 @@ void SE_AtlasView::Update()
 	ImGui::Image(m_AtlasTex->GetSRV().Get(), ImVec2((m_AtlasTex->Width() * m_Ratio), m_AtlasTex->Height() * m_Ratio)
 		, uv_min, uv_max, tint_col, border_col);
 
-	// SelectCheck
-	SelectCheck();
+	// SelectSpriteArea
+	SelectSpriteArea();
 
 	// 선택한 영역에 사각형 그리기
 	DrawSelectRect();
@@ -73,7 +73,7 @@ void SE_AtlasView::WheelCheck()
 		m_Ratio = 0.1f;
 }
 
-void SE_AtlasView::SelectCheck()
+void SE_AtlasView::SelectSpriteArea()
 {
 	bool onImage = ImGui::IsItemHovered();
 
@@ -81,20 +81,20 @@ void SE_AtlasView::SelectCheck()
 	m_imageRectMin = ImGui::GetItemRectMin();
 	auto imageRectMax = ImGui::GetItemRectMax();
 	float ArrImageMin[] = { m_imageRectMin.x, m_imageRectMin.y };
-	ImGui::InputFloat2("ImageMin", ArrImageMin);
+	ImGui::InputFloat2("ImageMin", ArrImageMin, "%.0f");
 
 
 	// 현재 마우스 위치
 	m_MousePos = ImGui::GetMousePos();
 	float arrMousePos[] = { m_MousePos.x, m_MousePos.y };
-	ImGui::InputFloat2("MousePos", arrMousePos);
+	ImGui::InputFloat2("MousePos", arrMousePos, "%.0f");
 
 	ImVec2 vDiff = ImVec2(m_MousePos.x - m_imageRectMin.x, m_MousePos.y - m_imageRectMin.y);
 	vDiff = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
 
 	// 마우스 위치의 아틀라스 픽셀좌표	
 	float PixelPos[] = { vDiff.x, vDiff.y };
-	ImGui::InputFloat2("PixelPos", PixelPos);
+	ImGui::InputFloat2("PixelPos", PixelPos, "%.0f");
 
 	if (onImage)
 	{

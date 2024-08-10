@@ -1,5 +1,5 @@
 #pragma once
-#include "SE_Sub.h"
+#include "SC_Sub.h"
 class SE_AtlasView :
     public SE_Sub
 {
@@ -27,7 +27,7 @@ public:
 
 private:
     void WheelCheck();
-    void SelectCheck();
+    void SelectSpriteArea();
     void DrawSelectRect();
     void CalcSpriteSize(Vec2 _PixelPos);
 

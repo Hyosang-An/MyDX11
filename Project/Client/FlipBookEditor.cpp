@@ -30,6 +30,9 @@ void FlipBookEditor::Init()
 	m_inspector = new FlipBookInspector;
 	m_inspector->m_owner = this;
 
+	m_viewer->m_inspector = m_inspector;
+	m_inspector->m_viewer = m_viewer;
+
 	m_viewer->Init();
 	m_inspector->Init();
 
@@ -54,7 +57,7 @@ void FlipBookEditor::Update()
 
 		else
 		{
-			right_pane_width = left_pane_width = available_width * 0.5;
+			right_pane_width = left_pane_width = available_width * 0.5f;
 		}
 			
 

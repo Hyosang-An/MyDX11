@@ -9,7 +9,8 @@ public:
     ~FlipBookViewer();
 
 private:
-    FlipBookEditor* m_owner = nullptr;
+    FlipBookEditor*     m_owner = nullptr;
+    FlipBookInspector*  m_inspector = nullptr;
 
 public:
     virtual void Init() override;

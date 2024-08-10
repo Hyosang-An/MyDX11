@@ -86,8 +86,6 @@ void FlipBookInspector::Update()
 
 			for (int i = 0; i < spriteVecInFlipBook.size(); i++)
 			{
-				static int selected_index = -1;
-
 				Ptr<CSprite>& pSprite = spriteVecInFlipBook[i];
 				wstring wstrKey = pSprite->GetKey();
 				string strKey = string(wstrKey.begin(), wstrKey.end());
@@ -98,12 +96,9 @@ void FlipBookInspector::Update()
 				if (firstLoop == false)
 					selectableWidth = maxWidth;
 
-				if (ImGui::Selectable(spriteName.c_str(), (selected_index == i), ImGuiSelectableFlags_None, { selectableWidth, 0 }))
+				if (ImGui::Selectable(spriteName.c_str(), (m_selectedSpriteIndex == i), ImGuiSelectableFlags_None, { selectableWidth, 0 }))
 				{
-					selected_index = i;
-
-					// TODO
-					// viewer에 선택한 sprite 전달 (index 전달이 나을듯)
+					m_selectedSpriteIndex = i;
 				}
 
 				if (ImGui::IsItemActive() && !ImGui::IsItemHovered()) // 아이템이 활성화되어 있으나 호버되지 않은 경우
@@ -136,6 +131,25 @@ void FlipBookInspector::Update()
 
 				if (i == spriteVecInFlipBook.size() - 1)
 					firstLoop = false;
+			}
+
+			// 방향키로 현재 선택된 Sprite 바꾸기
+			if (ImGui::IsWindowFocused())
+			{
+				if (ImGui::IsKeyPressed(ImGuiKey_UpArrow))
+				{
+					if (m_selectedSpriteIndex > 0)
+					{
+						m_selectedSpriteIndex--;
+					}
+				}
+				else if (ImGui::IsKeyPressed(ImGuiKey_DownArrow))
+				{
+					if (m_selectedSpriteIndex < spriteVecInFlipBook.size() - 1)
+					{
+						m_selectedSpriteIndex++;
+					}
+				}
 			}
 		}
 		ImGui::EndChild();
@@ -295,6 +309,14 @@ void FlipBookInspector::Update()
 			}
 		}
 	}
+
+
+
+
+
+	
+
+
 
 }
 

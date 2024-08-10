@@ -1,5 +1,5 @@
 #pragma once
-#include "SE_Sub.h"
+#include "SC_Sub.h"
 class SE_Detail :
     public SE_Sub
 {

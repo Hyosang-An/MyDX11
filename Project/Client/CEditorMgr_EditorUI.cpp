@@ -12,8 +12,8 @@
 #include "ListUI.h"
 #include "MenuUI.h"
 #include "SpriteCreator.h"
-#include "SE_AtlasView.h"
-#include "SE_Detail.h"
+#include "SC_AtlasView.h"
+#include "SC_Detail.h"
 #include "FlipBookEditor.h"
 
 #include "ParamUI.h"
@@ -129,13 +129,13 @@ void CEditorMgr::CreateEditorUI()
     // SE_AtlasView
     pUI = new SE_AtlasView;
     pUI->Init();
-    pUI->SetName("SE_AtlasView");
+    pUI->SetName("SC_AtlasView");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     // SE_Detail
     pUI = new SE_Detail;
     pUI->Init();
-    pUI->SetName("SE_Detail");
+    pUI->SetName("SC_Detail");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     // SpriteCreator

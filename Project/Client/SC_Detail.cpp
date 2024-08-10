@@ -1,12 +1,12 @@
 #include "pch.h"
-#include "SE_Detail.h"
+#include "SC_Detail.h"
 
 #include "CEditorMgr.h"
 
 #include "ListUI.h"
 #include "TreeUI.h"
 
-#include "SE_AtlasView.h"
+#include "SC_AtlasView.h"
 
 #include <Engine/CAssetMgr.h>
 #include <Engine/CSprite.h>
