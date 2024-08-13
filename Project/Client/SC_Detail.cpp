@@ -240,7 +240,7 @@ void SE_Detail::SaveSprite()
 
 						Ptr<CSprite> pSprite = new CSprite;
 						pSprite->Create(m_AtlasTex, m_SpriteLT, m_SpriteSize);
-						pSprite->SetBackground(m_BackgroundSize);
+						pSprite->SetBackgroundPixelSize(m_BackgroundSize);
 
 						pSprite->Save(pszFilePath);
 						

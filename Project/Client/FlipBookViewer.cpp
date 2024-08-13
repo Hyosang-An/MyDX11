@@ -22,13 +22,13 @@ void FlipBookViewer::Init()
 //	ImGui::Text("This is the FlipBookViewer.");
 //
 //	// Get the flipbook from the owner
-//	Ptr<CFlipBook> flipBook = m_owner->GetFlipBook();
+//	Ptr<CFlipBook> m_selectedFlipBook = m_owner->GetFlipBook();
 //	int selectedSpriteIndex = m_inspector->GetSelectedSpriteIndex();
 //
 //	if (selectedSpriteIndex != -1)
 //	{
 //		// Get the sprite from the flipbook
-//		Ptr<CSprite> sprite = flipBook->GetSprite(selectedSpriteIndex);
+//		Ptr<CSprite> sprite = m_selectedFlipBook->GetSprite(selectedSpriteIndex);
 //		if (sprite != nullptr)
 //		{
 //			// Get the atlasTexture from the sprite

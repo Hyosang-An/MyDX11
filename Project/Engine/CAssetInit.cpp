@@ -154,7 +154,7 @@ void CAssetMgr::CreateEngineSprite()
 
 	//	pSprite = new CSprite;
 	//	pSprite->Create(pAtlasTex, Vec2((float)i * 120.f, 520.f), Vec2(120.f, 130.f));
-	//	pSprite->SetBackground(Vec2(200.f, 200.f));
+	//	pSprite->SetBackgroundPixelSize(Vec2(200.f, 200.f));
 
 	//	pSprite->SetRelativePath(wstring(L"Animation\\") + szKey + L".sprite");
 	//	pSprite->Save(strContentsPath + L"Animation\\" + szKey + L".sprite");

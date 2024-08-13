@@ -26,7 +26,7 @@ void CSprite::SetSlice(Vec2 _Slice)
 	m_SliceSizeInAtlasUV = _Slice / AtlasResolution;
 }
 
-void CSprite::SetBackground(Vec2 _BackgroundPixelSize)
+void CSprite::SetBackgroundPixelSize(Vec2 _BackgroundPixelSize)
 {
 	Vec2 AtlasResolution = Vec2((float)m_Atlas->Width(), (float)m_Atlas->Height());
 	m_BackgroundSizeInAtlasUV = _BackgroundPixelSize / AtlasResolution;

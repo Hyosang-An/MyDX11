@@ -14,15 +14,28 @@ private:
     FlipBookEditor*         m_owner = nullptr;
     FlipBookViewer*         m_viewer = nullptr; 
 
+    Ptr<CFlipBook>          m_selectedFlipBook;
+
+    bool isSpriteListFocused;
+
     wstring                 m_lastFlipBookDirectory;
     wstring                 m_selectedSpriteDirectory;
     vector<Ptr<CSprite>>    m_vecSpriteInFolder;
     int                     m_selectedSpriteIndex = -1;
 
 private:
-    HRESULT SelectSpriteFolderPath();
     void    SelectFlipBook();
-    void    FindSprites(wstring _folderPath);
+    void    FlipBookSpriteList();
+    void    SetSpriteOffsetAndBackgroundSize();
+    void    SaveFlipBook(Ptr<CFlipBook> FlipBookToSave);
+
+    void    SelectSpreteFolderAndShowSprites();
+
+
+
+    HRESULT SelectSpriteFolderPathByDialog();
+    void    SelectFlipBookByDialog();
+    void    GetSpritesFromSelectedFolder(wstring _folderPath);
 
 public:
     int     GetSelectedSpriteIndex() { return m_selectedSpriteIndex; }

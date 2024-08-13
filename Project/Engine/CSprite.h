@@ -16,7 +16,7 @@ public:
 
     void SetLeftTop(Vec2 _LeftTop);
     void SetSlice(Vec2 _Slice);
-    void SetBackground(Vec2 _Background);
+    void SetBackgroundPixelSize(Vec2 _BackgroundPixelSize);
     void SetOffsetPixel(Vec2 _Offset);
 
     Vec2 GetLeftTopInAtlasUV() { return m_LeftTopInAtlasUV; }
