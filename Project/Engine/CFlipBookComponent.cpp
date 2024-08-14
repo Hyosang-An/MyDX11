@@ -17,7 +17,7 @@ CFlipBookComponent::CFlipBookComponent()
 
 CFlipBookComponent::CFlipBookComponent(CFlipBookComponent& _Origin)
 	: CComponent(_Origin)
-	, m_vecFlipBook(_Origin.m_vecFlipBook)
+	, m_mapFlipBook(_Origin.m_mapFlipBook)
 	, m_CurFlipBook(_Origin.m_CurFlipBook)
 	, m_CurFrmIdx(0)
 	, m_FPS(_Origin.m_FPS)
@@ -25,16 +25,21 @@ CFlipBookComponent::CFlipBookComponent(CFlipBookComponent& _Origin)
 	, m_Repeat(_Origin.m_Repeat)
 	, m_Finish(false)
 {
+	//if (nullptr != m_CurFlipBook)
+	//{
+	//	int FlipBookIdx = 0;
+	//	for (; FlipBookIdx < (int)m_mapFlipBook.size(); ++FlipBookIdx)
+	//	{
+	//		if (m_CurFlipBook == m_mapFlipBook[FlipBookIdx])
+	//			break;
+	//	}
+
+	//	Play(FlipBookIdx, m_FPS, m_Repeat);
+	//}
+
 	if (nullptr != m_CurFlipBook)
 	{
-		int FlipBookIdx = 0;
-		for (; FlipBookIdx < (int)m_vecFlipBook.size(); ++FlipBookIdx)
-		{
-			if (m_CurFlipBook == m_vecFlipBook[FlipBookIdx])
-				break;
-		}
-
-		Play(FlipBookIdx, m_FPS, m_Repeat);
+		Play(path(m_CurFlipBook->GetKey()).stem().wstring(), m_FPS, m_Repeat);
 	}
 }
 
@@ -75,34 +80,75 @@ void CFlipBookComponent::FinalTick()
 	}
 }
 
-void CFlipBookComponent::AddFlipBook(int _Idx, Ptr<CFlipBook> _Flipbook)
+void CFlipBookComponent::AddFlipBook(Ptr<CFlipBook> _Flipbook)
 {
-	if (m_vecFlipBook.size() <= _Idx)
-	{
-		m_vecFlipBook.resize(_Idx + 1);
-	}
+	//if (m_mapFlipBook.size() <= _Idx)
+	//{
+	//	m_mapFlipBook.resize(_Idx + 1);
+	//}
 
-	m_vecFlipBook[_Idx] = _Flipbook;
+	//m_mapFlipBook[_Idx] = _Flipbook;
+
+	wstring flipBookName = path(_Flipbook->GetKey()).stem().wstring();
+	if (m_mapFlipBook.find(flipBookName) != m_mapFlipBook.end())
+	{
+		assert(false);
+		MessageBox(nullptr, L"중복된 FlipBook 키가 존재합니다.", L"중복된 FlipBook 키", MB_OK);
+	}
+	else
+		m_mapFlipBook.insert(make_pair(flipBookName, _Flipbook));
 }
 
-Ptr<CFlipBook> CFlipBookComponent::FindFlipBook(const wstring& _Key)
+Ptr<CFlipBook> CFlipBookComponent::FindFlipBook(const wstring& _FlipBookName)
 {
-	for (size_t i = 0; i < m_vecFlipBook.size(); ++i)
-	{
-		if (m_vecFlipBook[i]->GetKey() == _Key)
-			return m_vecFlipBook[i];
-	}
+	//for (size_t i = 0; i < m_mapFlipBook.size(); ++i)
+	//{
+	//	if (m_mapFlipBook[i]->GetKey() == _FlipBookName)
+	//		return m_mapFlipBook[i];
+	//}
 
-	return nullptr;
+	//return nullptr;
+
+	auto iter = m_mapFlipBook.find(_FlipBookName);
+	if (iter == m_mapFlipBook.end())
+	{
+		assert(false);
+		MessageBox(nullptr, L"해당 이름의 FlipBook이 존재하지 않습니다.", L"FlipBook 찾기 실패", MB_OK);
+		return nullptr;
+	}
+	else
+	{
+		return iter->second;
+	}
 }
 
-void CFlipBookComponent::Play(int _FliBookIdx, float _FPS, bool _Repeat)
+void CFlipBookComponent::Play(wstring _FliBookName, float _FPS, bool _Repeat)
 {
-	m_CurFlipBook = m_vecFlipBook[_FliBookIdx];
+	//m_CurFlipBook = m_mapFlipBook[_FliBookName];
 
-	if (nullptr == m_CurFlipBook)
+	//if (nullptr == m_CurFlipBook)
+	//{
+	//	return;
+	//}
+
+	//m_CurFrmIdx = 0;
+	//m_AccTime = 0.f;
+	//m_FPS = _FPS;
+	//m_Repeat = _Repeat;
+
+
+
+
+	auto iter =  m_mapFlipBook.find(_FliBookName);
+	if (iter == m_mapFlipBook.end())
 	{
+		assert(false);
+		MessageBox(nullptr, L"해당 이름의 FlipBook이 존재하지 않습니다.", L"FlipBook 찾기 실패", MB_OK);
 		return;
+	}
+	else
+	{
+		m_CurFlipBook = iter->second;
 	}
 
 	m_CurFrmIdx = 0;
@@ -156,12 +202,20 @@ void CFlipBookComponent::Clear()
 
 void CFlipBookComponent::SaveToFile(FILE* _File)
 {
-	// FlipBook 에셋 목록 저장
-	size_t FlipBookCount = m_vecFlipBook.size();
+	//// FlipBook 에셋 목록 저장
+	//size_t FlipBookCount = m_mapFlipBook.size();
+	//fwrite(&FlipBookCount, sizeof(size_t), 1, _File);
+	//for (size_t i = 0; i < m_mapFlipBook.size(); ++i)
+	//{
+	//	SaveAssetRef(m_mapFlipBook[i], _File);
+	//}
+
+	// FlipBook 에셋맵을 저장
+	size_t FlipBookCount = m_mapFlipBook.size();
 	fwrite(&FlipBookCount, sizeof(size_t), 1, _File);
-	for (size_t i = 0; i < m_vecFlipBook.size(); ++i)
+	for (auto& pair : m_mapFlipBook)
 	{
-		SaveAssetRef(m_vecFlipBook[i], _File);
+		SaveAssetRef(pair.second, _File);
 	}
 
 	// 현재 재생중인 FlipBook 정보 저장
@@ -179,6 +233,16 @@ void CFlipBookComponent::SaveToFile(FILE* _File)
 
 void CFlipBookComponent::LoadFromFile(FILE* _File)
 {
+	//// FlipBook 에셋 목록 불러오기
+	//size_t FlipBookCount = 0;
+	//fread(&FlipBookCount, sizeof(size_t), 1, _File);
+	//for (size_t i = 0; i < FlipBookCount; ++i)
+	//{
+	//	Ptr<CFlipBook> pFlipBook;
+	//	LoadAssetRef(pFlipBook, _File);
+	//	m_mapFlipBook.push_back(pFlipBook);
+	//}
+
 	// FlipBook 에셋 목록 불러오기
 	size_t FlipBookCount = 0;
 	fread(&FlipBookCount, sizeof(size_t), 1, _File);
@@ -186,7 +250,14 @@ void CFlipBookComponent::LoadFromFile(FILE* _File)
 	{
 		Ptr<CFlipBook> pFlipBook;
 		LoadAssetRef(pFlipBook, _File);
-		m_vecFlipBook.push_back(pFlipBook);
+		wstring flipBookName = path(pFlipBook->GetKey()).stem().wstring();
+		if (m_mapFlipBook.find(flipBookName) != m_mapFlipBook.end())
+		{
+			assert(false);
+			MessageBox(nullptr, L"중복된 FlipBook 키가 존재합니다.", L"중복된 FlipBook 키", MB_OK);
+		}
+		else
+			m_mapFlipBook.insert(make_pair(flipBookName, pFlipBook));
 	}
 
 	// 현재 재생중인 FlipBook 정보 로드
