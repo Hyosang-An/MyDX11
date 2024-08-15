@@ -18,6 +18,9 @@ private:
 
     bool isSpriteListFocused;
 
+    bool m_isSpriteChanged = false;
+    float m_accTimeSinceSpriteChanged = 0.0f;
+
     wstring                 m_lastFlipBookDirectory;
     wstring                 m_selectedSpriteDirectory;
     vector<Ptr<CSprite>>    m_vecSpriteInFolder;
@@ -27,6 +30,7 @@ private:
     void    SelectFlipBook();
     void    FlipBookSpriteList();
     void    SetSpriteOffsetAndBackgroundSize();
+    void    SetSpriteChanged();
     void    SaveFlipBook(Ptr<CFlipBook> FlipBookToSave);
 
     void    SelectSpreteFolderAndShowSprites();

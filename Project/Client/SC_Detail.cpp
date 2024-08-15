@@ -56,7 +56,7 @@ void SE_Detail::Atlas()
 			TreeNode* pNode = *ppNode;
 
 			Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
-			if (ASSET_TYPE::TEXTURE == pAsset->GetAssetType())
+			if (pAsset != nullptr && ASSET_TYPE::TEXTURE == pAsset->GetAssetType())
 			{
 				SetAtlasTex((CTexture*)pAsset.Get());
 			}

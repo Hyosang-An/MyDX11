@@ -15,6 +15,10 @@ Light2DUI::~Light2DUI()
 
 void Light2DUI::Update()
 {
+	ImVec2 initial_content_pos = ImGui::GetCursorPos();
+
+
+
 	Title();
 
 	CLight2D* pLight = GetTargetObject()->Light2D();
@@ -85,4 +89,9 @@ void Light2DUI::Update()
 	pLight->SetAngle(Angle);
 
 	ImGui::EndDisabled();
+
+
+	ImVec2 last_content_pos = ImGui::GetCursorPos();
+	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
+	SetChildSize(content_size);
 }

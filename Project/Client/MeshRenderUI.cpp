@@ -21,6 +21,9 @@ MeshRenderUI::~MeshRenderUI()
 
 void MeshRenderUI::Update()
 {
+	ImVec2 initial_content_pos = ImGui::GetCursorPos();
+
+
 	Title();
 
 	CMeshRender* pMeshRender = GetTargetObject()->MeshRender();
@@ -48,7 +51,7 @@ void MeshRenderUI::Update()
 			TreeNode* pNode = *ppNode;
 
 			Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
-			if (ASSET_TYPE::MESH == pAsset->GetAssetType())
+			if (pAsset != nullptr && ASSET_TYPE::MESH == pAsset->GetAssetType())
 			{
 				pMeshRender->SetMesh((CMesh*)pAsset.Get());
 			}
@@ -90,7 +93,7 @@ void MeshRenderUI::Update()
 			TreeNode* pNode = *ppNode;
 
 			Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
-			if (ASSET_TYPE::MATERIAL == pAsset->GetAssetType())
+			if (pAsset != nullptr && ASSET_TYPE::MATERIAL == pAsset->GetAssetType())
 			{
 				pMeshRender->SetMaterial((CMaterial*)pAsset.Get());
 			}
@@ -110,6 +113,12 @@ void MeshRenderUI::Update()
 		pListUI->AddDelegate(this, (DELEGATE_1)&MeshRenderUI::SelectMaterial);
 		pListUI->SetActive(true);
 	}
+
+
+	ImVec2 last_content_pos = ImGui::GetCursorPos();
+	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
+
+	SetChildSize(content_size);
 }
 
 void MeshRenderUI::SelectMesh(DWORD_PTR _ListUI)

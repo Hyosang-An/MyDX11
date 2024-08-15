@@ -235,7 +235,7 @@ bool ParamUI::InputPrefab(Ptr<CPrefab>& _CurPrefab, const string& _Desc, EditorU
 			TreeNode* pNode = *ppNode;
 
 			Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
-			if (ASSET_TYPE::PREFAB == pAsset->GetAssetType())
+			if (pAsset != nullptr && ASSET_TYPE::PREFAB == pAsset->GetAssetType())
 			{
 				_CurPrefab = ((CPrefab*)pAsset.Get());
 			}

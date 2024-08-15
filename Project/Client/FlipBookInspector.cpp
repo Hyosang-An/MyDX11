@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "FlipBookInspector.h"
 #include <Engine/CAssetMgr.h>
+#include <Engine/CTimeMgr.h>
 
 #include "TreeUI.h"
 
@@ -105,7 +106,7 @@ void FlipBookInspector::SelectFlipBook()
 			TreeNode* pNode = *ppNode;
 
 			Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
-			if (ASSET_TYPE::FLIPBOOK == pAsset->GetAssetType())
+			if (pAsset != nullptr && ASSET_TYPE::FLIPBOOK == pAsset->GetAssetType())
 			{
 				m_owner->SetFlipBook((CFlipBook*)pAsset.Get());
 			}
@@ -217,59 +218,87 @@ void FlipBookInspector::FlipBookSpriteList()
 void FlipBookInspector::SetSpriteOffsetAndBackgroundSize()
 {
 	if (!m_selectedFlipBook.Get())
-	{
 		return;
-	}
 
-	// 선택한 flipBook의 offset 설정
-	if (m_selectedSpriteIndex != -1)
-	{
-		ImGui::Text("Offset");
-		ImGui::SameLine();
-		Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
-		ImGui::DragFloat2("##Sprite Offset FlipBookInspector", offsetPixel, 1, 0, 0, "%.0f");
-		m_selectedFlipBook->GetSprite(m_selectedSpriteIndex)->SetOffsetPixel(offsetPixel);
-	}
-
-	// WASD로 선택된 Sprite의 offset 변경 
 	if (m_selectedSpriteIndex == -1)
 		return;
+
+	// 선택한 flipBook의 offset 설정
+	ImGui::Text("Offset");
+	ImGui::SameLine();
+	Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
+	Vec2 prevOffsetPixel = offsetPixel;
+	ImGui::DragFloat2("##Sprite Offset FlipBookInspector", offsetPixel, 1, 0, 0, "%.0f");
+	m_selectedFlipBook->GetSprite(m_selectedSpriteIndex)->SetOffsetPixel(offsetPixel);
 	
+	// WASD로 선택된 Sprite의 offset 변경 
 	if (isSpriteListFocused)
 	{
 		if (ImGui::IsKeyPressed(ImGuiKey_W))
 		{
-			Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
+			//Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
 			offsetPixel.y -= 1;
 			m_selectedFlipBook->GetSprite(m_selectedSpriteIndex)->SetOffsetPixel(offsetPixel);
 		}
 		else if (ImGui::IsKeyPressed(ImGuiKey_S))
 		{
-			Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
+			//Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
 			offsetPixel.y += 1;
 			m_selectedFlipBook->GetSprite(m_selectedSpriteIndex)->SetOffsetPixel(offsetPixel);
 		}
 		else if (ImGui::IsKeyPressed(ImGuiKey_A))
 		{
-			Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
+			//Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
 			offsetPixel.x -= 1;
 			m_selectedFlipBook->GetSprite(m_selectedSpriteIndex)->SetOffsetPixel(offsetPixel);
 		}
 		else if (ImGui::IsKeyPressed(ImGuiKey_D))
 		{
-			Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
+			//Vec2 offsetPixel = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetOffsetPixel();
 			offsetPixel.x += 1;
 			m_selectedFlipBook->GetSprite(m_selectedSpriteIndex)->SetOffsetPixel(offsetPixel);
 		}
 	}
 
+	if (prevOffsetPixel != offsetPixel)
+	{
+		SetSpriteChanged();
+	}
+
 
 	// 선택한 flipBook의 배경 크기 설정
 	Vec2 backgroundPixelSize = m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetBackgroundSizeInAtlasUV() * Vec2(m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetAtlasTexture()->Width(), m_selectedFlipBook->GetSprite((int)m_selectedSpriteIndex)->GetAtlasTexture()->Height());
+	Vec2 prevBackgroundPixelSize = backgroundPixelSize;
 	ImGui::Text("Set All Sprites Background Size");
 	//ImGui::SameLine();
 	ImGui::InputFloat2("##Sprite Background Size", (float*)&backgroundPixelSize, "%.0f");
 	m_selectedFlipBook->SetAllSpritesBackgroundPixelSize(backgroundPixelSize);
+
+	if (prevBackgroundPixelSize != backgroundPixelSize)
+	{
+		SetSpriteChanged();
+	}
+
+	// 만약 Sprite가 변경된지 3초가 지나면 저장
+	if (m_isSpriteChanged)
+	{
+		m_accTimeSinceSpriteChanged += CTimeMgr::GetInst()->GetEngineDeltaTime();
+		if (m_accTimeSinceSpriteChanged > 3.0f)
+		{
+			vector<Ptr<CSprite>>& spriteVecInFlipBook = m_selectedFlipBook->GetSpriteVec();
+			for(Ptr<CSprite>& pSprite : spriteVecInFlipBook)
+				pSprite->Save(CPathMgr::GetInst()->GetContentsPath() + pSprite->GetRelativePath());
+
+			m_isSpriteChanged = false;
+			m_accTimeSinceSpriteChanged = 0.0f;
+		}
+	}
+}
+
+void FlipBookInspector::SetSpriteChanged()
+{
+	m_isSpriteChanged = true;
+	m_accTimeSinceSpriteChanged = 0;
 }
 
 void FlipBookInspector::SaveFlipBook(Ptr<CFlipBook> FlipBookToSave)
@@ -559,7 +588,14 @@ void FlipBookInspector::SelectFlipBookByDialog()
 					if (SUCCEEDED(hr)) {
 
 						// .flip 파일을 처리하는 로직 추가
-						m_owner->SetFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(CPathMgr::GetInst()->GetRelativePath(pszFilePath)));
+						wstring relativePath = CPathMgr::GetInst()->GetRelativePath(pszFilePath);
+						if (path(relativePath).extension().wstring() != L".flip")
+						{
+							MessageBox(NULL, L"선택한 파일이 FlipBook 파일이 아닙니다.", L"Error", MB_OK);
+							return;
+						}
+
+						m_owner->SetFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(relativePath));
 
 						path filePath = pszFilePath;
 						m_lastFlipBookDirectory = filePath.parent_path().wstring();
