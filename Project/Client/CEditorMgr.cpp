@@ -41,7 +41,7 @@ void CEditorMgr::Init()
 	InitImGui();
 
 	// Content 폴더를 감시하는 커널 오브젝트 생성
-	wstring ContentsPath = CPathMgr::GetInst()->GetContentsPath();
+	wstring ContentsPath = CPathMgr::GetInst()->GetContentPath();
 	m_hNotifyHandle = FindFirstChangeNotification(ContentsPath.c_str(), true
 		, FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME
 		| FILE_ACTION_ADDED | FILE_ACTION_REMOVED);

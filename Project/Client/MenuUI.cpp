@@ -23,7 +23,7 @@ MenuUI::~MenuUI()
 
 void MenuUI::Init()
 {
-	m_lastSaveLoadDirectory = CPathMgr::GetInst()->GetContentsPath() + L"level\\";
+	m_lastSaveLoadDirectory = CPathMgr::GetInst()->GetContentPath() + L"level\\";
 }
 
 void MenuUI::Tick()
@@ -196,7 +196,7 @@ void MenuUI::Level()
 		{
 			if (LEVEL_STATE::STOP == curState)
 			{
-				wstring strLevelPath = CPathMgr::GetInst()->GetContentsPath();
+				wstring strLevelPath = CPathMgr::GetInst()->GetContentPath();
 				strLevelPath += L"level\\Temp.level";
 				CLevelSaveLoad::SaveLevel(strLevelPath, pCurLevel);
 			}
@@ -215,7 +215,7 @@ void MenuUI::Level()
 		ImGui::BeginDisabled(LEVEL_STATE::STOP == curState);
 		if (ImGui::MenuItem("Stop"))
 		{
-			wstring StrLevelLoadPath = CPathMgr::GetInst()->GetContentsPath();
+			wstring StrLevelLoadPath = CPathMgr::GetInst()->GetContentPath();
 			StrLevelLoadPath += L"level\\Temp.level";
 			CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(StrLevelLoadPath);
 			ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
@@ -300,7 +300,7 @@ void MenuUI::Assets()
 			// Key는 저장 상대경로
 			wstring relativePathKey = CreateRelativePathAssetKey(ASSET_TYPE::MATERIAL, L"Default Material");
 			CAssetMgr::GetInst()->AddAsset<CMaterial>(relativePathKey, pMtrl);
-			pMtrl->Save(CPathMgr::GetInst()->GetContentsPath() + relativePathKey);
+			pMtrl->Save(CPathMgr::GetInst()->GetContentPath() + relativePathKey);
 		}
 
 		// SpriteCreator
@@ -357,7 +357,7 @@ wstring MenuUI::CreateRelativePathAssetKey(ASSET_TYPE _Type, const wstring& _Key
 	}
 
 	wchar_t szKey[255] = {};
-	wstring FilePath = CPathMgr::GetInst()->GetContentsPath();
+	wstring FilePath = CPathMgr::GetInst()->GetContentPath();
 
 	for (UINT i = 0; i < 0xffffffff; ++i)
 	{

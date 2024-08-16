@@ -72,7 +72,7 @@ void CEditorMgr::InitImGui()
     // 한글 폰트 추가 (기본 폰트에 병합)
     ImFontConfig config;
     config.MergeMode = true;
-    io.Fonts->AddFontFromFileTTF("..\\contents\\fonts\\malgun.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesKorean());
+    io.Fonts->AddFontFromFileTTF("..\\content\\fonts\\malgun.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesKorean());
 
 
     // Editor(Tool) 용 UI 생성 및 m_mapUI에 추가

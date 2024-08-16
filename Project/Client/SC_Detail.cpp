@@ -316,7 +316,7 @@ void SE_Detail::SaveSprite()
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
 			if (m_lastSaveDirectory.empty())
-				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
+				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
 			else
 				defaultDirectory = m_lastSaveDirectory;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
@@ -406,7 +406,7 @@ HRESULT SE_Detail::SelectSpriteSaveFolderByDialog()
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
 			if (m_lastSaveDirectory.empty())
-				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
+				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
 			else
 				defaultDirectory = m_lastSaveDirectory;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));

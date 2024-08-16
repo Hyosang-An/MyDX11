@@ -287,7 +287,7 @@ void FlipBookInspector::SetSpriteOffsetAndBackgroundSize()
 		{
 			vector<Ptr<CSprite>>& spriteVecInFlipBook = m_selectedFlipBook->GetSpriteVec();
 			for(Ptr<CSprite>& pSprite : spriteVecInFlipBook)
-				pSprite->Save(CPathMgr::GetInst()->GetContentsPath() + pSprite->GetRelativePath());
+				pSprite->Save(CPathMgr::GetInst()->GetContentPath() + pSprite->GetRelativePath());
 
 			m_isSpriteChanged = false;
 			m_accTimeSinceSpriteChanged = 0.0f;
@@ -325,7 +325,7 @@ void FlipBookInspector::SaveFlipBook(Ptr<CFlipBook> FlipBookToSave)
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
 			if (m_lastFlipBookDirectory.empty())
-				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
+				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
 			else
 				defaultDirectory = m_lastFlipBookDirectory;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
@@ -505,7 +505,7 @@ HRESULT FlipBookInspector::SelectSpriteFolderPathByDialog()
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
 			if (m_selectedSpriteDirectory.empty())
-				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
+				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
 			else
 				defaultDirectory = m_selectedSpriteDirectory;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
@@ -566,7 +566,7 @@ void FlipBookInspector::SelectFlipBookByDialog()
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
 			if (m_lastFlipBookDirectory.empty())
-				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
+				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
 			else
 				defaultDirectory = m_lastFlipBookDirectory;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));

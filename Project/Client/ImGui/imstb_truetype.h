@@ -739,7 +739,8 @@ STBTT_DEF int stbtt_InitFont(stbtt_fontinfo *info, const unsigned char *data, in
 // Given an offset into the file that defines a font, this function builds
 // the necessary cached info for the rest of the system. You must allocate
 // the stbtt_fontinfo yourself, and stbtt_InitFont will fill it out. You don't
-// need to do anything special to free it, because the contents are pure
+// need to do anything special to free it, because the 
+// are pure
 // value data with no additional data structures. Returns 0 on failure.
 
 

@@ -20,7 +20,7 @@ CGraphicShader::~CGraphicShader()
 
 int CGraphicShader::CreateVertexShader(const wstring& _RelativePath, const string& _FuncName)
 {
-	wstring strFilePath = CPathMgr::GetInst()->GetContentsPath();
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _RelativePath;
 
 	HRESULT hr = D3DCompileFromFile(strFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
@@ -84,7 +84,7 @@ int CGraphicShader::CreateVertexShader(const wstring& _RelativePath, const strin
 
 int CGraphicShader::CreateGeometryShader(const wstring& _RelativePath, const string& _FuncName)
 {
-	wstring strFilePath = CPathMgr::GetInst()->GetContentsPath();
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _RelativePath;
 
 	HRESULT hr = D3DCompileFromFile(strFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
@@ -116,7 +116,7 @@ int CGraphicShader::CreateGeometryShader(const wstring& _RelativePath, const str
 
 int CGraphicShader::CreatePixelShader(const wstring& _RelativePath, const string& _FuncName)
 {
-	wstring strFilePath = CPathMgr::GetInst()->GetContentsPath();
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _RelativePath;
 
 	HRESULT hr = D3DCompileFromFile(strFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE

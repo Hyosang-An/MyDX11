@@ -77,7 +77,7 @@ Ptr<T> CAssetMgr::Load(const wstring& _Key, const wstring& _RelativePath)
 	}
 
 	// 동일 키값의 에셋이 없었으면
-	wstring strFilePath = CPathMgr::GetInst()->GetContentsPath();
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _RelativePath;
 
 	Asset = new T;

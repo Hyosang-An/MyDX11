@@ -150,7 +150,7 @@ void CAssetMgr::CreateEngineTexture()
 
 void CAssetMgr::CreateEngineSprite()
 {
-	//wstring strContentsPath = CPathMgr::GetInst()->GetContentsPath();
+	//wstring strContentsPath = CPathMgr::GetInst()->GetContentPath();
 
 	//Ptr<CTexture> pAtlasTex = Load<CTexture>(L"texture\\link_3.png", L"texture\\link.png");
 

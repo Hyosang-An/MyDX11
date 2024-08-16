@@ -137,7 +137,7 @@ void Content::AssetSelected(DWORD_PTR _Param)
 void Content::Reload()
 {
 	// Content 폴더에 있는 에셋파일들의 경로를 전부 알아낸다.
-	wstring ContentsPath = CPathMgr::GetInst()->GetContentsPath();
+	wstring ContentsPath = CPathMgr::GetInst()->GetContentPath();
 	FindAssetName(ContentsPath, L"*.*");
 
 	// 알아낸 에셋 파일들의 경로를 통해서 Asset 들을 상대경로를 Key값으로 AssetMgr 에 로딩한다.
@@ -149,7 +149,7 @@ void Content::Reload()
 
 	// 에셋 매니저에는 로딩되어있지만, content 폴더에는 없는 에셋은 AssetMgr 에서 삭제하기
 	// 로딩된 에셋에 해당하는 원본 파일이 Content 폴더에 있는지 Exist 체크
-	wstring strContentPath = CPathMgr::GetInst()->GetContentsPath();
+	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
 
 	for (UINT i = 0; i < (UINT)ASSET_TYPE::END; ++i)
 	{

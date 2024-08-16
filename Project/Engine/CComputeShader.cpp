@@ -42,7 +42,7 @@ int CComputeShader::Execute()
 
 int CComputeShader::CreateComputeShader(const wstring& _RelativePath, const string& _FuncName)
 {
-	wstring strFilePath = CPathMgr::GetInst()->GetContentsPath();
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _RelativePath;
 
 	HRESULT hr = D3DCompileFromFile(strFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE

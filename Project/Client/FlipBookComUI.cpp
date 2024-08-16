@@ -124,7 +124,7 @@ void FlipBookComUI::AddFlipBookByDialog()
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
 			if (m_lastFlipBookDirectory.empty())
-				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
+				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
 			else
 				defaultDirectory = m_lastFlipBookDirectory;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));

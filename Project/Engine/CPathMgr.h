@@ -8,14 +8,14 @@ private:
 	~CPathMgr();
 
 private:
-	wstring m_strContentsPath;
+	wstring m_strContentPath;
 	wstring m_strSolutionPath;
 
 public:
 	void Init();
 	void Render();
 
-	const wstring& GetContentsPath() { return m_strContentsPath; }
+	const wstring& GetContentPath() { return m_strContentPath; }
 	const wstring& GetSolutionPath() { return m_strSolutionPath; }
 	wstring GetRelativePath(const wstring& _FilePath);
 
