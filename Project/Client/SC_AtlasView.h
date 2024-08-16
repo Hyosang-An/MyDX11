@@ -1,5 +1,7 @@
 #pragma once
 #include "SC_Sub.h"
+
+
 class SE_AtlasView :
     public SE_Sub
 {
@@ -9,6 +11,7 @@ public:
 
 private:
     Ptr<CTexture>   m_AtlasTex;
+
     ImVec2          m_imageRectMin; // Image 위젯 좌상단 실제 위치
 
     ImVec2          m_MousePos; // 실제 마우스 위치
@@ -24,6 +27,8 @@ private:
 public:
     void SetAtlasTex(Ptr<CTexture> _Tex);
     std::pair<Vec2, Vec2> GetSpriteBoxPosOnOriginalTex();
+
+
 
 private:
     void WheelCheck();

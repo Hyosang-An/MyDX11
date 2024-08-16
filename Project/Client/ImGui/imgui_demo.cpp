@@ -1338,7 +1338,7 @@ static void ShowDemoWindowWidgets()
 
         // Simplified one-liner Combo() using an array of const char*
         // This is not very useful (may obsolete): prefer using BeginCombo()/EndCombo() for full control.
-        static int item_current_3 = -1; // If the selection isn't within 0..count, Combo won't display a preview
+        static int item_current_3 = -1; // If the selection isn't within 0..m_Count, Combo won't display a preview
         ImGui::Combo("combo 3 (array)", &item_current_3, items, IM_ARRAYSIZE(items));
 
         // Simplified one-liner Combo() using an accessor function
@@ -1945,7 +1945,7 @@ static void ShowDemoWindowWidgets()
 
         // Use functions to generate output
         // FIXME: This is actually VERY awkward because current plot API only pass in indices.
-        // We probably want an API passing floats and user provide sample rate/count.
+        // We probably want an API passing floats and user provide sample rate/m_Count.
         struct Funcs
         {
             static float Sin(void*, int i) { return sinf(i * 0.1f); }

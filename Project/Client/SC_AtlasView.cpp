@@ -98,57 +98,91 @@ void SE_AtlasView::SelectSpriteArea()
 
 	if (onImage)
 	{
-
 		// ========================================================
 		// 사각형 수동 만들기
 		// ========================================================
-		/*if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		if (GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::ClickAndDrag)
 		{
-			m_stripeBoxLTonOriginalTex = ImGui::GetMousePos();
-			ImVec2 vDiff = ImVec2(m_stripeBoxLTonOriginalTex.x - m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y - m_imageRectMin.y);
-			m_stripeBoxLTonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+			{
+				m_stripeBoxLTonOriginalTex = ImGui::GetMousePos();
+				ImVec2 vDiff = ImVec2(m_stripeBoxLTonOriginalTex.x - m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y - m_imageRectMin.y);
+				m_stripeBoxLTonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+			}
+
+			if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+			{
+				m_stripeBoxRBonOriginalTex = ImGui::GetMousePos();
+				ImVec2 vDiff = ImVec2(m_stripeBoxRBonOriginalTex.x - m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y - m_imageRectMin.y);
+				m_stripeBoxRBonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+			}
 		}
-
-		if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
-		{
-			m_stripeBoxRBonOriginalTex = ImGui::GetMousePos();
-			ImVec2 vDiff = ImVec2(m_stripeBoxRBonOriginalTex.x - m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y - m_imageRectMin.y);
-			m_stripeBoxRBonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
-		}*/
-
-
-
 
 		// ========================================================
 		// 사각형 자동 만들기
 		// ========================================================
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		else if (GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::AutoSelectOnClick)
 		{
-			Vec2 vPixelPos = Vec2(ImGui::GetMousePos().x, ImGui::GetMousePos().y);
-			ImVec2 vDiff = ImVec2(vPixelPos.x - m_imageRectMin.x, vPixelPos.y - m_imageRectMin.y);
-			vPixelPos = Vec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
 
-			if (0.f <= vPixelPos.x && vPixelPos.x < m_AtlasTex->Width()
-				&& 0.f <= vPixelPos.y && vPixelPos.y < m_AtlasTex->Height())
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 			{
-				CalcSpriteSize(vPixelPos);
+				Vec2 vPixelPos = Vec2(ImGui::GetMousePos().x, ImGui::GetMousePos().y);
+				ImVec2 vDiff = ImVec2(vPixelPos.x - m_imageRectMin.x, vPixelPos.y - m_imageRectMin.y);
+				vPixelPos = Vec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+
+				if (0.f <= vPixelPos.x && vPixelPos.x < m_AtlasTex->Width()
+					&& 0.f <= vPixelPos.y && vPixelPos.y < m_AtlasTex->Height())
+				{
+					CalcSpriteSize(vPixelPos);
+				}
 			}
+		}
+
+		// ========================================================
+		// 사각형 수동 지정
+		// ========================================================
+		else if (GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::ManualSpecification)
+		{
+
 		}
 	}
 }
 
 void SE_AtlasView::DrawSelectRect()
 {
-	ImVec2 MouseLTPos = ImVec2(m_stripeBoxLTonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y * m_Ratio + m_imageRectMin.y);
-	ImVec2 MouseRBPos = ImVec2(m_stripeBoxRBonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y * m_Ratio + m_imageRectMin.y);
+	if (GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::ClickAndDrag || GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::AutoSelectOnClick)
+	{
+		ImVec2 BoxLTPosOnUI = ImVec2(m_stripeBoxLTonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y * m_Ratio + m_imageRectMin.y);
+		ImVec2 BoxRBPosOnUI = ImVec2(m_stripeBoxRBonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y * m_Ratio + m_imageRectMin.y);
 
-	if (MouseLTPos.x == MouseRBPos.x && MouseLTPos.y == MouseRBPos.y)
-		return;
+		if (BoxLTPosOnUI.x == BoxRBPosOnUI.x && BoxLTPosOnUI.y == BoxRBPosOnUI.y)
+			return;
 
+		ImGui::GetWindowDrawList()->AddRect(BoxLTPosOnUI, BoxRBPosOnUI
+			, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0.f, 1.f);
+	}
 
+	else if (GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::ManualSpecification)
+	{
+		Vec2 vStartLT = GetDetail()->GetStartLTandSize().first;
+		Vec2 vSize = GetDetail()->GetStartLTandSize().second;
+		int count = GetDetail()->GetCount();
 
-	ImGui::GetWindowDrawList()->AddRect(MouseLTPos, MouseRBPos
-		, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0.f, 1.f);
+		if (vSize.x * vSize.y == 0)
+			return;
+
+		for (int i = 0; i < count; i++)
+		{
+			ImVec2 BoxLTPosOnUI = ImVec2(vStartLT.x * m_Ratio + m_imageRectMin.x, vStartLT.y * m_Ratio + m_imageRectMin.y);
+			ImVec2 BoxRBPosOnUI = ImVec2((vStartLT.x + vSize.x) * m_Ratio + m_imageRectMin.x, (vStartLT.y + vSize.y) * m_Ratio + m_imageRectMin.y);
+
+			ImGui::GetWindowDrawList()->AddRect(BoxLTPosOnUI, BoxRBPosOnUI
+				, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0.f, 1.f);
+
+			vStartLT.x += vSize.x;
+		}
+	}
 }
 
 

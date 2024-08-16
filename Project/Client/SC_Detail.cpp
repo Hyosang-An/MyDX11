@@ -23,7 +23,7 @@ SE_Detail::~SE_Detail()
 
 void SE_Detail::Init()
 {
-	m_lastSaveDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation\\";
+
 }
 
 void SE_Detail::Update()
@@ -107,51 +107,152 @@ void SE_Detail::SpriteInfo()
 {
 	ImGui::Separator();
 
-	auto spriteBoxPos = GetAtlasView()->GetSpriteBoxPosOnOriginalTex();
-	if (spriteBoxPos.first == spriteBoxPos.second)
+	// Sprite SelectMod Combo Box
+	ImGui::Text("Sprite Select Mode");
+	ImGui::SameLine(140);
+	ImGui::SetNextItemWidth(180.f);
+	const char* SpriteSelectModes[] = { "Click And Drag", "Auto Select On Click", "Manual Specification"};
+	if (ImGui::BeginCombo("##SpriteSelectMode", SpriteSelectModes[(int)m_SelectMode]))
 	{
-		spriteBoxPos.first = Vec2();
-		spriteBoxPos.second = Vec2();
+		if (ImGui::Selectable("ClickAndDrag"))
+			m_SelectMode = SpriteSlectMode::ClickAndDrag; 
+		if (ImGui::Selectable("AutoSelectOnClick"))
+			m_SelectMode = SpriteSlectMode::AutoSelectOnClick;
+		if (ImGui::Selectable("ManualSpecification"))
+			m_SelectMode = SpriteSlectMode::ManualSpecification;
+		ImGui::EndCombo();
 	}
 
-	m_SpriteLT = spriteBoxPos.first;
-	m_SpriteSize = spriteBoxPos.second - spriteBoxPos.first;
+	if (m_SelectMode == SpriteSlectMode::ClickAndDrag || m_SelectMode == SpriteSlectMode::AutoSelectOnClick)
+	{
+		auto spriteBoxPos = GetAtlasView()->GetSpriteBoxPosOnOriginalTex();
+		if (spriteBoxPos.first == spriteBoxPos.second)
+		{
+			spriteBoxPos.first = Vec2();
+			spriteBoxPos.second = Vec2();
+		}
 
-	ImGui::PushID("Sprite Info");
-	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+		m_SpriteLT = spriteBoxPos.first;
+		m_SpriteSize = spriteBoxPos.second - spriteBoxPos.first;
 
-	ImGui::Button("Sprite Info");
+		ImGui::PushID("Sprite Info");
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
 
-	ImGui::PopStyleColor(3);
-	ImGui::PopID();
+		ImGui::Button("Sprite Info");
+
+		ImGui::PopStyleColor(3);
+		ImGui::PopID();
 
 
 
-	ImGui::Text("Left Top");
-	ImGui::SameLine(100);
-	ImGui::InputFloat2("##Left Top", m_SpriteLT, "%.0f", ImGuiInputTextFlags_ReadOnly);
+		ImGui::Text("Left Top");
+		ImGui::SameLine(100);
+		ImGui::InputFloat2("##Left Top", m_SpriteLT, "%.0f", ImGuiInputTextFlags_ReadOnly);
 
-	ImGui::Text("Right Bottom");
-	ImGui::SameLine(100);
-	ImGui::InputFloat2("##Right Bottom", spriteBoxPos.second, "%.0f", ImGuiInputTextFlags_ReadOnly);
+		ImGui::Text("Right Bottom");
+		ImGui::SameLine(100);
+		ImGui::InputFloat2("##Right Bottom", spriteBoxPos.second, "%.0f", ImGuiInputTextFlags_ReadOnly);
 
-	ImGui::Text("Size");
-	ImGui::SameLine(100);
-	ImGui::InputFloat2("##Right Bottom", m_SpriteSize, "%.0f", ImGuiInputTextFlags_ReadOnly);
+		ImGui::Text("Size");
+		ImGui::SameLine(100);
+		ImGui::InputFloat2("##Right Bottom", m_SpriteSize, "%.0f", ImGuiInputTextFlags_ReadOnly);
 
-	ImGui::NewLine();
+		ImGui::NewLine();
 
-	ImGui::Text("Set Background Size");
-	ImGui::InputFloat2("##Set Background Size", m_BackgroundSize, "%.0f");
+		ImGui::Text("Set Background Size");
+		ImGui::InputFloat2("##Set Background Size", m_BackgroundSize, "%.0f");
 
-	// "Save Sprite" 버튼
-	ImGui::BeginDisabled(m_SpriteSize.x * m_SpriteSize.y == 0 || m_AtlasTex == nullptr);
-	if (ImGui::Button("Save Sprite")) 
-		SaveSprite();
+		// "Save Sprite" 버튼
+		ImGui::BeginDisabled(m_SpriteSize.x * m_SpriteSize.y == 0 || m_AtlasTex == nullptr);
+		if (ImGui::Button("Save Sprite"))
+			SaveSprite();
+		ImGui::EndDisabled();
+	}
 
-	ImGui::EndDisabled(); 
+	else if (m_SelectMode == SpriteSlectMode::ManualSpecification)
+	{
+		ImGui::PushID("Set Specification");
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.7f, 0.8f));
+
+		ImGui::Button("Set Specification");
+
+		ImGui::PopStyleColor(3);
+		ImGui::PopID();
+
+		// 시작 Left Top
+		int startLT[] = { (int)m_StartLT.x, (int)m_StartLT.y };
+		ImGui::Text("Start Left Top");
+		ImGui::SameLine(120);
+		ImGui::SetNextItemWidth(150.f);
+		ImGui::InputInt2("##StartLeftTop", startLT);
+		m_StartLT.x = startLT[0];
+		m_StartLT.y = startLT[1];
+		m_StartLT.x = max(0, m_StartLT.x);
+		m_StartLT.y = max(0, m_StartLT.y);
+
+		// size
+		int size[] = { (int)m_SpriteSize.x, (int)m_SpriteSize.y };
+		ImGui::Text("Size");
+		ImGui::SameLine(120);
+		ImGui::SetNextItemWidth(150.f);
+		ImGui::InputInt2("##Size", size);
+		m_SpriteSize.x = size[0];
+		m_SpriteSize.y = size[1];
+		m_SpriteSize.x = max(0, m_SpriteSize.x);
+		m_SpriteSize.y = max(0, m_SpriteSize.y);
+
+		// Count
+		ImGui::Text("Count");
+		ImGui::SameLine(120);
+		ImGui::SetNextItemWidth(150.f);
+		ImGui::InputInt("##Count", &m_Count);
+		m_Count = max(1, m_Count);
+
+		// Background Size
+		int backgroundSize[] = { (int)m_BackgroundSize.x, (int)m_BackgroundSize.y };
+		ImGui::Text("Set Background Size");
+		ImGui::InputInt2("##Set Background Size", backgroundSize);
+		m_BackgroundSize.x = backgroundSize[0];
+		m_BackgroundSize.y = backgroundSize[1];
+		m_BackgroundSize.x = max(0, m_BackgroundSize.x);
+		m_BackgroundSize.y = max(0, m_BackgroundSize.y);
+
+		// 저장 경로 선택
+		if (ImGui::Button("Select Sprite Save Folder"))
+		{
+			if (SUCCEEDED(SelectSpriteSaveFolderByDialog()))
+			{
+				m_SpriteName = path(m_lastSaveDirectory).stem().wstring();
+			}
+		}
+		ImGui::Text("Save Directory");
+		ImGui::SameLine(120);
+		wstring WsaveRelativeDirectory = CPathMgr::GetInst()->GetRelativePath(m_lastSaveDirectory);
+		string saveRelativeDirectory = string(WsaveRelativeDirectory.begin(), WsaveRelativeDirectory.end());
+		ImGui::InputText("##SaveDirectory", (char*)saveRelativeDirectory.c_str(), saveRelativeDirectory.size(), ImGuiInputTextFlags_ReadOnly);
+
+
+		// 파일 이름 설정
+		ImGui::Text("File Name");
+		ImGui::SameLine(120);
+		string spriteName = string(m_SpriteName.begin(), m_SpriteName.end());
+		char buff[255] = {};
+		sprintf_s(buff, "%s", spriteName.c_str());
+		ImGui::InputText("##FileName", buff, 255);
+		spriteName = buff;
+		m_SpriteName = wstring(spriteName.begin(), spriteName.end());
+
+
+		// "Save All Sprites" 버튼
+		ImGui::BeginDisabled(m_SpriteSize.x * m_SpriteSize.y == 0 || m_AtlasTex == nullptr);
+		if (ImGui::Button("Save All Sprites"))
+			SaveAllSprites();
+		ImGui::EndDisabled();
+	}
 
 
 }
@@ -213,7 +314,12 @@ void SE_Detail::SaveSprite()
 
 			// 마지막 경로를 초기 폴더로 설정
 			IShellItem* psiFolder = nullptr;
-			hr = SHCreateItemFromParsingName(m_lastSaveDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
+			wstring defaultDirectory;
+			if (m_lastSaveDirectory.empty())
+				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
+			else
+				defaultDirectory = m_lastSaveDirectory;
+			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
 			if (SUCCEEDED(hr) && psiFolder) {
 				pFileSave->SetFolder(psiFolder);
 				psiFolder->Release();
@@ -262,3 +368,81 @@ void SE_Detail::SaveSprite()
 
 }
 
+void SE_Detail::SaveAllSprites()
+{
+	for (int i = 0; i < m_Count; i++)
+	{
+		wstring fileName = m_SpriteName + L"_" + std::to_wstring(i) + L".sprite";
+
+		Ptr<CSprite> pSprite = new CSprite;
+		pSprite->Create(m_AtlasTex, m_StartLT + Vec2(m_SpriteSize.x * i, 0.f), m_SpriteSize);
+		pSprite->SetBackgroundPixelSize(m_BackgroundSize);
+
+		wstring savePath = path(m_lastSaveDirectory) / path(fileName);
+		pSprite->Save(savePath);
+	}
+}
+
+HRESULT SE_Detail::SelectSpriteSaveFolderByDialog()
+{
+	// COM 라이브러리 초기화
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+	if (SUCCEEDED(hr)) {
+		// IFileOpenDialog 인터페이스 포인터 선언
+		IFileOpenDialog* pFolderOpen = nullptr;
+
+		// IFileOpenDialog 인스턴스 생성
+		hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFolderOpen));
+		if (SUCCEEDED(hr)) {
+			// 폴더 선택 옵션 설정
+			DWORD dwOptions;
+			pFolderOpen->GetOptions(&dwOptions);
+			pFolderOpen->SetOptions(dwOptions | FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM); // 폴더 선택 옵션 추가
+
+			// 대화상자 타이틀 설정
+			pFolderOpen->SetTitle(L"Select Folder");
+
+			// 마지막 경로를 초기 폴더로 설정
+			IShellItem* psiFolder = nullptr;
+			wstring defaultDirectory;
+			if (m_lastSaveDirectory.empty())
+				defaultDirectory = CPathMgr::GetInst()->GetContentsPath() + L"animation";
+			else
+				defaultDirectory = m_lastSaveDirectory;
+			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
+			if (SUCCEEDED(hr) && psiFolder) {
+				pFolderOpen->SetFolder(psiFolder);
+				psiFolder->Release();
+			}
+
+			// 대화상자 표시
+			hr = pFolderOpen->Show(NULL);
+			if (SUCCEEDED(hr))
+			{
+				// 사용자가 선택한 폴더를 나타내는 IShellItem 포인터
+				IShellItem* pItem = nullptr;
+				hr = pFolderOpen->GetResult(&pItem);
+				if (SUCCEEDED(hr))
+				{
+					// 선택한 폴더의 경로 얻기
+					PWSTR pszFolderPath = nullptr;
+					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFolderPath);
+					if (SUCCEEDED(hr))
+					{
+
+						m_lastSaveDirectory = pszFolderPath;
+
+						// 경로 사용 후 메모리 해제
+						CoTaskMemFree(pszFolderPath);
+					}
+					pItem->Release();
+				}
+			}
+
+			pFolderOpen->Release();
+		}
+		CoUninitialize();
+	}
+
+	return hr;
+}

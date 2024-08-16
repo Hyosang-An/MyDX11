@@ -117,7 +117,7 @@ void FlipBookEditor::Update()
 			left_pane_width = ImGui::GetContentRegionAvail().x;
 		}
 
-		if (ImGui::BeginChild("FlipBook Viewer", ImVec2(left_pane_width, 0), ImGuiChildFlags_None, ImGuiWindowFlags_NoMove))
+		if (ImGui::BeginChild("FlipBook Viewer", ImVec2(left_pane_width, 0), ImGuiChildFlags_None))
 		{
 			if (ImGui::BeginTabBar("FlipBook Viewer TabBar"))
 			{
@@ -162,7 +162,7 @@ void FlipBookEditor::Update()
 	//	int a = 0;
 	//ImGui::EndChild();
 
-	if (ImGui::BeginChild("FlipBook Inspector", remainRegionavail, ImGuiChildFlags_None, ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginChild("FlipBook Inspector", remainRegionavail, ImGuiChildFlags_None))
 	{
 		if (ImGui::BeginTabBar("FlipBook Inspector TabBar"))
 		{

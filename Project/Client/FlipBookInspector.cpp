@@ -384,8 +384,6 @@ void FlipBookInspector::SelectSpreteFolderAndShowSprites()
 			// 새로운 폴더 선택 시 maxSelectableWidth 초기화
 			maxSelectableWidth = 0;
 		}
-
-		m_vecSpriteInFolder;
 	}
 
 	ImGui::Text("Selected Folder");
