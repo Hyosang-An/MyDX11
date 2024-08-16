@@ -78,7 +78,6 @@ void CS_ParticleTick(int3 ThreadID : SV_DispatchThreadID)
     {
         // 파티클이 활성화된 경우 위치 업데이트
         Particle.vWorldPos += Particle.vVelocity * g_EngineDT;
-        
         Particle.Age += g_EngineDT;
         Particle.NormalizedAge = Particle.Age / Particle.Life;
         if (Particle.Life <= Particle.Age)
