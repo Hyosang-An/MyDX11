@@ -26,17 +26,22 @@ void CSprite::SetSlice(Vec2 _Slice)
 	m_SliceSizeInAtlasUV = _Slice / AtlasResolution;
 }
 
-void CSprite::SetBackground(Vec2 _BackgroundPixelSize)
+void CSprite::SetBackgroundPixelSize(Vec2 _BackgroundPixelSize)
 {
 	Vec2 AtlasResolution = Vec2((float)m_Atlas->Width(), (float)m_Atlas->Height());
 	m_BackgroundSizeInAtlasUV = _BackgroundPixelSize / AtlasResolution;
 }
 
-void CSprite::SetOffset(Vec2 _OffsetPixel)
+void CSprite::SetOffsetPixel(Vec2 _OffsetPixel)
 {
-	// 오프셋의 y방향 부호 반대로 해야 UV좌표계 상에서 방향이 맞음
-	Vec2 AtlasResolution = Vec2((float)m_Atlas->Width(), -(float)m_Atlas->Height());
+	Vec2 AtlasResolution = Vec2((float)m_Atlas->Width(), (float)m_Atlas->Height());
 	m_OffsetUV = _OffsetPixel / AtlasResolution;
+}
+
+Vec2 CSprite::GetOffsetPixel()
+{
+	Vec2 OffsetPixel = m_OffsetUV * Vec2(m_Atlas->Width(), m_Atlas->Height());
+	return OffsetPixel;
 }
 
 void CSprite::Create(Ptr<CTexture> _Atlas, Vec2 _LeftTopPixel, Vec2 _SlicePixel)

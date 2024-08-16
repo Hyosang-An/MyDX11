@@ -71,7 +71,7 @@ void CTimeMgr::Tick()
 	{
 		m_DeltaTime = 0.f;
 	}
-	else
+	else // 현재 level이 play중이라면
 	{
 		m_DeltaTime = m_E_DeltaTime;
 	}

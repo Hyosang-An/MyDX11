@@ -6,38 +6,68 @@
 FlipBookEditor::FlipBookEditor()
 {
 	UseMenuBar(true);
+	m_isSizeConstrained = true;
+	m_minSize = ImVec2(400, 500);
+	m_maxSize = ImVec2(FLT_MAX, FLT_MAX);
 }
 
 FlipBookEditor::~FlipBookEditor()
 {
-	if (m_Inspector != nullptr)
-		delete m_Inspector;
+	if (m_inspector != nullptr)
+		delete m_inspector;
 
-	if (m_Viewer != nullptr)
-		delete m_Viewer;
+	if (m_viewer != nullptr)
+		delete m_viewer;
 }
 
 
 
 void FlipBookEditor::Init()
 {
-	m_Viewer = new FlipBookViewer;
-	m_Inspector = new FlipBookInspector;
+	m_viewer = new FlipBookViewer;
+	m_viewer->m_owner = this;
+
+	m_inspector = new FlipBookInspector;
+	m_inspector->m_owner = this;
+
+	m_viewer->m_inspector = m_inspector;
+	m_inspector->m_viewer = m_viewer;
+
+	m_viewer->Init();
+	m_inspector->Init();
+
 }
 
 void FlipBookEditor::Update()
 {
-	float available_width = ImGui::GetContentRegionAvail().x;
-	float splitterThickness = 8;
-	available_width -= splitterThickness;
+	static bool first_update = true;
+	
+	if (first_update)
+	{
+		float available_width = ImGui::GetContentRegionAvail().x;
+		
+		available_width -= (splitterThickness + 16);
 
 
-	static float left_pane_width = available_width * 0.2f;
-	static float right_pane_width = available_width * 0.8f;
+		if (available_width > 500)
+		{
+			right_pane_width = 300;
+			left_pane_width = available_width - right_pane_width;
+		}
+
+		else
+		{
+			right_pane_width = left_pane_width = available_width * 0.5f;
+		}
+			
+
+		first_update = false;
+	}
+
 
 	// 메뉴바
-	bool viewerOpen = m_Viewer->IsActive();
-	bool inspectorOpen = m_Inspector->IsActive();
+	bool viewerOpen = m_viewer->IsActive();
+	bool inspectorOpen = m_inspector->IsActive();
 
 	if (ImGui::BeginMenuBar())
 	{
@@ -54,7 +84,7 @@ void FlipBookEditor::Update()
 				if (viewerOpen == true)
 					left_pane_width = m_prevViewerWidth;
 
-				m_Viewer->SetActive(viewerOpen);
+				m_viewer->SetActive(viewerOpen);
 			}
 
 			if (ImGui::MenuItem("FlipBook Inspector", nullptr, &inspectorOpen))
@@ -66,7 +96,7 @@ void FlipBookEditor::Update()
 				if (inspectorOpen == true)
 					left_pane_width = m_prevViewerWidth;
 
-				m_Inspector->SetActive(inspectorOpen);
+				m_inspector->SetActive(inspectorOpen);
 			}
 
 			ImGui::EndMenu();
@@ -79,22 +109,21 @@ void FlipBookEditor::Update()
 
 
 	// Viewer 창
-
-	// Viewer만 켜진 경우
 	if (viewerOpen)
 	{
+		// Viewer만 켜진 경우
 		if (!inspectorOpen)
 		{
 			left_pane_width = ImGui::GetContentRegionAvail().x;
 		}
 
-		if (ImGui::BeginChild("FlipBook Viewer", ImVec2(left_pane_width, 0), ImGuiChildFlags_None, ImGuiWindowFlags_NoMove))
+		if (ImGui::BeginChild("FlipBook Viewer", ImVec2(left_pane_width, 0), ImGuiChildFlags_None))
 		{
 			if (ImGui::BeginTabBar("FlipBook Viewer TabBar"))
 			{
 				if (ImGui::BeginTabItem("FlipBook Viewer", &viewerOpen, ImGuiTabItemFlags_None))
 				{
-					m_Viewer->Update();
+					m_viewer->Update();
 
 					if (viewerOpen == false)
 					{
@@ -102,7 +131,7 @@ void FlipBookEditor::Update()
 						if (inspectorOpen)
 							m_prevViewerWidth = left_pane_width;
 
-						m_Viewer->SetActive(viewerOpen);
+						m_viewer->SetActive(viewerOpen);
 
 					}
 
@@ -127,20 +156,14 @@ void FlipBookEditor::Update()
 		remainRegionavail = ImGui::GetContentRegionAvail();
 
 
-	////test
-	//bool b = ImGui::BeginChild("FlipBook Inspector", remainRegionavail, ImGuiChildFlags_None, ImGuiWindowFlags_NoMove);
-	//if (!b)
-	//	int a = 0;
-	//ImGui::EndChild();
-
-	if (ImGui::BeginChild("FlipBook Inspector", remainRegionavail, ImGuiChildFlags_None, ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginChild("FlipBook Inspector", remainRegionavail, ImGuiChildFlags_None))
 	{
 		if (ImGui::BeginTabBar("FlipBook Inspector TabBar"))
 		{
 			if (ImGui::BeginTabItem("FlipBook Inspector", &inspectorOpen, ImGuiTabItemFlags_None))
 			{
 
-				m_Inspector->Update();
+				m_inspector->Update();
 
 				if (inspectorOpen == false)
 				{
@@ -148,7 +171,7 @@ void FlipBookEditor::Update()
 					if (viewerOpen)
 						m_prevViewerWidth = left_pane_width;
 
-					m_Inspector->SetActive(inspectorOpen);
+					m_inspector->SetActive(inspectorOpen);
 				}
 
 				ImGui::EndTabItem();
@@ -186,7 +209,6 @@ ImVec2 FlipBookEditor::Splitter(float thickness, float* leftSize, float* rightSi
 		initial_size2 = *rightSize;
 	}
 
-	//ImGui::SetItemAllowOverlap();
 
 	if (ImGui::IsItemActive())
 	{

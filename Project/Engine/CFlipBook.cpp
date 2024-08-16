@@ -17,6 +17,14 @@ void CFlipBook::FinalTick()
 
 }
 
+void CFlipBook::SetAllSpritesBackgroundPixelSize(Vec2 _Size)
+{
+	for (size_t i = 0; i < m_vecSprite.size(); ++i)
+	{
+		m_vecSprite[i]->SetBackgroundPixelSize(_Size);
+	}
+}
+
 int CFlipBook::Save(const wstring& _FilePath)
 {
 	// 어디에 저장해뒀는지 알고 있는게 좋음

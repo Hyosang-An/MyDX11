@@ -50,7 +50,7 @@ void MaterialUI::Update()
 			TreeNode* pNode = *ppNode;
 
 			Ptr<CAsset> pAsset = (CAsset*)pNode->GetData();
-			if (ASSET_TYPE::GRAPHIC_SHADER == pAsset->GetAssetType())
+			if (pAsset != nullptr && ASSET_TYPE::GRAPHIC_SHADER == pAsset->GetAssetType())
 			{
 				pMtrl->SetShader((CGraphicShader*)pAsset.Get());
 			}

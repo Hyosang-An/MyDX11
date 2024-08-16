@@ -23,11 +23,19 @@ void EditorUI::Tick()
 
 	bool bActive = m_Active;
 
-	int flags = ImGuiWindowFlags_HorizontalScrollbar;
+	int flags = 0;
+	if (m_HorizontalScrollbar)
+		flags |= ImGuiWindowFlags_HorizontalScrollbar;
 	if (m_UseMenuBar)
-		flags = ImGuiWindowFlags_MenuBar;
+		flags |= ImGuiWindowFlags_MenuBar;
 	if (!m_Move)
 		flags |= ImGuiWindowFlags_NoMove;
+
+
+	// 창의 최소 크기 및 최대 크기를 설정
+	if (m_isSizeConstrained)
+		ImGui::SetNextWindowSizeConstraints(m_minSize, m_maxSize);
+	
 
 	// 최상위 부모 UI 인 경우
 	if (nullptr == m_Parent)

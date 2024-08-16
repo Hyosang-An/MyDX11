@@ -3,12 +3,13 @@
 
 
 #include "CEditorMgr.h"
-#include "SE_AtlasView.h"
-#include "SE_Detail.h"
+#include "SC_AtlasView.h"
+#include "SC_Detail.h"
 
 SpriteCreator::SpriteCreator()
 {
 	UseMenuBar(true);
+	m_HorizontalScrollbar = true;
 }
 
 SpriteCreator::~SpriteCreator()
@@ -17,11 +18,11 @@ SpriteCreator::~SpriteCreator()
 
 void SpriteCreator::Init()
 {
-	m_AtlasView = (SE_AtlasView*)CEditorMgr::GetInst()->FindEditorUI("SE_AtlasView");
-	m_Detail = (SE_Detail*)CEditorMgr::GetInst()->FindEditorUI("SE_Detail");
+	m_AtlasView = (SE_AtlasView*)CEditorMgr::GetInst()->FindEditorUI("SC_AtlasView");
+	m_Detail = (SE_Detail*)CEditorMgr::GetInst()->FindEditorUI("SC_Detail");
 
 	m_AtlasView->SetMove(false);
-	m_Detail->SetMove(false);
+	m_Detail->SetMove(true);
 
 	m_AtlasView->m_Owner = this;
 	m_Detail->m_Owner = this;

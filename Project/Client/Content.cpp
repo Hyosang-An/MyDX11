@@ -137,8 +137,8 @@ void Content::AssetSelected(DWORD_PTR _Param)
 void Content::Reload()
 {
 	// Content 폴더에 있는 에셋파일들의 경로를 전부 알아낸다.
-	wstring ContentPath = CPathMgr::GetInst()->GetContentsPath();
-	FindAssetName(ContentPath, L"*.*");
+	wstring ContentsPath = CPathMgr::GetInst()->GetContentsPath();
+	FindAssetName(ContentsPath, L"*.*");
 
 	// 알아낸 에셋 파일들의 경로를 통해서 Asset 들을 상대경로를 Key값으로 AssetMgr 에 로딩한다.
 	for (size_t i = 0; i < m_vecAssetRelativePath.size(); ++i)
@@ -165,12 +165,15 @@ void Content::Reload()
 
 			if (strRelativePath == L"" || false == std::filesystem::exists(strContentPath + strRelativePath))
 			{
+				// AssetMgr에서만 들고 있는 경우
 				if (pair.second->GetRefCount() <= 1)
 				{
 					// // AssetMgr에서 삭제 요청
 					tTask deleteAssetTask{ TASK_TYPE::DEL_ASSET, (DWORD_PTR)pair.second.Get() };
 					CTaskMgr::GetInst()->AddTask(deleteAssetTask);
 				}
+
+				// 다른 곳에서도 참조하고 있는 경우
 				else
 				{
 					wstring msg = pair.second->GetName() + L"다른 곳에서 참조되고 있을 수 있습니다.";

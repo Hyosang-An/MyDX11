@@ -194,9 +194,9 @@
     <ClInclude Include="PrefabUI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScriptUI.h" />
-    <ClInclude Include="SE_AtlasView.h" />
-    <ClInclude Include="SE_Detail.h" />
-    <ClInclude Include="SE_Sub.h" />
+    <ClInclude Include="SC_AtlasView.h" />
+    <ClInclude Include="SC_Detail.h" />
+    <ClInclude Include="SC_Sub.h" />
     <ClInclude Include="SoundUI.h" />
     <ClInclude Include="SpriteCreator.h" />
     <ClInclude Include="SpriteUI.h" />
@@ -254,9 +254,9 @@
     </ClCompile>
     <ClCompile Include="PrefabUI.cpp" />
     <ClCompile Include="ScriptUI.cpp" />
-    <ClCompile Include="SE_AtlasView.cpp" />
-    <ClCompile Include="SE_Detail.cpp" />
-    <ClCompile Include="SE_Sub.cpp" />
+    <ClCompile Include="SC_AtlasView.cpp" />
+    <ClCompile Include="SC_Detail.cpp" />
+    <ClCompile Include="SC_Sub.cpp" />
     <ClCompile Include="SoundUI.cpp" />
     <ClCompile Include="SpriteCreator.cpp" />
     <ClCompile Include="SpriteUI.cpp" />

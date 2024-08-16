@@ -3,7 +3,7 @@
 #include "ImGui/imgui.h"
 class EditorUI
 {
-private:
+protected:
 	static UINT			m_GlobalID;
 
 	string				m_Name;			// 창에 표시될 이름
@@ -19,8 +19,15 @@ private:
 	bool				m_Modal = false;
 	bool				m_ChildBorder = false;	// 자식 구분선 표기 유무 
 
+	bool				m_HorizontalScrollbar = false;
 	bool				m_UseMenuBar = false;
 	bool				m_Move = true;
+
+
+	bool				m_isSizeConstrained = false;
+	ImVec2				m_minSize;
+	ImVec2				m_maxSize;
+
 
 public:
 	void AddChild(EditorUI* _UI);

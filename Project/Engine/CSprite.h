@@ -16,13 +16,14 @@ public:
 
     void SetLeftTop(Vec2 _LeftTop);
     void SetSlice(Vec2 _Slice);
-    void SetBackground(Vec2 _Background);
-    void SetOffset(Vec2 _Offset);
+    void SetBackgroundPixelSize(Vec2 _BackgroundPixelSize);
+    void SetOffsetPixel(Vec2 _Offset);
 
     Vec2 GetLeftTopInAtlasUV() { return m_LeftTopInAtlasUV; }
     Vec2 GetSliceSizeInAtlasUV() { return m_SliceSizeInAtlasUV; }
     Vec2 GetBackgroundSizeInAtlasUV() { return m_BackgroundSizeInAtlasUV; }
     Vec2 GetOffsetUV() { return m_OffsetUV; }
+    Vec2 GetOffsetPixel();
 
 
 public:

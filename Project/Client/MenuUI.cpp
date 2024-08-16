@@ -23,7 +23,7 @@ MenuUI::~MenuUI()
 
 void MenuUI::Init()
 {
-	m_lastSaveDirectory = CPathMgr::GetInst()->GetContentsPath() + L"level\\";
+	m_lastSaveLoadDirectory = CPathMgr::GetInst()->GetContentsPath() + L"level\\";
 }
 
 void MenuUI::Tick()
@@ -78,7 +78,7 @@ void MenuUI::File()
 
 					// 마지막 경로를 초기 폴더로 설정
 					IShellItem* psiFolder = nullptr;
-					hr = SHCreateItemFromParsingName(m_lastSaveDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
+					hr = SHCreateItemFromParsingName(m_lastSaveLoadDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
 					if (SUCCEEDED(hr) && psiFolder) {
 						pFileSave->SetFolder(psiFolder);
 						psiFolder->Release();
@@ -104,7 +104,7 @@ void MenuUI::File()
 
 								// 마지막 디렉토리 업데이트
 								path filePath = pszFilePath;
-								m_lastSaveDirectory = filePath.parent_path().wstring();
+								m_lastSaveLoadDirectory = filePath.parent_path().wstring();
 
 								// 파일 경로 사용 후 메모리를 해제합니다.
 								CoTaskMemFree(pszFilePath);
@@ -136,7 +136,7 @@ void MenuUI::File()
 					pFileOpen->SetTitle(L"Load Level File");
 
 					IShellItem* psiFolder = nullptr;
-					hr = SHCreateItemFromParsingName(m_lastSaveDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
+					hr = SHCreateItemFromParsingName(m_lastSaveLoadDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
 					if (SUCCEEDED(hr) && psiFolder) {
 						pFileOpen->SetFolder(psiFolder);
 						psiFolder->Release();
@@ -152,16 +152,19 @@ void MenuUI::File()
 							hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 							if (SUCCEEDED(hr)) {
 
-								CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(pszFilePath);
-								ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
+								if (path(pszFilePath).extension().wstring() == L".level")
+								{
+									CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(pszFilePath);
+									ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
 
-								// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
-								Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
-								pInspector->SetTargetObject(nullptr);
-								pInspector->SetTargetAsset(nullptr);
+									// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
+									Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+									pInspector->SetTargetObject(nullptr);
+									pInspector->SetTargetAsset(nullptr);
 
-								path filePath = pszFilePath;
-								m_lastSaveDirectory = filePath.parent_path().wstring();
+									path filePath = pszFilePath;
+									m_lastSaveLoadDirectory = filePath.parent_path().wstring();
+								}
 
 								CoTaskMemFree(pszFilePath);
 							}

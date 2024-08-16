@@ -15,6 +15,8 @@ TransformUI::~TransformUI()
 
 void TransformUI::Update()
 {
+	ImVec2 initial_content_pos = ImGui::GetCursorPos();
+
 	Title();
 
 	CTransform* pTrans = GetTargetObject()->Transform();
@@ -54,4 +56,11 @@ void TransformUI::Update()
 	{
 		pTrans->SetIndependentScale(IS);
 	}
+
+
+
+	ImVec2 last_content_pos = ImGui::GetCursorPos();
+	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
+
+	SetChildSize(content_size);
 }

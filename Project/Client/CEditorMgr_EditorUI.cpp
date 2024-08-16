@@ -12,8 +12,8 @@
 #include "ListUI.h"
 #include "MenuUI.h"
 #include "SpriteCreator.h"
-#include "SE_AtlasView.h"
-#include "SE_Detail.h"
+#include "SC_AtlasView.h"
+#include "SC_Detail.h"
 #include "FlipBookEditor.h"
 
 #include "ParamUI.h"
@@ -48,6 +48,8 @@ void CEditorMgr::InitImGui()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
+
+
     ImGui_ImplWin32_Init(CEngine::GetInst()->GetMainWnd());
     ImGui_ImplDX11_Init(DEVICE, CONTEXT);
 
@@ -59,13 +61,19 @@ void CEditorMgr::InitImGui()
     // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
     // - Read 'docs/FONTS.md' for more instructions and details.
     // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
+    io.Fonts->AddFontDefault();
     //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
+
+    // 한글 폰트 추가 (기본 폰트에 병합)
+    ImFontConfig config;
+    config.MergeMode = true;
+    io.Fonts->AddFontFromFileTTF("..\\contents\\fonts\\malgun.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesKorean());
+
 
     // Editor(Tool) 용 UI 생성 및 m_mapUI에 추가
     CreateEditorUI();
@@ -129,13 +137,13 @@ void CEditorMgr::CreateEditorUI()
     // SE_AtlasView
     pUI = new SE_AtlasView;
     pUI->Init();
-    pUI->SetName("SE_AtlasView");
+    pUI->SetName("SC_AtlasView");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     // SE_Detail
     pUI = new SE_Detail;
     pUI->Init();
-    pUI->SetName("SE_Detail");
+    pUI->SetName("SC_Detail");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     // SpriteCreator
@@ -148,7 +156,7 @@ void CEditorMgr::CreateEditorUI()
     // FlipBookEditor
     pUI = new FlipBookEditor;
     pUI->Init();
-    pUI->SetActive(false);
+    pUI->SetActive(true);
     pUI->SetName("FlipBookEditor");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 }
