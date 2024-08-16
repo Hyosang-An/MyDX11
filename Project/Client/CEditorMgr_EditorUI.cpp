@@ -48,6 +48,8 @@ void CEditorMgr::InitImGui()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
+
+
     ImGui_ImplWin32_Init(CEngine::GetInst()->GetMainWnd());
     ImGui_ImplDX11_Init(DEVICE, CONTEXT);
 
@@ -59,13 +61,19 @@ void CEditorMgr::InitImGui()
     // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
     // - Read 'docs/FONTS.md' for more instructions and details.
     // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
+    io.Fonts->AddFontDefault();
     //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
+
+    // 한글 폰트 추가 (기본 폰트에 병합)
+    ImFontConfig config;
+    config.MergeMode = true;
+    io.Fonts->AddFontFromFileTTF("..\\contents\\fonts\\malgun.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesKorean());
+
 
     // Editor(Tool) 용 UI 생성 및 m_mapUI에 추가
     CreateEditorUI();

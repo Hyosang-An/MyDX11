@@ -156,12 +156,6 @@ void FlipBookEditor::Update()
 		remainRegionavail = ImGui::GetContentRegionAvail();
 
 
-	////test
-	//bool b = ImGui::BeginChild("FlipBook Inspector", remainRegionavail, ImGuiChildFlags_None, ImGuiWindowFlags_NoMove);
-	//if (!b)
-	//	int a = 0;
-	//ImGui::EndChild();
-
 	if (ImGui::BeginChild("FlipBook Inspector", remainRegionavail, ImGuiChildFlags_None))
 	{
 		if (ImGui::BeginTabBar("FlipBook Inspector TabBar"))
