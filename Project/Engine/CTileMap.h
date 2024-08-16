@@ -36,7 +36,10 @@ public:
 	void SetAtlasTexture(Ptr<CTexture> _Atlas, Vec2 _tileResolution = Vec2(0, 0));
 	void SetAtlasTileResolution(Vec2 _TileSize);
 
-
+	Vec2 GetRowCol() { return Vec2(m_Row, m_Col); }
+	Vec2 GetTileSize() { return m_TileSize; }
+	Ptr<CTexture> GetAtlasTexture() { return m_TileAtlas; }
+	Vec2 GetAtlasTileResolution() { return m_AtlasTileResolution; }
 
 private:
 	void ChangeTileMapSize();

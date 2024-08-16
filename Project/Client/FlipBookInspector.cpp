@@ -117,7 +117,7 @@ void FlipBookInspector::SelectFlipBook()
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("..."))
+	if (ImGui::Button("...##FlipBook"))
 	{
 		SelectFlipBookByDialog();
 	}
