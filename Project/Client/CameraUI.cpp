@@ -115,7 +115,7 @@ void CameraUI::LayerCheck()
     if (!m_ShowLayerCheck)
         return;
 
-
+    ImGui::BeginChild("##LayerCheck", ImVec2(300, 400), ImGuiChildFlags_None);
     CCamera* pCam = GetTargetObject()->Camera();
 
     bool bLayer[32] = {};
@@ -151,6 +151,7 @@ void CameraUI::LayerCheck()
     {
         pCam->SetLayer(ChangedIdx, bLayer[ChangedIdx]);
     }
+    ImGui::EndChild();
 }
 
 void CameraUI::Projection()
