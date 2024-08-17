@@ -92,11 +92,11 @@ void CTileMap::SetRowCol(UINT _Row, UINT _Col)
 		m_structuredBuffer->Create(sizeof(tTileInfo), TileCount);
 	}
 
-	// 타일 종류별로 한개씩 순서대로 넣기
-	for (int i = 0; i < m_vecTileInfo.size(); i++)
-	{
-		m_vecTileInfo[i].ImgIdx = i;
-	}
+	//// 타일 종류별로 한개씩 순서대로 넣기
+	//for (int i = 0; i < m_vecTileInfo.size(); i++)
+	//{
+	//	m_vecTileInfo[i].ImgIdx = i;
+	//}
 }
 
 void CTileMap::SetTileSize(Vec2 _Size)

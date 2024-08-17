@@ -42,6 +42,8 @@ public:
 	Vec2 GetAtlasTileResolution() { return m_AtlasTileResolution; }
 	Vec2 GetAtlasMaxRowCol() { return Vec2(m_AtlasMaxRow, m_AtlasMaxCol); }
 	Vec2 GetAtlasTileSliceUV() { return m_AtlasTileSliceUV; }
+	
+	vector<tTileInfo>& GetTileInfoVec() { return m_vecTileInfo; }
 
 private:
 	void ChangeTileMapSize();

@@ -1,11 +1,18 @@
 #include "pch.h"
 #include "TileMapUI.h"
 
+#include "CEditorMgr.h"
+
 #include "TreeUI.h"
 
 #include "Engine/CTileMap.h"
 #include "Engine/CPathMgr.h"
 #include "Engine/CAssetMgr.h"
+#include <Engine/CCamera.h>
+#include <Engine/CKeyMgr.h>
+#include <Engine/CEngine.h>
+#include <Engine/CTransform.h>
+
 
 TileMapUI::TileMapUI()
 	: ComponentUI(COMPONENT_TYPE::TILEMAP)
@@ -84,15 +91,15 @@ void TileMapUI::Update()
 
 
 	// 타일맵 Row, Col 설정
-	Vec2 vRowCol = m_selectedTileMap->GetRowCol();
-	Vec2 prevRowCol = vRowCol;
-	int rowcol[2] = { (int)vRowCol.x, (int)vRowCol.y };
+	Vec2 vTileMapRowCol = m_selectedTileMap->GetRowCol();
+	Vec2 prevTileMapRowCol = vTileMapRowCol;
+	int rowcol[2] = { (int)vTileMapRowCol.x, (int)vTileMapRowCol.y };
 	ImGui::Text("Row Col");
 	ImGui::SameLine(120);
 	ImGui::InputInt2("##RowCol", rowcol);
 	rowcol[0] = max(1, rowcol[0]);
 	rowcol[1] = max(1, rowcol[1]);
-	if (prevRowCol != Vec2((float)rowcol[0], (float)rowcol[1]))
+	if (prevTileMapRowCol != Vec2((float)rowcol[0], (float)rowcol[1]))
 		m_selectedTileMap->SetRowCol(rowcol[0], rowcol[1]);
 
 	// 타일맵 타일 크기 설정 (World Scale)
@@ -175,15 +182,95 @@ void TileMapUI::Update()
 		}
 		ImGui::EndPopup();
 	}
+	ImGui::Separator();
 
 
-	//
+	// EditorCamera 정보
+	if (CEditorMgr::GetInst()->GetEditorCamera() != nullptr)
+		
+	{
+		CCamera* editorCamera = CEditorMgr::GetInst()->GetEditorCamera()->Camera();
+		ImGui::Text("Editor Camera Info");
+
+		ImGui::Text("Screen World Scale");
+		ImGui::SameLine(140);
+		float screenWorldWidth = editorCamera->GetWidth() * editorCamera->GetScale();
+		float screenWorldHeight = editorCamera->GetHeight() * editorCamera->GetScale();
+		float screenWorldScale[2] = { screenWorldWidth, screenWorldHeight };
+		ImGui::InputFloat2("##ScreenWorldScale", screenWorldScale, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+		// 마우스 클라이언트 내 좌표
+		ImGui::Text("Mouse Pos In Client");
+		ImGui::SameLine(140);
+		POINT mousePosInClient;
+		GetCursorPos(&mousePosInClient);
+		ScreenToClient(CEngine::GetInst()->GetMainWnd(), &mousePosInClient);
+		float mousePosInClientFloat[2] = { (float)mousePosInClient.x, (float)mousePosInClient.y };
+		ImGui::InputFloat2("##Mouse Pos In Client", mousePosInClientFloat, "%.0f", ImGuiInputTextFlags_ReadOnly);
+
+
+		// 에디터카메라 위치
+		ImGui::Text("Editor Camera Pos");
+		ImGui::SameLine(140);
+		CTransform* pCameraTrans = editorCamera->Transform();
+		if (pCameraTrans == nullptr)
+			return;
+		Vec3 vEditorCameraPos = pCameraTrans->GetRelativePos();
+		ImGui::InputFloat3("##EditorCameraPos", vEditorCameraPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+
+		// 클라이언트 좌상단 world 좌표
+		ImGui::Text("Client LT World Pos");
+		ImGui::SameLine(140);
+		Vec3 vClientLTWorldPos = vEditorCameraPos - Vec3(screenWorldWidth * 0.5f, -screenWorldHeight * 0.5f, 0.f);
+		ImGui::InputFloat3("##ClientLTWorldPos", vClientLTWorldPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+		// 마우스 world 좌표
+		ImGui::Text("Mouse World Pos");
+		ImGui::SameLine(140);
+		Vec3 vMouseWorldPos = vClientLTWorldPos + Vec3(mousePosInClientFloat[0] * editorCamera->GetScale(), -mousePosInClientFloat[1] * editorCamera->GetScale(), 0.f);
+		ImGui::InputFloat3("##MouseWorldPos", vMouseWorldPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+		// 타일맵 기준 마우스 world 좌표 계산
+		ImGui::Text("Mouse Pos In TileMap");
+		ImGui::SameLine(140);
+		Vec3 vMousePosInTileMap = vMouseWorldPos - m_selectedTileMap->Transform()->GetRelativePos();
+		ImGui::InputFloat3("##MousePosInTileMap", vMousePosInTileMap, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+		// 마우스가 가리키는 타일의 row col 확인
+		ImGui::Text("Mouse Tile Row Col");
+		ImGui::SameLine(140);
+		Vec2 vMouseTileRowCol = Vec2(-vMousePosInTileMap.y / vTileSize.y, vMousePosInTileMap.x / vTileSize.x);
+		// row col을 정수화
+		vMouseTileRowCol.x = floor(vMouseTileRowCol.x);
+		vMouseTileRowCol.y = floor(vMouseTileRowCol.y);
+		ImGui::InputFloat2("##MouseTileRowCol", vMouseTileRowCol, "%.0f", ImGuiInputTextFlags_ReadOnly);
+
+
+
+		// 마우스 좌클릭 감지
+		if (KEY_PRESSED(KEY::LBTN))
+		{
+			// 타일맵 범위 내에서 클릭한 경우
+			if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
+				vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
+			{
+				// 타일맵의 타일 인덱스 계산
+				int mouseTileIndex = (int)vMouseTileRowCol.x * (int)vTileMapRowCol.y + (int)vMouseTileRowCol.y;
+				
+				// TileInfoVec의mouseTileIndex에 m_selectedTileImgIndex저장
+				vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
+				tileInfoVec[mouseTileIndex].ImgIdx = m_selectedTileImgIndex;
+			}
+		}
+	}
+
 
 
 	ImVec2 last_content_pos = ImGui::GetCursorPos();
 	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
 
-	//SetChildSize(content_size);
+	SetChildSize(content_size);
 }
 
 void TileMapUI::SelectTileMapAtlasByDialog()
