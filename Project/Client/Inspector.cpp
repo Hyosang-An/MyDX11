@@ -189,7 +189,7 @@ void Inspector::CreateComponentUI()
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP] = new TileMapUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP]->SetName("TileMapUI");
-	m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP]->SetChildSize(ImVec2(0.f, 100.f));
+	m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP]->SetChildSize(ImVec2(0.f, 500.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP]);
 
 	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLE_SYSTEM] = new ParticleSystemUI;

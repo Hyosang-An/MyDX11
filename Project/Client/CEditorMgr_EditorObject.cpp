@@ -23,5 +23,5 @@ void CEditorMgr::CreateEditorObject()
 
 	m_vecEditorObject.push_back(pEditorCamera);
 
-	CRenderMgr::GetInst()->RegisterEditorCamera(pEditorCamera->Camera());
+	CRenderMgr::GetInst()->RegisterEditorCamera(pEditorCamera->Camera()); 
 }

@@ -121,7 +121,6 @@ void CEditorMgr::CreateEditorUI()
     pUI->SetModal(true);
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
-
     // Inspector
     pUI = new Inspector;
     pUI->Init();

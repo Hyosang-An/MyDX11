@@ -40,6 +40,8 @@ public:
 	Vec2 GetTileSize() { return m_TileSize; }
 	Ptr<CTexture> GetAtlasTexture() { return m_TileAtlas; }
 	Vec2 GetAtlasTileResolution() { return m_AtlasTileResolution; }
+	Vec2 GetAtlasMaxRowCol() { return Vec2(m_AtlasMaxRow, m_AtlasMaxCol); }
+	Vec2 GetAtlasTileSliceUV() { return m_AtlasTileSliceUV; }
 
 private:
 	void ChangeTileMapSize();

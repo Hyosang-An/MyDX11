@@ -21,7 +21,6 @@ void TileMapUI::Update()
 	ImVec2 initial_content_pos = ImGui::GetCursorPos();
 
 
-
 	Title();
 
 	m_selectedTileMap = GetTargetObject()->TileMap();
@@ -58,6 +57,7 @@ void TileMapUI::Update()
 				{
 					pAtlasTex = ((CTexture*)pAsset.Get());
 					m_selectedTileMap->SetAtlasTexture(pAtlasTex);
+					m_selectedTileImgIndex = -1;
 				}
 			}
 
@@ -65,48 +65,125 @@ void TileMapUI::Update()
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("...##Tile AtlasTexture"))
-		{ 
+		{
 			SelectTileMapAtlasByDialog();
 		}
 	}
 
 	// TileResolution 설정
 	Vec2 atlasTileResolution = m_selectedTileMap->GetAtlasTileResolution();
+	Vec2 prevAtlasTileResolution = atlasTileResolution;
 	ImGui::Text("Tile Resolution");
 	ImGui::SameLine(120);
 	int tileResolution[2] = { (int)atlasTileResolution.x, (int)atlasTileResolution.y };
 	ImGui::InputInt2("##TileResolution", tileResolution);
 	tileResolution[0] = max(1, tileResolution[0]);
 	tileResolution[1] = max(1, tileResolution[1]);
-	m_selectedTileMap->SetAtlasTileResolution(Vec2((float)tileResolution[0], (float)tileResolution[1]));
+	if (prevAtlasTileResolution != Vec2((float)tileResolution[0], (float)tileResolution[1]))
+		m_selectedTileMap->SetAtlasTileResolution(Vec2((float)tileResolution[0], (float)tileResolution[1]));
 
 
 	// 타일맵 Row, Col 설정
 	Vec2 vRowCol = m_selectedTileMap->GetRowCol();
+	Vec2 prevRowCol = vRowCol;
 	int rowcol[2] = { (int)vRowCol.x, (int)vRowCol.y };
 	ImGui::Text("Row Col");
 	ImGui::SameLine(120);
 	ImGui::InputInt2("##RowCol", rowcol);
 	rowcol[0] = max(1, rowcol[0]);
 	rowcol[1] = max(1, rowcol[1]);
-	m_selectedTileMap->SetRowCol(rowcol[0], rowcol[1]);
+	if (prevRowCol != Vec2((float)rowcol[0], (float)rowcol[1]))
+		m_selectedTileMap->SetRowCol(rowcol[0], rowcol[1]);
 
 	// 타일맵 타일 크기 설정 (World Scale)
 	Vec2 vTileSize = m_selectedTileMap->GetTileSize();
+	Vec2 prevTileSize = vTileSize;
 	ImGui::Text("Tile Size");
 	ImGui::SameLine(120);
 	ImGui::DragFloat2("##Tile Size", vTileSize, 1.f, 0.0f, FLT_MAX, "%.3f", ImGuiSliderFlags_AlwaysClamp);
 	vTileSize.x = max(0.f, vTileSize.x);
 	vTileSize.y = max(0.f, vTileSize.y);
-	m_selectedTileMap->SetTileSize(vTileSize);
+	if (prevTileSize != vTileSize)
+		m_selectedTileMap->SetTileSize(vTileSize);
 
 
-	
+	// 타일맵 타일 선택
+	ImGui::Text("Tile Select");
+	ImGui::SameLine(120);
+	ImVec2 uv_min = ImVec2(0.0f, 0.0f);
+	ImVec2 uv_max = ImVec2(1.0f, 1.0f);
+	ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+	ImVec4 border_col = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
+	int atlasMaxRow = m_selectedTileMap->GetAtlasMaxRowCol().x;
+	int atlasMaxCol = m_selectedTileMap->GetAtlasMaxRowCol().y;
+	int atlasMaxTileSize = atlasMaxRow * atlasMaxCol;
+	if (m_selectedTileImgIndex == -1 || m_selectedTileImgIndex >= atlasMaxTileSize)
+	{
+		tint_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+	}
+	else
+	{
+		int row = m_selectedTileImgIndex / atlasMaxCol;
+		int col = m_selectedTileImgIndex % atlasMaxCol;
+		uv_min = ImVec2((float)col / atlasMaxCol, (float)row / atlasMaxRow);
+		uv_max = ImVec2((float)(col + 1) / atlasMaxCol, (float)(row + 1) / atlasMaxRow);
+	}
+	float tileAspectRatio = atlasTileResolution.x / atlasTileResolution.y;
+	ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
+	// 타일 이미지 좌클릭시 팝업 창 띄우고 아틀라스이미지를 보여주기
+	if (ImGui::IsItemClicked(0))
+		ImGui::OpenPopup("TileSelect");
+	if (ImGui::BeginPopup("TileSelect"))
+	{
+		ImGui::Text("Tile Select");
+		ImGui::Separator();
+		ImVec2 selectedTileLeftTopPos = ImGui::GetCursorScreenPos(); // 초기화
+		for (int i = 0; i < atlasMaxTileSize; ++i)
+		{
+			int row = i / atlasMaxCol;
+			int col = i % atlasMaxCol;
+			uv_min = ImVec2((float)col / atlasMaxCol, (float)row / atlasMaxRow);
+			uv_max = ImVec2((float)(col + 1) / atlasMaxCol, (float)(row + 1) / atlasMaxRow);
+			tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+			border_col = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+			if (m_selectedTileImgIndex == i)
+			{
+				// 선택한 타일 이미지 selectedTileLeftTopPos 저장
+				selectedTileLeftTopPos = ImGui::GetCursorScreenPos();
+			}
+			ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
+			if (ImGui::IsItemClicked())
+			{
+				m_selectedTileImgIndex = i;
+				ImGui::CloseCurrentPopup();
+			}
+			if ((i + 1) % atlasMaxCol != 0)
+				ImGui::SameLine();
+		}
+
+		// 선택한 타일 주변에 초록색 테두리를 그리기
+		if (m_selectedTileImgIndex != -1)
+		{
+			// 경계 두께 설정
+			float borderThickness = 4.f;
+
+			// 사각형 크기 설정
+			ImVec2 borderBoxSize = ImVec2(50, 50 / tileAspectRatio);
+			border_col = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // 테두리 색상 설정
+			// 사각형 경계 그리기
+			ImGui::GetWindowDrawList()->AddRect(selectedTileLeftTopPos, ImVec2(selectedTileLeftTopPos.x + borderBoxSize.x, selectedTileLeftTopPos.y + borderBoxSize.y), ImGui::GetColorU32(border_col), 0.0f, 0, borderThickness);
+		}
+		ImGui::EndPopup();
+	}
+
+
+	//
+
 
 	ImVec2 last_content_pos = ImGui::GetCursorPos();
 	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
 
-	SetChildSize(content_size);
+	//SetChildSize(content_size);
 }
 
 void TileMapUI::SelectTileMapAtlasByDialog()
@@ -167,6 +244,7 @@ void TileMapUI::SelectTileMapAtlasByDialog()
 						// 이미지 파일을 처리하는 로직을 여기에 추가
 						// 예: m_owner->SetTexture(CAssetMgr::GetInst()->FindAsset<CTexture>(relativePath));
 						m_selectedTileMap->SetAtlasTexture(CAssetMgr::GetInst()->FindAsset<CTexture>(relativePath));
+						m_selectedTileImgIndex = -1;
 
 						m_lastTextureDirectory = filePath.parent_path().wstring();
 
