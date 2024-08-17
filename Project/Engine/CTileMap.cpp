@@ -18,6 +18,7 @@ CTileMap::CTileMap()
 	SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"TileMapMtrl"));
 
 	m_structuredBuffer = new CStructuredBuffer;
+	m_vecTileInfo.resize(1);
 }
 
 CTileMap::CTileMap(const CTileMap& _Origin) :
@@ -45,6 +46,7 @@ void CTileMap::Init()
 {
 	// 행, 렬 설정해서 구조화버퍼 크기 조정
 	SetRowCol(m_Row, m_Col);
+	SetTileSize(m_TileSize);
 }
 
 void CTileMap::FinalTick()
@@ -69,6 +71,8 @@ void CTileMap::Render()
 
 void CTileMap::SetRowCol(UINT _Row, UINT _Col)
 {
+	UINT prevRow = m_Row;
+	UINT prevCol = m_Col;
 	m_Row = _Row;
 	m_Col = _Col;
 
@@ -80,8 +84,22 @@ void CTileMap::SetRowCol(UINT _Row, UINT _Col)
 	// 타일 정보를 저장하는 벡터의 데이터 개수가 타일개수랑 다르면 리사이즈
 	if (m_vecTileInfo.size() != TileCount)
 	{
+		vector<tTileInfo> prevVecTileInfo = m_vecTileInfo;
+
 		m_vecTileInfo.clear();
 		m_vecTileInfo.resize(TileCount);
+
+		// 이전 데이터를 이전 행렬의 구조에 맞게 새로운 벡터에 복사
+		for (size_t i = 0; i < prevRow; i++)
+		{
+			for (size_t j = 0; j < prevCol; j++)
+			{
+				if (i >= m_Row || j >= m_Col)
+					continue;
+
+				m_vecTileInfo[i * m_Col + j] = prevVecTileInfo[i * prevCol + j];
+			}
+		}
 	}
 
 	// 타일정보를 전달받아서 t 레지스터에 전달시킬 구조화버퍼가 타일 전체 데이터 사이즈보다 작으면 리사이즈
@@ -161,11 +179,14 @@ void CTileMap::SaveToFile(FILE* _File)
 void CTileMap::LoadFromFile(FILE* _File)
 {
 	LoadDataFromFile(_File);
+	
+	int col = 0;
+	int row = 0;
 
-	fread(&m_Col, sizeof(int), 1, _File);
-	fread(&m_Row, sizeof(int), 1, _File);
+	fread(&col, sizeof(int), 1, _File);
+	fread(&row, sizeof(int), 1, _File);
 
-	SetRowCol(m_Row, m_Col);
+	SetRowCol(row, col);
 
 	fread(&m_TileSize, sizeof(Vec2), 1, _File);
 	fread(&m_AtlasTileResolution, sizeof(Vec2), 1, _File);

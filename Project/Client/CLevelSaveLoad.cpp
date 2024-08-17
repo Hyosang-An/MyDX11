@@ -173,11 +173,13 @@ CGameObject* CLevelSaveLoad::LoadGameObject(FILE* _File)
 		// 저장된 타입에 맞는 컴포넌트를 생성 시키고, 저장할때랑 동일한 순서로 데이터를 읽는다.
 		CComponent* pComponent = GetComponent(Type);
 
-		// 생성된 컴포넌트를 오브젝트에 넣어준다.
-		pObject->AddComponent(pComponent);
-
-		// 저장당시의 정보를 읽어와서 복수한다.
+		// 컴포넌트의 LoadFromFile을 할 때, Onwer 정보가 필요한 경우가 있다.
+		pComponent->SetOwner(pObject);
+		// 저장당시의 정보를 읽어와서 복사한다.
 		pComponent->LoadFromFile(_File);
+
+		// 생성된 컴포넌트를 오브젝트에 넣어준다. 넣어주면서 component init 수행
+		pObject->AddComponent(pComponent);
 	}
 
 	// Script 정보 로드	

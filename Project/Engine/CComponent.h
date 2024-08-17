@@ -6,7 +6,7 @@
 class CComponent :
     public CEntity
 {
-    friend class CGameObject;
+    friend class CGameObject; friend class CLevelSaveLoad;
 public:
     CComponent(COMPONENT_TYPE _Type);
     CComponent(const CComponent& _Origin);

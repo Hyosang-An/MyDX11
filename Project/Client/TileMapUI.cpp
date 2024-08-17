@@ -12,7 +12,8 @@
 #include <Engine/CKeyMgr.h>
 #include <Engine/CEngine.h>
 #include <Engine/CTransform.h>
-
+#include <Engine/CLevelMgr.h>
+#include <Engine/CLevel.h>
 
 TileMapUI::TileMapUI()
 	: ComponentUI(COMPONENT_TYPE::TILEMAP)
@@ -79,38 +80,37 @@ void TileMapUI::Update()
 
 	// TileResolution 설정
 	Vec2 atlasTileResolution = m_selectedTileMap->GetAtlasTileResolution();
-	Vec2 prevAtlasTileResolution = atlasTileResolution;
 	ImGui::Text("Tile Resolution");
 	ImGui::SameLine(120);
 	int tileResolution[2] = { (int)atlasTileResolution.x, (int)atlasTileResolution.y };
 	ImGui::InputInt2("##TileResolution", tileResolution);
 	tileResolution[0] = max(1, tileResolution[0]);
 	tileResolution[1] = max(1, tileResolution[1]);
-	if (prevAtlasTileResolution != Vec2((float)tileResolution[0], (float)tileResolution[1]))
+	// InputInt2의 포커스가 풀리면 적용
+	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetAtlasTileResolution(Vec2((float)tileResolution[0], (float)tileResolution[1]));
 
 
 	// 타일맵 Row, Col 설정
 	Vec2 vTileMapRowCol = m_selectedTileMap->GetRowCol();
-	Vec2 prevTileMapRowCol = vTileMapRowCol;
 	int rowcol[2] = { (int)vTileMapRowCol.x, (int)vTileMapRowCol.y };
 	ImGui::Text("Row Col");
 	ImGui::SameLine(120);
 	ImGui::InputInt2("##RowCol", rowcol);
 	rowcol[0] = max(1, rowcol[0]);
 	rowcol[1] = max(1, rowcol[1]);
-	if (prevTileMapRowCol != Vec2((float)rowcol[0], (float)rowcol[1]))
+	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetRowCol(rowcol[0], rowcol[1]);
+	
 
 	// 타일맵 타일 크기 설정 (World Scale)
 	Vec2 vTileSize = m_selectedTileMap->GetTileSize();
-	Vec2 prevTileSize = vTileSize;
 	ImGui::Text("Tile Size");
 	ImGui::SameLine(120);
 	ImGui::DragFloat2("##Tile Size", vTileSize, 1.f, 0.0f, FLT_MAX, "%.3f", ImGuiSliderFlags_AlwaysClamp);
 	vTileSize.x = max(0.f, vTileSize.x);
 	vTileSize.y = max(0.f, vTileSize.y);
-	if (prevTileSize != vTileSize)
+	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetTileSize(vTileSize);
 
 
@@ -185,9 +185,8 @@ void TileMapUI::Update()
 	ImGui::Separator();
 
 
-	// EditorCamera 정보
-	if (CEditorMgr::GetInst()->GetEditorCamera() != nullptr)
-		
+	// EditorCamera 정보 및 타일 편집 (level이 stop 상태일 때만)
+	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() == LEVEL_STATE::STOP && CEditorMgr::GetInst()->GetEditorCamera() != nullptr)
 	{
 		CCamera* editorCamera = CEditorMgr::GetInst()->GetEditorCamera()->Camera();
 		ImGui::Text("Editor Camera Info");
@@ -246,10 +245,9 @@ void TileMapUI::Update()
 		vMouseTileRowCol.y = floor(vMouseTileRowCol.y);
 		ImGui::InputFloat2("##MouseTileRowCol", vMouseTileRowCol, "%.0f", ImGuiInputTextFlags_ReadOnly);
 
-
-
-		// 마우스 좌클릭 감지
-		if (KEY_PRESSED(KEY::LBTN))
+		
+		// Level이 Stop상태일 때,마우스 좌클릭 감지
+		if (KEY_PRESSED(KEY::LBTN) && m_selectedTileImgIndex != -1)
 		{
 			// 타일맵 범위 내에서 클릭한 경우
 			if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
