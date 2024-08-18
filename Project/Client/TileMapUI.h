@@ -1,5 +1,6 @@
 #pragma once
 #include "ComponentUI.h"
+#include <stack>
 class TileMapUI :
     public ComponentUI
 {
@@ -10,6 +11,8 @@ private:
     class CTileMap* m_selectedTileMap = nullptr;
 
     int m_selectedTileImgIndex = -1;
+
+    std::stack<std::pair<int, int>> m_undoStack;
 
 private:
     void SelectTileMapAtlasByDialog();
