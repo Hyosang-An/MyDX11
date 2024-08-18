@@ -22,6 +22,7 @@ void CEditorMgr::CreateEditorObject()
 	pEditorCamera->Camera()->SetProjType(ORTHOGRAPHIC);
 
 	m_vecEditorObject.push_back(pEditorCamera);
+	m_EditorCamera = pEditorCamera;
 
-	CRenderMgr::GetInst()->RegisterEditorCamera(pEditorCamera->Camera());
+	CRenderMgr::GetInst()->RegisterEditorCamera(pEditorCamera->Camera()); 
 }

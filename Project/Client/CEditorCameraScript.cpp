@@ -122,13 +122,13 @@ void CEditorCameraScript::PerspectiveMove()
 	//	CKeyMgr::GetInst()->MouseCapture(true);
 
 	//	// 마우스가 이동하는 방향
-	//	//vDir.x; ==> y축 회전;
-	//	//vDir.y; ==> x축 회전
-	//	Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
+	//	//vMouseDragDelta.x; ==> y축 회전;
+	//	//vMouseDragDelta.y; ==> x축 회전
+	//	Vec2 vMouseDragDelta = CKeyMgr::GetInst()->GetMouseDragDelta();
 
 	//	Vec3 vRot = Transform()->GetRelativeRoatation();
-	//	vRot.y += vDir.x * XM_PI * EngineDT * 10.f;
-	//	vRot.x += vDir.y * XM_PI * EngineDT * 10.f;
+	//	vRot.y += vMouseDragDelta.x * XM_PI * EngineDT * 10.f;
+	//	vRot.x += vMouseDragDelta.y * XM_PI * EngineDT * 10.f;
 	//	Transform()->SetRelativeRotation(vRot);
 	//}
 	//else if (KEY_RELEASED(KEY::RBTN))
@@ -152,11 +152,11 @@ void CEditorCameraScript::PerspectiveMove()
 
 	if (mousecontrol)
 	{
-		Vec2 vDir = CKeyMgr::GetInst()->GetDragDir();
+		Vec2 vMouseDragDelta = CKeyMgr::GetInst()->GetMouseDragDelta();
 
 		Vec3 vRot = Transform()->GetRelativeRoatation();
-		vRot.y += vDir.x * XM_PI * EngineDT * 1.f;
-		vRot.x += vDir.y * XM_PI * EngineDT * 1.f;
+		vRot.y += vMouseDragDelta.x * XM_PI * 0.001;
+		vRot.x += vMouseDragDelta.y * XM_PI * 0.001;
 		Transform()->SetRelativeRotation(vRot);
 	}
 

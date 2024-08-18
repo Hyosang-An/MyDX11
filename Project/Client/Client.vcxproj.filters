@@ -112,12 +112,6 @@
     <Filter Include="Manager\03. CLevelSaveLoad">
       <UniqueIdentifier>{94a208c6-84ab-48bd-9362-d97aa12cf8d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EditorUI\08. SpriteEditor">
-      <UniqueIdentifier>{eb3eeb56-a61e-4db7-ba20-c285305622d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="EditorUI\08. SpriteEditor\SE_Sub">
-      <UniqueIdentifier>{0b164b06-00b9-411a-9240-331405e82103}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EditorUI\09. FlipBookEditor">
       <UniqueIdentifier>{26a850a8-b161-4e1a-931f-3e69c8200f77}</UniqueIdentifier>
     </Filter>
@@ -127,10 +121,16 @@
     <Filter Include="EditorUI\09. FlipBookEditor\FlipBookInspector">
       <UniqueIdentifier>{e23f732a-3a68-4aa9-bf7b-86cc635563ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EditorUI\08. SpriteEditor\SE_Sub\SC_Detail">
+    <Filter Include="EditorUI\08. SpriteCreator">
+      <UniqueIdentifier>{eb3eeb56-a61e-4db7-ba20-c285305622d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\08. SpriteCreator\SC_Sub">
+      <UniqueIdentifier>{0b164b06-00b9-411a-9240-331405e82103}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorUI\08. SpriteCreator\SC_Sub\SC_Detail">
       <UniqueIdentifier>{791248f4-e51d-4c00-8a65-d9b1281dd968}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EditorUI\08. SpriteEditor\SE_Sub\SC_AtlasView">
+    <Filter Include="EditorUI\08. SpriteCreator\SC_Sub\SC_AtlasView">
       <UniqueIdentifier>{ef1bef0a-e838-44e6-96cd-efab87eb585d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -283,16 +283,16 @@
       <Filter>Manager\03. CLevelSaveLoad</Filter>
     </ClInclude>
     <ClInclude Include="SC_Sub.h">
-      <Filter>EditorUI\08. SpriteEditor\SE_Sub</Filter>
+      <Filter>EditorUI\08. SpriteCreator\SC_Sub</Filter>
     </ClInclude>
     <ClInclude Include="SC_AtlasView.h">
-      <Filter>EditorUI\08. SpriteEditor\SE_Sub\SC_AtlasView</Filter>
+      <Filter>EditorUI\08. SpriteCreator\SC_Sub\SC_AtlasView</Filter>
     </ClInclude>
     <ClInclude Include="SC_Detail.h">
-      <Filter>EditorUI\08. SpriteEditor\SE_Sub\SC_Detail</Filter>
+      <Filter>EditorUI\08. SpriteCreator\SC_Sub\SC_Detail</Filter>
     </ClInclude>
     <ClInclude Include="SpriteCreator.h">
-      <Filter>EditorUI\08. SpriteEditor</Filter>
+      <Filter>EditorUI\08. SpriteCreator</Filter>
     </ClInclude>
     <ClInclude Include="FlipBookEditor.h">
       <Filter>EditorUI\09. FlipBookEditor</Filter>
@@ -439,16 +439,16 @@
       <Filter>Manager\03. CLevelSaveLoad</Filter>
     </ClCompile>
     <ClCompile Include="SC_Sub.cpp">
-      <Filter>EditorUI\08. SpriteEditor\SE_Sub</Filter>
+      <Filter>EditorUI\08. SpriteCreator\SC_Sub</Filter>
     </ClCompile>
     <ClCompile Include="SC_AtlasView.cpp">
-      <Filter>EditorUI\08. SpriteEditor\SE_Sub\SC_AtlasView</Filter>
+      <Filter>EditorUI\08. SpriteCreator\SC_Sub\SC_AtlasView</Filter>
     </ClCompile>
     <ClCompile Include="SC_Detail.cpp">
-      <Filter>EditorUI\08. SpriteEditor\SE_Sub\SC_Detail</Filter>
+      <Filter>EditorUI\08. SpriteCreator\SC_Sub\SC_Detail</Filter>
     </ClCompile>
     <ClCompile Include="SpriteCreator.cpp">
-      <Filter>EditorUI\08. SpriteEditor</Filter>
+      <Filter>EditorUI\08. SpriteCreator</Filter>
     </ClCompile>
     <ClCompile Include="FlipBookEditor.cpp">
       <Filter>EditorUI\09. FlipBookEditor</Filter>

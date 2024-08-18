@@ -121,7 +121,6 @@ void CEditorMgr::CreateEditorUI()
     pUI->SetModal(true);
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
-
     // Inspector
     pUI = new Inspector;
     pUI->Init();
@@ -156,7 +155,7 @@ void CEditorMgr::CreateEditorUI()
     // FlipBookEditor
     pUI = new FlipBookEditor;
     pUI->Init();
-    pUI->SetActive(true);
+    pUI->SetActive(false);
     pUI->SetName("FlipBookEditor");
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 }

@@ -68,9 +68,9 @@ void CKeyMgr::Tick()
 			POINT ptMousePos = { };
 			GetCursorPos(&ptMousePos);
 			ScreenToClient(CEngine::GetInst()->GetMainWnd(), &ptMousePos);
-			m_MousePos = Vec2((float)ptMousePos.x, (float)ptMousePos.y);
+			m_MousePosInClient = Vec2((float)ptMousePos.x, (float)ptMousePos.y);
 
-			m_DragDir = m_MousePos - m_CapturePos;
+			m_MouseDragDelta = m_MousePosInClient - m_CapturePos;
 
 			POINT ptCapturePos = { (int)m_CapturePos.x, (int)m_CapturePos.y };
 			ClientToScreen(CEngine::GetInst()->GetMainWnd(), &ptCapturePos);
@@ -78,12 +78,12 @@ void CKeyMgr::Tick()
 		}
 		else
 		{
-			m_PrevMousePos = m_MousePos;
+			m_PrevMousePos = m_MousePosInClient;
 			POINT ptMousePos = { };
 			GetCursorPos(&ptMousePos);
 			ScreenToClient(CEngine::GetInst()->GetMainWnd(), &ptMousePos);
-			m_MousePos = Vec2((float)ptMousePos.x, (float)ptMousePos.y);
-			m_DragDir = m_MousePos - m_PrevMousePos;
+			m_MousePosInClient = Vec2((float)ptMousePos.x, (float)ptMousePos.y);
+			m_MouseDragDelta = m_MousePosInClient - m_PrevMousePos;
 		}
 	}
 

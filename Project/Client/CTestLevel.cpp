@@ -97,29 +97,29 @@ void CTestLevel::CreateTestLevel()
 
 
 
-	//플레이어 오브젝트
-	CGameObject* pPlayer = new CGameObject;
-	pPlayer->SetName(L"Player");
-	pPlayer->AddComponent(new CTransform);
-	pPlayer->AddComponent(new CMeshRender);
-	pPlayer->AddComponent(new CCollider2D);
-	pPlayer->AddComponent(new CFlipBookComponent);
-	pPlayer->AddComponent(new CPlayerScript);
+	////플레이어 오브젝트
+	//CGameObject* pPlayer = new CGameObject;
+	//pPlayer->SetName(L"Player");
+	//pPlayer->AddComponent(new CTransform);
+	//pPlayer->AddComponent(new CMeshRender);
+	//pPlayer->AddComponent(new CCollider2D);
+	//pPlayer->AddComponent(new CFlipBookComponent);
+	//pPlayer->AddComponent(new CPlayerScript);
 
-	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
-	pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
+	//pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+	//pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
 
-	pPlayer->Collider2D()->SetIndependentScale(false);
-	pPlayer->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
-	pPlayer->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
+	//pPlayer->Collider2D()->SetIndependentScale(false);
+	//pPlayer->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	//pPlayer->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
 
-	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pPlayer->MeshRender()->SetMaterial(pMtrl);
+	//pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	//pPlayer->MeshRender()->SetMaterial(pMtrl);
 
-	pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Link_MoveDown.flip"));
-	pPlayer->FlipBookComponent()->Play(L"Link_MoveDown", 10, true);
+	//pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Link_MoveDown.flip"));
+	//pPlayer->FlipBookComponent()->Play(L"Link_MoveDown", 10, true);
 
-	TestLevel->AddObject(3, pPlayer);
+	//TestLevel->AddObject(3, pPlayer);
 
 
 	//// Monster Object
@@ -142,22 +142,22 @@ void CTestLevel::CreateTestLevel()
 	//TestLevel->AddObject(4, pMonster);
 
 
-	//// TileMap Object
-	//CGameObject* pTileMapObj = new CGameObject;
-	//pTileMapObj->SetName(L"TileMap");
+	// TileMap Object
+	CGameObject* pTileMapObj = new CGameObject;
+	pTileMapObj->SetName(L"TileMap");
 
-	//pTileMapObj->AddComponent(new CTransform);
-	//pTileMapObj->AddComponent(new CTileMap);
+	pTileMapObj->AddComponent(new CTransform);
+	pTileMapObj->AddComponent(new CTileMap);
 
-	//pTileMapObj->Transform()->SetRelativePos(Vec3(-500.f, 250.f, 500.f));
+	pTileMapObj->Transform()->SetRelativePos(Vec3(-500.f, 250.f, 500.f));
 
-	//pTileMapObj->TileMap()->SetRowCol(20, 20);
-	//pTileMapObj->TileMap()->SetTileSize(Vec2(64.f, 64.f)); // 해상도가 아닌 게임상 Scale
+	pTileMapObj->TileMap()->SetRowCol(20, 20);
+	pTileMapObj->TileMap()->SetTileSize(Vec2(64.f, 64.f)); // 해상도가 아닌 게임상 Scale
 
-	//Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\TILE.bmp");
-	//pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas, Vec2(64.f, 64.f));
+	Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\TILE.bmp");
+	pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas, Vec2(64.f, 64.f));
 
-	//TestLevel->AddObject(2, pTileMapObj);
+	TestLevel->AddObject(2, pTileMapObj);
 
 
 	//// PostProcess0 Object

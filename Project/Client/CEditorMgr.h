@@ -16,6 +16,8 @@ private:
     vector<CGameObject*>        m_vecEditorObject;
     map<string, EditorUI*>      m_mapUI;
 
+    CGameObject*                m_EditorCamera = nullptr;
+
     HANDLE                      m_hNotifyHandle = nullptr;
 
 public:
@@ -25,7 +27,9 @@ public:
     void Init();
     void Progress();
 
-private:
+public:
+    CGameObject* GetEditorCamera() { return m_EditorCamera; }
+
 private:
     void ShortCut();
 

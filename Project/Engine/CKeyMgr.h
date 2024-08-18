@@ -64,9 +64,9 @@ private:
 
 	vector<tKeyInfo>    m_vecKeyInfo;
 
-	Vec2	m_MousePos;
+	Vec2	m_MousePosInClient;
 	Vec2	m_PrevMousePos;
-	Vec2	m_DragDir;
+	Vec2	m_MouseDragDelta;
 
 	Vec2				m_CapturePos;
 	bool				m_MouseCapture;
@@ -76,15 +76,15 @@ public:
 	void Tick();
 
 	KEY_STATE GetKeyState(KEY _key) { return m_vecKeyInfo[(UINT)_key].eKeyState; }
-	Vec2 GetMousePos() { return m_MousePos; }
-	Vec2 GetDragDir() { return m_DragDir; }
+	Vec2 GetMousePosInClient() { return m_MousePosInClient; }
+	Vec2 GetMouseDragDelta() { return m_MouseDragDelta; }
 
 	void MouseCapture(bool _bCapture)
 	{
 		m_MouseCapture = _bCapture;		
 
 		if (_bCapture == true)
-			m_CapturePos = m_MousePos;
+			m_CapturePos = m_MousePosInClient;
 	}
 };
 
