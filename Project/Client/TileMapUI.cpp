@@ -260,11 +260,25 @@ void TileMapUI::Update()
 			{
 				// 타일맵의 타일 인덱스 계산
 				int mouseTileIndex = (int)vMouseTileRowCol.x * (int)vTileMapRowCol.y + (int)vMouseTileRowCol.y;
-				
-				// TileInfoVec의mouseTileIndex에 m_selectedTileImgIndex저장
+	
 				vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
-				tileInfoVec[mouseTileIndex].ImgIdx = m_selectedTileImgIndex;
+
+				// 기존 인덱스 값과 새로운 인덱스 값이 다를 경우에만 stack에 저장 후 변경
+				if (tileInfoVec[mouseTileIndex].ImgIdx != m_selectedTileImgIndex)
+				{
+					m_undoStack.push({ mouseTileIndex, tileInfoVec[mouseTileIndex].ImgIdx });
+					tileInfoVec[mouseTileIndex].ImgIdx = m_selectedTileImgIndex;
+				}
 			}
+		}
+
+		// Undo
+		if (KEY_PRESSED(KEY::CTRL) && KEY_JUST_PRESSED(KEY::Z) && !m_undoStack.empty())
+		{
+			std::pair<int, int> undoData = m_undoStack.top();
+			m_undoStack.pop();
+			vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
+			tileInfoVec[undoData.first].ImgIdx = undoData.second;
 		}
 	}
 
