@@ -139,8 +139,9 @@ void CTileMap::SetAtlasTexture(Ptr<CTexture> _Atlas, Vec2 _tileResolution)
 	else
 		m_AtlasResolution = Vec2((float)_Atlas->Width(), (float)_Atlas->Height());
 
-	m_AtlasTileResolution = _tileResolution;
-	if (m_AtlasTileResolution != Vec2(0, 0))
+	if (_tileResolution != Vec2(0, 0))
+		SetAtlasTileResolution(_tileResolution);
+	else
 		SetAtlasTileResolution(m_AtlasTileResolution);
 }
 

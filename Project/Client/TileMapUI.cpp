@@ -28,7 +28,6 @@ void TileMapUI::Update()
 {
 	ImVec2 initial_content_pos = ImGui::GetCursorPos();
 
-
 	Title();
 
 	m_selectedTileMap = GetTargetObject()->TileMap();
@@ -66,6 +65,13 @@ void TileMapUI::Update()
 					pAtlasTex = ((CTexture*)pAsset.Get());
 					m_selectedTileMap->SetAtlasTexture(pAtlasTex);
 					m_selectedTileImgIndex = -1;
+
+					// 아틀라스 텍스쳐가 바뀌면 tileinfo 초기화
+					auto& vecTileInfo = m_selectedTileMap->GetTileInfoVec();
+					for (size_t i = 0; i < vecTileInfo.size(); ++i)
+					{
+						vecTileInfo[i].ImgIdx = 0;
+					}
 				}
 			}
 
@@ -113,7 +119,6 @@ void TileMapUI::Update()
 	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetTileSize(vTileSize);
 
-
 	// 타일맵 타일 선택
 	ImGui::Text("Tile Select");
 	ImGui::SameLine(120);
@@ -137,6 +142,7 @@ void TileMapUI::Update()
 	}
 	float tileAspectRatio = atlasTileResolution.x / atlasTileResolution.y;
 	ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
+
 	// 타일 이미지 좌클릭시 팝업 창 띄우고 아틀라스이미지를 보여주기
 	if (ImGui::IsItemClicked(0))
 		ImGui::OpenPopup("TileSelect");
@@ -183,7 +189,6 @@ void TileMapUI::Update()
 		ImGui::EndPopup();
 	}
 	ImGui::Separator();
-
 
 	// EditorCamera 정보 및 타일 편집 (level이 stop 상태일 때만)
 	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() == LEVEL_STATE::STOP && CEditorMgr::GetInst()->GetEditorCamera() != nullptr)
@@ -264,7 +269,6 @@ void TileMapUI::Update()
 	}
 
 
-
 	ImVec2 last_content_pos = ImGui::GetCursorPos();
 	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
 
@@ -330,6 +334,13 @@ void TileMapUI::SelectTileMapAtlasByDialog()
 						// 예: m_owner->SetTexture(CAssetMgr::GetInst()->FindAsset<CTexture>(relativePath));
 						m_selectedTileMap->SetAtlasTexture(CAssetMgr::GetInst()->FindAsset<CTexture>(relativePath));
 						m_selectedTileImgIndex = -1;
+
+						// 아틀라스 텍스쳐가 바뀌면 tileinfo 초기화
+						auto& vecTileInfo = m_selectedTileMap->GetTileInfoVec();
+						for (size_t i = 0; i < vecTileInfo.size(); ++i)
+						{
+							vecTileInfo[i].ImgIdx = 0;
+						}
 
 						m_lastTextureDirectory = filePath.parent_path().wstring();
 
