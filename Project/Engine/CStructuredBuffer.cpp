@@ -16,7 +16,7 @@ CStructuredBuffer::~CStructuredBuffer()
 
 
 int CStructuredBuffer::Create(UINT _ElementSize, UINT _ElementCount,
-	SB_TYPE _Type, bool _SysMemMove, void* _InitData)
+	SB_TYPE _Type, void* _InitData)
 {
 	// _Type 기본값: SRV_ONLY
 	// _SysMemMove 기본값: false
@@ -36,8 +36,6 @@ int CStructuredBuffer::Create(UINT _ElementSize, UINT _ElementCount,
 	m_ElementSize = _ElementSize;
 	m_ElementCount = _ElementCount;
 
-	m_SysMemMove = _SysMemMove;
-
 	// ID3D11Buffer m_SB를 메인 StructuredBuffer 용도로 생성하기
 	if (SB_TYPE::SRV_UAV == _Type)
 		m_Desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
@@ -49,18 +47,16 @@ int CStructuredBuffer::Create(UINT _ElementSize, UINT _ElementCount,
 	m_Desc.StructureByteStride = m_ElementSize;
 
 
-	if (false == m_SysMemMove)
-	{
-		m_Desc.Usage = D3D11_USAGE_DYNAMIC;
-		m_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	}
-	else
+	if (SB_TYPE::SRV_UAV == _Type)
 	{
 		m_Desc.Usage = D3D11_USAGE_DEFAULT;
 		m_Desc.CPUAccessFlags = 0;
 	}
-
-
+	else if (SB_TYPE::SRV_ONLY == _Type)
+	{
+		m_Desc.Usage = D3D11_USAGE_DYNAMIC;
+		m_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	}
 
 	HRESULT hr = S_OK;
 	if (nullptr == _InitData)
@@ -80,7 +76,7 @@ int CStructuredBuffer::Create(UINT _ElementSize, UINT _ElementCount,
 
 
 	// 추가버퍼 생성
-	if (m_SysMemMove)
+	if (m_Type == SB_TYPE::SRV_UAV)
 	{
 		D3D11_BUFFER_DESC tRWBufferDesc = m_Desc;
 
@@ -155,7 +151,7 @@ void CStructuredBuffer::SetData(void* _pData, UINT _DataSize)
 	}
 
 	// 메인 버퍼만 사용하는 경우
-	if (false == m_SysMemMove)
+	if (m_Type == SRV_ONLY)
 	{
 		D3D11_MAPPED_SUBRESOURCE tMapSub = {};
 		CONTEXT->Map(m_SB.Get(), 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &tMapSub);
@@ -164,10 +160,9 @@ void CStructuredBuffer::SetData(void* _pData, UINT _DataSize)
 	}
 
 	// 읽기, 쓰기 버퍼를 따로 쓰는 경우
-	else
+	else if (m_Type == SRV_UAV)
 	{
 		D3D11_MAPPED_SUBRESOURCE tMapSub = {};
-		auto test = m_SB_Write;
 		CONTEXT->Map(m_SB_Write.Get(), 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &tMapSub);
 		memcpy(tMapSub.pData, _pData, _DataSize);
 		CONTEXT->Unmap(m_SB_Write.Get(), 0);
@@ -180,7 +175,7 @@ void CStructuredBuffer::GetData(void* _pData, UINT _DataSize)
 {
 	// 요청한 데이터 크기가 구조화버퍼 크기보다 작아야한다.
 	assert(_DataSize <= m_Desc.ByteWidth);
-	assert(m_SysMemMove);
+	assert(m_Type == SRV_ONLY);
 
 	if (0 == _DataSize)
 	{

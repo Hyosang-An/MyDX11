@@ -187,3 +187,16 @@ enum class LIGHT_TYPE
 	POINT,
 	SPOT,
 };
+
+enum class PARTICLE_MODULE
+{
+	SPAWN,
+	SPAWN_BURST,
+	ADD_VELOCITY,
+	SCALE,
+	DRAG,
+	NOISE_FORCE,
+	RENDER,
+
+	END,
+};

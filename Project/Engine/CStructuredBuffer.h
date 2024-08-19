@@ -20,7 +20,7 @@ private:
     ComPtr<ID3D11UnorderedAccessView>   m_UAV;
 
     SB_TYPE                             m_Type = SRV_ONLY;
-    bool                                m_SysMemMove = false;
+    //bool                                m_SysMemMove = false;
 
     UINT                                m_ElementCount;
     UINT                                m_ElementSize;
@@ -48,7 +48,7 @@ public:
     void Clear_CS_UAV();
 
 public:
-    int Create(UINT _ElementSize, UINT _ElementCount, SB_TYPE _Type = SRV_ONLY, bool _SysMemMove = false, void* _InitData = nullptr);
+    int Create(UINT _ElementSize, UINT _ElementCount, SB_TYPE _Type = SRV_ONLY, void* _InitData = nullptr);
 
 public:
     CLONE_DISABLE(CStructuredBuffer)

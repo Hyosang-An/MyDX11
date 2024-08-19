@@ -177,16 +177,16 @@ void CTestLevel::CreateTestLevel()
 	//TestLevel->AddObject(0, pPostProcess_1_Obj);
 
 
-	//// Particle Object
-	//CGameObject* pParticleObj = new CGameObject;
-	//pParticleObj->SetName(L"Particle");
+	// Particle Object
+	CGameObject* pParticleObj = new CGameObject;
+	pParticleObj->SetName(L"Particle");
 
-	//pParticleObj->AddComponent(new CTransform);
-	//pParticleObj->AddComponent(new CParticleSystem);
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->AddComponent(new CParticleSystem);
 
-	//pParticleObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+	pParticleObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
 
-	//TestLevel->AddObject(0, pParticleObj);
+	TestLevel->AddObject(0, pParticleObj);
 
 
 	//// PostProcess Object2 (GaussianBlur)

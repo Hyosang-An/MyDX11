@@ -5,6 +5,8 @@
 #include "CLevelMgr.h"
 #include "CLevel.h"
 
+#include "CKeyMgr.h"
+
 CTimeMgr::CTimeMgr() :
 	m_llCurCount{},
 	m_llPrevCount{},
@@ -83,4 +85,11 @@ void CTimeMgr::Tick()
 	g_GlobalData.g_EngineDT = m_E_DeltaTime;
 	g_GlobalData.g_Time = m_Time;
 	g_GlobalData.g_EngineTime = m_E_Time;
+
+
+	// H≈∞ ¥©∏£∏È Engine Time ∏ÿ√„
+	if (KEY_PRESSED(KEY::H))
+	{
+		g_GlobalData.g_EngineDT = 0.f;
+	}
 }
