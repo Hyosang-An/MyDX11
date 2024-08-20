@@ -160,7 +160,7 @@ void SE_AtlasView::DrawSelectRect()
 			return;
 
 		ImGui::GetWindowDrawList()->AddRect(BoxLTPosOnUI, BoxRBPosOnUI
-			, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0.f, 1.f);
+			, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0, 1.f);
 	}
 
 	else if (GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::ManualSpecification)
@@ -178,7 +178,7 @@ void SE_AtlasView::DrawSelectRect()
 			ImVec2 BoxRBPosOnUI = ImVec2((vStartLT.x + vSize.x) * m_Ratio + m_imageRectMin.x, (vStartLT.y + vSize.y) * m_Ratio + m_imageRectMin.y);
 
 			ImGui::GetWindowDrawList()->AddRect(BoxLTPosOnUI, BoxRBPosOnUI
-				, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0.f, 1.f);
+				, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0, 1.f);
 
 			vStartLT.x += vSize.x;
 		}

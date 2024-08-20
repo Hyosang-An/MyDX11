@@ -243,9 +243,9 @@ void Content::LoadAsset(const path& _Path)
 	else if (ext == L".png" || ext == L".jpg" || ext == L".jpeg" || ext == L".bmp" || ext == L".dds" || ext == L".tga"
 		|| ext == L".PNG" || ext == L".JPG" || ext == L".JPEG" || ext == L".BMP" || ext == L".DDS" || ext == L".TGA")
 		CAssetMgr::GetInst()->Load<CTexture>(_Path, _Path);
-	//else if (ext == L".mp3" || ext == L".mp4" || ext == L".ogg" || ext == L".wav" 
-	//	|| ext == L".MP3" || ext == L".MP4" || ext == L".OGG" || ext == L".WAV")
-	//	CAssetMgr::GetInst()->Load<CSound>(_Path, _Path);
+	else if (ext == L".mp3" || ext == L".mp4" || ext == L".ogg" || ext == L".wav" 
+		|| ext == L".MP3" || ext == L".MP4" || ext == L".OGG" || ext == L".WAV")
+		CAssetMgr::GetInst()->Load<CSound>(_Path, _Path);
 	else if (ext == L".sprite")
 		CAssetMgr::GetInst()->Load<CSprite>(_Path, _Path);
 	else if (ext == L".flip")

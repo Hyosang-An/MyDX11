@@ -22,6 +22,17 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "DirectxTex//DirectXTex.lib")
 #endif
 
+// FMOD
+#include <FMOD/fmod.h>
+#include <FMOD/fmod.hpp>
+#include <FMOD/fmod_codec.h>
+
+#ifdef _DEBUG
+#pragma comment(lib, "FMOD/fmodL_vc.lib")
+#else
+#pragma comment(lib, "FMOD/fmod_vc.lib")
+#endif
+
 #include "SimpleMath.h"
 using namespace DirectX;
 using namespace DirectX::SimpleMath;

@@ -155,8 +155,8 @@ void CEditorCameraScript::PerspectiveMove()
 		Vec2 vMouseDragDelta = CKeyMgr::GetInst()->GetMouseDragDelta();
 
 		Vec3 vRot = Transform()->GetRelativeRoatation();
-		vRot.y += vMouseDragDelta.x * XM_PI * 0.001;
-		vRot.x += vMouseDragDelta.y * XM_PI * 0.001;
+		vRot.y += vMouseDragDelta.x * XM_PI * 0.001f;
+		vRot.x += vMouseDragDelta.y * XM_PI * 0.001f;
 		Transform()->SetRelativeRotation(vRot);
 	}
 

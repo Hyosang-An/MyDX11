@@ -73,7 +73,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 	Vec3 vScale = Transform()->GetRelativeScale();
 
 	vScale += Vec3(10.f, 10.f, 0.f);
-	Collider2D()->SetScale(Collider2D()->GetScale() + Vec3(0.1, 0.1f, 0.f));
+	Collider2D()->SetScale(Collider2D()->GetScale() + Vec3(0.1f, 0.1f, 0.f));
 
 	Transform()->SetRelativeScale(vScale);
 }

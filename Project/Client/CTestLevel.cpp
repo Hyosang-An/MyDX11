@@ -35,7 +35,9 @@ void CTestLevel::CreateTestLevel()
 
 	CreatePrefab();
 
-
+	// Sound 재생
+	Ptr<CSound> pSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\BGM_title_screen.wav");
+	pSound->Play(0, 1.f, false);
 
 	// 컴퓨트 쉐이더 테스트용 텍스쳐 생성
 	Ptr<CTexture> pTestTex = CAssetMgr::GetInst()->CreateTexture(L"ComputeShaderTestTex"

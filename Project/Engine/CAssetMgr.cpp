@@ -18,6 +18,9 @@ void CAssetMgr::Tick()
 {
 	if (m_Changed)
 		m_Changed = false;
+
+	// FMOD Tick
+	m_FMODSystem->update();
 }
 
 

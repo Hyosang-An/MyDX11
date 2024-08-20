@@ -2,8 +2,8 @@
 
 # DirectTex 
 
-# Fmod
-* Fmod Engine for Windows - version 2.02.23
+# FMOD
+* FMOD Engine for Windows - version 2.02.23
 
 # ImGui
 

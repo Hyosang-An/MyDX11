@@ -189,8 +189,8 @@ void SE_Detail::SpriteInfo()
 		ImGui::SameLine(120);
 		ImGui::SetNextItemWidth(150.f);
 		ImGui::InputInt2("##StartLeftTop", startLT);
-		m_StartLT.x = startLT[0];
-		m_StartLT.y = startLT[1];
+		m_StartLT.x = (float)startLT[0];
+		m_StartLT.y = (float)startLT[1];
 		m_StartLT.x = max(0, m_StartLT.x);
 		m_StartLT.y = max(0, m_StartLT.y);
 
@@ -200,8 +200,8 @@ void SE_Detail::SpriteInfo()
 		ImGui::SameLine(120);
 		ImGui::SetNextItemWidth(150.f);
 		ImGui::InputInt2("##Size", size);
-		m_SpriteSize.x = size[0];
-		m_SpriteSize.y = size[1];
+		m_SpriteSize.x = (float)size[0];
+		m_SpriteSize.y = (float)size[1];
 		m_SpriteSize.x = max(0, m_SpriteSize.x);
 		m_SpriteSize.y = max(0, m_SpriteSize.y);
 
@@ -216,8 +216,8 @@ void SE_Detail::SpriteInfo()
 		int backgroundSize[] = { (int)m_BackgroundSize.x, (int)m_BackgroundSize.y };
 		ImGui::Text("Set Background Size");
 		ImGui::InputInt2("##Set Background Size", backgroundSize);
-		m_BackgroundSize.x = backgroundSize[0];
-		m_BackgroundSize.y = backgroundSize[1];
+		m_BackgroundSize.x = (float)backgroundSize[0];
+		m_BackgroundSize.y = (float)backgroundSize[1];
 		m_BackgroundSize.x = max(0, m_BackgroundSize.x);
 		m_BackgroundSize.y = max(0, m_BackgroundSize.y);
 

@@ -6,6 +6,13 @@
 
 void CAssetMgr::Init()
 {
+	// FMOD 초기화
+	FMOD::System_Create(&m_FMODSystem);
+	assert(m_FMODSystem);
+
+	// 32개 채널 생성
+	m_FMODSystem->init(32, FMOD_DEFAULT, nullptr);
+
 	CreateEngineMesh();
 
 	CreateEngineTexture();

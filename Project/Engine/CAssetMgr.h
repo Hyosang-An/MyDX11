@@ -19,6 +19,8 @@ private:
 	map<wstring, Ptr<CAsset>>	m_arrAssetMap[(UINT)ASSET_TYPE::END];
 	bool						m_Changed = false;
 
+	FMOD::System* m_FMODSystem;  // FMOD 관리자 클래스
+
 	int							m_PostProcessTextCnt = 4;
 
 public:
@@ -28,7 +30,7 @@ public:
 	void GetAssetNames(ASSET_TYPE _Type, vector<string>& _vecOut);
 	const map<wstring, Ptr<CAsset>>& GetAssetMap(ASSET_TYPE _Type) { return m_arrAssetMap[(UINT)_Type]; }
 	bool IsChanged() { return m_Changed; }
-
+	FMOD::System* GetFMODSystem() { return m_FMODSystem; }
 	int GetPostProcessTextCnt() { return m_PostProcessTextCnt; }
 
 	template<typename T>

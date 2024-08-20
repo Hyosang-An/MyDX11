@@ -122,9 +122,9 @@ CParticleSystem::CParticleSystem(const CParticleSystem& _Other)
 
 CParticleSystem::~CParticleSystem()
 {
-	DELETE(m_ParticleBuffer);
-	DELETE(m_SpawnCountBuffer);
-	DELETE(m_ModuleBuffer);
+	DELETE_PTR(m_ParticleBuffer);
+	DELETE_PTR(m_SpawnCountBuffer);
+	DELETE_PTR(m_ModuleBuffer);
 }
 
 void CParticleSystem::FinalTick()

@@ -126,8 +126,8 @@ void TileMapUI::Update()
 	ImVec2 uv_max = ImVec2(1.0f, 1.0f);
 	ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	ImVec4 border_col = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
-	int atlasMaxRow = m_selectedTileMap->GetAtlasMaxRowCol().x;
-	int atlasMaxCol = m_selectedTileMap->GetAtlasMaxRowCol().y;
+	int atlasMaxRow = (int)m_selectedTileMap->GetAtlasMaxRowCol().x;
+	int atlasMaxCol = (int)m_selectedTileMap->GetAtlasMaxRowCol().y;
 	int atlasMaxTileSize = atlasMaxRow * atlasMaxCol;
 	if (m_selectedTileImgIndex == -1 || m_selectedTileImgIndex >= atlasMaxTileSize)
 	{

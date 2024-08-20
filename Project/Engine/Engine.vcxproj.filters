@@ -154,6 +154,9 @@
     <ClInclude Include="CParticleTickCS.h">
       <Filter>HLSL\03. Compute\02. ParticleTick</Filter>
     </ClInclude>
+    <ClInclude Include="CSound.h">
+      <Filter>06. Asset\06. Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -284,6 +287,9 @@
     </ClCompile>
     <ClCompile Include="CParticleTickCS.cpp">
       <Filter>HLSL\03. Compute\02. ParticleTick</Filter>
+    </ClCompile>
+    <ClCompile Include="CSound.cpp">
+      <Filter>06. Asset\06. Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
