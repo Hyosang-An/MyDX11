@@ -96,6 +96,8 @@ void CRenderMgr::Tick()
 	// Debug Render
 	RenderDebugShape();
 
+	// Time 정보 출력
+	CTimeMgr::GetInst()->Render();
 
 	// Lightvec Clear
 	Clear();

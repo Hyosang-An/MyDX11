@@ -12,6 +12,7 @@
 #include "CCollisionMgr.h"
 #include "CTaskMgr.h"
 #include "CPrefab.h"
+#include "CFontMgr.h"
 
 CEngine::CEngine() :
 	m_hWnd{},
@@ -21,6 +22,11 @@ CEngine::CEngine() :
 
 CEngine::~CEngine()
 {
+	if (nullptr != m_FMODSystem)
+	{
+		m_FMODSystem->release();
+		m_FMODSystem = nullptr;
+	}
 }
 
 int CEngine::Init(HWND _wnd, POINT _ptResolution, OBJECT_SAVE _SaveFunc, OBJECT_LOAD _LoadFunc)
@@ -35,6 +41,13 @@ int CEngine::Init(HWND _wnd, POINT _ptResolution, OBJECT_SAVE _SaveFunc, OBJECT_
 		return E_FAIL;
 	}
 
+	// FMOD 초기화		
+	FMOD::System_Create(&m_FMODSystem);
+	assert(m_FMODSystem);
+
+	// 32개 채널 생성
+	m_FMODSystem->init(32, FMOD_DEFAULT, nullptr);
+
 	// Manager 초기화
 	CPathMgr::GetInst()->Init();
 	CKeyMgr::GetInst()->Init();
@@ -43,6 +56,7 @@ int CEngine::Init(HWND _wnd, POINT _ptResolution, OBJECT_SAVE _SaveFunc, OBJECT_
 	CRenderMgr::GetInst()->Init();	// AssetMgr에서 렌더링에 필요한 Texture들을 생성한 뒤 RenderMgr 초기화
 	
 	CLevelMgr::GetInst()->Init();
+	CFontMgr::GetInst()->Init();
 
 	// Prefab Function 등록
 	CPrefab::g_ObjectSaveFunc = _SaveFunc;
@@ -53,6 +67,9 @@ int CEngine::Init(HWND _wnd, POINT _ptResolution, OBJECT_SAVE _SaveFunc, OBJECT_
 
 void CEngine::Progress()
 {
+	// FMOD Tick
+	m_FMODSystem->update();
+
 	// Manager
 	CKeyMgr::GetInst()->Tick();
 	CTimeMgr::GetInst()->Tick();

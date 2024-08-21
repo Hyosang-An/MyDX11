@@ -41,7 +41,7 @@ int CSound::Play(int _iRoopCount, float _fVolume, bool _bOverlap)
 	_iRoopCount -= 1;
 
 	FMOD::Channel* pChannel = nullptr;
-	CAssetMgr::GetInst()->GetFMODSystem()->playSound(m_Sound, nullptr, false, &pChannel);
+	CEngine::GetInst()->GetFMODSystem()->playSound(m_Sound, nullptr, false, &pChannel);
 
 	// 재생 실패
 	if (nullptr == pChannel)
@@ -132,7 +132,7 @@ int CSound::Load(const wstring& _FilePath)
 	WideCharToMultiByte(CP_UTF8, 0, _FilePath.c_str(), -1, &path[0], bufferSize, nullptr, nullptr);
 
 	// FMOD::System::createSound 호출
-	FMOD_RESULT result = CAssetMgr::GetInst()->GetFMODSystem()->createSound(path.c_str(), FMOD_DEFAULT, nullptr, &m_Sound);
+	FMOD_RESULT result = CEngine::GetInst()->GetFMODSystem()->createSound(path.c_str(), FMOD_DEFAULT, nullptr, &m_Sound);
 	if (result != FMOD_OK)
 	{
 		// 에러 처리
