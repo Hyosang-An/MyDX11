@@ -249,9 +249,19 @@ void TileMapUI::Update()
 		vMouseTileRowCol.x = floor(vMouseTileRowCol.x);
 		vMouseTileRowCol.y = floor(vMouseTileRowCol.y);
 		ImGui::InputFloat2("##MouseTileRowCol", vMouseTileRowCol, "%.0f", ImGuiInputTextFlags_ReadOnly);
-
 		
-		// Level이 Stop상태일 때,마우스 좌클릭 감지
+		// 마우스가 타일맵 위에 있을 경우 해당 타일 주변에 테두리 그리기
+		if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
+			vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
+		{
+			// 마우스가 호버하는 타일의 좌상단 world 좌표
+			Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(vMouseTileRowCol.y * vTileSize.y, -vMouseTileRowCol.x * vTileSize.x, 0.f);
+
+			// DebugRender 그리기
+			DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);				
+		}
+
+		// 마우스 좌클릭시 타일맵에 타일 이미지 삽입
 		if (KEY_PRESSED(KEY::LBTN) && m_selectedTileImgIndex != -1)
 		{
 			// 타일맵 범위 내에서 클릭한 경우

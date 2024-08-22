@@ -20,7 +20,7 @@ struct tTileInfo
 #define AtlasMaxRow         g_int_1
 #define AtlasMaxCol         g_int_2
 #define TileSliceUV         g_vec2_0
-#define TileMapColRow          g_vec2_1
+#define TileMapColRow       g_vec2_1
 StructuredBuffer<tTileInfo> g_TileInfoBuffer : register(t15);
 // ===============================
 
