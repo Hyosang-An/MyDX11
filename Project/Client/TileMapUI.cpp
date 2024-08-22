@@ -119,78 +119,10 @@ void TileMapUI::Update()
 	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetTileSize(vTileSize);
 
-	// 타일맵 타일 선택
-	ImGui::Text("Tile Select");
-	ImGui::SameLine(120);
-	ImVec2 uv_min = ImVec2(0.0f, 0.0f);
-	ImVec2 uv_max = ImVec2(1.0f, 1.0f);
-	ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-	ImVec4 border_col = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
-	int atlasMaxRow = m_selectedTileMap->GetAtlasMaxRowCol().x;
-	int atlasMaxCol = m_selectedTileMap->GetAtlasMaxRowCol().y;
-	int atlasMaxTileSize = atlasMaxRow * atlasMaxCol;
-	if (m_selectedTileImgIndex == -1 || m_selectedTileImgIndex >= atlasMaxTileSize)
-	{
-		tint_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
-	}
-	else
-	{
-		int row = m_selectedTileImgIndex / atlasMaxCol;
-		int col = m_selectedTileImgIndex % atlasMaxCol;
-		uv_min = ImVec2((float)col / atlasMaxCol, (float)row / atlasMaxRow);
-		uv_max = ImVec2((float)(col + 1) / atlasMaxCol, (float)(row + 1) / atlasMaxRow);
-	}
-	float tileAspectRatio = atlasTileResolution.x / atlasTileResolution.y;
-	ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
-
-	// 타일 이미지 좌클릭시 팝업 창 띄우고 아틀라스이미지를 보여주기
-	if (ImGui::IsItemClicked(0))
-		ImGui::OpenPopup("TileSelect");
-	if (ImGui::BeginPopup("TileSelect"))
-	{
-		ImGui::Text("Tile Select");
-		ImGui::Separator();
-		ImVec2 selectedTileLeftTopPos = ImGui::GetCursorScreenPos(); // 초기화
-		for (int i = 0; i < atlasMaxTileSize; ++i)
-		{
-			int row = i / atlasMaxCol;
-			int col = i % atlasMaxCol;
-			uv_min = ImVec2((float)col / atlasMaxCol, (float)row / atlasMaxRow);
-			uv_max = ImVec2((float)(col + 1) / atlasMaxCol, (float)(row + 1) / atlasMaxRow);
-			tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-			border_col = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-			if (m_selectedTileImgIndex == i)
-			{
-				// 선택한 타일 이미지 selectedTileLeftTopPos 저장
-				selectedTileLeftTopPos = ImGui::GetCursorScreenPos();
-			}
-			ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
-			if (ImGui::IsItemClicked())
-			{
-				m_selectedTileImgIndex = i;
-				ImGui::CloseCurrentPopup();
-			}
-			if ((i + 1) % atlasMaxCol != 0)
-				ImGui::SameLine();
-		}
-
-		// 선택한 타일 주변에 초록색 테두리를 그리기
-		if (m_selectedTileImgIndex != -1)
-		{
-			// 경계 두께 설정
-			float borderThickness = 4.f;
-
-			// 사각형 크기 설정
-			ImVec2 borderBoxSize = ImVec2(50, 50 / tileAspectRatio);
-			border_col = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // 테두리 색상 설정
-			// 사각형 경계 그리기
-			ImGui::GetWindowDrawList()->AddRect(selectedTileLeftTopPos, ImVec2(selectedTileLeftTopPos.x + borderBoxSize.x, selectedTileLeftTopPos.y + borderBoxSize.y), ImGui::GetColorU32(border_col), 0.0f, 0, borderThickness);
-		}
-		ImGui::EndPopup();
-	}
 	ImGui::Separator();
 
-	// EditorCamera 정보 및 타일 편집 (level이 stop 상태일 때만)
+
+	// 에디터 카메라 및 마우스 월드 좌표 계산, 타일 편집 및 충돌체 편집 (level이 stop 상태일 때만)
 	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() == LEVEL_STATE::STOP && CEditorMgr::GetInst()->GetEditorCamera() != nullptr)
 	{
 		CCamera* editorCamera = CEditorMgr::GetInst()->GetEditorCamera()->Camera();
@@ -249,46 +181,182 @@ void TileMapUI::Update()
 		vMouseTileRowCol.x = floor(vMouseTileRowCol.x);
 		vMouseTileRowCol.y = floor(vMouseTileRowCol.y);
 		ImGui::InputFloat2("##MouseTileRowCol", vMouseTileRowCol, "%.0f", ImGuiInputTextFlags_ReadOnly);
-		
-		// 마우스가 타일맵 위에 있을 경우 해당 타일 주변에 테두리 그리기
-		if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
-			vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
-		{
-			// 마우스가 호버하는 타일의 좌상단 world 좌표
-			Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(vMouseTileRowCol.y * vTileSize.y, -vMouseTileRowCol.x * vTileSize.x, 0.f);
 
-			// DebugRender 그리기
-			DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);				
+		// 전체 타일맵 가장자리 테두리 그리기 (DebugRender)
+		Vec3 vTileMapLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos();
+		Vec3 vTileMapRBWorldPos = vTileMapLTWorldPos + Vec3(vTileMapRowCol.y * vTileSize.y, -vTileMapRowCol.x * vTileSize.x, 0.f);
+		DrawDebugRect((vTileMapLTWorldPos + vTileMapRBWorldPos) * 0.5f, Vec3(vTileMapRowCol.y * vTileSize.y, vTileMapRowCol.x * vTileSize.x, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 0.f, 1.f, 1.f), 0.f, false);
+
+
+		ImGui::Separator();
+
+		// Sprite SelectMod Combo Box
+		ImGui::Text("TileMap Edit Mode");
+		ImGui::SameLine(140);
+		ImGui::SetNextItemWidth(180.f);
+		const char* TileMapEditModes[] = { "Edit Tile", "Edit Collider"};
+		if (ImGui::BeginCombo("##TileMapEditModes", TileMapEditModes[(int)m_editMode]))
+		{
+			if (ImGui::Selectable("Edit Tile"))
+				m_editMode = TileMapEditMode::EditTile;
+			if (ImGui::Selectable("Edit Collider"))
+				m_editMode = TileMapEditMode::EditCollider;
+			ImGui::EndCombo();
 		}
 
-		// 마우스 좌클릭시 타일맵에 타일 이미지 삽입
-		if (KEY_PRESSED(KEY::LBTN) && m_selectedTileImgIndex != -1)
+		if (m_editMode == TileMapEditMode::EditTile)
 		{
-			// 타일맵 범위 내에서 클릭한 경우
+			// 타일맵 타일 선택
+			ImGui::Text("Tile Select");
+			ImGui::SameLine(120);
+			ImVec2 uv_min = ImVec2(0.0f, 0.0f);
+			ImVec2 uv_max = ImVec2(1.0f, 1.0f);
+			ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+			ImVec4 border_col = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
+			int atlasMaxRow = m_selectedTileMap->GetAtlasMaxRowCol().x;
+			int atlasMaxCol = m_selectedTileMap->GetAtlasMaxRowCol().y;
+			int atlasMaxTileSize = atlasMaxRow * atlasMaxCol;
+			if (m_selectedTileImgIndex == -1 || m_selectedTileImgIndex >= atlasMaxTileSize)
+			{
+				tint_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+			}
+			else
+			{
+				int row = m_selectedTileImgIndex / atlasMaxCol;
+				int col = m_selectedTileImgIndex % atlasMaxCol;
+				uv_min = ImVec2((float)col / atlasMaxCol, (float)row / atlasMaxRow);
+				uv_max = ImVec2((float)(col + 1) / atlasMaxCol, (float)(row + 1) / atlasMaxRow);
+			}
+			float tileAspectRatio = atlasTileResolution.x / atlasTileResolution.y;
+			ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
+
+			// 타일 이미지 좌클릭시 팝업 창 띄우고 아틀라스이미지를 보여주기
+			if (ImGui::IsItemClicked(0))
+				ImGui::OpenPopup("TileSelect");
+			if (ImGui::BeginPopup("TileSelect"))
+			{
+				ImGui::Text("Tile Select");
+				ImGui::Separator();
+				ImVec2 selectedTileLeftTopPos = ImGui::GetCursorScreenPos(); // 초기화
+				for (int i = 0; i < atlasMaxTileSize; ++i)
+				{
+					int row = i / atlasMaxCol;
+					int col = i % atlasMaxCol;
+					uv_min = ImVec2((float)col / atlasMaxCol, (float)row / atlasMaxRow);
+					uv_max = ImVec2((float)(col + 1) / atlasMaxCol, (float)(row + 1) / atlasMaxRow);
+					tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+					border_col = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+					if (m_selectedTileImgIndex == i)
+					{
+						// 선택한 타일 이미지 selectedTileLeftTopPos 저장
+						selectedTileLeftTopPos = ImGui::GetCursorScreenPos();
+					}
+					ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
+					if (ImGui::IsItemClicked())
+					{
+						m_selectedTileImgIndex = i;
+						ImGui::CloseCurrentPopup();
+					}
+					if ((i + 1) % atlasMaxCol != 0)
+						ImGui::SameLine();
+				}
+
+				// 선택한 타일 주변에 초록색 테두리를 그리기
+				if (m_selectedTileImgIndex != -1)
+				{
+					// 경계 두께 설정
+					float borderThickness = 4.f;
+
+					// 사각형 크기 설정
+					ImVec2 borderBoxSize = ImVec2(50, 50 / tileAspectRatio);
+					border_col = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // 테두리 색상 설정
+					// 사각형 경계 그리기
+					ImGui::GetWindowDrawList()->AddRect(selectedTileLeftTopPos, ImVec2(selectedTileLeftTopPos.x + borderBoxSize.x, selectedTileLeftTopPos.y + borderBoxSize.y), ImGui::GetColorU32(border_col), 0.0f, 0, borderThickness);
+				}
+				ImGui::EndPopup();
+			}
+			ImGui::Separator();
+
+
+			// 마우스가 타일맵 위에 있을 경우 해당 타일 주변에 테두리 그리기
 			if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
 				vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
 			{
-				// 타일맵의 타일 인덱스 계산
-				int mouseTileIndex = (int)vMouseTileRowCol.x * (int)vTileMapRowCol.y + (int)vMouseTileRowCol.y;
-	
-				vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
+				// 마우스가 호버하는 타일의 좌상단 world 좌표
+				Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(vMouseTileRowCol.y * vTileSize.y, -vMouseTileRowCol.x * vTileSize.x, 0.f);
 
-				// 기존 인덱스 값과 새로운 인덱스 값이 다를 경우에만 stack에 저장 후 변경
-				if (tileInfoVec[mouseTileIndex].ImgIdx != m_selectedTileImgIndex)
+				// DebugRender 그리기
+				DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);
+			}
+
+			// 마우스 좌클릭시 타일맵에 타일 이미지 삽입
+			if (KEY_PRESSED(KEY::LBTN) && m_selectedTileImgIndex != -1)
+			{
+				// 타일맵 범위 내에서 클릭한 경우
+				if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
+					vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
 				{
-					m_undoStack.push({ mouseTileIndex, tileInfoVec[mouseTileIndex].ImgIdx });
-					tileInfoVec[mouseTileIndex].ImgIdx = m_selectedTileImgIndex;
+					// 타일맵의 타일 인덱스 계산
+					int mouseTileIndex = (int)vMouseTileRowCol.x * (int)vTileMapRowCol.y + (int)vMouseTileRowCol.y;
+
+					vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
+
+					// 기존 인덱스 값과 새로운 인덱스 값이 다를 경우에만 stack에 저장 후 변경
+					if (tileInfoVec[mouseTileIndex].ImgIdx != m_selectedTileImgIndex)
+					{
+						m_undoStack.push({ mouseTileIndex, tileInfoVec[mouseTileIndex].ImgIdx });
+						tileInfoVec[mouseTileIndex].ImgIdx = m_selectedTileImgIndex;
+					}
 				}
+			}
+
+			// 마우스 우클릭시 타일맵에 타일 이미지 삭제
+			if (KEY_PRESSED(KEY::RBTN))
+			{
+				// 타일맵 범위 내에서 클릭한 경우
+				if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
+					vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
+				{
+					// 타일맵의 타일 인덱스 계산
+					int mouseTileIndex = (int)vMouseTileRowCol.x * (int)vTileMapRowCol.y + (int)vMouseTileRowCol.y;
+
+					vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
+
+					// 기존 인덱스 값이 -1이 아닌 경우에만 stack에 저장 후 변경
+					if (tileInfoVec[mouseTileIndex].ImgIdx != -1)
+					{
+						m_undoStack.push({ mouseTileIndex, tileInfoVec[mouseTileIndex].ImgIdx });
+						tileInfoVec[mouseTileIndex].ImgIdx = -1;
+					}
+				}
+			}
+
+			// Undo
+			if (KEY_PRESSED(KEY::CTRL) && KEY_JUST_PRESSED(KEY::Z) && !m_undoStack.empty())
+			{
+				std::pair<int, int> undoData = m_undoStack.top();
+				m_undoStack.pop();
+				vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
+				tileInfoVec[undoData.first].ImgIdx = undoData.second;
 			}
 		}
 
-		// Undo
-		if (KEY_PRESSED(KEY::CTRL) && KEY_JUST_PRESSED(KEY::Z) && !m_undoStack.empty())
+		else if (m_editMode == TileMapEditMode::EditCollider)
 		{
-			std::pair<int, int> undoData = m_undoStack.top();
-			m_undoStack.pop();
-			vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
-			tileInfoVec[undoData.first].ImgIdx = undoData.second;
+			// 타일맵 충돌체 편집
+			ImGui::Text("Edit Collider");
+
+			// 마우스가 타일맵 위에 있을 경우 해당 타일 주변에 테두리 그리기
+			if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
+				vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
+			{
+				// 마우스가 호버하는 타일의 좌상단 world 좌표
+				Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(vMouseTileRowCol.y * vTileSize.y, -vMouseTileRowCol.x * vTileSize.x, 0.f);
+
+				// DebugRender 그리기
+				DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);
+			}
+
 		}
 	}
 

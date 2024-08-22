@@ -6,7 +6,7 @@
 
 struct tTileInfo
 {
-    uint ImgIdx;
+    int ImgIdx;
     int3 padding;
 };
 
@@ -20,7 +20,7 @@ struct tTileInfo
 #define AtlasMaxRow         g_int_1
 #define AtlasMaxCol         g_int_2
 #define TileSliceUV         g_vec2_0
-#define TileColRow          g_vec2_1
+#define TileMapColRow       g_vec2_1
 StructuredBuffer<tTileInfo> g_TileInfoBuffer : register(t15);
 // ===============================
 
@@ -50,7 +50,7 @@ VS_OUT VS_TileMap(VS_IN _in)
     _in.vPos.y -= 0.5f;
     
     output.vPosition = mul(float4(_in.vPos, 1.f), matWVP);
-    output.vUV = _in.vUV * TileColRow;
+    output.vUV = _in.vUV * TileMapColRow;
     output.vWorldPos = mul(float4(_in.vPos, 1.f), matWorld).xyz;
     
     return output;
@@ -65,16 +65,26 @@ float4 PS_TileMap(VS_OUT _in) : SV_Target
     {
         // 픽셀쉐이더에서 본인의 타일이 몇번째 타일인지 알아내야한다.
         float2 CurColRow = floor(_in.vUV);
-        int Idx = TileColRow.x * CurColRow.y + CurColRow.x;
+        int Idx = TileMapColRow.x * CurColRow.y + CurColRow.x;
         
         // 그 정보로 g_TileInfoBuffer 에 전달된 각 타일정보중 본인의 정보에 접근해서 ImgIdx 를 알아낸다.
         // 알아낸 ImgIdx 로 LeftTopUV 값을 계산한다.        
-        int row = g_TileInfoBuffer[Idx].ImgIdx / AtlasMaxCol;
-        int col = g_TileInfoBuffer[Idx].ImgIdx % AtlasMaxCol;
-        float2 vLeftTopUV = float2(col, row) * TileSliceUV;
+        // ImgIdx가 atlas의 전체 타일 개수보다 많아도 uv wrap이 되어서 0~1로 계산된다.
         
-        float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
-        vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+        if (g_TileInfoBuffer[Idx].ImgIdx != -1)
+        {
+            int row = g_TileInfoBuffer[Idx].ImgIdx / AtlasMaxCol;
+            int col = g_TileInfoBuffer[Idx].ImgIdx % AtlasMaxCol;
+            float2 vLeftTopUV = float2(col, row) * TileSliceUV;
+        
+            float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
+            vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+        }
+        else
+        {
+            discard;
+        }
+
     }
     else
     {

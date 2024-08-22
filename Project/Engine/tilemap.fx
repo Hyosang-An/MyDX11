@@ -6,7 +6,7 @@
 
 struct tTileInfo
 {
-    uint ImgIdx;
+    int ImgIdx;
     int3 padding;
 };
 
@@ -70,12 +70,21 @@ float4 PS_TileMap(VS_OUT _in) : SV_Target
         // 그 정보로 g_TileInfoBuffer 에 전달된 각 타일정보중 본인의 정보에 접근해서 ImgIdx 를 알아낸다.
         // 알아낸 ImgIdx 로 LeftTopUV 값을 계산한다.        
         // ImgIdx가 atlas의 전체 타일 개수보다 많아도 uv wrap이 되어서 0~1로 계산된다.
-        int row = g_TileInfoBuffer[Idx].ImgIdx / AtlasMaxCol;
-        int col = g_TileInfoBuffer[Idx].ImgIdx % AtlasMaxCol;
-        float2 vLeftTopUV = float2(col, row) * TileSliceUV;
         
-        float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
-        vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+        if (g_TileInfoBuffer[Idx].ImgIdx != -1)
+        {
+            int row = g_TileInfoBuffer[Idx].ImgIdx / AtlasMaxCol;
+            int col = g_TileInfoBuffer[Idx].ImgIdx % AtlasMaxCol;
+            float2 vLeftTopUV = float2(col, row) * TileSliceUV;
+        
+            float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
+            vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+        }
+        else
+        {
+            discard;
+        }
+
     }
     else
     {
