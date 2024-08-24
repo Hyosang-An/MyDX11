@@ -275,8 +275,6 @@ void TileMapUI::Update()
 				}
 				ImGui::EndPopup();
 			}
-			ImGui::Separator();
-
 
 			// 마우스가 타일맵 위에 있을 경우 해당 타일 주변에 테두리 그리기
 			if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
@@ -356,9 +354,16 @@ void TileMapUI::Update()
 				// DebugRender 그리기
 				DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);
 			}
-
 		}
+
+		// 타일 그리드 표시 여부 체크박스
+		bool isShowTileGrid = m_selectedTileMap->IsShowTileGrid();
+		ImGui::Checkbox("Show Tile Grid", &isShowTileGrid);
+		m_selectedTileMap->SetTileGridShow(isShowTileGrid);
+
 	}
+
+	ImGui::Separator();
 
 
 	ImVec2 last_content_pos = ImGui::GetCursorPos();
@@ -366,6 +371,7 @@ void TileMapUI::Update()
 
 	SetChildSize(content_size);
 }
+
 
 void TileMapUI::SelectTileMapAtlasByDialog()
 {

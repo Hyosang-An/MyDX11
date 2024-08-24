@@ -32,6 +32,7 @@ CTileMap::CTileMap(const CTileMap& _Origin) :
 	m_AtlasTileSliceUV(_Origin.m_AtlasTileSliceUV),
 	m_AtlasMaxRow(_Origin.m_AtlasMaxRow),
 	m_AtlasMaxCol(_Origin.m_AtlasMaxCol),
+	m_isShowTileGrid(_Origin.m_isShowTileGrid),
 	m_vecTileInfo(_Origin.m_vecTileInfo),
 	m_structuredBuffer(nullptr)
 {
@@ -62,8 +63,9 @@ void CTileMap::Render()
 	GetMaterial()->SetTexParam(TEX_0, m_TileAtlas);
 	GetMaterial()->SetScalarParam(INT_1, m_AtlasMaxRow);
 	GetMaterial()->SetScalarParam(INT_2, m_AtlasMaxCol);
-	GetMaterial()->SetScalarParam(VEC2_1, Vec2(m_Col, m_Row));
+	GetMaterial()->SetScalarParam(INT_3, m_isShowTileGrid);
 	GetMaterial()->SetScalarParam(VEC2_0, m_AtlasTileSliceUV);
+	GetMaterial()->SetScalarParam(VEC2_1, Vec2(m_Col, m_Row));
 	GetMaterial()->Binding();
 	Transform()->Binding();
 	GetMesh()->Render();
@@ -160,6 +162,7 @@ void CTileMap::SetAtlasTileResolution(Vec2 _TileResolution)
 
 void CTileMap::SaveToFile(FILE* _File)
 {
+	// 부모클래스인 RenderComponent 의 SaveToFile 호출
 	SaveDataToFile(_File);
 
 	fwrite(&m_Col, sizeof(int), 1, _File);
@@ -179,6 +182,7 @@ void CTileMap::SaveToFile(FILE* _File)
 
 void CTileMap::LoadFromFile(FILE* _File)
 {
+	// 부모클래스인 RenderComponent 의 LoadFromFile 호출
 	LoadDataFromFile(_File);
 	
 	int col = 0;
