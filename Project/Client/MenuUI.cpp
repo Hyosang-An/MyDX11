@@ -7,11 +7,14 @@
 #include <Engine/assets.h>
 #include <Engine/CGameObject.h>
 #include <Engine/CScript.h>
+#include <Engine/CLayer.h>
 #include <Scripts/CScriptMgr.h>
 
 #include "CLevelSaveLoad.h"
 #include "Inspector.h"
 #include "CEditorMgr.h"
+
+#include "IconsFontAwesome6/IconsFontAwesome6.h"
 
 MenuUI::MenuUI()
 {
@@ -50,6 +53,10 @@ void MenuUI::Update()
 	GameObject();
 
 	Assets();
+
+	FontsCheck();
+
+	LevelPlayPauseStopButton();
 }
 
 void MenuUI::File()
@@ -234,11 +241,56 @@ void MenuUI::Level()
 
 void MenuUI::GameObject()
 {
+	ImGui::BeginDisabled(nullptr == CLevelMgr::GetInst()->GetCurrentLevel() || CLevelMgr::GetInst()->GetCurrentLevel()->GetState() != STOP);
 	if (ImGui::BeginMenu("GameObject"))
 	{
 		if (ImGui::MenuItem("Create Empty Object"))
 		{
+			CGameObject* pObject = new CGameObject;
+			wstring strObjDefaultName = L"New GameObject";
+			wstring strObjName = strObjDefaultName + L" " + to_wstring(m_newObjIdx);
+			// 현재 레벨에 있는 오브젝트들 확인하면서 중복되는 이름이 있는지 확인
+			CLevel* pCurrentLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			for (UINT i = 0; i < MAX_LAYER; ++i)
+			{
+				CLayer* pLayer = pCurrentLevel->GetLayer(i);
+				const vector<CGameObject*>& vecObjects = pLayer->GetObjects();
 
+				for (size_t i = 0; i < vecObjects.size(); ++i)
+				{
+					// 중복된 이름이 이미 있으면 숫자를 늘려가면서 이름을 만듦
+					if (vecObjects[i]->GetName() == strObjName)
+					{
+						for (; m_newObjIdx < 0xffffffff; ++m_newObjIdx)
+						{
+							strObjName = strObjDefaultName + L" " + to_wstring(++m_newObjIdx);
+							bool bExist = false;
+							for (size_t k = 0; k < vecObjects.size(); ++k)
+							{
+								if (vecObjects[k]->GetName() == strObjName)
+								{
+									bExist = true;
+									break;
+								}
+							}
+							if (false == bExist)
+								break;
+						}
+					}
+				}
+			}
+
+			pObject->SetName(strObjName);
+
+			// transform 추가
+			pObject->AddComponent(new CTransform);
+
+			// 에디터 카메라 좌표에 생성
+			Vec3 vPos = CEditorMgr::GetInst()->GetEditorCamera()->Transform()->GetWorldPos();
+			pObject->Transform()->SetRelativePos(vPos);
+
+			// 현재 레벨에 추가
+			CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(0, pObject);
 		}
 
 		if (ImGui::BeginMenu("Add Component"))
@@ -247,14 +299,19 @@ void MenuUI::GameObject()
 			ImGui::MenuItem("Collider2D");
 			ImGui::MenuItem("Camera");
 
+
+
 			ImGui::EndMenu();
 		}
 
 		AddScript();
 
+
 		ImGui::EndMenu();
 	}
+	ImGui::EndDisabled();
 }
+
 
 void MenuUI::AddScript()
 {
@@ -325,35 +382,113 @@ void MenuUI::Assets()
 	}
 }
 
+void MenuUI::LevelPlayPauseStopButton()
+{
+	// 중앙에 버튼 배치하기 위한 계산
+	float window_width = ImGui::GetWindowWidth(); // 현재 창(메인 메뉴 바)의 너비를 가져옵니다.
+	float button_width = 100.0f; // 버튼 그룹의 전체 너비 (버튼 간 간격 포함)
+	float center_position_for_buttons = (window_width - button_width) / 2.0f; // 중앙 위치 계산
+
+	// 버튼을 중앙에 배치하기 위해 커서 위치 조정
+	ImGui::SetCursorPosX(center_position_for_buttons);
+
+	// 플레이 버튼
+	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+	LEVEL_STATE curState = pCurLevel ? pCurLevel->GetState() : LEVEL_STATE::STOP; // 현재 레벨의 상태를 가져옵니다.
+
+	ImGui::BeginDisabled(!pCurLevel || LEVEL_STATE::PLAY == curState);
+	if (ImGui::Button(ICON_FA_PLAY " Play")) {
+		// Play 버튼 동작
+		if (LEVEL_STATE::STOP == curState)
+		{
+			wstring strLevelPath = CPathMgr::GetInst()->GetContentPath();
+			strLevelPath += L"level\\Temp.level";
+			CLevelSaveLoad::SaveLevel(strLevelPath, pCurLevel);
+		}
+
+		ChangeLevelState(LEVEL_STATE::PLAY);
+	}
+	ImGui::EndDisabled();
+
+
+	ImGui::SameLine(); // 다음 버튼을 같은 줄에 배치
+
+	// 일시정지 버튼
+	ImGui::BeginDisabled(!pCurLevel || LEVEL_STATE::PLAY != curState);
+	if (ImGui::Button(ICON_FA_PAUSE " Pause")) {
+		// Pause 버튼 동작
+		ChangeLevelState(LEVEL_STATE::PAUSE);
+	}
+	ImGui::EndDisabled();
+
+	//ImGui::SameLine(); // 다음 버튼을 같은 줄에 배치
+
+	// 정지 버튼
+	ImGui::BeginDisabled(!pCurLevel || LEVEL_STATE::STOP == curState);
+	if (ImGui::Button(ICON_FA_STOP " Stop")) {
+		// Stop 버튼 동작
+		wstring StrLevelLoadPath = CPathMgr::GetInst()->GetContentPath();
+		StrLevelLoadPath += L"level\\Temp.level";
+		CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(StrLevelLoadPath);
+		ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
+
+		// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
+		Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+		pInspector->SetTargetObject(nullptr);
+		pInspector->SetTargetAsset(nullptr);
+	}
+	ImGui::EndDisabled();
+}
+
+void MenuUI::FontsCheck()
+{
+	if (ImGui::BeginMenu("Fonts Check"))
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		ImFontAtlas* atlas = io.Fonts;
+		ImGui::Text("Number of fonts loaded: %d", atlas->Fonts.Size);
+
+		for (int i = 0; i < atlas->Fonts.Size; i++)
+		{
+			ImFont* font = atlas->Fonts[i];
+			ImGui::PushFont(font);
+			ImGui::Text(u8"Font %d: %s, Size: %.2f 한글", i, font->GetDebugName(), font->FontSize);
+			ImGui::PopFont();
+		}
+
+		ImGui::EndMenu();
+	}
+}
+
 wstring MenuUI::CreateRelativePathAssetKey(ASSET_TYPE _Type, const wstring& _KeyFormat)
 {
 	wstring Key;
 
 	switch (_Type)
 	{
-		case ASSET_TYPE::MATERIAL:
-		{
-			Key = wstring(L"material\\") + _KeyFormat + L" %d.mtrl";
-		}
+	case ASSET_TYPE::MATERIAL:
+	{
+		Key = wstring(L"material\\") + _KeyFormat + L" %d.mtrl";
+	}
+	break;
+	case ASSET_TYPE::PREFAB:
+	{
+		Key = wstring(L"prefab\\") + _KeyFormat + L" %d.pref";
+	}
+	break;
+	case ASSET_TYPE::SPRITE:
+	{
+		Key = wstring(L"sprite\\") + _KeyFormat + L" %d.sprite";
+	}
+	break;
+	case ASSET_TYPE::FLIPBOOK:
+	{
+		Key = wstring(L"flipbook\\") + _KeyFormat + L" %d.flip";
+	}
+	break;
+	default:
+		assert(nullptr);
 		break;
-		case ASSET_TYPE::PREFAB:
-		{
-			Key = wstring(L"prefab\\") + _KeyFormat + L" %d.pref";
-		}
-		break;
-		case ASSET_TYPE::SPRITE:
-		{
-			Key = wstring(L"sprite\\") + _KeyFormat + L" %d.sprite";
-		}
-		break;
-		case ASSET_TYPE::FLIPBOOK:
-		{
-			Key = wstring(L"flipbook\\") + _KeyFormat + L" %d.flip";
-		}
-		break;
-		default:
-			assert(nullptr);
-			break;
 	}
 
 	wchar_t szKey[255] = {};

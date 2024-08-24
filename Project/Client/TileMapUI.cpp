@@ -151,7 +151,7 @@ void TileMapUI::Update()
 		CTransform* pCameraTrans = editorCamera->Transform();
 		if (pCameraTrans == nullptr)
 			return;
-		Vec3 vEditorCameraPos = pCameraTrans->GetRelativePos();
+		Vec3 vEditorCameraPos = pCameraTrans->GetWorldPos();
 		ImGui::InputFloat3("##EditorCameraPos", vEditorCameraPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
 
 
