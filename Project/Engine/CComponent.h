@@ -29,13 +29,13 @@ public:
     virtual void SaveToFile(FILE* _File) = 0;   // 파일에 컴포넌트의 정보를 저장
     virtual void LoadFromFile(FILE* _File) = 0; // 파일에 컴포넌트의 정보를 로드
 
-    CTransform* Transform() { return m_Owner->Transform(); }
-    CMeshRender* MeshRender() { return m_Owner->MeshRender(); }
-    CCamera* Camera() { return m_Owner->Camera(); }
-    CCollider2D* Collider2D() { return m_Owner->Collider2D(); }
-    CFlipBookComponent* FlipBookComponent() { return m_Owner->FlipBookComponent(); }
-    CLight2D* Light2D() { return m_Owner->Light2D(); }
-    CParticleSystem* ParticleSystem() { return m_Owner->ParticleSystem(); }
+    class CTransform* Transform() { return m_Owner->Transform(); }
+    class CMeshRender* MeshRender() { return m_Owner->MeshRender(); }
+    class CCamera* Camera() { return m_Owner->Camera(); }
+    class CCollider2D* Collider2D() { return m_Owner->Collider2D(); }
+    class CFlipBookComponent* FlipBookComponent() { return m_Owner->FlipBookComponent(); }
+    class CLight2D* Light2D() { return m_Owner->Light2D(); }
+    class CParticleSystem* ParticleSystem() { return m_Owner->ParticleSystem(); }
     
 
 

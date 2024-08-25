@@ -39,6 +39,11 @@ void CCollider2D::FinalTick()
 		matObjectScaleInv = XMMatrixInverse(nullptr, matObjectScaleInv);
 	}
 
+	// 디버깅
+	auto owner = GetOwner();
+	auto transform = owner->Transform();
+	auto worldMat = transform->GetWorldMat();
+
 	m_matColWorld = matScale * matTranslation * matObjectScaleInv * GetOwner()->Transform()->GetWorldMat();
 
 	// Debug 렌더링으로 충돌체의 위치를 표시
@@ -46,6 +51,10 @@ void CCollider2D::FinalTick()
 		DrawDebugRect(m_matColWorld, Vec4(1.f, 0.f, 0.f, 1.f), 0.f, false);
 	else
 		DrawDebugRect(m_matColWorld, Vec4(0.f, 1.f, 0.f, 1.f), 0.f, false);
+
+	// 디버깅
+	auto worldPos = GetWorldPos();
+	auto worldScale = GetOwner()->Transform()->GetWorldScale();
 }
 
 void CCollider2D::BeginOverlap(CCollider2D* _Other)

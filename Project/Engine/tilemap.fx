@@ -6,7 +6,7 @@
 
 struct tTileInfo
 {
-    uint ImgIdx;
+    int ImgIdx;
     int3 padding;
 };
 
@@ -19,8 +19,9 @@ struct tTileInfo
 
 #define AtlasMaxRow         g_int_1
 #define AtlasMaxCol         g_int_2
+#define isTileGridShow      g_int_3
 #define TileSliceUV         g_vec2_0
-#define TileMapColRow          g_vec2_1
+#define TileMapColRow       g_vec2_1
 StructuredBuffer<tTileInfo> g_TileInfoBuffer : register(t15);
 // ===============================
 
@@ -70,12 +71,56 @@ float4 PS_TileMap(VS_OUT _in) : SV_Target
         // 그 정보로 g_TileInfoBuffer 에 전달된 각 타일정보중 본인의 정보에 접근해서 ImgIdx 를 알아낸다.
         // 알아낸 ImgIdx 로 LeftTopUV 값을 계산한다.        
         // ImgIdx가 atlas의 전체 타일 개수보다 많아도 uv wrap이 되어서 0~1로 계산된다.
-        int row = g_TileInfoBuffer[Idx].ImgIdx / AtlasMaxCol;
-        int col = g_TileInfoBuffer[Idx].ImgIdx % AtlasMaxCol;
-        float2 vLeftTopUV = float2(col, row) * TileSliceUV;
         
-        float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
-        vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+        if (g_TileInfoBuffer[Idx].ImgIdx != -1)
+        {
+            int row = g_TileInfoBuffer[Idx].ImgIdx / AtlasMaxCol;
+            int col = g_TileInfoBuffer[Idx].ImgIdx % AtlasMaxCol;
+            float2 vLeftTopUV = float2(col, row) * TileSliceUV;
+            
+            if (isTileGridShow)
+            {
+                // frac(_in.vUV)가 타일 가장자리이면, 그리드 렌더링
+                if (frac(_in.vUV).x < 0.025f || frac(_in.vUV).x > 0.975f ||
+                frac(_in.vUV).y < 0.025f || frac(_in.vUV).y > 0.975f)
+                {
+                // 그리드 색상은 회색
+                    vOutColor = float4(0.8f, 0.8f, 0.8f, 1.f);
+                }
+            
+            // 타일 내부이면, 타일 렌더링
+                else
+                {
+                    float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
+                    vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+                }
+            }
+            
+            else
+            {
+                float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
+                vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+            }
+            
+        }
+        else
+        {
+            if (isTileGridShow)
+            {
+                // frac(_in.vUV)가 타일 가장자리이면, 그리드 렌더링
+                if (frac(_in.vUV).x < 0.025f || frac(_in.vUV).x > 0.975f ||
+                frac(_in.vUV).y < 0.025f || frac(_in.vUV).y > 0.975f)
+                {
+                // 그리드 색상은 회색
+                    vOutColor = float4(0.8f, 0.8f, 0.8f, 1.f);
+                }
+                else
+                    discard;
+            }
+            else
+                discard;
+        }
+
     }
     else
     {

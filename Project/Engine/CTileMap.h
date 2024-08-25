@@ -25,6 +25,7 @@ private:
 	int                     m_AtlasMaxRow;			// Atlas 텍스쳐가 보유하고 있는 타일의 최대 행 숫자
 	int                     m_AtlasMaxCol;			// Atlas 텍스쳐가 보유하고 있는 타일의 최대 열 숫자
 
+	int						m_isShowTileGrid = false;		// 타일 그리드를 보여줄지 여부
 
 	vector<tTileInfo>       m_vecTileInfo;			// 각각의 타일의 정보
 	CStructuredBuffer*		m_structuredBuffer;		// 각각의 타일정보를 t 레지스터로 전달하기 위한 구조화버퍼
@@ -35,6 +36,7 @@ public:
 	void SetTileSize(Vec2 _Size);
 	void SetAtlasTexture(Ptr<CTexture> _Atlas, Vec2 _tileResolution = Vec2(0, 0));
 	void SetAtlasTileResolution(Vec2 _TileSize);
+	void SetTileGridShow(bool _Show) { m_isShowTileGrid = _Show; }
 
 	Vec2 GetRowCol() { return Vec2(m_Row, m_Col); }
 	Vec2 GetTileSize() { return m_TileSize; }
@@ -42,6 +44,7 @@ public:
 	Vec2 GetAtlasTileResolution() { return m_AtlasTileResolution; }
 	Vec2 GetAtlasMaxRowCol() { return Vec2(m_AtlasMaxRow, m_AtlasMaxCol); }
 	Vec2 GetAtlasTileSliceUV() { return m_AtlasTileSliceUV; }
+	bool IsShowTileGrid() { return (bool)m_isShowTileGrid; }
 	
 	vector<tTileInfo>& GetTileInfoVec() { return m_vecTileInfo; }
 

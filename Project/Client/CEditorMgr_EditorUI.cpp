@@ -18,6 +18,8 @@
 
 #include "ParamUI.h"
 
+#include "IconsFontAwesome6/IconsFontAwesome6.h"
+
 void CEditorMgr::InitImGui()
 {
     // Setup Dear ImGui context
@@ -61,19 +63,30 @@ void CEditorMgr::InitImGui()
     // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
     // - Read 'docs/FONTS.md' for more instructions and details.
     // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontDefault();
     //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+    /*io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+    io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+    io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);*/
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
 
-    // 한글 폰트 추가 (기본 폰트에 병합)
+    // 한글 폰트 추가 (기본폰트로 사용)
     ImFontConfig config;
-    config.MergeMode = true;
+    //config.MergeMode = true;
     io.Fonts->AddFontFromFileTTF("..\\content\\fonts\\malgun.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesKorean());
 
+    // FontAwesome 글꼴 추가
+    static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
+    icons_config.PixelSnapH = true;
+
+    io.Fonts->AddFontFromFileTTF("..\\content\\fonts\\fa-solid-900.ttf", 16.0f, &icons_config, icons_ranges);
+
+
+	// Room No.703 글꼴 추가
+    io.Fonts->AddFontFromFileTTF("..\\content\\fonts\\Room No.703.ttf", 16.0f, nullptr, io.Fonts->GetGlyphRangesKorean());
 
     // Editor(Tool) 용 UI 생성 및 m_mapUI에 추가
     CreateEditorUI();

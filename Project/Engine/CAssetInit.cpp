@@ -271,6 +271,7 @@ void CAssetMgr::CreateEngineGraphicShader()
 	// DebugShapeShader
 	pShader = new CGraphicShader;
 	pShader->CreateVertexShader(L"shader\\debug.fx", "VS_DebugShape");
+	pShader->CreateGeometryShader(L"shader\\debug.fx", "GS_DebugShape");
 	pShader->CreatePixelShader(L"shader\\debug.fx", "PS_DebugShape");
 
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
