@@ -423,6 +423,8 @@ void TileMapUI::Update()
 
 						// 현재 타일맵의 자식 오브젝트 가져오기
 						const vector<CGameObject*>& vecChild = m_selectedTileMap->GetOwner()->GetChildren();
+
+						// 중복되지 않는 이름 생성
 						while (true)
 						{
 							bool isExist = false;

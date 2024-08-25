@@ -25,6 +25,10 @@ void TreeNode::Update()
 			  | ImGuiTreeNodeFlags_OpenOnArrow
 			  | ImGuiTreeNodeFlags_SpanAvailWidth;
 
+	// openNodeNames에 해당 노드가 있는 경우
+	if (m_OwnerTree->GetOpenNodeNames().find(m_Name) != m_OwnerTree->GetOpenNodeNames().end())
+		Flag |= ImGuiTreeNodeFlags_DefaultOpen;
+
 	if (m_Frame)
 		Flag |= ImGuiTreeNodeFlags_Framed;
 
@@ -70,6 +74,10 @@ void TreeNode::Update()
 
 	if (ImGui::TreeNodeEx(strName.c_str(), Flag))
 	{
+		// 열려있으면서 자식이 있는 경우 openNodeNames에 추가
+		if (!m_vecChildNode.empty())
+			m_OwnerTree->GetOpenNodeNames().insert(m_Name);
+
 		// 우클릭 팝업메뉴
 		if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 		{
@@ -116,6 +124,11 @@ void TreeNode::Update()
 	// 트리 노드가 닫혀있을 때
 	else
 	{
+		// 닫혀있는 경우 openNodeNames에서 제거
+		auto &openNodeNames = m_OwnerTree->GetOpenNodeNames();
+		if (openNodeNames.find(m_Name) != openNodeNames.end())
+			openNodeNames.erase(m_Name);
+
 		// Drag 체크	
 		DragCheck();
 		// Drop 체크

@@ -71,6 +71,8 @@ private:
 
     DELEGATE_1  m_PopUpFunc = nullptr;
 
+    set<string> m_openNodeNames;
+
 
 public:
     TreeNode* AddNode(TreeNode* _Parent, const string& _Name, DWORD_PTR _Data = 0);
@@ -104,6 +106,8 @@ public:
     void AddPopUpDelegate(DELEGATE_1 _FUNC) { m_PopUpFunc = _FUNC; }
 
     void Clear();
+
+	set<string>& GetOpenNodeNames() { return m_openNodeNames; }
 
 public:
     virtual void Update() override;
