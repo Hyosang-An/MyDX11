@@ -56,13 +56,13 @@ void CTestLevel::CreateTestLevel()
 
 
 	// 아래 부분은 CLevel 생성자에서 해주는게 낫지 않을까하는 생각이...
-	TestLevel->GetLayer(0)->SetName(L"Default");
-	TestLevel->GetLayer(1)->SetName(L"Background");
-	TestLevel->GetLayer(2)->SetName(L"Tile");
-	TestLevel->GetLayer(3)->SetName(L"Player");
-	TestLevel->GetLayer(4)->SetName(L"Monster");
-	TestLevel->GetLayer(5)->SetName(L"PlayerProjectile");
-	TestLevel->GetLayer(6)->SetName(L"MonsterProjectile");
+	//TestLevel->GetLayer(0)->SetName(L"Default");
+	//TestLevel->GetLayer(1)->SetName(L"Background");
+	//TestLevel->GetLayer(2)->SetName(L"Tile");
+	//TestLevel->GetLayer(3)->SetName(L"Player");
+	//TestLevel->GetLayer(4)->SetName(L"Monster");
+	//TestLevel->GetLayer(5)->SetName(L"PlayerProjectile");
+	//TestLevel->GetLayer(6)->SetName(L"MonsterProjectile");
 
 	// 카메라 오브젝트
 	CGameObject* CamObj = new CGameObject;

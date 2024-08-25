@@ -57,6 +57,21 @@ enum class COMPONENT_TYPE
 	SCRIPT
 };
 
+enum class LAYER
+{
+	DEFAULT,
+	BACKGROUND,
+	TILE,
+	PLAYER,
+	MONSTER,
+	PLAYER_PROJECTILE,
+	MONSTER_PROJECTILE,
+	UI,
+
+
+	END
+};
+
 extern const char* COMPONENT_TYPE_STRING[(UINT)COMPONENT_TYPE::END];
 const char* ToString(COMPONENT_TYPE _Type);
 
