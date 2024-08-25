@@ -176,11 +176,11 @@ void TileMapUI::Update()
 		// 마우스가 가리키는 타일의 row col 확인
 		ImGui::Text("Mouse Tile Row Col");
 		ImGui::SameLine(140);
-		Vec2 vMouseTileRowCol = Vec2(-vMousePosInTileMap.y / vTileSize.y, vMousePosInTileMap.x / vTileSize.x);
+		m_MouseTileRowCol = Vec2(-vMousePosInTileMap.y / vTileSize.y, vMousePosInTileMap.x / vTileSize.x);
 		// row col을 정수화
-		vMouseTileRowCol.x = floor(vMouseTileRowCol.x);
-		vMouseTileRowCol.y = floor(vMouseTileRowCol.y);
-		ImGui::InputFloat2("##MouseTileRowCol", vMouseTileRowCol, "%.0f", ImGuiInputTextFlags_ReadOnly);
+		m_MouseTileRowCol.x = floor(m_MouseTileRowCol.x);
+		m_MouseTileRowCol.y = floor(m_MouseTileRowCol.y);
+		ImGui::InputFloat2("##MouseTileRowCol", m_MouseTileRowCol, "%.0f", ImGuiInputTextFlags_ReadOnly);
 
 		// 전체 타일맵 가장자리 테두리 그리기 (DebugRender)
 		Vec3 vTileMapLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos();
@@ -194,7 +194,7 @@ void TileMapUI::Update()
 		ImGui::Text("TileMap Edit Mode");
 		ImGui::SameLine(140);
 		ImGui::SetNextItemWidth(180.f);
-		const char* TileMapEditModes[] = { "Edit Tile", "Edit Collider"};
+		const char* TileMapEditModes[] = { "Edit Tile", "Edit Collider" };
 		if (ImGui::BeginCombo("##TileMapEditModes", TileMapEditModes[(int)m_editMode]))
 		{
 			if (ImGui::Selectable("Edit Tile"))
@@ -204,6 +204,7 @@ void TileMapUI::Update()
 			ImGui::EndCombo();
 		}
 
+		// EditTile Mode
 		if (m_editMode == TileMapEditMode::EditTile)
 		{
 			// 타일맵 타일 선택
@@ -277,11 +278,11 @@ void TileMapUI::Update()
 			}
 
 			// 마우스가 타일맵 위에 있을 경우 해당 타일 주변에 테두리 그리기
-			if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
-				vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
+			if (m_MouseTileRowCol.x >= 0 && m_MouseTileRowCol.x < vTileMapRowCol.x &&
+				m_MouseTileRowCol.y >= 0 && m_MouseTileRowCol.y < vTileMapRowCol.y)
 			{
 				// 마우스가 호버하는 타일의 좌상단 world 좌표
-				Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(vMouseTileRowCol.y * vTileSize.y, -vMouseTileRowCol.x * vTileSize.x, 0.f);
+				Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(m_MouseTileRowCol.y * vTileSize.y, -m_MouseTileRowCol.x * vTileSize.x, 0.f);
 
 				// DebugRender 그리기
 				DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);
@@ -291,11 +292,11 @@ void TileMapUI::Update()
 			if (KEY_PRESSED(KEY::LBTN) && m_selectedTileImgIndex != -1)
 			{
 				// 타일맵 범위 내에서 클릭한 경우
-				if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
-					vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
+				if (m_MouseTileRowCol.x >= 0 && m_MouseTileRowCol.x < vTileMapRowCol.x &&
+					m_MouseTileRowCol.y >= 0 && m_MouseTileRowCol.y < vTileMapRowCol.y)
 				{
 					// 타일맵의 타일 인덱스 계산
-					int mouseTileIndex = (int)vMouseTileRowCol.x * (int)vTileMapRowCol.y + (int)vMouseTileRowCol.y;
+					int mouseTileIndex = (int)m_MouseTileRowCol.x * (int)vTileMapRowCol.y + (int)m_MouseTileRowCol.y;
 
 					vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
 
@@ -312,11 +313,11 @@ void TileMapUI::Update()
 			if (KEY_PRESSED(KEY::RBTN))
 			{
 				// 타일맵 범위 내에서 클릭한 경우
-				if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
-					vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
+				if (m_MouseTileRowCol.x >= 0 && m_MouseTileRowCol.x < vTileMapRowCol.x &&
+					m_MouseTileRowCol.y >= 0 && m_MouseTileRowCol.y < vTileMapRowCol.y)
 				{
 					// 타일맵의 타일 인덱스 계산
-					int mouseTileIndex = (int)vMouseTileRowCol.x * (int)vTileMapRowCol.y + (int)vMouseTileRowCol.y;
+					int mouseTileIndex = (int)m_MouseTileRowCol.x * (int)vTileMapRowCol.y + (int)m_MouseTileRowCol.y;
 
 					vector<tTileInfo>& tileInfoVec = m_selectedTileMap->GetTileInfoVec();
 
@@ -339,31 +340,76 @@ void TileMapUI::Update()
 			}
 		}
 
+		// Collider Edit Mode 
 		else if (m_editMode == TileMapEditMode::EditCollider)
 		{
 			// 타일맵 충돌체 편집
 			ImGui::Text("Edit Collider");
 
-			// 마우스가 타일맵 위에 있을 경우 해당 타일 주변에 테두리 그리기
-			if (vMouseTileRowCol.x >= 0 && vMouseTileRowCol.x < vTileMapRowCol.x &&
-				vMouseTileRowCol.y >= 0 && vMouseTileRowCol.y < vTileMapRowCol.y)
+			// 마우스가 타일맵 위에 있는 경우에만 편집 가능
+			if (m_MouseTileRowCol.x >= 0 && m_MouseTileRowCol.x < vTileMapRowCol.x &&
+				m_MouseTileRowCol.y >= 0 && m_MouseTileRowCol.y < vTileMapRowCol.y)
 			{
-				// 마우스가 호버하는 타일의 좌상단 world 좌표
-				Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(vMouseTileRowCol.y * vTileSize.y, -vMouseTileRowCol.x * vTileSize.x, 0.f);
 
-				// DebugRender 그리기
-				DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);
+				// 마우스 좌클릭시 타일 위치 기억
+				if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+				{
+					m_MouseClickTileRowCol = m_MouseTileRowCol;
+				}
+
+				// 마우스가 클릭 없이 단순 호버 상태에서 타일맵 위에 있을 경우 해당 타일 주변에 테두리 그리기
+				if (false == ImGui::IsMouseDown(ImGuiMouseButton_Left))
+				{
+
+					// 마우스가 호버하는 타일의 좌상단 world 좌표
+					Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(m_MouseTileRowCol.y * vTileSize.y, -m_MouseTileRowCol.x * vTileSize.x, 0.f);
+
+					// DebugRender 그리기
+					DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);
+
+				}
+				// 마우스 드래그 중일 경우 타일 위치와 마우스 릴리즈 타일 위치까지의 사각형을 그림
+				else if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+				{
+					// Collider의 타일 LT Row, Col
+					m_MouseReleaseTileRowCol = m_MouseTileRowCol;
+
+					// Collider의 타일 LT Row, Col
+					int colliderLTRow = min((int)m_MouseClickTileRowCol.x, (int)m_MouseReleaseTileRowCol.x);
+					int colliderLTCol = min((int)m_MouseClickTileRowCol.y, (int)m_MouseReleaseTileRowCol.y);
+
+					// Collider의 타일 RB Row, Col
+					int colliderRBRow = max((int)m_MouseClickTileRowCol.x, (int)m_MouseReleaseTileRowCol.x);
+					int colliderRBCol = max((int)m_MouseClickTileRowCol.y, (int)m_MouseReleaseTileRowCol.y);
+
+					// Collider의 타일 LT, RB world 좌표
+					vColliderLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(colliderLTCol * vTileSize.y, -colliderLTRow * vTileSize.x, 0.f);
+					vColliderRBWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3((colliderRBCol + 1) * vTileSize.y, -(colliderRBRow + 1) * vTileSize.x, 0.f);
+
+					// DebugRender 그리기
+					DrawDebugRect((vColliderLTWorldPos + vColliderRBWorldPos) * 0.5f, Vec3((colliderRBCol - colliderLTCol + 1)* vTileSize.y, (colliderRBRow - colliderLTRow + 1)* vTileSize.x, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(0.f, 1.f, 0.f, 1.f), 0.f, false);
+
+				}
+
+				// 마우스 좌클릭 떼었을 때 충돌체 생성
+				if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+				{
+
+
+
+				}
+
 			}
+
+			// 타일 그리드 표시 여부 체크박스
+			bool isShowTileGrid = m_selectedTileMap->IsShowTileGrid();
+			ImGui::Checkbox("Show Tile Grid", &isShowTileGrid);
+			m_selectedTileMap->SetTileGridShow(isShowTileGrid);
+
 		}
 
-		// 타일 그리드 표시 여부 체크박스
-		bool isShowTileGrid = m_selectedTileMap->IsShowTileGrid();
-		ImGui::Checkbox("Show Tile Grid", &isShowTileGrid);
-		m_selectedTileMap->SetTileGridShow(isShowTileGrid);
-
+		ImGui::Separator();
 	}
-
-	ImGui::Separator();
 
 
 	ImVec2 last_content_pos = ImGui::GetCursorPos();
