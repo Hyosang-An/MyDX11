@@ -256,27 +256,46 @@ void MenuUI::GameObject()
 				CLayer* pLayer = pCurrentLevel->GetLayer(i);
 				const vector<CGameObject*>& vecObjects = pLayer->GetObjects();
 
-				for (size_t i = 0; i < vecObjects.size(); ++i)
+				//for (size_t j = 0; j < vecObjects.size(); ++j)
+				//{
+				//	// 중복된 이름이 이미 있으면 숫자를 늘려가면서 이름을 만듦
+				//	if (vecObjects[j]->GetName() == strObjName)
+				//	{
+				//		for (; m_newObjIdx < 0xffffffff; ++m_newObjIdx)
+				//		{
+				//			strObjName = strObjDefaultName + L" " + to_wstring(++m_newObjIdx);
+				//			bool bExist = false;
+				//			for (size_t k = 0; k < vecObjects.size(); ++k)
+				//			{
+				//				if (vecObjects[k]->GetName() == strObjName)
+				//				{
+				//					bExist = true;
+				//					break;
+				//				}
+				//			}
+				//			if (false == bExist)
+				//				break;
+				//		}
+				//	}
+				//}
+
+				// 중복된 이름이 이미 있으면 숫자를 늘려가면서 이름을 만듦
+				while (true)
 				{
-					// 중복된 이름이 이미 있으면 숫자를 늘려가면서 이름을 만듦
-					if (vecObjects[i]->GetName() == strObjName)
+					bool bExist = false;
+					for (size_t j = 0; j < vecObjects.size(); ++j)
 					{
-						for (; m_newObjIdx < 0xffffffff; ++m_newObjIdx)
+						if (vecObjects[j]->GetName() == strObjName)
 						{
-							strObjName = strObjDefaultName + L" " + to_wstring(++m_newObjIdx);
-							bool bExist = false;
-							for (size_t k = 0; k < vecObjects.size(); ++k)
-							{
-								if (vecObjects[k]->GetName() == strObjName)
-								{
-									bExist = true;
-									break;
-								}
-							}
-							if (false == bExist)
-								break;
+							bExist = true;
+							break;
 						}
 					}
+
+					if (false == bExist)
+						break;
+
+					strObjName = strObjDefaultName + L" " + to_wstring(++m_newObjIdx);
 				}
 			}
 

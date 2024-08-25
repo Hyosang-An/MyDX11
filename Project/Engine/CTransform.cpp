@@ -55,9 +55,9 @@ void CTransform::FinalTick()
 		{
 			Vec3 vParentScale = GetOwner()->GetParent()->Transform()->GetWorldScale();
 			Matrix matParentScale = XMMatrixScaling(vParentScale.x, vParentScale.y, vParentScale.z);
-			Matrix matParentScaceInv = XMMatrixInverse(nullptr, matParentScale);
+			Matrix matParentScaleInv = XMMatrixInverse(nullptr, matParentScale);
 
-			m_matWorld = m_matWorld * matParentScaceInv * matParentWorldMat;
+			m_matWorld = m_matWorld * matParentScaleInv * matParentWorldMat;
 		}
 		else
 		{
