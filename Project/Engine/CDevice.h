@@ -40,6 +40,8 @@ public:
 	void Present() { m_SwapChain->Present(0, 0); }
 	Vec2 GetResolution() { return m_vResolution; }
 
+	void ResizeResolution(UINT _width, UINT _height);
+
 private:
 	int CreateSwapChain();
 	int CreateView();
@@ -48,6 +50,8 @@ private:
 	int CreateDepthStencilState();
 	int CreateBlendState();
 	int CreateSamplerState();
+
+
 
 public:
 	ID3D11Device* GetDevice() { return m_Device.Get(); }

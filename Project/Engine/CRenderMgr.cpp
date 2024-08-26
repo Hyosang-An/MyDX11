@@ -61,7 +61,7 @@ void CRenderMgr::SetPostProcessTex()
 		m_vecPostProcessRTTex.push_back(CAssetMgr::GetInst()->FindAsset<CTexture>(texName));
 	}
 
-	m_PostProcessDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessDSTex");
+	//m_PostProcessDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"PostProcessDSTex");
 }
 
 void CRenderMgr::Tick()
@@ -223,9 +223,9 @@ void CRenderMgr::PostProcessCopy(int _postProcessRTTex_index)
 	Ptr<CTexture> pRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"RenderTargetTex");
 	CONTEXT->CopyResource(m_vecPostProcessRTTex[_postProcessRTTex_index]->GetTex2D().Get(), pRTTex->GetTex2D().Get());
 
-	// DepthStencilTex -> PostProcessDSTex
-	Ptr<CTexture> pDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"DepthStencilTex");
-	CONTEXT->CopyResource(m_PostProcessDSTex->GetTex2D().Get(), pDSTex->GetTex2D().Get());
+	//// DepthStencilTex -> PostProcessDSTex
+	//Ptr<CTexture> pDSTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"DepthStencilTex");
+	//CONTEXT->CopyResource(m_PostProcessDSTex->GetTex2D().Get(), pDSTex->GetTex2D().Get());
 }
 
 void CRenderMgr::RegisterLight2D(CLight2D* _light)

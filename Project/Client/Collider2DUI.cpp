@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Collider2DUI.h"
 
+#include <Engine/CDevice.h>
+
 
 Collider2DUI::Collider2DUI()
 	: ComponentUI(COMPONENT_TYPE::COLLIDER2D)
@@ -25,6 +27,20 @@ void Collider2DUI::Update()
 
 	// Independent Scale CheckBox
 
+
+
+	// µð¹ö±×
+	if (ImGui::IsMouseClicked(1))
+	{
+		//auto resolution = CDevice::GetInst()->GetResolution();
+		auto resolution = CDevice::GetInst()->GetResolution() * 2;
+		CEngine::GetInst()->ResizeWindowResolution(1920, 1080);
+	}
+
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle))
+	{
+		CEngine::GetInst()->ToggleFullScreen();
+	}
 
 
 	ImVec2 last_content_pos = ImGui::GetCursorPos();
