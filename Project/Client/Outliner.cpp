@@ -53,6 +53,64 @@ void Outliner::Update()
 
 	if (CLevelMgr::GetInst()->IsLevelChanged())
 		RenewLevel();
+
+
+
+
+	// Test
+	// Always center this window when appearing
+	//ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	//ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	if (m_bRename)
+	{
+		ImGui::OpenPopup("Rename##GameObject");
+
+		// Always center this window when appearing
+		//ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(m_RenamePos, ImGuiCond_Appearing);
+
+		if (ImGui::BeginPopup("Rename##GameObject", ImGuiPopupFlags_None))
+		{
+
+
+			string strObjName = string(m_PopUpSelectedObject->GetName().begin(), m_PopUpSelectedObject->GetName().end());
+			char buffer[255];
+			sprintf_s(buffer, 255, "%s", strObjName.c_str());
+
+			ImGui::Text("Edit name: ");
+			ImGui::InputText("##edit", buffer, 255);
+			if (ImGui::IsItemDeactivatedAfterEdit()) 
+			{
+				string strObjName = string(buffer);
+				// 이름 변경
+				wstring wstrObjName = wstring(strObjName.begin(), strObjName.end());
+				m_PopUpSelectedObject->SetName(wstrObjName);
+				m_bRename = false;
+				ImGui::CloseCurrentPopup();
+
+				RenewLevel();
+			}
+
+			if (ImGui::Button("Close"))
+			{
+				m_bRename = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			// 창 밖을 클릭하면 닫히게, 단 InputText가 활성화되어 있지 않은 경우에만
+			if (!ImGui::IsWindowHovered() &&
+				!ImGui::IsAnyItemActive() &&  // 활성화된 위젯이 없을 때만
+				ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+			{
+				m_bRename = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
 }
 
 void Outliner::RenewLevel()
@@ -152,13 +210,21 @@ void Outliner::DroppedFromOuter(DWORD_PTR _OuterData, DWORD_PTR _DropNode)
 void Outliner::PopUpMenu(DWORD_PTR _Param)
 {
 	TreeNode* pTargetNode = (TreeNode*)_Param;
+	CGameObject* pObject = (CGameObject*)pTargetNode->GetData();
 
-
-	if (ImGui::MenuItem("Option 1"))
+	if (ImGui::MenuItem("Rename"))
 	{
-		// Option 1 선택 시 실행할 코드
-		int a = 0;
+		// 이름 변경 창 띄우기
+		m_bRename = !m_bRename;
+
+		// 이름 변경 창 위치 설정
+		m_RenamePos = ImGui::GetItemRectMin();
+
+		m_PopUpSelectedObject = pObject;
 	}
+
+	
+
 	if (ImGui::MenuItem("Option 2"))
 	{
 		// Option 2 선택 시 실행할 코드

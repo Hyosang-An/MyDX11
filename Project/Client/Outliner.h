@@ -6,6 +6,11 @@ class Outliner :
 private:
     class TreeUI* m_Tree;
 
+
+    bool m_bRename = false;
+	ImVec2 m_RenamePos;
+    class CGameObject* m_PopUpSelectedObject;
+
 public:
     virtual void Update() override;
 
