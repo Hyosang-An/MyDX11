@@ -7,8 +7,11 @@ private:
     class TreeUI* m_Tree;
 
 
-    bool m_bRename = false;
+    bool m_bRenameObject = false;
 	ImVec2 m_RenamePos;
+
+	bool m_bDeleteObject = false;
+
     class CGameObject* m_PopUpSelectedObject;
 
 public:

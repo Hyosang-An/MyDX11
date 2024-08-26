@@ -62,7 +62,7 @@ void Outliner::Update()
 	//ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 	//ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-	if (m_bRename)
+	if (m_bRenameObject)
 	{
 		ImGui::OpenPopup("Rename##GameObject");
 
@@ -86,7 +86,7 @@ void Outliner::Update()
 				// 이름 변경
 				wstring wstrObjName = wstring(strObjName.begin(), strObjName.end());
 				m_PopUpSelectedObject->SetName(wstrObjName);
-				m_bRename = false;
+				m_bRenameObject = false;
 				ImGui::CloseCurrentPopup();
 
 				RenewLevel();
@@ -94,7 +94,7 @@ void Outliner::Update()
 
 			if (ImGui::Button("Close"))
 			{
-				m_bRename = false;
+				m_bRenameObject = false;
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -103,7 +103,7 @@ void Outliner::Update()
 				!ImGui::IsAnyItemActive() &&  // 활성화된 위젯이 없을 때만
 				ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 			{
-				m_bRename = false;
+				m_bRenameObject = false;
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -111,6 +111,61 @@ void Outliner::Update()
 		}
 	}
 
+	if (m_bDeleteObject)
+	{
+		ImGui::OpenPopup("Delete##GameObject");
+
+		// Always center this window when appearing
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing);
+
+		if (ImGui::BeginPopup("Delete##GameObject", ImGuiPopupFlags_None))
+		{
+			string strObjName = string(m_PopUpSelectedObject->GetName().begin(), m_PopUpSelectedObject->GetName().end());
+			string text = "Delete Object : " + strObjName;
+			ImGui::Text(text.c_str());
+
+			ImGui::NewLine();
+
+			// 버튼들을 중앙에 정렬하기 위해 사용 가능한 너비를 가져옴
+			float windowWidth = ImGui::GetWindowSize().x;
+			float buttonWidth = ImGui::CalcTextSize("Yes").x + ImGui::GetStyle().FramePadding.x * 2;
+			buttonWidth += ImGui::CalcTextSize("No").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetStyle().ItemSpacing.x;
+
+			float offsetX = (windowWidth - buttonWidth) * 0.5f;
+
+			ImGui::SetCursorPosX(offsetX); // 버튼을 중앙으로 정렬
+
+			if (ImGui::Button("Yes"))
+			{
+				// 삭제
+				DeleteObject(m_PopUpSelectedObject);
+				m_bDeleteObject = false;
+				ImGui::CloseCurrentPopup();
+
+				RenewLevel();
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("No"))
+			{
+				m_bDeleteObject = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			// 창 밖을 클릭하면 닫히게, 단 InputText가 활성화되어 있지 않은 경우에만
+			if (!ImGui::IsWindowHovered() &&
+				!ImGui::IsAnyItemActive() &&  // 활성화된 위젯이 없을 때만
+				ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+			{
+				m_bDeleteObject = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
 }
 
 void Outliner::RenewLevel()
@@ -215,7 +270,7 @@ void Outliner::PopUpMenu(DWORD_PTR _Param)
 	if (ImGui::MenuItem("Rename"))
 	{
 		// 이름 변경 창 띄우기
-		m_bRename = !m_bRename;
+		m_bRenameObject = true;
 
 		// 이름 변경 창 위치 설정
 		m_RenamePos = ImGui::GetItemRectMin();
@@ -225,9 +280,11 @@ void Outliner::PopUpMenu(DWORD_PTR _Param)
 
 	
 
-	if (ImGui::MenuItem("Option 2"))
+	if (ImGui::MenuItem("Delete"))
 	{
-		// Option 2 선택 시 실행할 코드
+		m_bDeleteObject = true;
+
+		m_PopUpSelectedObject = pObject;
 	}
 	if (ImGui::MenuItem("Option 3"))
 	{
