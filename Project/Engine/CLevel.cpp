@@ -23,7 +23,7 @@ CLevel::CLevel() :
 			m_vecLayer[i]->SetName(L"Background");
 			break;
 		case 2:
-			m_vecLayer[i]->SetName(L"Tile");
+			m_vecLayer[i]->SetName(L"TileMap");
 			break;
 		case 3:
 			m_vecLayer[i]->SetName(L"Player");
@@ -36,8 +36,17 @@ CLevel::CLevel() :
 			break;
 		case 6:
 			m_vecLayer[i]->SetName(L"MonsterProjectile");
-			break;
+			break;			
 		case 7:
+			m_vecLayer[i]->SetName(L"WALL");
+			break;
+		case 8:
+			m_vecLayer[i]->SetName(L"SPIKE");
+			break;
+		case 9:
+			m_vecLayer[i]->SetName(L"DREAMBLOCK");
+			break;
+		case 10:
 			m_vecLayer[i]->SetName(L"UI");
 			break;
 

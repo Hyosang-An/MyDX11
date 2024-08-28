@@ -22,6 +22,7 @@ private:
     Vec2 m_MouseTileRowCol = Vec2(0.f, 0.f);
 
 	TileMapEditMode m_editMode = TileMapEditMode::EditTile;
+	LAYER m_colliderLayerType = LAYER::WALL;
 
     std::stack<std::pair<int, int>> m_undoStack;
 

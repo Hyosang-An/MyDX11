@@ -57,15 +57,21 @@ enum class COMPONENT_TYPE
 	SCRIPT
 };
 
+// Layer 이름을 변경하면 level 생성자에서도 변경해야함
 enum class LAYER
 {
 	DEFAULT,
 	BACKGROUND,
-	TILE,
+	TILEMAP,
 	PLAYER,
 	MONSTER,
 	PLAYER_PROJECTILE,
 	MONSTER_PROJECTILE,
+
+	WALL,
+	SPIKE,
+	DREAMBLOCK,
+
 	UI,
 
 

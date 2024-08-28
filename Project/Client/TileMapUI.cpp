@@ -347,6 +347,23 @@ void TileMapUI::Update()
 			// 타일맵 충돌체 편집
 			ImGui::Text("Edit Collider");
 
+			// 오브젝트 Layer 선택 콤보박스
+			ImGui::Text("Layer Type");
+			ImGui::SameLine(140);
+			ImGui::SetNextItemWidth(180.f);
+			const char* layerTypes[] = { "Wall", "Spike", "Dream Block"};
+			if (ImGui::BeginCombo("##Layer Type", layerTypes[(int)m_colliderLayerType - (int)LAYER::WALL]))
+			{
+				if (ImGui::Selectable("Wall"))
+					m_colliderLayerType = LAYER::WALL;
+				if (ImGui::Selectable("Spike"))
+					m_colliderLayerType = LAYER::SPIKE;
+				if (ImGui::Selectable("Dream Block"))
+					m_colliderLayerType = LAYER::DREAMBLOCK;
+				ImGui::EndCombo();
+			}
+
+
 			// 메인 윈도우의 클라이언트 영역을 가져옴
 			RECT clientRect;
 			GetClientRect(CEngine::GetInst()->GetMainWnd(), &clientRect);
@@ -407,6 +424,7 @@ void TileMapUI::Update()
 						CGameObject* pColliderObj = new CGameObject;
 						pColliderObj->AddComponent(new CTransform);
 						pColliderObj->AddComponent(new CCollider2D);
+						
 
 						// 충돌체의 위치는 타일맵의 상대 좌표
 						Vec3 vColliderRelativePos = ((vColliderLTWorldPos + vColliderRBWorldPos) * 0.5f - m_selectedTileMap->Transform()->GetRelativePos()) / m_selectedTileMap->GetOwner()->Transform()->GetRelativeScale();
@@ -445,7 +463,7 @@ void TileMapUI::Update()
 
 						pColliderObj->SetName(colliderObjName);
 						// 현재 레벨에 추가
-						CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(2, pColliderObj);
+						CLevelMgr::GetInst()->GetCurrentLevel()->AddObject((int)m_colliderLayerType, pColliderObj);
 						m_selectedTileMap->GetOwner()->AddChild(pColliderObj);
 					}
 				}
