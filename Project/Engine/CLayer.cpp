@@ -161,3 +161,16 @@ void CLayer::DeregisterObject(CGameObject* _Object)
 		assert(nullptr);*/
 	}
 }
+
+CGameObject* CLayer::FindObject(wstring _objName)
+{
+	for (size_t i = 0; i < m_vecObjects.size(); ++i)
+	{
+		if (_objName == m_vecObjects[i]->GetName())
+		{
+			return m_vecObjects[i];
+		}
+	}
+
+	return nullptr;
+}

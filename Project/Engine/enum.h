@@ -57,6 +57,9 @@ enum class COMPONENT_TYPE
 	SCRIPT
 };
 
+extern const char* COMPONENT_TYPE_STRING[(UINT)COMPONENT_TYPE::END];
+const char* ToString(COMPONENT_TYPE _Type);
+
 // Layer 이름을 변경하면 level 생성자에서도 변경해야함
 enum class LAYER
 {
@@ -78,8 +81,10 @@ enum class LAYER
 	END
 };
 
-extern const char* COMPONENT_TYPE_STRING[(UINT)COMPONENT_TYPE::END];
-const char* ToString(COMPONENT_TYPE _Type);
+extern const char* LAYER_STRING[(UINT)LAYER::END];
+const char* ToString(LAYER _Layer);
+
+
 
 enum DIR
 {

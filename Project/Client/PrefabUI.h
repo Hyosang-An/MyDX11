@@ -6,6 +6,9 @@ class PrefabUI :
 public:
     virtual void Update() override;
 
+private:
+	LAYER m_spawnLayer = LAYER::DEFAULT;
+
 public:
     PrefabUI();
     ~PrefabUI();

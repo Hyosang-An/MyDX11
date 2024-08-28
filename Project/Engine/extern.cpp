@@ -42,3 +42,26 @@ const char* COMPONENT_TYPE_STRING[] =
 };
 
 const char* ToString(COMPONENT_TYPE _Type) { return COMPONENT_TYPE_STRING[(UINT)_Type]; }
+
+
+
+
+const char* LAYER_STRING[] =
+{
+	"Default",
+	"Background",
+	"TileMap",
+	"Player",
+	"Monster",
+	"Player_Projectile",
+	"Monster_Projectile",
+	"Wall",
+	"Spike",
+	"DreamBlock",
+	"UI"
+};
+
+const char* ToString(LAYER _Layer)
+{
+	return LAYER_STRING[(UINT)_Layer];
+}

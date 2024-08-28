@@ -36,7 +36,7 @@ public:
     void DeregisterAsParent(CGameObject* _Object);
     void DeregisterObject(CGameObject* _Object);
 
-
+    CGameObject* FindObject(wstring _objName);
 
 
 };
