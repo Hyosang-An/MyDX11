@@ -238,7 +238,7 @@ void Content::LoadAsset(const path& _Path)
 		//CAssetMgr::GetInst()->Load<CMeshData>(_Path, _Path);
 	else if (ext == L".mtrl")
 		CAssetMgr::GetInst()->Load<CMaterial>(_Path, _Path);
-	else if (ext == L".pref")
+	else if (ext == L".prefab")
 		CAssetMgr::GetInst()->Load<CPrefab>(_Path, _Path);
 	else if (ext == L".png" || ext == L".jpg" || ext == L".jpeg" || ext == L".bmp" || ext == L".dds" || ext == L".tga"
 		|| ext == L".PNG" || ext == L".JPG" || ext == L".JPEG" || ext == L".BMP" || ext == L".DDS" || ext == L".TGA")

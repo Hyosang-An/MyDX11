@@ -219,26 +219,28 @@ void CTestLevel::CreateTestLevel()
 
 void CTestLevel::CreatePrefab()
 {
-	//CGameObject* pProto = new CGameObject;
+	CGameObject* pProto = new CGameObject;
 
-	//pProto->AddComponent(new CTransform);
-	//pProto->AddComponent(new CMeshRender);
-	//pProto->AddComponent(new CMissileScript);
+	pProto->SetName(L"MissilePrefab");
 
-	//pProto->Transform()->SetRelativeScale(100.f, 100.f, 1.f);
+	pProto->AddComponent(new CTransform);
+	pProto->AddComponent(new CMeshRender);
+	pProto->AddComponent(new CMissileScript);
 
-	//pProto->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	//pProto->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+	pProto->Transform()->SetRelativeScale(100.f, 100.f, 1.f);
 
-	//Ptr<CPrefab> pPrefab = new CPrefab;
-	//pPrefab->SetProtoObject(pProto);
+	pProto->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pProto->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+
+	Ptr<CPrefab> pPrefab = new CPrefab;
+	pPrefab->SetProtoObject(pProto);
 
 	//CAssetMgr::GetInst()->AddAsset<CPrefab>(L"MissilePref", pPrefab);
 
 
 
 
-	//wstring FilePath = CPathMgr::GetInst()->GetContentPath();
-	//FilePath += L"prefab\\Missile.pref";
-	//pPrefab->Save(FilePath);
+	wstring FilePath = CPathMgr::GetInst()->GetContentPath();
+	FilePath += L"prefab\\Missile.prefab";
+	pPrefab->Save(FilePath);
 }

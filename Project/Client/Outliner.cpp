@@ -10,6 +10,7 @@
 #include <Engine/CLayer.h>
 #include <Engine/CGameObject.h>
 #include <Engine/CTransform.h>
+#include <Engine/CPathMgr.h>
 
 Outliner::Outliner()
 {
@@ -212,6 +213,8 @@ void Outliner::AddGameObject(TreeNode* _ParentNode, CGameObject* _Object)
 	}
 }
 
+
+
 void Outliner::GameObjectSelected(DWORD_PTR _Param)
 {
 	TreeNode* pSelectedNode = (TreeNode*)_Param;
@@ -269,6 +272,7 @@ void Outliner::PopUpMenu(DWORD_PTR _Param)
 {
 	TreeNode* pTargetNode = (TreeNode*)_Param;
 	CGameObject* pObject = (CGameObject*)pTargetNode->GetData();
+	m_PopUpSelectedObject = pObject;
 
 	if (ImGui::MenuItem("Rename"))
 	{
@@ -277,8 +281,6 @@ void Outliner::PopUpMenu(DWORD_PTR _Param)
 
 		// 이름 변경 창 위치 설정
 		m_RenamePos = ImGui::GetItemRectMin();
-
-		m_PopUpSelectedObject = pObject;
 	}
 
 	
@@ -286,13 +288,87 @@ void Outliner::PopUpMenu(DWORD_PTR _Param)
 	if (ImGui::MenuItem("Delete"))
 	{
 		m_bDeleteObject = true;
-
-		m_PopUpSelectedObject = pObject;
 	}
-	if (ImGui::MenuItem("Option 3"))
+
+	if (ImGui::MenuItem("Save As Prefab"))
 	{
-		// Option 3 선택 시 실행할 코드
+		// Prefab으로 저장
+		SaveAsPrefabByDialog();
 	}
 
 }
 
+void Outliner::SaveAsPrefabByDialog()
+{
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+	if (SUCCEEDED(hr)) {
+		IFileSaveDialog* pFileSave;
+
+		// CLSID_FileSaveDialog 클래스의 인스턴스를 생성하고 IFileSaveDialog 인터페이스 포인터를 가져옵니다.
+		hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL, IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSave));
+
+		if (SUCCEEDED(hr)) {
+			// 파일 형식 필터를 설정합니다.
+			COMDLG_FILTERSPEC rgSpec[] = {
+				{ L"Prefab Files", L"*.prefab" },
+				{ L"All Files", L"*.*" }
+			};
+			pFileSave->SetFileTypes(ARRAYSIZE(rgSpec), rgSpec); // 필터를 대화상자에 설정합니다.
+			pFileSave->SetFileTypeIndex(1); // 기본 파일 형식을 설정합니다. rgSpec중 어떤 것을 기본값으로 할지. Index는 1부터.
+			pFileSave->SetDefaultExtension(L"prefab"); // 기본 확장자를 설정합니다.
+			pFileSave->SetTitle(L"Save Prefab File"); // 대화상자의 제목을 설정합니다.
+
+			// 여기서 기본 파일 이름을 설정합니다. 기본 이름은 오브젝트 이름으로 설정합니다.
+			wstring DefaultFileName = m_PopUpSelectedObject->GetName();
+			pFileSave->SetFileName(DefaultFileName.c_str()); // 기본 파일 이름 설정
+
+			// 마지막 경로를 초기 폴더로 설정
+			IShellItem* psiFolder = nullptr;
+			wstring defaultDirectory;
+			if (m_lastPrefabSaveDirectory.empty())
+				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"prefab";
+			else
+				defaultDirectory = m_lastPrefabSaveDirectory;
+			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
+			if (SUCCEEDED(hr) && psiFolder) {
+				pFileSave->SetFolder(psiFolder);
+				psiFolder->Release();
+			}
+
+			// 파일 저장 대화상자를 표시합니다.
+			hr = pFileSave->Show(NULL);
+
+			if (SUCCEEDED(hr))
+			{
+				IShellItem* pItem;
+
+				// 사용자가 선택한 파일의 IShellItem을 가져옵니다.
+				hr = pFileSave->GetResult(&pItem);
+				if (SUCCEEDED(hr))
+				{
+					PWSTR pszFilePath;
+
+					// IShellItem에서 파일 경로를 가져옵니다.
+					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+					if (SUCCEEDED(hr))
+					{
+						// 여기에서 pszFilePath 경로를 사용하여 파일을 저장합니다.
+						Ptr<CPrefab> pPrefab = new CPrefab;
+						pPrefab->SetProtoObject(m_PopUpSelectedObject->Clone());
+						pPrefab->Save(pszFilePath);
+
+
+						// 마지막 파일명 및 디렉토리 업데이트
+						path filePath = pszFilePath;
+						m_lastPrefabSaveDirectory = filePath.parent_path().wstring();
+						// 파일 경로 사용 후 메모리를 해제합니다.
+						CoTaskMemFree(pszFilePath);
+					}
+					pItem->Release(); // IShellItem 포인터를 해제합니다.
+				}
+			}
+			pFileSave->Release(); // IFileSaveDialog 포인터를 해제합니다.
+		}
+		CoUninitialize(); // COM 라이브러리를 종료합니다.
+	}
+}

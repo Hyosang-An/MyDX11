@@ -46,6 +46,7 @@ void CRenderMgr::Init()
 
 	// 디버그 렌더링용 게임 오브젝트
 	m_DebugObject = new CGameObject;
+	m_DebugObject->SetName(L"DebugObject");
 	m_DebugObject->AddComponent(new CTransform);
 	m_DebugObject->AddComponent(new CMeshRender);
 	m_DebugObject->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DebugShapeMtrl"));

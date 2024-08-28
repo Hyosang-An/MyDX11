@@ -15,6 +15,8 @@ private:
 
     class CGameObject* m_PopUpSelectedObject;
 
+	wstring m_lastPrefabSaveDirectory;
+
 public:
     virtual void Update() override;
 
@@ -22,6 +24,7 @@ private:
     void RenewLevel();
     void GameObjectSelected(DWORD_PTR _Param);
     void AddGameObject(class TreeNode* pNode, class CGameObject* _Object);
+	void SaveAsPrefabByDialog();
 
     void GameObjectAddChild(DWORD_PTR _Param1, DWORD_PTR _Param2);
     void DroppedFromOuter(DWORD_PTR _OuterData, DWORD_PTR _DropNode);
