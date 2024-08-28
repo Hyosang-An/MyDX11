@@ -152,6 +152,27 @@ void Inspector::Update()
 	ImGui::Text("Layer");
 	ImGui::SameLine(108);
 	ImGui::InputText("##LayerName", buffer, strlen(buffer), ImGuiInputTextFlags_ReadOnly);
+
+
+	// Layer index combo box
+	ImGui::Text("Change Layer");
+	ImGui::Checkbox("Move Child", &m_bMoveChild);
+	ImGui::SameLine(108);
+	if (ImGui::BeginCombo("##LayerCombo", LAYER_STRING[(int)LayerIdx]))
+	{
+		for (int i = 0; i < (int)LAYER::END; ++i)
+		{
+			if (ImGui::Selectable(LAYER_STRING[i]))
+			{
+				if (LayerIdx == i)
+					continue;
+
+				pCurLevel->AddObject(i, m_TargetObject, m_bMoveChild);
+			}
+		}
+
+		ImGui::EndCombo();
+	}
 }
 
 

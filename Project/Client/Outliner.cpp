@@ -56,13 +56,12 @@ void Outliner::Update()
 	if (CLevelMgr::GetInst()->IsLevelChanged())
 		RenewLevel();
 
-	// 선택된 오브젝트 WorldPos, WorldScale (타일맵은 타일맵 컴포넌트UI에서 처리)
+	// 선택된 오브젝트 둘레에 보라색 테두리 (타일맵은 타일맵 컴포넌트UI에서 처리)
 	if (m_SelectedObject && m_SelectedObject->GetLayerIdx() != (int)LAYER::TILEMAP)
 	{
 		Vec3 objWorldPos = m_SelectedObject->Transform()->GetWorldPos();
 		Vec3 objWorldScale = m_SelectedObject->Transform()->GetWorldScale();
 
-		//해당 오브젝트 영역에 반투명한 박스 (Debug Render)
 		DrawDebugRect(objWorldPos, objWorldScale * 1.1 ,Vec3(0, 0, 0), Vec4(1.f, 0.f, 1.f, 0.5f), 0.f, false);
 	}
 

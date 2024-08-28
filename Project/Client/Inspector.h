@@ -15,6 +15,8 @@ private:
     Ptr<CAsset>             m_TargetAsset;
     class AssetUI*          m_arrAssetUI[(UINT)ASSET_TYPE::END];
 
+    bool                    m_bMoveChild = false;
+
 public:
     void SetTargetObject(CGameObject* _Object);
     void SetTargetAsset(Ptr<CAsset> _Asset);

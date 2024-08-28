@@ -27,7 +27,7 @@ void PrefabUI::Update()
 
 	// layer index combo box
     
-	if (ImGui::BeginCombo("##TileMapEditModes", LAYER_STRING[(int)m_spawnLayer]))
+	if (ImGui::BeginCombo("##LayerCombo", LAYER_STRING[(int)m_spawnLayer]))
 	{
 		for (int i = 0; i < (int)LAYER::END; ++i)
 		{
