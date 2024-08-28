@@ -6,6 +6,7 @@ class Outliner :
 private:
     class TreeUI* m_Tree;
 
+	class CGameObject* m_SelectedObject;
 
     bool m_bRenameObject = false;
 	ImVec2 m_RenamePos;

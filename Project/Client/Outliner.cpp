@@ -9,6 +9,7 @@
 #include <Engine/CLevel.h>
 #include <Engine/CLayer.h>
 #include <Engine/CGameObject.h>
+#include <Engine/CTransform.h>
 
 Outliner::Outliner()
 {
@@ -54,13 +55,15 @@ void Outliner::Update()
 	if (CLevelMgr::GetInst()->IsLevelChanged())
 		RenewLevel();
 
+	// 선택된 오브젝트 WorldPos, WorldScale (타일맵은 타일맵 컴포넌트UI에서 처리)
+	if (m_SelectedObject && m_SelectedObject->GetLayerIdx() != (int)LAYER::TILEMAP)
+	{
+		Vec3 objWorldPos = m_SelectedObject->Transform()->GetWorldPos();
+		Vec3 objWorldScale = m_SelectedObject->Transform()->GetWorldScale();
 
-
-
-	// Test
-	// Always center this window when appearing
-	//ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-	//ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		//해당 오브젝트 영역에 반투명한 박스 (Debug Render)
+		DrawDebugRect(objWorldPos, objWorldScale * 1.1 ,Vec3(0, 0, 0), Vec4(1.f, 0.f, 1.f, 0.5f), 0.f, false);
+	}
 
 	if (m_bRenameObject)
 	{
@@ -213,10 +216,10 @@ void Outliner::GameObjectSelected(DWORD_PTR _Param)
 {
 	TreeNode* pSelectedNode = (TreeNode*)_Param;
 
-	CGameObject* pObject = (CGameObject*)pSelectedNode->GetData();
+	m_SelectedObject = (CGameObject*)pSelectedNode->GetData();
 
 	Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
-	pInspector->SetTargetObject(pObject);
+	pInspector->SetTargetObject(m_SelectedObject);
 }
 
 void Outliner::GameObjectAddChild(DWORD_PTR _Param1, DWORD_PTR _Param2)
