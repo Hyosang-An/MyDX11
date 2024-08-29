@@ -26,6 +26,7 @@ void TransformUI::Update()
 
 	Vec3 vPos = pTrans->GetRelativePos();
 	Vec3 vScale = pTrans->GetRelativeScale();
+	Vec3 vPrevScale = vScale;
 	Vec3 vRot = pTrans->GetRelativeRoatation();
 	vRot = (vRot / XM_PI) * 180.f;
 	ImGui::Text("Position");
@@ -35,6 +36,20 @@ void TransformUI::Update()
 	ImGui::Text("Scale");
 	ImGui::SameLine(100);
 	ImGui::DragFloat3("##Scale", vScale);
+
+	// scale의 절대값이 0이 되지 않도록
+	float fMin = 0.001f;
+	for (int i = 0; i < 3; ++i)
+	{
+		if (abs(vScale[i]) <= fMin)
+		{
+			if (vPrevScale[i] > 0)
+				vScale[i] = fMin;
+			else if (vPrevScale[i] < 0)
+				vScale[i] = -fMin;
+		}
+
+	}
 
 	ImGui::Text("Rotation");
 	ImGui::SameLine(100);
