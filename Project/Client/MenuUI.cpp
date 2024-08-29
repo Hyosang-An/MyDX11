@@ -9,6 +9,7 @@
 #include <Engine/CScript.h>
 #include <Engine/CLayer.h>
 #include <Engine/CRenderMgr.h>
+#include <Engine/CDevice.h>
 
 #include <Scripts/CScriptMgr.h>
 
@@ -57,6 +58,8 @@ void MenuUI::Update()
 	Assets();
 
 	EditorMode();
+
+	Window();
 
 	FontsCheck();
 
@@ -420,6 +423,44 @@ void MenuUI::EditorMode()
 		}
 		ImGui::EndMenu();
 	}
+}
+
+void MenuUI::Window()
+{
+	// 전체화면
+	if (ImGui::BeginMenu("Window"))
+	{
+		static bool bFullScreen = false;
+		if (ImGui::MenuItem("Full Screen", 0, &bFullScreen))
+		{
+			CEngine::GetInst()->ToggleFullScreen();
+		}
+
+		// Resolution
+		if (ImGui::BeginMenu("Resolution"))
+		{
+			
+
+			// 1920x1080
+			if (ImGui::MenuItem("1920x1080"))
+			{
+				if (bFullScreen)
+				{
+					CEngine::GetInst()->ToggleFullScreen();
+					bFullScreen = false;					
+				}
+				CEngine::GetInst()->ChangeWindowScale(1920, 1080);
+			}
+			
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenu();
+	}
+
+	
+
+
 }
 
 void MenuUI::LevelPlayPauseStopButton()

@@ -19,6 +19,7 @@ private:
     void GameObject();
     void Assets();
     void EditorMode();
+	void Window();
     void FontsCheck();
 	void LevelPlayPauseStopButton();
 
