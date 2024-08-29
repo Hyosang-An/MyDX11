@@ -8,6 +8,8 @@
 #include <Engine/CGameObject.h>
 #include <Engine/CScript.h>
 #include <Engine/CLayer.h>
+#include <Engine/CRenderMgr.h>
+
 #include <Scripts/CScriptMgr.h>
 
 #include "CLevelSaveLoad.h"
@@ -53,6 +55,8 @@ void MenuUI::Update()
 	GameObject();
 
 	Assets();
+
+	EditorMode();
 
 	FontsCheck();
 
@@ -397,6 +401,23 @@ void MenuUI::Assets()
 			CEditorMgr::GetInst()->FindEditorUI("FlipBookEditor")->SetActive(IsActive);
 		}
 
+		ImGui::EndMenu();
+	}
+}
+
+void MenuUI::EditorMode()
+{
+	if (ImGui::BeginMenu("Editor Mode"))
+	{
+		if (ImGui::MenuItem("Editor Camera", 0, CRenderMgr::GetInst()->IsEditorMode()))
+		{
+			CRenderMgr::GetInst()->SetEditorMode(true);
+		}
+		if (ImGui::MenuItem("Game Camera", 0, !CRenderMgr::GetInst()->IsEditorMode()))
+		{
+			// 에디터 카메라를 비활성화
+			CRenderMgr::GetInst()->SetEditorMode(false);			
+		}
 		ImGui::EndMenu();
 	}
 }

@@ -72,11 +72,11 @@ void CEditorCameraScript::OrthoGraphicMove()
 	Transform()->SetRelativePos(vPos);
 
 	float Scale = Camera()->GetScale();
-	if (KEY_PRESSED(KEY::_8))
-		Scale += EngineDT;
+	if (KEY_JUST_PRESSED(KEY::_8))
+		Scale += 0.1;
 
-	if (KEY_PRESSED(KEY::_9))
-		Scale -= EngineDT;
+	if (KEY_JUST_PRESSED(KEY::_9))
+		Scale -= 0.1;
 
 	Camera()->SetScale(Scale);
 }

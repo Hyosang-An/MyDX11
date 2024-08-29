@@ -43,13 +43,16 @@ void CRenderMgr::Init()
 	// AssetMgr 가 초기화될때 만들어둔 후처리용 텍스쳐를 참조한다.
 	SetPostProcessTex();
 
-
 	// 디버그 렌더링용 게임 오브젝트
 	m_DebugObject = new CGameObject;
 	m_DebugObject->SetName(L"DebugObject");
 	m_DebugObject->AddComponent(new CTransform);
 	m_DebugObject->AddComponent(new CMeshRender);
 	m_DebugObject->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DebugShapeMtrl"));
+
+#ifdef _DEBUG // Debug 모드에서만 EditorMode 활성화
+	m_bEditorMode = true;
+#endif // _DEBUG
 }
 
 
@@ -73,8 +76,8 @@ void CRenderMgr::Tick()
 
 	RenderStart();
 
-	// Level 이 Play 상태인 경우, Level 내에 있는 카메라 시점으로 렌더링하기
-	if (PLAY == pCurLevel->GetState())
+	// 게임 카메라 시점으로 렌더링하기
+	if (!m_bEditorMode)
 	{
 		for (size_t i = 0; i < m_vecCam.size(); ++i)
 		{
@@ -85,7 +88,7 @@ void CRenderMgr::Tick()
 		}
 	}
 
-	// Level 이 Stop 이나 Pause 인 경우, Editor 용 카메라 시점으로 렌더링 하기
+	// Editor 용 카메라 시점으로 렌더링 하기
 	else
 	{
 		if (nullptr != m_EditorCamera)

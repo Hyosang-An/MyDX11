@@ -28,6 +28,8 @@ private:
 	vector<Ptr<CTexture>>   m_vecPostProcessRTTex;
 	//Ptr<CTexture>			m_PostProcessDSTex;
 
+	bool					m_bEditorMode = false;	// Debug 모드면 true (Init에서 설정)
+
 public:
 	void RegisterCamera(CCamera* _cam, int _camPriority);
 	void RegisterEditorCamera(CCamera* _Cam) { m_EditorCamera = _Cam; }
@@ -36,6 +38,10 @@ public:
 	void DeregisterLight2D(CLight2D* _light);
 
 	void PostProcessCopy(int _postProcessRTTex_index);
+
+	void SetEditorMode(bool _Mode) { m_bEditorMode = _Mode; }
+
+	bool IsEditorMode() { return m_bEditorMode; }
 
 private:
 	void SetPostProcessTex();

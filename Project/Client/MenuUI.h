@@ -18,13 +18,14 @@ private:
     void Level();
     void GameObject();
     void Assets();
-
+    void EditorMode();
+    void FontsCheck();
 	void LevelPlayPauseStopButton();
 
 private:
     void AddScript();
 
-    void FontsCheck();
+
 
     wstring CreateRelativePathAssetKey(ASSET_TYPE _Type, const wstring& _Format);
 

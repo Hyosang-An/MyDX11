@@ -45,6 +45,8 @@ void CPlayerScript::Tick()
 		vRot.z += DT * XM_PI;
 		Transform()->SetRelativeRotation(vRot);
 
+
+
 		/*	Vec3 vScale = Transform()->GetRelativeScale();
 			vScale += DT * 100.f * Vec3(1.f, 1.f, 1.f);
 			Transform()->SetRelativeScale(vScale);*/

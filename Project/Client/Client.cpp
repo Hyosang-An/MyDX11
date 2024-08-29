@@ -12,7 +12,6 @@
 #include "CTestLevel.h"
 #include "CLevelSaveLoad.h"
 
-
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
@@ -111,7 +110,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
     
     //wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_CLIENT);
-    // 메뉴바 제거
+    // 메뉴바 제거    
     wcex.lpszMenuName   = nullptr; // MAKEINTRESOURCEW(IDC_CLIENT);
 
     wcex.lpszClassName  = L"MyWindowClass";
