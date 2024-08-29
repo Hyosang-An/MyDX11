@@ -57,6 +57,7 @@ void CTransform::FinalTick()
 			Matrix matParentScale = XMMatrixScaling(vParentScale.x, vParentScale.y, vParentScale.z);
 			Matrix matParentScaleInv = XMMatrixInverse(nullptr, matParentScale);
 
+			// 부모 Scaling 상쇄
 			m_matWorld = m_matWorld * matParentScaleInv * matParentWorldMat;
 		}
 		else
@@ -115,6 +116,153 @@ void CTransform::Binding()
 	//	strNDC = std::to_wstring(NDC.x) + L" ," + std::to_wstring(NDC.y) + L" ," + std::to_wstring(NDC.z) + L" ,";
 	//	int a = 1;
 	//}
+}
+
+void CTransform::SetWorldPos(Vec3 _Pos)
+{
+	Matrix matTargetRelativeTranslation;
+
+	// 크기행렬
+	Matrix matRelativeScale = XMMatrixScaling(m_RelativeScale.x, m_RelativeScale.y, m_RelativeScale.z);
+
+	// 회전 행렬 (월드 좌표계의 X -> Y -> Z 축 순서로 오브젝트를 회전시킴)
+	Matrix matRelativeRot = XMMatrixRotationX(m_RelativeRotation.x)
+		* XMMatrixRotationY(m_RelativeRotation.y)
+		* XMMatrixRotationZ(m_RelativeRotation.z);
+
+	Matrix matParentWorld; // Identity로 초기화
+
+	// 부모 오브젝트가 있는지 확인
+	if (GetOwner()->GetParent())
+	{
+		// 부모의 월드행렬을 곱해서 최종 월드행렬을 계산함
+		if (m_IndependentScale)
+		{
+			matParentWorld = GetOwner()->GetParent()->Transform()->GetWorldMat();
+
+			Vec3 vParentScale = GetOwner()->GetParent()->Transform()->GetWorldScale();
+			Matrix matParentScale = XMMatrixScaling(vParentScale.x, vParentScale.y, vParentScale.z);
+
+			// 부모 Scaling 상쇄
+			matParentWorld = matParentScale.Invert() * matParentWorld ;
+		}
+		else
+		{
+			matParentWorld = GetOwner()->GetParent()->Transform()->GetWorldMat();
+		}
+	}
+
+	Matrix matTargetWorld = m_matWorld;
+	matTargetWorld._41 = _Pos.x;
+	matTargetWorld._42 = _Pos.y;
+	matTargetWorld._43 = _Pos.z;
+	
+	matTargetRelativeTranslation =  matRelativeRot.Invert() * matRelativeScale.Invert() * matTargetWorld * matParentWorld.Invert();
+
+	// 이게 우리가 원하는 WorldPos에 대한 RelativePos
+	Vec3 TargetRelativePos = matTargetRelativeTranslation.Translation();
+
+	m_RelativePos = TargetRelativePos;
+
+	FinalTick();
+}
+
+void CTransform::SetWorldScale(Vec3 _Scale)
+{
+	Matrix matTargetRelativeScaling;
+
+	Matrix matTargetWorldScaling =  Matrix::CreateScale(_Scale);
+
+	// 부모 오브젝트가 있는지 확인
+	if (GetOwner()->GetParent())
+	{
+		// 부모의 월드행렬을 곱해서 최종 월드행렬을 계산함
+		if (m_IndependentScale)
+		{
+			m_RelativeScale = _Scale;
+		}
+		else
+		{
+			Matrix matParentWorldScaling = Matrix::CreateScale(GetOwner()->GetParent()->Transform()->GetWorldScale());
+			matTargetRelativeScaling = matTargetWorldScaling * matParentWorldScaling.Invert();
+
+			// 이게 우리가 원하는 WorldScale에 대한 RelativeScale
+			m_RelativeScale = Vec3(matTargetRelativeScaling._11, matTargetRelativeScaling._22, matTargetRelativeScaling._33);
+		}
+	}
+	else
+		m_RelativeScale = _Scale;
+
+	FinalTick();
+}
+
+void CTransform::SetWorldRotation(Vec3 _Rot)
+{
+	// 제대로 작동되는지 확인 안됨!
+
+	Matrix matTargetRot;
+
+	// 크기행렬
+	Matrix matRelativeScale = XMMatrixScaling(m_RelativeScale.x, m_RelativeScale.y, m_RelativeScale.z);
+
+	// 이동 행렬
+	Matrix matRelativeTranslation = XMMatrixTranslation(m_RelativePos.x, m_RelativePos.y, m_RelativePos.z);
+
+	Matrix matParentWorld; // Identity로 초기화
+
+	// 부모 오브젝트가 있는지 확인
+	if (GetOwner()->GetParent())
+	{
+		// 부모의 월드행렬을 곱해서 최종 월드행렬을 계산함
+		if (m_IndependentScale)
+		{
+			matParentWorld = GetOwner()->GetParent()->Transform()->GetWorldMat();
+
+			Vec3 vParentScale = GetOwner()->GetParent()->Transform()->GetWorldScale();
+			Matrix matParentScale = XMMatrixScaling(vParentScale.x, vParentScale.y, vParentScale.z);
+
+			// 부모 Scaling 상쇄
+			matParentWorld = matParentScale.Invert() * matParentWorld;
+		}
+		else
+		{
+			matParentWorld = GetOwner()->GetParent()->Transform()->GetWorldMat();
+		}
+	}
+
+	// WorldScale
+	Matrix matWorldScaling = XMMatrixScaling(GetWorldScale().x, GetWorldScale().y, GetWorldScale().z);
+
+	// WorldTranslation
+	Matrix matWorldTranslation = XMMatrixTranslation(GetWorldPos().x, GetWorldPos().y, GetWorldPos().z);
+
+	// WorldRotation
+	Matrix matWorldRotation = XMMatrixRotationX(_Rot.x) * XMMatrixRotationY(_Rot.y) * XMMatrixRotationZ(_Rot.z);
+
+
+	matTargetRot = matRelativeScale.Invert() * (matWorldScaling * matWorldRotation * matWorldTranslation) * (matRelativeTranslation * matParentWorld).Invert();
+
+	// matRot 행렬로부터 오일러 각도를 추출
+	float sy = -matTargetRot.m[2][0];
+	float cy = sqrt(1 - sy * sy);
+
+	float x, y, z;
+
+	if (cy > 1e-6) {
+		x = atan2(matTargetRot.m[2][1], matTargetRot.m[2][2]);
+		y = atan2(-matTargetRot.m[2][0], cy);
+		z = atan2(matTargetRot.m[1][0], matTargetRot.m[0][0]);
+	}
+	else {
+		x = atan2(-matTargetRot.m[1][2], matTargetRot.m[1][1]);
+		y = atan2(-matTargetRot.m[2][0], cy);
+		z = 0; // Z는 알 수 없음
+	}
+
+	// 추출된 오일러 각도를 Vec3로 저장
+	m_RelativeRotation = Vec3(x, y, z);
+
+	FinalTick();
 }
 
 Vec3 CTransform::GetWorldScale()

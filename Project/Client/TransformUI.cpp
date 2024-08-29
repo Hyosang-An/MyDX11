@@ -58,6 +58,21 @@ void TransformUI::Update()
 	}
 
 
+	// WorldPos
+	Vec3 vWorldPos = pTrans->GetWorldPos();
+	ImGui::Text("World Position");
+	ImGui::SameLine(100);
+	ImGui::DragFloat3("##WorldPos", vWorldPos, 1);
+	pTrans->SetWorldPos(vWorldPos);
+
+	// WorldScale
+	Vec3 vWorldScale = pTrans->GetWorldScale();
+	ImGui::Text("World Scale");
+	ImGui::SameLine(100);
+	ImGui::DragFloat3("##WorldScale", vWorldScale, 1);
+	pTrans->SetWorldScale(vWorldScale);
+
+
 
 	ImVec2 last_content_pos = ImGui::GetCursorPos();
 	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);

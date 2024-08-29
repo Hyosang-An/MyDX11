@@ -28,13 +28,19 @@ public:
 public:
     void Binding();
 
-    void SetRelativePos(Vec3 _Pos) { m_RelativePos = _Pos; }
-    void SetRelativeScale(Vec3 _Scale) { m_RelativeScale = _Scale; }
-    void SetRelativeRotation(Vec3 _Rot) { m_RelativeRotation = _Rot; }
+    void SetRelativePos(Vec3 _Pos) { m_RelativePos = _Pos; FinalTick(); }
+    void SetRelativeScale(Vec3 _Scale) { m_RelativeScale = _Scale; FinalTick(); }
+    void SetRelativeRotation(Vec3 _Rot) { m_RelativeRotation = _Rot; FinalTick(); }
 
-    void SetRelativePos(float x, float y, float z) { m_RelativePos = Vec3(x, y, z); }
-    void SetRelativeScale(float x, float y, float z) { m_RelativeScale = Vec3(x, y, z); }
-    void SetRelativeRotation(float x, float y, float z) { m_RelativeRotation = Vec3(x, y, z); }
+    void SetRelativePos(float x, float y, float z) { m_RelativePos = Vec3(x, y, z); FinalTick(); }
+    void SetRelativeScale(float x, float y, float z) { m_RelativeScale = Vec3(x, y, z); FinalTick(); }
+    void SetRelativeRotation(float x, float y, float z) { m_RelativeRotation = Vec3(x, y, z); FinalTick(); }
+
+    void SetWorldPos(Vec3 _Pos);
+	void SetWorldScale(Vec3 _Scale);
+
+    // 제대로 작동되는지 확인 안됨!
+	void SetWorldRotation(Vec3 _Rot); 
 
     void SetWorldMatrix(const Matrix& matWorld) { m_matWorld = matWorld; }
 
