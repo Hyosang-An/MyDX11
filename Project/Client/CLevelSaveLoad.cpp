@@ -77,7 +77,7 @@ void CLevelSaveLoad::SaveGameObject(FILE* _File, CGameObject* _Object)
 
 	// Script 정보 저장
 	// Script 개수 저장
-	const vector<CScript*> vecScripts = _Object->GetScripts();
+	const vector<CScript*> vecScripts = _Object->GetScriptVec();
 	size_t ScriptCount = vecScripts.size();
 	fwrite(&ScriptCount, sizeof(size_t), 1, _File);
 

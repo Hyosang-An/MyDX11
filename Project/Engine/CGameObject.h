@@ -39,7 +39,9 @@ public:
     CGameObject* GetParent() { return m_Parent; }
     const vector<CGameObject*>& GetChildren() { return m_vecChildren; }
     int GetLayerIdx() { return m_LayerIdx; }
-    const vector<CScript*> GetScripts() { return m_vecScript; }
+    const vector<CScript*> GetScriptVec() { return m_vecScript; }
+    template<typename T>
+    T* GetScript();
 
     bool IsAncestor(CGameObject* _Object);
     bool IsDead() { return m_Dead; }
@@ -64,8 +66,18 @@ public:
     void Tick();
     virtual void FinalTick();
     void Render();
-
-
-
 };
 
+// m_vecScript에서 특정 스크립트를 찾아서 반환하는 함수
+template <typename T>
+T* CGameObject::GetScript()
+{
+	for (size_t i = 0; i < m_vecScript.size(); ++i)
+	{
+		T* pScript = dynamic_cast<T*>(m_vecScript[i]);
+		if (pScript)
+			return pScript;
+	}
+
+	return nullptr;
+}

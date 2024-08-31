@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CRigidBody.h"
 
+#include "CPlayerScript.h"
+
 CRigidBody::CRigidBody() :
 	CScript((UINT)SCRIPT_TYPE::RIGIDBODY)
 {
@@ -37,6 +39,7 @@ void CRigidBody::Tick()
 	}
 
 	// 최대 낙하 속도 제한
+	//GetOwner()->GetScript<CPlayerScript>();
 	if (m_bUseGravity && !m_bOnGround)
 	{
 		if (m_fMaxFallingSpeed > 0.f && m_fMaxFallingSpeed < -m_vVelocity.y)

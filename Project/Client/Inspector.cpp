@@ -65,7 +65,7 @@ void Inspector::SetTargetObject(CGameObject* _Object)
 	}
 	else
 	{
-		const vector<CScript*>& vecScripts = m_TargetObject->GetScripts();
+		const vector<CScript*>& vecScripts = m_TargetObject->GetScriptVec();
 
 		// 스크립트UI 개수가 부족하면 추가 생성
 		if (m_vecScriptUI.size() < vecScripts.size())
