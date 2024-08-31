@@ -12,47 +12,14 @@ CLevel::CLevel() :
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
 		m_vecLayer[i] = new CLayer(i);
+		m_vecLayer[i]->SetName(L"NO_NAME");
+	}
 
-		// 레이어 이름 설정
-		switch (i)
-		{
-		case 0:
-			m_vecLayer[i]->SetName(L"Default");
-			break;
-		case 1:
-			m_vecLayer[i]->SetName(L"Background");
-			break;
-		case 2:
-			m_vecLayer[i]->SetName(L"TileMap");
-			break;
-		case 3:
-			m_vecLayer[i]->SetName(L"Player");
-			break;
-		case 4:
-			m_vecLayer[i]->SetName(L"Monster");
-			break;
-		case 5:
-			m_vecLayer[i]->SetName(L"PlayerProjectile");
-			break;
-		case 6:
-			m_vecLayer[i]->SetName(L"MonsterProjectile");
-			break;			
-		case 7:
-			m_vecLayer[i]->SetName(L"WALL");
-			break;
-		case 8:
-			m_vecLayer[i]->SetName(L"SPIKE");
-			break;
-		case 9:
-			m_vecLayer[i]->SetName(L"DREAMBLOCK");
-			break;
-		case 10:
-			m_vecLayer[i]->SetName(L"UI");
-			break;
-
-		default:
-			m_vecLayer[i]->SetName(L"NO_NAME");
-		}
+	// 이름 설정
+	for (int i = 0; i < (int)LAYER::END; ++i)
+	{
+		string strName = ToString(LAYER(i));
+		m_vecLayer[i]->SetName(wstring(strName.begin(), strName.end()));
 	}
 }
 

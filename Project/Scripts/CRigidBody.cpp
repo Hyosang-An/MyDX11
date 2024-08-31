@@ -25,11 +25,16 @@ void CRigidBody::Begin()
 
 void CRigidBody::Tick()
 {
+	// 현재 플레이어 상태
+	PLAYER_STATE curState = GetOwner()->GetScript<CPlayerScript>()->GetCurState();
+
 	// 중력 이외의 외력으로 인한 가속도
 	Vec3 Acceleration = m_vForce / m_fMass;	
 
-	// 땅에 있지 않을 때, 중력 가속도 적용
-	if (m_bUseGravity && !m_bOnGround)
+	// 땅에 있지 않으면서, 대쉬 및 드림 대쉬 상태가 아닐 때 중력 가속도 적용
+	if (m_bUseGravity && !m_bOnGround && 
+		curState != PLAYER_STATE::DASH &&
+		curState != PLAYER_STATE::DREAM_DASH)
 	{
 		Acceleration.y -= m_fGravityAccelaration;
 	}
@@ -46,7 +51,7 @@ void CRigidBody::Tick()
 	}
 
 	// 최대 낙하 속도 제한
-	if (m_bUseGravity && !m_bOnGround && GetOwner()->GetScript<CPlayerScript>()->GetCurState() != PLAYER_STATE::DASH)
+	if (m_bUseGravity && !m_bOnGround && curState != PLAYER_STATE::DASH)
 	{
 		if (m_fMaxFallingSpeed > 0.f && m_fMaxFallingSpeed < -m_vVelocity.y)
 		{
@@ -77,6 +82,10 @@ void CRigidBody::LoadFromFile(FILE* _File)
 
 void CRigidBody::OnLand()
 {
+	m_bOnGround = true;
+	m_bIsDangle = false;
+
+	m_vVelocity.y = 0.f;
 }
 
 void CRigidBody::OnWallHang()

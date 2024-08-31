@@ -92,7 +92,7 @@ void CCollisionMgr::CollisionBtwLayer(UINT _Left, UINT _Right)
 			if (nullptr == pRightCol)
 				continue;
 
-			
+
 
 			COLLIDER_ID id = {};
 
@@ -175,8 +175,118 @@ void CCollisionMgr::CollisionBtwLayer(UINT _Left, UINT _Right)
 
 bool CCollisionMgr::IsCollision(CCollider2D* _Left, CCollider2D* _Right)
 {
+	//// BOD 알고리즘
+	//
+	//// 충돌체의 기본 원형 도형을 가져온다.
+	//Ptr<CMesh> pRectMesh = CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh");
+	//Vtx* pVtx = (Vtx*)pRectMesh->GetVtxSysMem();
+
+	//// 각 충돌체의 월드 행렬을 가져온다.
+	//const Matrix& matLeft = _Left->GetWorldMat();
+	//const Matrix& matRight = _Right->GetWorldMat();
+
+	//// 기본 도형(Rect) 를 각 충돌체의 월드행렬을 곱해서, 충돌체의 각 모서리 위치로 옮긴 후,
+	//// 좌표끼리 위치값을 빼서 충돌체의 월드상에서의 위치에서 도형의 표면 방향벡터를 구한다.
+	//// 이 벡터는 충돌체들을 투영시킬 축이 될 예정
+	//Vec3 vProjAxis[4] = {};
+
+	//vProjAxis[0] = XMVector3TransformCoord(pVtx[3].vPos, matLeft) - XMVector3TransformCoord(pVtx[0].vPos, matLeft);
+	//vProjAxis[1] = XMVector3TransformCoord(pVtx[1].vPos, matLeft) - XMVector3TransformCoord(pVtx[0].vPos, matLeft);
+
+	//vProjAxis[2] = XMVector3TransformCoord(pVtx[3].vPos, matRight) - XMVector3TransformCoord(pVtx[0].vPos, matRight);
+	//vProjAxis[3] = XMVector3TransformCoord(pVtx[1].vPos, matRight) - XMVector3TransformCoord(pVtx[0].vPos, matRight);
+
+	//// 충돌체의 중심을 잇는 벡터
+	//Vec3 vCenter = XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matLeft) - XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matRight);
+
+	//// 투영
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	Vec3 vProj = vProjAxis[i];
+	//	vProj.Normalize();
+
+	//	float dot = fabs(vProjAxis[0].Dot(vProj));
+	//	dot += fabs(vProjAxis[1].Dot(vProj));
+	//	dot += fabs(vProjAxis[2].Dot(vProj));
+	//	dot += fabs(vProjAxis[3].Dot(vProj));
+	//	dot /= 2.f;
+
+	//	float fCenter = fabs(vCenter.Dot(vProj));
+
+	//	if (dot <= fCenter)
+	//		return false;
+	//}
+
+	//return true;
+
+
+
+	// Overlap 계산 가능한 코드
 	// BOD 알고리즘
-	
+
+	// 충돌체의 기본 원형 도형을 가져온다.
+	//Ptr<CMesh> pRectMesh = CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh");
+	//Vtx* pVtx = (Vtx*)pRectMesh->GetVtxSysMem();
+
+	//// 각 충돌체의 월드 행렬을 가져온다.
+	//const Matrix& matLeft = _Left->GetWorldMat();
+	//const Matrix& matRight = _Right->GetWorldMat();
+
+	//// 기본 도형(Rect) 를 각 충돌체의 월드행렬을 곱해서, 충돌체의 각 모서리 위치로 옮긴 후,
+	//// 좌표끼리 위치값을 빼서 충돌체의 월드상에서의 위치에서 도형의 표면 방향벡터를 구한다.
+	//// 이 벡터는 충돌체들을 투영시킬 축이 될 예정
+	//Vec3 vProjAxis[4] = {};
+
+	//vProjAxis[0] = XMVector3TransformCoord(pVtx[3].vPos, matLeft) - XMVector3TransformCoord(pVtx[0].vPos, matLeft);
+	//vProjAxis[1] = XMVector3TransformCoord(pVtx[1].vPos, matLeft) - XMVector3TransformCoord(pVtx[0].vPos, matLeft);
+
+	//vProjAxis[2] = XMVector3TransformCoord(pVtx[3].vPos, matRight) - XMVector3TransformCoord(pVtx[0].vPos, matRight);
+	//vProjAxis[3] = XMVector3TransformCoord(pVtx[1].vPos, matRight) - XMVector3TransformCoord(pVtx[0].vPos, matRight);
+
+	//// 충돌체의 중심을 잇는 벡터
+	//Vec3 vCenter = XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matLeft) - XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matRight);
+
+	//// 오버랩 거리 초기화
+	//float minOverlap = FLT_MAX; // 최소 오버랩을 매우 큰 값으로 초기화
+	//Vec3 smallestOverlapAxis; // 최소 오버랩이 발생한 축
+
+	//// 투영
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	Vec3 vProj = vProjAxis[i];
+	//	vProj.Normalize();
+
+	//	float dot = fabs(vProjAxis[0].Dot(vProj));
+	//	dot += fabs(vProjAxis[1].Dot(vProj));
+	//	dot += fabs(vProjAxis[2].Dot(vProj));
+	//	dot += fabs(vProjAxis[3].Dot(vProj));
+	//	dot /= 2.f;
+
+	//	float fCenter = fabs(vCenter.Dot(vProj));
+
+	//	float overlap = dot - fCenter; // 오버랩 계산
+
+	//	if (overlap <= 0) {
+	//		return false; // 충돌이 발생하지 않음
+	//	}
+
+	//	// 최소 오버랩 거리 및 축 업데이트
+	//	if (overlap < minOverlap) {
+	//		minOverlap = overlap;
+	//		smallestOverlapAxis = vProj;
+	//	}
+	//}
+
+	//// 최소 오버랩 축과 거리를 반환
+	//m_vOverlap = smallestOverlapAxis * minOverlap;
+	//return true;
+
+
+
+
+
+	// int 타입 비교
+
 	// 충돌체의 기본 원형 도형을 가져온다.
 	Ptr<CMesh> pRectMesh = CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh");
 	Vtx* pVtx = (Vtx*)pRectMesh->GetVtxSysMem();
@@ -199,23 +309,39 @@ bool CCollisionMgr::IsCollision(CCollider2D* _Left, CCollider2D* _Right)
 	// 충돌체의 중심을 잇는 벡터
 	Vec3 vCenter = XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matLeft) - XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matRight);
 
+	// 오버랩 거리 초기화
+	int minOverlap = INT_MAX; // 최소 오버랩을 매우 큰 값으로 초기화
+	Vec3 smallestOverlapAxis; // 최소 오버랩이 발생한 축
+
 	// 투영
 	for (int i = 0; i < 4; ++i)
 	{
 		Vec3 vProj = vProjAxis[i];
 		vProj.Normalize();
 
-		float dot = fabs(vProjAxis[0].Dot(vProj));
-		dot += fabs(vProjAxis[1].Dot(vProj));
-		dot += fabs(vProjAxis[2].Dot(vProj));
-		dot += fabs(vProjAxis[3].Dot(vProj));
-		dot /= 2.f;
+		// float 결과를 int로 변환
+		int dot = static_cast<int>(fabs(vProjAxis[0].Dot(vProj)));
+		dot += static_cast<int>(fabs(vProjAxis[1].Dot(vProj)));
+		dot += static_cast<int>(fabs(vProjAxis[2].Dot(vProj)));
+		dot += static_cast<int>(fabs(vProjAxis[3].Dot(vProj)));
+		dot /= 2;
 
-		float fCenter = fabs(vCenter.Dot(vProj));
+		int fCenter = static_cast<int>(fabs(vCenter.Dot(vProj)));
 
-		if (dot < fCenter)
-			return false;
+		int overlap = dot - fCenter; // 오버랩 계산
+
+		if (overlap <= 0) {
+			return false; // 충돌이 발생하지 않음
+		}
+
+		// 최소 오버랩 거리 및 축 업데이트
+		if (overlap < minOverlap) {
+			minOverlap = overlap;
+			smallestOverlapAxis = vProj;
+		}
 	}
 
+	// 최소 오버랩 축과 거리를 반환
+	m_vOverlap = smallestOverlapAxis * static_cast<float>(minOverlap);
 	return true;
 }

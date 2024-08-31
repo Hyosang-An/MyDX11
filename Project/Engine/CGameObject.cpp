@@ -115,6 +115,14 @@ void CGameObject::AddChild(CGameObject* _ChildObject)
 	CLevelMgr::GetInst()->LevelChanged();
 }
 
+void CGameObject::AddChild(CGameObject* _ChildObject, int _childLayerIdx)
+{
+	_ChildObject->m_LayerIdx = _childLayerIdx;
+	m_vecChildren.push_back(_ChildObject);
+	_ChildObject->m_Parent = this;
+	CLevelMgr::GetInst()->LevelChanged();
+}
+
 bool CGameObject::IsAncestor(CGameObject* _Object)
 {
 	CGameObject* ancestor = m_Parent;

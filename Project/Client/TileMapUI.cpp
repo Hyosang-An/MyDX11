@@ -353,10 +353,10 @@ void TileMapUI::Update()
 			ImGui::SameLine(140);
 			ImGui::SetNextItemWidth(180.f);
 			const char* layerTypes[] = { "Wall", "Spike", "Dream Block"};
-			if (ImGui::BeginCombo("##Layer Type", layerTypes[(int)m_colliderLayerType - (int)LAYER::WALL]))
+			if (ImGui::BeginCombo("##Layer Type", layerTypes[(int)m_colliderLayerType - (int)LAYER::WALL_OR_GROUND]))
 			{
 				if (ImGui::Selectable("Wall"))
-					m_colliderLayerType = LAYER::WALL;
+					m_colliderLayerType = LAYER::WALL_OR_GROUND;
 				if (ImGui::Selectable("Spike"))
 					m_colliderLayerType = LAYER::SPIKE;
 				if (ImGui::Selectable("Dream Block"))

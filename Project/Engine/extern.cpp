@@ -55,7 +55,7 @@ const char* LAYER_STRING[] =
 	"Monster",
 	"Player_Projectile",
 	"Monster_Projectile",
-	"Wall",
+	"Wall_Or_Ground",
 	"Spike",
 	"DreamBlock",
 	"UI"

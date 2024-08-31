@@ -164,6 +164,7 @@ void CTransform::SetWorldPos(Vec3 _Pos)
 
 	m_RelativePos = TargetRelativePos;
 
+	// m_matWorld와 같은 다른 멤버변수 업데이트
 	FinalTick();
 }
 
@@ -193,6 +194,7 @@ void CTransform::SetWorldScale(Vec3 _Scale)
 	else
 		m_RelativeScale = _Scale;
 
+	// m_matWorld와 같은 다른 멤버변수 업데이트
 	FinalTick();
 }
 

@@ -9,6 +9,8 @@
 
 #include <Scripts/CScriptMgr.h>
 
+CLevel* CLevelSaveLoad::pLoadingLevel = nullptr;
+
 void CLevelSaveLoad::SaveLevel(const wstring& _FilePath, CLevel* _Level)
 {
 	//assert(_Level && _Level->GetState() == LEVEL_STATE::STOP);
@@ -55,6 +57,10 @@ void CLevelSaveLoad::SaveGameObject(FILE* _File, CGameObject* _Object)
 {
 	// GameObject 의 이름 저장
 	SaveWString(_Object->GetName(), _File);
+
+	// layerIdx 저장
+	UINT LayerIdx = _Object->GetLayerIdx();
+	fwrite(&LayerIdx, sizeof(UINT), 1, _File);
 
 	// Component 정보 저장
 	UINT i = 0;
@@ -116,17 +122,17 @@ CLevel* CLevelSaveLoad::LoadLevel(const wstring& _FilePath)
 	}
 
 	// Level 생성
-	CLevel* pNewLevel = new CLevel;
+	pLoadingLevel = new CLevel;
 
 	// Level 이름 불러오기
 	wstring LevelName;
 	LoadWString(LevelName, File);
-	pNewLevel->SetName(LevelName);
+	pLoadingLevel->SetName(LevelName);
 
 	// Level 안에 있는 Layer 정보 불러오기
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
-		CLayer* pLayer = pNewLevel->GetLayer(i);
+		CLayer* pLayer = pLoadingLevel->GetLayer(i);
 
 		// Layer 이름 불러오기
 		wstring LayerName;
@@ -140,17 +146,18 @@ CLevel* CLevelSaveLoad::LoadLevel(const wstring& _FilePath)
 		// GameObject 불러와서 Layer 에 집어넣기
 		for (size_t i = 0; i < count; ++i)
 		{
-			CGameObject* pLoadedObject = LoadGameObject(File);
+			int layerIdx = -1;
+			CGameObject* pLoadedObject = LoadGameObject(File, layerIdx);
 			pLayer->AddObject(pLoadedObject, false);
 		}
 	}
 
 	fclose(File);
 
-	return pNewLevel;
+	return pLoadingLevel;
 }
 
-CGameObject* CLevelSaveLoad::LoadGameObject(FILE* _File)
+CGameObject* CLevelSaveLoad::LoadGameObject(FILE* _File, int& _objIdx)
 {
 	CGameObject* pObject = new CGameObject;
 
@@ -158,6 +165,11 @@ CGameObject* CLevelSaveLoad::LoadGameObject(FILE* _File)
 	wstring Name;
 	LoadWString(Name, _File);
 	pObject->SetName(Name);
+
+	// LayerIdx 로드
+	UINT layerIdx = 0;
+	fread(&layerIdx, sizeof(UINT), 1, _File);
+	_objIdx = layerIdx;
 
 	// Component 정보 로드
 	COMPONENT_TYPE Type = COMPONENT_TYPE::END;
@@ -205,8 +217,10 @@ CGameObject* CLevelSaveLoad::LoadGameObject(FILE* _File)
 
 	for (size_t i = 0; i < ChildCount; ++i)
 	{
-		CGameObject* pChildObject = LoadGameObject(_File);
-		pObject->AddChild(pChildObject);
+		int layerIdx = -1;
+		CGameObject* pChildObject = LoadGameObject(_File, layerIdx);
+		
+		pObject->AddChild(pChildObject, layerIdx);
 	}
 
 	return pObject;

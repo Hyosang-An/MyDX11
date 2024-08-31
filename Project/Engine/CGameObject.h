@@ -34,6 +34,9 @@ public:
     void AddComponent(CComponent* _Comopnent);
     void AddChild(CGameObject* _ChildObject);
 
+	// LevelSaveLoad에서 사용
+	void AddChild(CGameObject* _ChildObject, int _childLayerIdx);
+
     CComponent* GetComponent(COMPONENT_TYPE _Type) { return m_arrCom[(UINT)_Type]; }
     CRenderComponent* GetRenderComponent() { return m_RenderCom; }
     CGameObject* GetParent() { return m_Parent; }

@@ -73,7 +73,7 @@ void CCollider2D::Overlap(CCollider2D* _Other)
 	const vector<CScript*>& vecScripts = GetOwner()->GetScriptVec();
 	for (size_t i = 0; i < vecScripts.size(); ++i)
 	{
-		vecScripts[i]->EndOverlap(this, _Other->GetOwner(), _Other);
+		vecScripts[i]->Overlap(this, _Other->GetOwner(), _Other);
 	}
 }
 

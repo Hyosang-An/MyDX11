@@ -15,7 +15,7 @@ private:
 	Vec3	m_vForce = Vec3(0.f, 0.f, 0.f);
 
 	bool	m_bUseGravity = true;
-	float	m_fGravityAccelaration = 100.f;
+	float	m_fGravityAccelaration = 1000.f;
 
 	float	m_fMaxSpeed = 0.f; // 0.f이면 제한 없음
 	float   m_fMaxFallingSpeed = 0.f; // 0.f이면 제한 없음
@@ -39,6 +39,11 @@ public:
 
 	void OnLand();
 	void OnWallHang();
+
+	void SetOnGround(bool _bOnGround) { m_bOnGround = _bOnGround; }
+	bool IsOnGround() { return m_bOnGround; }
+
+	Vec3 GetVelocity() { return m_vVelocity; }
 
 public:
     virtual void Begin() override;

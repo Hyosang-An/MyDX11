@@ -215,7 +215,9 @@ void Outliner::AddGameObject(TreeNode* _ParentNode, CGameObject* _Object)
 
 	for (size_t i = 0; i < vecChild.size(); ++i)
 	{
-		AddGameObject(pObjectNode, vecChild[i]);
+		// 오브젝트가 살아있는 것만
+		if (!vecChild[i]->IsDead())
+			AddGameObject(pObjectNode, vecChild[i]);
 	}
 }
 

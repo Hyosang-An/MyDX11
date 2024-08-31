@@ -25,11 +25,15 @@ private:
     UINT					m_Matrix[MAX_LAYER];
     map<ULONGLONG, bool>	m_mapCollisionInfo;
 
+	Vec3                    m_vOverlap;
+
 
 public:
     void CollisionCheck(UINT _Layer1, UINT _Layer2);
     void CollisionCheck(LAYER _layer1, LAYER _Layer2);
     void CollisionCheckClear() { memset(m_Matrix, 0, sizeof(UINT) * MAX_LAYER); }
+
+	Vec3 GetOverlap() { return m_vOverlap; }
 
 private:
     void CollisionBtwLayer(UINT _Left, UINT _Right);

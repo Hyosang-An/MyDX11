@@ -7,7 +7,10 @@ public:
 
 
 	static CLevel* LoadLevel(const wstring& _FilePath);
-	static CGameObject* LoadGameObject(FILE* _File);
+	static CGameObject* LoadGameObject(FILE* _File, int& _objIdx);
 	static class CComponent* GetComponent(COMPONENT_TYPE _Type);
+
+private:
+	static CLevel* pLoadingLevel;
 };
 

@@ -333,6 +333,7 @@ void CTestLevel::CreateCelesteTestLevel()
 	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
 
 	// 충돌 지정
-	CCollisionMgr::GetInst()->CollisionCheck(3, 4); // Player vs Monster
-	CCollisionMgr::GetInst()->CollisionCheck(5, 4); // Player Projectile vs Monster
+	//CCollisionMgr::GetInst()->CollisionCheck(LAYER::PLAYER, LAYER::GROUND); // Ground라는 개념이 필요가 없는듯
+	CCollisionMgr::GetInst()->CollisionCheck(LAYER::PLAYER, LAYER::WALL_OR_GROUND);
+	CCollisionMgr::GetInst()->CollisionCheck(LAYER::PLAYER, LAYER::SPIKE);
 }
