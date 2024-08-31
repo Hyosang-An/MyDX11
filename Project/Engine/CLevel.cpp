@@ -103,6 +103,13 @@ void CLevel::AddObject(int LayerIdx, CGameObject* _Object, bool _bMoveChild)
 	CLevelMgr::GetInst()->LevelChanged();
 }
 
+void CLevel::AddObject(LAYER _layer, CGameObject* _Object, bool _bMoveChild)
+{
+	m_vecLayer[(int)_layer]->AddObject(_Object, _bMoveChild);
+
+	CLevelMgr::GetInst()->LevelChanged();
+}
+
 void CLevel::RegisterAsParent(int LayerIdx, CGameObject* _Object)
 {
 	m_vecLayer[LayerIdx]->RegisterAsParent(_Object);

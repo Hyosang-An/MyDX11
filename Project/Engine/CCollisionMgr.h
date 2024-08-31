@@ -28,6 +28,7 @@ private:
 
 public:
     void CollisionCheck(UINT _Layer1, UINT _Layer2);
+    void CollisionCheck(LAYER _layer1, LAYER _Layer2);
     void CollisionCheckClear() { memset(m_Matrix, 0, sizeof(UINT) * MAX_LAYER); }
 
 private:

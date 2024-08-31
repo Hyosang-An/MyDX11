@@ -20,6 +20,8 @@ public:
 	static bool InputVec2(Vec2* _Data, const string& _Desc);
 	static bool DragVec2(Vec2* _Data, float _Step, const string& _Desc);
 
+	static bool InputVec3(Vec3* _Data, const string& _Desc);
+
 	static bool InputVec4(Vec4* _Data, const string& _Desc);
 	static bool DragVec4(Vec4* _Data, float _Step, const string& _Desc);
 

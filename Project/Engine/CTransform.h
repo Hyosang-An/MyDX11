@@ -11,7 +11,7 @@ public:
 
 private:
     Vec3    m_RelativePos;
-    Vec3    m_RelativeScale;
+    Vec3    m_RelativeScale = Vec3(1, 1, 1);
     Vec3    m_RelativeRotation;
 
     Vec3    m_RelativeDir[3] = {};

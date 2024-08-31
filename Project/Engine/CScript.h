@@ -37,7 +37,7 @@ private:
 public:
     CRenderComponent* GetRenderComponent() { return GetOwner()->GetRenderComponent(); }
     UINT GetScriptType() { return m_ScriptType; }
-    const vector<tScriptParam>& GetScriptParam() { return   m_vecScriptParam; }
+    const vector<tScriptParam>& GetScriptParamVec() { return   m_vecScriptParam; }
 
 protected:
     void AddScriptParam(SCRIPT_PARAM_TYPE _Type, const string& _Desc, void* _pData, DWORD_PTR _Param0 = 0, DWORD_PTR _Param1 = 0)

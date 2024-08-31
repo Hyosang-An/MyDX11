@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CPlayerScript.h"
-
-#include "CMissileScript.h"
+#include "CRigidBody.h"
 
 CPlayerScript::CPlayerScript() :
 	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
@@ -17,6 +16,8 @@ void CPlayerScript::Begin()
 {
 	// 2D 파트에서는 최적화하지 않을 것이므로 오브젝트 시작 시 모든 객체가 DynamicMaterial을 각자 들고 있어도 된다.
 	GetRenderComponent()->GetDynamicMaterial();
+
+	m_pRigidBody = GetOwner()->GetScript<CRigidBody>();
 }
 
 void CPlayerScript::Tick()

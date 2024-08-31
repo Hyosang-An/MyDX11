@@ -56,6 +56,13 @@ void Outliner::Update()
 	if (CLevelMgr::GetInst()->IsLevelChanged())
 		RenewLevel();
 
+	if (m_SelectedObject && m_SelectedObject->IsDead())
+	{
+		m_SelectedObject = nullptr;
+		Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+		pInspector->SetTargetObject(nullptr);
+	}
+
 	// 선택된 오브젝트 둘레에 보라색 테두리 (타일맵은 타일맵 컴포넌트UI에서 처리)
 	if (m_SelectedObject && m_SelectedObject->GetLayerIdx() != (int)LAYER::TILEMAP)
 	{

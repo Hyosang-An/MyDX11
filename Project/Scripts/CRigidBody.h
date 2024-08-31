@@ -15,13 +15,14 @@ private:
 	Vec3	m_vForce = Vec3(0.f, 0.f, 0.f);
 
 	bool	m_bUseGravity = true;
-	float	m_fGravityAccelaration = 9.8f;
+	float	m_fGravityAccelaration = 100.f;
 
 	float	m_fMaxSpeed = 0.f; // 0.f이면 제한 없음
 	float   m_fMaxFallingSpeed = 0.f; // 0.f이면 제한 없음
 
 	bool	m_bOnGround = false;
 	bool	m_bIsDangle = false;
+	bool	m_bIsDash = false;
 
 public:
 	void SetMass(float _fMass) { m_fMass = _fMass; }

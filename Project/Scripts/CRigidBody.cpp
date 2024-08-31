@@ -6,6 +6,12 @@
 CRigidBody::CRigidBody() :
 	CScript((UINT)SCRIPT_TYPE::RIGIDBODY)
 {
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Max Speed", &m_fMaxSpeed);
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Max Falling Speed", &m_fMaxFallingSpeed);
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Gravity Accelaration", &m_fGravityAccelaration);
+
+	// 현재 속도
+	AddScriptParam(SCRIPT_PARAM_TYPE::VEC3, "Velocity", &m_vVelocity);
 }
 
 CRigidBody::~CRigidBody()
@@ -14,6 +20,7 @@ CRigidBody::~CRigidBody()
 
 void CRigidBody::Begin()
 {
+	GetOwner()->GetScript<CPlayerScript>();
 }
 
 void CRigidBody::Tick()
@@ -24,7 +31,7 @@ void CRigidBody::Tick()
 	// 땅에 있지 않을 때, 중력 가속도 적용
 	if (m_bUseGravity && !m_bOnGround)
 	{
-		Acceleration.y -= m_fGravityAccelaration * DT;
+		Acceleration.y -= m_fGravityAccelaration;
 	}
 
 	// 속도 업데이트
@@ -39,8 +46,7 @@ void CRigidBody::Tick()
 	}
 
 	// 최대 낙하 속도 제한
-	//GetOwner()->GetScript<CPlayerScript>();
-	if (m_bUseGravity && !m_bOnGround)
+	if (m_bUseGravity && !m_bOnGround && GetOwner()->GetScript<CPlayerScript>()->GetCurState() != PLAYER_STATE::DASH)
 	{
 		if (m_fMaxFallingSpeed > 0.f && m_fMaxFallingSpeed < -m_vVelocity.y)
 		{

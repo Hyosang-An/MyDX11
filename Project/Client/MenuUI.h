@@ -25,6 +25,7 @@ private:
 
 private:
     void AddScript();
+    void LoadLevel(wstring _path);
 
 
 

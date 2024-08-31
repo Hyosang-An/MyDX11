@@ -35,7 +35,7 @@ void ScriptUI::Update()
 	ImGui::PopID();
 
 	// Script 에서 노출시킬 데이터를 보여준다.
-	const vector<tScriptParam>& vecParam = m_Script->GetScriptParam();
+	const vector<tScriptParam>& vecParam = m_Script->GetScriptParamVec();
 
 	for (size_t i = 0; i < vecParam.size(); ++i)
 	{
@@ -51,7 +51,7 @@ void ScriptUI::Update()
 				ParamUI::InputVec2((Vec2*)vecParam[i].pData, vecParam[i].Desc);
 				break;
 			case SCRIPT_PARAM_TYPE::VEC3:
-
+				ParamUI::InputVec3((Vec3*)vecParam[i].pData, vecParam[i].Desc);
 				break;
 			case SCRIPT_PARAM_TYPE::VEC4:
 				ParamUI::InputVec4((Vec4*)vecParam[i].pData, vecParam[i].Desc);

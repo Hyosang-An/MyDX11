@@ -13,6 +13,7 @@
 #include <Engine/CCollisionMgr.h>
 
 #include <Scripts/CPlayerScript.h>
+#include <Scripts/CRigidBody.h>
 #include <Scripts/CMissileScript.h>
 #include <Scripts/CCameraMoveScript.h>
 
@@ -33,7 +34,7 @@ void CTestLevel::CreateTestLevel()
 	pAlphaBlendMtrl->SetTexParam(TEX_0, pTexture);
 
 
-	CreatePrefab();
+	//CreatePrefab();
 
 	// Sound 재생
 	//Ptr<CSound> pSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\BGM_title_screen.wav");
@@ -107,6 +108,7 @@ void CTestLevel::CreateTestLevel()
 	pPlayer->AddComponent(new CCollider2D);
 	pPlayer->AddComponent(new CFlipBookComponent);
 	pPlayer->AddComponent(new CPlayerScript);
+	pPlayer->AddComponent(new CRigidBody);
 
 	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
 	pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
@@ -243,4 +245,94 @@ void CTestLevel::CreatePrefab()
 	wstring FilePath = CPathMgr::GetInst()->GetContentPath();
 	FilePath += L"prefab\\Missile.prefab";
 	pPrefab->Save(FilePath);
+}
+
+void CTestLevel::CreateCelesteTestLevel()
+{
+	// Level 생성
+	CLevel* TestLevel = new CLevel;
+
+	// 카메라 오브젝트
+	CGameObject* CamObj = new CGameObject;
+	CamObj->SetName(L"MainCamera");
+	CamObj->AddComponent(new CTransform);
+	CamObj->AddComponent(new CCamera);
+	CamObj->AddComponent(new CCameraMoveScript);
+
+	// 우선순위를 0 : MainCamera 로 설정
+	CamObj->Camera()->SetPriority(0);
+
+	// 카메라 레이어 설정 (31번 레이어 제외 모든 레이어를 촬영)
+	CamObj->Camera()->SetLayerAll();
+	CamObj->Camera()->SetLayer(31, false);
+	CamObj->Camera()->SetFar(100000.f);
+	CamObj->Camera()->SetProjType(ORTHOGRAPHIC);
+
+	TestLevel->AddObject(LAYER::DEFAULT, CamObj);
+
+	CGameObject* pObject = nullptr;
+
+	// 광원 오브젝트 추가
+	pObject = new CGameObject;
+	pObject->SetName(L"PointLight 1");
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CLight2D);
+
+	pObject->Light2D()->SetLightType(LIGHT_TYPE::POINT);
+	pObject->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	pObject->Light2D()->SetRadius(1000);
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+
+	TestLevel->AddObject(LAYER::DEFAULT, pObject);
+
+
+
+	//플레이어 오브젝트
+	CGameObject* pPlayer = new CGameObject;
+	pPlayer->SetName(L"Player");
+	pPlayer->AddComponent(new CTransform);
+	pPlayer->AddComponent(new CMeshRender);
+	pPlayer->AddComponent(new CCollider2D);
+	pPlayer->AddComponent(new CFlipBookComponent);
+	pPlayer->AddComponent(new CPlayerScript);
+	pPlayer->AddComponent(new CRigidBody);
+
+	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+	pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
+
+	pPlayer->Collider2D()->SetIndependentScale(false);
+	pPlayer->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	pPlayer->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
+
+	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pPlayer->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+
+	pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Link_MoveDown.flip"));
+	pPlayer->FlipBookComponent()->Play(L"Link_MoveDown", 10, true);
+
+	TestLevel->AddObject(LAYER::PLAYER, pPlayer);
+
+
+	// TileMap Object
+	CGameObject* pTileMapObj = new CGameObject;
+	pTileMapObj->SetName(L"Room");
+
+	pTileMapObj->AddComponent(new CTransform);
+	pTileMapObj->AddComponent(new CTileMap);
+
+	pTileMapObj->Transform()->SetRelativePos(Vec3(-500.f, 250.f, 500.f));
+
+	pTileMapObj->TileMap()->SetRowCol(15, 10);
+	pTileMapObj->TileMap()->SetTileSize(Vec2(64.f, 64.f)); // 해상도가 아닌 게임상 Scale
+
+	Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\TILE.bmp");
+	pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas, Vec2(64.f, 64.f));
+
+	TestLevel->AddObject(LAYER::TILEMAP, pTileMapObj);
+
+	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
+
+	// 충돌 지정
+	CCollisionMgr::GetInst()->CollisionCheck(3, 4); // Player vs Monster
+	CCollisionMgr::GetInst()->CollisionCheck(5, 4); // Player Projectile vs Monster
 }

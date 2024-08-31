@@ -106,6 +106,22 @@ bool ParamUI::DragVec2(Vec2* _Data, float _Step, const string& _Desc)
 	return false;
 }
 
+bool ParamUI::InputVec3(Vec3* _Data, const string& _Desc)
+{
+	ImGui::Text(_Desc.c_str());
+	ImGui::SameLine(120);
+
+	char szID[255] = {};
+	sprintf_s(szID, 255, "##Input%d", g_ID++);
+
+	if (ImGui::InputFloat3(szID, *_Data))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 bool ParamUI::InputVec4(Vec4* _Data, const string& _Desc)
 {
 	ImGui::Text(_Desc.c_str());

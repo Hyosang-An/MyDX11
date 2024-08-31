@@ -15,6 +15,7 @@
 
 #include "CLevelSaveLoad.h"
 #include "Inspector.h"
+#include "Outliner.h"
 #include "CEditorMgr.h"
 
 #include "IconsFontAwesome6/IconsFontAwesome6.h"
@@ -168,13 +169,18 @@ void MenuUI::File()
 
 								if (path(pszFilePath).extension().wstring() == L".level")
 								{
-									CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(pszFilePath);
-									ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
+									LoadLevel(pszFilePath);
+									//CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(pszFilePath);
+									//ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
 
-									// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
-									Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
-									pInspector->SetTargetObject(nullptr);
-									pInspector->SetTargetAsset(nullptr);
+									//// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
+									//Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+									//pInspector->SetTargetObject(nullptr);
+									//pInspector->SetTargetAsset(nullptr);
+
+									//// Outliner Clear 하기 (이전 오브젝트 정보를 참조하고 있을 수가 있기 때문에)
+									//Outliner* pOutliner = (Outliner*)CEditorMgr::GetInst()->FindEditorUI("Outliner");
+									//pOutliner->SetSelectedObject(nullptr);
 
 									path filePath = pszFilePath;
 									m_lastSaveLoadDirectory = filePath.parent_path().wstring();
@@ -231,13 +237,7 @@ void MenuUI::Level()
 		{
 			wstring StrLevelLoadPath = CPathMgr::GetInst()->GetContentPath();
 			StrLevelLoadPath += L"level\\Temp.level";
-			CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(StrLevelLoadPath);
-			ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
-
-			// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
-			Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
-			pInspector->SetTargetObject(nullptr);
-			pInspector->SetTargetAsset(nullptr);
+			LoadLevel(StrLevelLoadPath);
 		}
 		ImGui::EndDisabled();
 
@@ -339,37 +339,7 @@ void MenuUI::GameObject()
 }
 
 
-void MenuUI::AddScript()
-{
-	if (ImGui::BeginMenu("Add Script"))
-	{
-		vector<wstring> vecScriptsName;
-		CScriptMgr::GetScriptInfo(vecScriptsName);
 
-		for (size_t i = 0; i < vecScriptsName.size(); ++i)
-		{
-			if (ImGui::MenuItem(string(vecScriptsName[i].begin(), vecScriptsName[i].end()).c_str()))
-			{
-				// 인스펙터
-				Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
-
-				// 타겟 오브젝트 알아냄
-				CGameObject* pObject = pInspector->GetTargetObject();
-
-				// 오브젝트에, 선택한 스크립트를 추가해줌
-				if (nullptr != pObject)
-				{
-					// 오브젝트에, 선택한 스크립트를 추가해줌
-					CScript* pScript = CScriptMgr::GetScript(vecScriptsName[i]);
-					pObject->AddComponent(pScript);
-				}
-			}
-		}
-
-		ImGui::EndMenu();
-	}
-
-}
 
 void MenuUI::Assets()
 {
@@ -510,13 +480,7 @@ void MenuUI::LevelPlayPauseStopButton()
 		// Stop 버튼 동작
 		wstring StrLevelLoadPath = CPathMgr::GetInst()->GetContentPath();
 		StrLevelLoadPath += L"level\\Temp.level";
-		CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(StrLevelLoadPath);
-		ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
-
-		// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
-		Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
-		pInspector->SetTargetObject(nullptr);
-		pInspector->SetTargetAsset(nullptr);
+		LoadLevel(StrLevelLoadPath);
 	}
 	ImGui::EndDisabled();
 }
@@ -539,6 +503,53 @@ void MenuUI::FontsCheck()
 
 		ImGui::EndMenu();
 	}
+}
+
+void MenuUI::AddScript()
+{
+	if (ImGui::BeginMenu("Add Script"))
+	{
+		vector<wstring> vecScriptsName;
+		CScriptMgr::GetScriptInfo(vecScriptsName);
+
+		for (size_t i = 0; i < vecScriptsName.size(); ++i)
+		{
+			if (ImGui::MenuItem(string(vecScriptsName[i].begin(), vecScriptsName[i].end()).c_str()))
+			{
+				// 인스펙터
+				Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+
+				// 타겟 오브젝트 알아냄
+				CGameObject* pObject = pInspector->GetTargetObject();
+
+				// 오브젝트에, 선택한 스크립트를 추가해줌
+				if (nullptr != pObject)
+				{
+					// 오브젝트에, 선택한 스크립트를 추가해줌
+					CScript* pScript = CScriptMgr::GetScript(vecScriptsName[i]);
+					pObject->AddComponent(pScript);
+				}
+			}
+		}
+
+		ImGui::EndMenu();
+	}
+
+}
+
+void MenuUI::LoadLevel(wstring _levelFilePath)
+{
+	CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(_levelFilePath);
+	ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
+
+	// Inspector Clear 하기 (이전 오브젝트 정보를 보여주고 있을 수가 있기 때문에)				
+	Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+	pInspector->SetTargetObject(nullptr);
+	pInspector->SetTargetAsset(nullptr);
+
+	// Outliner Clear 하기 (이전 오브젝트 정보를 참조하고 있을 수가 있기 때문에)
+	Outliner* pOutliner = (Outliner*)CEditorMgr::GetInst()->FindEditorUI("Outliner");
+	pOutliner->SetSelectedObject(nullptr);
 }
 
 wstring MenuUI::CreateRelativePathAssetKey(ASSET_TYPE _Type, const wstring& _KeyFormat)

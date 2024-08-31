@@ -25,6 +25,7 @@ private:
 
 public:
     void AddObject(int LayerIdx, CGameObject* _Object, bool _bMoveChild = false);
+    void AddObject(LAYER _layer, CGameObject* _Object, bool _bMoveChild = false);
     void RegisterAsParent(int LayerIdx, CGameObject* _Object);
 
     CLayer* GetLayer(int _LayerIdx) { return m_vecLayer[_LayerIdx]; }

@@ -58,6 +58,11 @@ void CCollisionMgr::CollisionCheck(UINT Layer1, UINT Layer2)
 	}
 }
 
+void CCollisionMgr::CollisionCheck(LAYER _layer1, LAYER _Layer2)
+{
+	CollisionCheck((UINT)_layer1, (UINT)_Layer2);
+}
+
 
 void CCollisionMgr::CollisionBtwLayer(UINT _Left, UINT _Right)
 {

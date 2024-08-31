@@ -35,14 +35,15 @@ private:
 
 	float           m_fSpeed = 100;
 	float           m_fJumpSpeed = 500;
+    float		   m_fDashSpeed = 700;
+    float		   m_fRemainDashTime = 0.5;
+
 	float           m_MaxSpeed = 800;
 	float           m_MaxFallingSpeed = 600;
 
-	float		   m_fDashSpeed = 700;
-	float		   m_fDashTime;
 
     // Script
-	class CRigidBody* m_pRigidBody;
+	class CRigidBody* m_pRigidBody = nullptr;
 
 
 

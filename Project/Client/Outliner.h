@@ -18,6 +18,9 @@ private:
 	wstring m_lastPrefabSaveDirectory;
 
 public:
+	void SetSelectedObject(class CGameObject* _Object) { m_SelectedObject = _Object; }
+
+public:
     virtual void Update() override;
 
 private:
