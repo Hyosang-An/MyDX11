@@ -476,7 +476,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 			if (abs(vOverlap.y) > abs(vOverlap.x))
 			{
 				// 땅과 충돌한 경우
-				if (m_RigidBody->GetVelocity().y < 0.f && !m_RigidBody->IsOnGround())
+				if (vDir.y < 0 && m_RigidBody->GetVelocity().y < 0.f && !m_RigidBody->IsOnGround())
 				{
 					m_RigidBody->OnLand();
 					m_setGroundColliders.insert(_OtherCollider);
