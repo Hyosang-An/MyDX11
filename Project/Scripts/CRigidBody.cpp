@@ -33,6 +33,7 @@ void CRigidBody::Tick()
 
 	// 땅에 있지 않으면서, 대쉬 및 드림 대쉬 상태가 아닐 때 중력 가속도 적용
 	if (m_bUseGravity && !m_bOnGround && 
+		curState != PLAYER_STATE::CLIMB &&
 		curState != PLAYER_STATE::DASH &&
 		curState != PLAYER_STATE::DREAM_DASH)
 	{
@@ -90,4 +91,9 @@ void CRigidBody::OnLand()
 
 void CRigidBody::OnWallHang()
 {
+}
+
+void CRigidBody::SetVelocity(Vec3 _vVelocity)
+{
+	m_vVelocity = _vVelocity;
 }

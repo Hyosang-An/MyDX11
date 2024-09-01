@@ -6,7 +6,7 @@
 CPlayerScript::CPlayerScript() :
 	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
 {
-	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "MagnitudeOfMoveForce", &m_fMagnitudeOfMoveForce);
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "MagnitudeOfMoveForce", &m_MagnitudeOfMoveForce);
 }
 
 CPlayerScript::~CPlayerScript()
@@ -18,7 +18,7 @@ void CPlayerScript::Begin()
 	// 2D 파트에서는 최적화하지 않을 것이므로 오브젝트 시작 시 모든 객체가 DynamicMaterial을 각자 들고 있어도 된다.
 	GetRenderComponent()->GetDynamicMaterial();
 
-	m_pRigidBody = GetOwner()->GetScript<CRigidBody>();
+	m_RigidBody = GetOwner()->GetScript<CRigidBody>();
 }
 
 void CPlayerScript::Tick()
@@ -48,7 +48,7 @@ void CPlayerScript::Tick()
 void CPlayerScript::KeyCheck()
 {
 	//OnGround 상태 업데이트
-	m_bOnGround = m_pRigidBody->IsOnGround();
+	m_bOnGround = m_RigidBody->IsOnGround();
 
 	// IDLE
 	if (m_bOnGround && !KEY_PRESSED(KEY::RIGHT) && !KEY_PRESSED(KEY::LEFT) && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
@@ -90,6 +90,12 @@ void CPlayerScript::KeyCheck()
 		m_CurState = PLAYER_STATE::JUMP;
 	}
 
+	// CLIMB
+	if ((m_bOnLeftWall || m_bOnRightWall) && (KEY_JUST_PRESSED(KEY::Z) || KEY_PRESSED(KEY::Z)) && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
+	{
+		m_CurState = PLAYER_STATE::CLIMB;
+	}
+
 	// DASH
 	if (m_DashCount != 1 && m_bOnGround)
 	{
@@ -100,7 +106,7 @@ void CPlayerScript::KeyCheck()
 	if (KEY_JUST_PRESSED(KEY::X) && m_DashCount > 0 && m_PrevState != PLAYER_STATE::DASH)
 	{		
 		--m_DashCount;
-		m_SpeedBeforeDash = m_pRigidBody->GetVelocity().Length();
+		m_SpeedBeforeDash = m_RigidBody->GetVelocity().Length();
 
 		Vec3 vDir;
 
@@ -108,42 +114,42 @@ void CPlayerScript::KeyCheck()
 		if (KEY_PRESSED(KEY::RIGHT) && KEY_PRESSED(KEY::UP))
 		{
 			vDir = Vec3(1, 1, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::RIGHT) && KEY_PRESSED(KEY::DOWN))
 		{
 			vDir = Vec3(1, -1, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::LEFT) && KEY_PRESSED(KEY::UP))
 		{
 			vDir = Vec3(-1, 1, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::LEFT) && KEY_PRESSED(KEY::DOWN))
 		{
 			vDir = Vec3(-1, -1, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::RIGHT))
 		{
 			vDir = Vec3(1, 0, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::LEFT))
 		{
 			vDir = Vec3(-1, 0, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::UP))
 		{
 			Vec3 vDir = Vec3(0, 1, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::DOWN))
 		{
 			vDir = Vec3(0, -1, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 		}
 
 		// 방향키를 누르지 않은 경우
@@ -152,23 +158,19 @@ void CPlayerScript::KeyCheck()
 			if (m_bFacingRight)
 			{
 				vDir = Vec3(1, 0, 0).Normalize();
-				m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+				m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 			}
 			else
 			{
 				vDir = Vec3(-1, 0, 0).Normalize();
-				m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+				m_RigidBody->SetVelocity(vDir * m_DashSpeed);
 			}
 		}
 
 		m_CurState = PLAYER_STATE::DASH;		
 	}
 
-	// CLIMB
-	if ((m_bOnLeftWall || m_bOnRightWall) && (KEY_JUST_PRESSED(KEY::Z) || KEY_PRESSED(KEY::Z)))
-	{
-		m_CurState = PLAYER_STATE::CLIMB;
-	}
+
 
 
 	// DREAM DASH
@@ -185,8 +187,8 @@ void CPlayerScript::KeyCheck()
 	//{
 	//	m_CurState = PLAYER_STATE::FALL;
 	//}
-	// 아래 방향으로 떨어지면서, 대쉬나 드림 대쉬 상태가 아니면 FALL 상태로 전환
-	if (m_pRigidBody->GetVelocity().y < 0 && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
+	// 아래 방향으로 떨어지면서, CLIMB나 대쉬나 드림 대쉬 상태가 아니면 FALL 상태로 전환
+	if (m_RigidBody->GetVelocity().y < 0 && m_CurState !=PLAYER_STATE::CLIMB && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
 	{
 		m_CurState = PLAYER_STATE::FALL;
 	}
@@ -199,7 +201,7 @@ void CPlayerScript::UpdateState()
 	{
 		case PLAYER_STATE::IDLE:
 		{
-			m_pRigidBody->SetVelocity(Vec3(0, 0, 0));
+			m_RigidBody->SetVelocity(Vec3(0, 0, 0));
 			break;
 		}
 
@@ -207,16 +209,16 @@ void CPlayerScript::UpdateState()
 		{
 			if (KEY_PRESSED(KEY::RIGHT))
 			{
-				if (m_pRigidBody->GetVelocity().x < m_MaxRunSpeed)
+				if (m_RigidBody->GetVelocity().x < m_MaxRunSpeed)
 				{
-					m_pRigidBody->AddForce(Vec3(m_fMagnitudeOfMoveForce, 0, 0));
+					m_RigidBody->AddForce(Vec3(m_MagnitudeOfMoveForce, 0, 0));
 				}
 			}
 			else if (KEY_PRESSED(KEY::LEFT))
 			{
-				if (m_pRigidBody->GetVelocity().x > -m_MaxRunSpeed)
+				if (m_RigidBody->GetVelocity().x > -m_MaxRunSpeed)
 				{
-					m_pRigidBody->AddForce(Vec3(-m_fMagnitudeOfMoveForce, 0, 0));
+					m_RigidBody->AddForce(Vec3(-m_MagnitudeOfMoveForce, 0, 0));
 				}
 			}
 
@@ -227,22 +229,22 @@ void CPlayerScript::UpdateState()
 		{
 			if (m_PrevState != PLAYER_STATE::JUMP)
 			{
-				m_pRigidBody->SetVelocity(Vec3(m_pRigidBody->GetVelocity().x, m_fJumpSpeed, 0));
-				m_pRigidBody->SetOnGround(false);
+				m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, m_JumpSpeed, 0));
+				m_RigidBody->SetOnGround(false);
 			}
 
 			if (KEY_PRESSED(KEY::RIGHT))
 			{
-				if (m_pRigidBody->GetVelocity().x < m_MaxRunSpeed)
+				if (m_RigidBody->GetVelocity().x < m_MaxRunSpeed)
 				{
-					m_pRigidBody->AddForce(Vec3(m_fMagnitudeOfMoveForce, 0, 0));
+					m_RigidBody->AddForce(Vec3(m_MagnitudeOfMoveForce, 0, 0));
 				}
 			}
 			else if (KEY_PRESSED(KEY::LEFT))
 			{
-				if (m_pRigidBody->GetVelocity().x > -m_MaxRunSpeed)
+				if (m_RigidBody->GetVelocity().x > -m_MaxRunSpeed)
 				{
-					m_pRigidBody->AddForce(Vec3(-m_fMagnitudeOfMoveForce, 0, 0));
+					m_RigidBody->AddForce(Vec3(-m_MagnitudeOfMoveForce, 0, 0));
 				}
 			}
 
@@ -253,16 +255,16 @@ void CPlayerScript::UpdateState()
 		{
 			if (KEY_PRESSED(KEY::RIGHT))
 			{
-				if (m_pRigidBody->GetVelocity().x < m_MaxRunSpeed)
+				if (m_RigidBody->GetVelocity().x < m_MaxRunSpeed)
 				{
-					m_pRigidBody->AddForce(Vec3(m_fMagnitudeOfMoveForce, 0, 0));
+					m_RigidBody->AddForce(Vec3(m_MagnitudeOfMoveForce, 0, 0));
 				}
 			}
 			else if (KEY_PRESSED(KEY::LEFT))
 			{
-				if (m_pRigidBody->GetVelocity().x > -m_MaxRunSpeed)
+				if (m_RigidBody->GetVelocity().x > -m_MaxRunSpeed)
 				{
-					m_pRigidBody->AddForce(Vec3(-m_fMagnitudeOfMoveForce, 0, 0));
+					m_RigidBody->AddForce(Vec3(-m_MagnitudeOfMoveForce, 0, 0));
 				}
 			}
 
@@ -274,17 +276,17 @@ void CPlayerScript::UpdateState()
 			// 벽이 있으면 벽 방향 속도 0
 			if (m_bFacingRight && m_bOnRightWall)
 			{
-				m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+				m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 			}
 			else if (!m_bFacingRight && m_bOnLeftWall)
 			{
-				m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+				m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 			}
 
 			// 바닥에 있으면 바닥 방향 속도 0
-			if (m_pRigidBody->GetVelocity().y < 0.f && m_pRigidBody->IsOnGround())
+			if (m_RigidBody->GetVelocity().y < 0.f && m_RigidBody->IsOnGround())
 			{
-				m_pRigidBody->SetVelocity(Vec3(m_pRigidBody->GetVelocity().x, 0, 0));
+				m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, 0, 0));
 			}
 
 			if (m_PrevState != PLAYER_STATE::DASH)
@@ -302,8 +304,8 @@ void CPlayerScript::UpdateState()
 					m_CurState = PLAYER_STATE::FALL;
 
 				// 속도 정상화
-				Vec3 vDir = m_pRigidBody->GetVelocity().Normalize();
-				m_pRigidBody->SetVelocity(vDir * m_SpeedBeforeDash);
+				Vec3 vDir = m_RigidBody->GetVelocity().Normalize();
+				m_RigidBody->SetVelocity(vDir * m_SpeedBeforeDash);
 				
 			}
 
@@ -312,7 +314,113 @@ void CPlayerScript::UpdateState()
 
 		case PLAYER_STATE::CLIMB:
 		{
-			// TODO : 매달리는 상태 처리
+			if (KEY_PRESSED(KEY::UP))
+			{
+				m_RigidBody->SetVelocity(Vec3(0, 100, 0));
+			}
+			else if (KEY_PRESSED(KEY::DOWN))
+			{
+				m_RigidBody->SetVelocity(Vec3(0, -100, 0));
+			}
+			else
+			{
+				m_RigidBody->SetVelocity(Vec3(0, 0, 0));
+			}
+			
+			if ((KEY_RELEASED(KEY::Z) || (!m_bOnLeftWall && !m_bOnRightWall)))
+			{
+				if (m_bOnGround)
+					m_CurState = PLAYER_STATE::IDLE;
+				else
+					m_CurState = PLAYER_STATE::FALL;
+			}
+
+			// 점프
+			if (KEY_JUST_PRESSED(KEY::C))
+			{
+				Vec3 vVelocity;
+				if (m_bFacingRight)
+				{
+					vVelocity = Vec3(m_MaxRunSpeed, m_JumpSpeed, 0);
+				}
+				else
+				{
+					vVelocity = Vec3(-m_MaxRunSpeed, m_JumpSpeed, 0);
+				}
+				
+				m_RigidBody->SetVelocity(vVelocity);
+				m_RigidBody->SetOnGround(false);
+				m_CurState = PLAYER_STATE::JUMP;
+			}
+
+			// 대쉬
+			if (KEY_JUST_PRESSED(KEY::X) && m_DashCount > 0)
+			{
+				--m_DashCount;
+				m_SpeedBeforeDash = m_RigidBody->GetVelocity().Length();
+
+				Vec3 vDir;
+
+				// 8가지 방향에 대한 대쉬 처리
+				if (KEY_PRESSED(KEY::RIGHT) && KEY_PRESSED(KEY::UP))
+				{
+					vDir = Vec3(1, 1, 0).Normalize();
+					m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+				}
+				else if (KEY_PRESSED(KEY::RIGHT) && KEY_PRESSED(KEY::DOWN))
+				{
+					vDir = Vec3(1, -1, 0).Normalize();
+					m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+				}
+				else if (KEY_PRESSED(KEY::LEFT) && KEY_PRESSED(KEY::UP))
+				{
+					vDir = Vec3(-1, 1, 0).Normalize();
+					m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+				}
+				else if (KEY_PRESSED(KEY::LEFT) && KEY_PRESSED(KEY::DOWN))
+				{
+					vDir = Vec3(-1, -1, 0).Normalize();
+					m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+				}
+				else if (KEY_PRESSED(KEY::RIGHT))
+				{
+					vDir = Vec3(1, 0, 0).Normalize();
+					m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+				}
+				else if (KEY_PRESSED(KEY::LEFT))
+				{
+					vDir = Vec3(-1, 0, 0).Normalize();
+					m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+				}
+				else if (KEY_PRESSED(KEY::UP))
+				{
+					Vec3 vDir = Vec3(0, 1, 0).Normalize();
+					m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+				}
+				else if (KEY_PRESSED(KEY::DOWN))
+				{
+					vDir = Vec3(0, -1, 0).Normalize();
+					m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+				}
+
+				// 방향키를 누르지 않은 경우
+				else
+				{
+					if (m_bFacingRight)
+					{
+						vDir = Vec3(1, 0, 0).Normalize();
+						m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+					}
+					else
+					{
+						vDir = Vec3(-1, 0, 0).Normalize();
+						m_RigidBody->SetVelocity(vDir * m_DashSpeed);
+					}
+				}
+
+				m_CurState = PLAYER_STATE::DASH;
+			}
+
 			break;
 		}
 
@@ -368,9 +476,9 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 			if (abs(vOverlap.y) > abs(vOverlap.x))
 			{
 				// 땅과 충돌한 경우
-				if (m_pRigidBody->GetVelocity().y < 0.f && !m_pRigidBody->IsOnGround())
+				if (m_RigidBody->GetVelocity().y < 0.f && !m_RigidBody->IsOnGround())
 				{
-					m_pRigidBody->OnLand();
+					m_RigidBody->OnLand();
 					m_setGroundColliders.insert(_OtherCollider);
 
 					// 대쉬 초기화
@@ -391,7 +499,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 				else
 				{
 					// 천장과 충돌한 경우
-					m_pRigidBody->SetVelocity(Vec3(m_pRigidBody->GetVelocity().x, 0.f, 0.f));
+					m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, 0.f, 0.f));
 
 					// 점프	상태에서 천장에 닿으면 점프 상태 해제
 					if (m_CurState == PLAYER_STATE::JUMP)
@@ -415,7 +523,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 			else
 			{
 				// 벽과 충돌한 경우
-				m_pRigidBody->SetVelocity(Vec3(0.f, m_pRigidBody->GetVelocity().y, 0.f));
+				m_RigidBody->SetVelocity(Vec3(0.f, m_RigidBody->GetVelocity().y, 0.f));
 				if (vDir.x > 0)
 				{
 					m_setRightWallColliders.insert(_OtherCollider);
@@ -432,11 +540,11 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 				{
 					if (m_bFacingRight && m_bOnRightWall)
 					{
-						m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+						m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 					}
 					else if (!m_bFacingRight && m_bOnLeftWall)
 					{
-						m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+						m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 					}
 
 					if (m_bOnGround)
@@ -480,17 +588,17 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 			// 벽 방향 속도 0
 			if (m_bFacingRight && m_bOnRightWall)
 			{
-				m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+				m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 			}
 			else if (!m_bFacingRight && m_bOnLeftWall)
 			{
-				m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+				m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 			}
 
 			// 바닥 방향 속도 0
-			if (m_pRigidBody->GetVelocity().y < 0.f && m_pRigidBody->IsOnGround())
+			if (m_RigidBody->GetVelocity().y < 0.f && m_RigidBody->IsOnGround())
 			{
-				m_pRigidBody->SetVelocity(Vec3(m_pRigidBody->GetVelocity().x, 0, 0));
+				m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, 0, 0));
 			}
 		}
 		
@@ -511,7 +619,7 @@ void CPlayerScript::EndOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 
 				// 땅에서 떨어진 경우
 				if (m_setGroundColliders.empty())
-					m_pRigidBody->SetOnGround(false);
+					m_RigidBody->SetOnGround(false);
 			}
 
 			else if (m_setLeftWallColliders.find(_OtherCollider) != m_setLeftWallColliders.end())

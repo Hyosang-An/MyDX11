@@ -26,7 +26,7 @@ private:
 
 public:
 	void SetMass(float _fMass) { m_fMass = _fMass; }
-	void SetVelocity(Vec3 _vVelocity) { m_vVelocity = _vVelocity; }
+	void SetVelocity(Vec3 _vVelocity);
 	void SetAcceleration(Vec3 _vAcceleration) { m_vAcceleration = _vAcceleration; }
 	void SetForce(Vec3 _vForce) { m_vForce = _vForce; }
 	void AddForce(Vec3 _vForce) { m_vForce += _vForce; }

@@ -32,10 +32,12 @@ private:
 	int             m_CurRoomIdx = 0;
 
 
-	float           m_fMagnitudeOfMoveForce = 1000;
+	float           m_MagnitudeOfMoveForce = 1000;
 	float           m_MaxRunSpeed = 200;
-	float           m_fJumpSpeed = 500;
-    float		    m_fDashSpeed = 700;
+	float           m_JumpSpeed = 500;
+    float		    m_DashSpeed = 700;
+	float           m_ClimbSpeed = 100;
+
 	float           m_SpeedBeforeDash = 0;
     
 	int             m_DashCount = 1;
@@ -52,7 +54,7 @@ private:
 	set<CCollider2D*> m_setRightWallColliders;
 
     // Script
-	class CRigidBody* m_pRigidBody = nullptr;
+	class CRigidBody* m_RigidBody = nullptr;
 
 
 
