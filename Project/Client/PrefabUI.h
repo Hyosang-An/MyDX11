@@ -9,6 +9,8 @@ public:
 private:
 	LAYER m_spawnLayer = LAYER::DEFAULT;
 
+	virtual void Activate() override;
+
 public:
     PrefabUI();
     ~PrefabUI();

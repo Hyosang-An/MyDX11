@@ -362,8 +362,12 @@ void Outliner::SaveAsPrefabByDialog()
 					{
 						// 여기에서 pszFilePath 경로를 사용하여 파일을 저장합니다.
 						Ptr<CPrefab> pPrefab = new CPrefab;
-						pPrefab->SetProtoObject(m_PopUpSelectedObject->Clone());
+						CGameObject* PrefabObj = m_PopUpSelectedObject->Clone();
+						PrefabObj->SetLayerIdxForPrefabSave(m_PopUpSelectedObject->GetLayerIdx());
+						pPrefab->SetProtoObject(PrefabObj);
 						pPrefab->Save(pszFilePath);
+
+						// Prefab이 죽으면서 타겟 삼고있는 m_ProtoObject도 자동으로 소멸하기 때문에 따로 PrefabObj를 해제할 필요 없음.
 
 
 						// 마지막 파일명 및 디렉토리 업데이트

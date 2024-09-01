@@ -8,6 +8,8 @@
 #include <Engine/CLevel.h>
 #include <Engine/CLayer.h>
 
+
+
 PrefabUI::PrefabUI()
 	: AssetUI(ASSET_TYPE::PREFAB)
 {
@@ -15,6 +17,14 @@ PrefabUI::PrefabUI()
 
 PrefabUI::~PrefabUI()
 {
+}
+
+void PrefabUI::Activate()
+{
+	Ptr<CPrefab> pPrefab = (CPrefab*)GetAsset().Get();
+	int originalLayerIdx = pPrefab->GetOriginalLayerIdx();
+	if (originalLayerIdx != -1)
+		m_spawnLayer = (LAYER)originalLayerIdx;
 }
 
 void PrefabUI::Update()

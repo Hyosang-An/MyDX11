@@ -64,6 +64,9 @@ public:
     class CParticleSystem* ParticleSystem() { return (CParticleSystem*)GetComponent(COMPONENT_TYPE::PARTICLE_SYSTEM); }
 
 
+    // Prefab Save Àü¿ë!
+	void SetLayerIdxForPrefabSave(int _Idx) { m_LayerIdx = _Idx; }
+
 public:
     void Begin();
     void Tick();

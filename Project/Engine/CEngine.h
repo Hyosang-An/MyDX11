@@ -1,7 +1,9 @@
 #pragma once
 
-typedef void(*OBJECT_SAVE)(FILE*, class CGameObject*);
-typedef CGameObject* (*OBJECT_LOAD)(FILE*, int&);
+//typedef void(*OBJECT_SAVE)(FILE*, class CGameObject*);
+//typedef CGameObject* (*OBJECT_LOAD)(FILE*, int&);
+typedef std::function<void(FILE*, class CGameObject*)> OBJECT_SAVE;
+typedef std::function<CGameObject* (FILE*, int&)> OBJECT_LOAD;
 
 class CEngine :
     public CSingleton<CEngine>
