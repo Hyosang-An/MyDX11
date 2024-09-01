@@ -18,7 +18,7 @@ private:
 	float	m_fGravityAccelaration = 1000.f;
 
 	float	m_fMaxSpeed = 0.f; // 0.f이면 제한 없음
-	float   m_fMaxFallingSpeed = 0.f; // 0.f이면 제한 없음
+	float   m_fMaxFallingSpeed = 800.f; // 0.f이면 제한 없음
 
 	bool	m_bOnGround = false;
 	bool	m_bIsDangle = false;

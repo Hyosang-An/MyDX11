@@ -6,7 +6,7 @@
 CPlayerScript::CPlayerScript() :
 	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
 {
-	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "PlayerSpeed", &m_fMagnitudeOfMoveForce);
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "MagnitudeOfMoveForce", &m_fMagnitudeOfMoveForce);
 }
 
 CPlayerScript::~CPlayerScript()
@@ -51,7 +51,7 @@ void CPlayerScript::KeyCheck()
 	m_bOnGround = m_pRigidBody->IsOnGround();
 
 	// IDLE
-	if (m_bOnGround && !KEY_PRESSED(KEY::RIGHT) && !KEY_PRESSED(KEY::LEFT))
+	if (m_bOnGround && !KEY_PRESSED(KEY::RIGHT) && !KEY_PRESSED(KEY::LEFT) && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
 	{
 		m_CurState = PLAYER_STATE::IDLE;
 	}
@@ -72,7 +72,7 @@ void CPlayerScript::KeyCheck()
 	// RUN
 	if (m_bOnGround && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
 	{
-		if ((KEY_PRESSED(KEY::RIGHT) && m_bFacingRight) || (KEY_PRESSED(KEY::LEFT) && !m_bFacingRight))
+		if ((KEY_PRESSED(KEY::RIGHT) && m_bFacingRight && !m_bOnRightWall) || (KEY_PRESSED(KEY::LEFT) && !m_bFacingRight && !m_bOnLeftWall))
 		{
 
 			m_CurState = PLAYER_STATE::RUN;
@@ -91,37 +91,48 @@ void CPlayerScript::KeyCheck()
 	}
 
 	// DASH
-	if (KEY_JUST_PRESSED(KEY::X) && m_fDashTimeRemained > 0 && m_PrevState != PLAYER_STATE::DASH)
+	if (m_DashCount != 1 && m_bOnGround)
+	{
+		m_DashCount = 1;
+		//m_DashTimeRemained = m_DashTime;
+	}
+
+	if (KEY_JUST_PRESSED(KEY::X) && m_DashCount > 0 && m_PrevState != PLAYER_STATE::DASH)
 	{		
+		--m_DashCount;
+		m_SpeedBeforeDash = m_pRigidBody->GetVelocity().Length();
+
+		Vec3 vDir;
+
 		// 8가지 방향에 대한 대쉬 처리
 		if (KEY_PRESSED(KEY::RIGHT) && KEY_PRESSED(KEY::UP))
 		{
-			Vec3 vDir = Vec3(1, 1, 0).Normalize();
+			vDir = Vec3(1, 1, 0).Normalize();
 			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::RIGHT) && KEY_PRESSED(KEY::DOWN))
 		{
-			Vec3 vDir = Vec3(1, -1, 0).Normalize();
+			vDir = Vec3(1, -1, 0).Normalize();
 			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::LEFT) && KEY_PRESSED(KEY::UP))
 		{
-			Vec3 vDir = Vec3(-1, 1, 0).Normalize();
+			vDir = Vec3(-1, 1, 0).Normalize();
 			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::LEFT) && KEY_PRESSED(KEY::DOWN))
 		{
-			Vec3 vDir = Vec3(-1, -1, 0).Normalize();
+			vDir = Vec3(-1, -1, 0).Normalize();
 			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::RIGHT))
 		{
-			Vec3 vDir = Vec3(1, 0, 0).Normalize();
+			vDir = Vec3(1, 0, 0).Normalize();
 			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::LEFT))
 		{
-			Vec3 vDir = Vec3(-1, 0, 0).Normalize();
+			vDir = Vec3(-1, 0, 0).Normalize();
 			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
 		}
 		else if (KEY_PRESSED(KEY::UP))
@@ -131,20 +142,30 @@ void CPlayerScript::KeyCheck()
 		}
 		else if (KEY_PRESSED(KEY::DOWN))
 		{
-			Vec3 vDir = Vec3(0, -1, 0).Normalize();
+			vDir = Vec3(0, -1, 0).Normalize();
 			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
 		}
+
+		// 방향키를 누르지 않은 경우
 		else
 		{
-			Vec3 vDir = Vec3(1, 0, 0).Normalize();
-			m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			if (m_bFacingRight)
+			{
+				vDir = Vec3(1, 0, 0).Normalize();
+				m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			}
+			else
+			{
+				vDir = Vec3(-1, 0, 0).Normalize();
+				m_pRigidBody->SetVelocity(vDir * m_fDashSpeed);
+			}
 		}
 
 		m_CurState = PLAYER_STATE::DASH;		
 	}
 
 	// CLIMB
-	if (m_bCollisionWithWall && (KEY_JUST_PRESSED(KEY::Z) || KEY_PRESSED(KEY::Z)))
+	if ((m_bOnLeftWall || m_bOnRightWall) && (KEY_JUST_PRESSED(KEY::Z) || KEY_PRESSED(KEY::Z)))
 	{
 		m_CurState = PLAYER_STATE::CLIMB;
 	}
@@ -186,14 +207,14 @@ void CPlayerScript::UpdateState()
 		{
 			if (KEY_PRESSED(KEY::RIGHT))
 			{
-				if (m_pRigidBody->GetVelocity().x < m_MaxSpeedX)
+				if (m_pRigidBody->GetVelocity().x < m_MaxRunSpeed)
 				{
 					m_pRigidBody->AddForce(Vec3(m_fMagnitudeOfMoveForce, 0, 0));
 				}
 			}
 			else if (KEY_PRESSED(KEY::LEFT))
 			{
-				if (m_pRigidBody->GetVelocity().x > -m_MaxSpeedX)
+				if (m_pRigidBody->GetVelocity().x > -m_MaxRunSpeed)
 				{
 					m_pRigidBody->AddForce(Vec3(-m_fMagnitudeOfMoveForce, 0, 0));
 				}
@@ -205,7 +226,25 @@ void CPlayerScript::UpdateState()
 		case PLAYER_STATE::JUMP:
 		{
 			if (m_PrevState != PLAYER_STATE::JUMP)
+			{
 				m_pRigidBody->SetVelocity(Vec3(m_pRigidBody->GetVelocity().x, m_fJumpSpeed, 0));
+				m_pRigidBody->SetOnGround(false);
+			}
+
+			if (KEY_PRESSED(KEY::RIGHT))
+			{
+				if (m_pRigidBody->GetVelocity().x < m_MaxRunSpeed)
+				{
+					m_pRigidBody->AddForce(Vec3(m_fMagnitudeOfMoveForce, 0, 0));
+				}
+			}
+			else if (KEY_PRESSED(KEY::LEFT))
+			{
+				if (m_pRigidBody->GetVelocity().x > -m_MaxRunSpeed)
+				{
+					m_pRigidBody->AddForce(Vec3(-m_fMagnitudeOfMoveForce, 0, 0));
+				}
+			}
 
 			break;
 		}
@@ -214,14 +253,14 @@ void CPlayerScript::UpdateState()
 		{
 			if (KEY_PRESSED(KEY::RIGHT))
 			{
-				if (m_pRigidBody->GetVelocity().x < m_MaxSpeedX)
+				if (m_pRigidBody->GetVelocity().x < m_MaxRunSpeed)
 				{
 					m_pRigidBody->AddForce(Vec3(m_fMagnitudeOfMoveForce, 0, 0));
 				}
 			}
 			else if (KEY_PRESSED(KEY::LEFT))
 			{
-				if (m_pRigidBody->GetVelocity().x > -m_MaxSpeedX)
+				if (m_pRigidBody->GetVelocity().x > -m_MaxRunSpeed)
 				{
 					m_pRigidBody->AddForce(Vec3(-m_fMagnitudeOfMoveForce, 0, 0));
 				}
@@ -232,9 +271,30 @@ void CPlayerScript::UpdateState()
 
 		case PLAYER_STATE::DASH:
 		{
-			m_fDashTimeRemained -= DT;
+			// 벽이 있으면 벽 방향 속도 0
+			if (m_bFacingRight && m_bOnRightWall)
+			{
+				m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+			}
+			else if (!m_bFacingRight && m_bOnLeftWall)
+			{
+				m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+			}
 
-			if (m_fDashTimeRemained <= 0)
+			// 바닥에 있으면 바닥 방향 속도 0
+			if (m_pRigidBody->GetVelocity().y < 0.f && m_pRigidBody->IsOnGround())
+			{
+				m_pRigidBody->SetVelocity(Vec3(m_pRigidBody->GetVelocity().x, 0, 0));
+			}
+
+			if (m_PrevState != PLAYER_STATE::DASH)
+			{
+				m_DashTimeRemained = m_DashTime;
+			}
+
+			m_DashTimeRemained -= DT;
+
+			if (m_DashTimeRemained <= 0)
 			{
 				if (m_bOnGround)
 					m_CurState = PLAYER_STATE::IDLE;
@@ -243,11 +303,8 @@ void CPlayerScript::UpdateState()
 
 				// 속도 정상화
 				Vec3 vDir = m_pRigidBody->GetVelocity().Normalize();
-				if (vDir.y >= 0)
-				{
-					vDir.y = 0;
-					m_pRigidBody->SetVelocity(vDir * m_MaxSpeedX);
-				}
+				m_pRigidBody->SetVelocity(vDir * m_SpeedBeforeDash);
+				
 			}
 
 			break;
@@ -290,20 +347,22 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 	{
 		case LAYER::WALL_OR_GROUND:
 		{
-			// 일단 파고들어간 깊이만큼 보정
 			Vec3 vOverlap = CCollisionMgr::GetInst()->GetOverlap();
+
+
 			Vec3 vColliderPos = _OwnCollider->GetWorldPos();
 			Vec3 vOtherColliderPos = _OtherCollider->GetWorldPos();
 			Vec3 vDir = vOtherColliderPos - vColliderPos;
 
-			if (vOverlap.Dot(vDir) > 0)
-			{
-				vOverlap = -vOverlap;
-			}
+			// 일단 파고들어간 깊이만큼 보정
+			//if (vOverlap.Dot(vDir) > 0)
+			//{
+			//	vOverlap = -vOverlap;
+			//}
 
-			Vec3 vObjPos = Transform()->GetWorldPos();
-			vObjPos += vOverlap;
-			Transform()->SetWorldPos(vObjPos);
+			//Vec3 vObjPos = Transform()->GetWorldPos();
+			//vObjPos += vOverlap;
+			//Transform()->SetWorldPos(vObjPos);
 
 			// 벽과 충돌한건지 땅과 충돌한건지 판단
 			if (abs(vOverlap.y) > abs(vOverlap.x))
@@ -315,7 +374,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 					m_setGroundColliders.insert(_OtherCollider);
 
 					// 대쉬 초기화
-					m_fDashTimeRemained = m_fDashTime;
+					m_DashTimeRemained = m_DashTime;
 
 					// 대쉬 상태에서 땅에 닿으면 대쉬 상태 해제
 					if (m_CurState == PLAYER_STATE::DASH)
@@ -357,12 +416,29 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 			{
 				// 벽과 충돌한 경우
 				m_pRigidBody->SetVelocity(Vec3(0.f, m_pRigidBody->GetVelocity().y, 0.f));
-				m_bCollisionWithWall = true;
-				m_setWallColliders.insert(_OtherCollider);
+				if (vDir.x > 0)
+				{
+					m_setRightWallColliders.insert(_OtherCollider);
+					m_bOnRightWall = true;
+				}
+				else
+				{
+					m_setLeftWallColliders.insert(_OtherCollider);
+					m_bOnLeftWall = true;
+				}
 
-				// 대쉬 상태에서 벽에 닿으면 대쉬 상태 해제
+				// 대쉬 상태에서 벽에 닿으면 해당 방향의 속도 0
 				if (m_CurState == PLAYER_STATE::DASH)
 				{
+					if (m_bFacingRight && m_bOnRightWall)
+					{
+						m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+					}
+					else if (!m_bFacingRight && m_bOnLeftWall)
+					{
+						m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+					}
+
 					if (m_bOnGround)
 					{
 						m_CurState = PLAYER_STATE::IDLE;
@@ -401,20 +477,21 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 	{
 		case LAYER::WALL_OR_GROUND:
 		{
-			// 일단 파고들어간 깊이만큼 보정
-			Vec3 vOverlap = CCollisionMgr::GetInst()->GetOverlap();
-			Vec3 vColliderPos = _OwnCollider->GetWorldPos();
-			Vec3 vOtherColliderPos = _OtherCollider->GetWorldPos();
-			Vec3 vDir = vOtherColliderPos - vColliderPos;
-
-			if (vOverlap.Dot(vDir) > 0)
+			// 벽 방향 속도 0
+			if (m_bFacingRight && m_bOnRightWall)
 			{
-				vOverlap = -vOverlap;
+				m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
+			}
+			else if (!m_bFacingRight && m_bOnLeftWall)
+			{
+				m_pRigidBody->SetVelocity(Vec3(0, m_pRigidBody->GetVelocity().y, 0));
 			}
 
-			Vec3 vObjPos = Transform()->GetWorldPos();
-			vObjPos += vOverlap;
-			Transform()->SetWorldPos(vObjPos);
+			// 바닥 방향 속도 0
+			if (m_pRigidBody->GetVelocity().y < 0.f && m_pRigidBody->IsOnGround())
+			{
+				m_pRigidBody->SetVelocity(Vec3(m_pRigidBody->GetVelocity().x, 0, 0));
+			}
 		}
 		
 		break;
@@ -436,13 +513,23 @@ void CPlayerScript::EndOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 				if (m_setGroundColliders.empty())
 					m_pRigidBody->SetOnGround(false);
 			}
-			else if (m_setWallColliders.find(_OtherCollider) != m_setWallColliders.end())
+
+			else if (m_setLeftWallColliders.find(_OtherCollider) != m_setLeftWallColliders.end())
 			{
-				m_setWallColliders.erase(_OtherCollider);
+				m_setLeftWallColliders.erase(_OtherCollider);
 
 				// 벽에서 떨어진 경우
-				if (m_setWallColliders.empty())
-					m_bCollisionWithWall = false;
+				if (m_setLeftWallColliders.empty())
+					m_bOnLeftWall = false;
+			}
+
+			else if (m_setRightWallColliders.find(_OtherCollider) != m_setRightWallColliders.end())
+			{
+				m_setRightWallColliders.erase(_OtherCollider);
+
+				// 벽에서 떨어진 경우
+				if (m_setRightWallColliders.empty())
+					m_bOnRightWall = false;
 			}
 		}
 	}

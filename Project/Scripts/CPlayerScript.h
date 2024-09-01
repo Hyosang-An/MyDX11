@@ -32,19 +32,24 @@ private:
 	int             m_CurRoomIdx = 0;
 
 
-	float           m_fMagnitudeOfMoveForce = 100;
-	float           m_MaxSpeedX = 200;
+	float           m_fMagnitudeOfMoveForce = 1000;
+	float           m_MaxRunSpeed = 200;
 	float           m_fJumpSpeed = 500;
     float		    m_fDashSpeed = 700;
-	float		    m_fDashTime = 0.5;
-    float		    m_fDashTimeRemained = m_fDashTime;
+	float           m_SpeedBeforeDash = 0;
+    
+	int             m_DashCount = 1;
+	float		    m_DashTime = 0.5;
+    float		    m_DashTimeRemained = m_DashTime;
 
 	float           m_MaxFallingSpeed = 600;
 
-	bool            m_bCollisionWithWall = false;
+	bool            m_bOnLeftWall = false;
+	bool            m_bOnRightWall = false;
 
 	set<CCollider2D*> m_setGroundColliders;
-	set<CCollider2D*> m_setWallColliders;
+	set<CCollider2D*> m_setLeftWallColliders;
+	set<CCollider2D*> m_setRightWallColliders;
 
     // Script
 	class CRigidBody* m_pRigidBody = nullptr;
