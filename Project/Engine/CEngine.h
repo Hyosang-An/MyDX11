@@ -1,7 +1,7 @@
 #pragma once
 
 typedef void(*OBJECT_SAVE)(FILE*, class CGameObject*);
-typedef CGameObject* (*OBJECT_LOAD)(FILE*);
+typedef CGameObject* (*OBJECT_LOAD)(FILE*, int&);
 
 class CEngine :
     public CSingleton<CEngine>

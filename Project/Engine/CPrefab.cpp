@@ -63,7 +63,8 @@ int CPrefab::Load(const wstring& _FilePath)
         return E_FAIL;
     }
 
-    m_ProtoObject = g_ObjectLoadFunc(File);
+    int objIdx = -1;
+    m_ProtoObject = g_ObjectLoadFunc(File, objIdx);
 
     fclose(File);
 

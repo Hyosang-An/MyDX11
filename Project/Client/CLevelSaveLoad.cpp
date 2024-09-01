@@ -59,8 +59,8 @@ void CLevelSaveLoad::SaveGameObject(FILE* _File, CGameObject* _Object)
 	SaveWString(_Object->GetName(), _File);
 
 	// layerIdx 저장
-	UINT LayerIdx = _Object->GetLayerIdx();
-	fwrite(&LayerIdx, sizeof(UINT), 1, _File);
+	int LayerIdx = _Object->GetLayerIdx();
+	fwrite(&LayerIdx, sizeof(int), 1, _File);
 
 	// Component 정보 저장
 	UINT i = 0;
@@ -167,8 +167,8 @@ CGameObject* CLevelSaveLoad::LoadGameObject(FILE* _File, int& _objIdx)
 	pObject->SetName(Name);
 
 	// LayerIdx 로드
-	UINT layerIdx = 0;
-	fread(&layerIdx, sizeof(UINT), 1, _File);
+	int layerIdx = -1;
+	fread(&layerIdx, sizeof(int), 1, _File);
 	_objIdx = layerIdx;
 
 	// Component 정보 로드
