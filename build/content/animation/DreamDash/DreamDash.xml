@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:98ea47231a487cf815a82d570e9642f8:9022203871a32c3a7ab20e86d37c934e:c16b9b65aac70998e9d0c1efde546351$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="DreamDash.png" width="238" height="102">
+    <sprite n="dreamDash00.png" x="1" y="1" w="32" h="32"/>
+    <sprite n="dreamDash01.png" x="35" y="1" w="32" h="32"/>
+    <sprite n="dreamDash02.png" x="69" y="1" w="32" h="32"/>
+    <sprite n="dreamDash03.png" x="103" y="1" w="32" h="32"/>
+    <sprite n="dreamDash04.png" x="137" y="1" w="32" h="32"/>
+    <sprite n="dreamDash05.png" x="171" y="1" w="32" h="32"/>
+    <sprite n="dreamDash06.png" x="205" y="1" w="32" h="32"/>
+    <sprite n="dreamDash07.png" x="1" y="35" w="32" h="32"/>
+    <sprite n="dreamDash08.png" x="35" y="35" w="32" h="32"/>
+    <sprite n="dreamDash09.png" x="69" y="35" w="32" h="32"/>
+    <sprite n="dreamDash10.png" x="103" y="35" w="32" h="32"/>
+    <sprite n="dreamDash11.png" x="137" y="35" w="32" h="32"/>
+    <sprite n="dreamDash12.png" x="171" y="35" w="32" h="32"/>
+    <sprite n="dreamDash13.png" x="205" y="35" w="32" h="32"/>
+    <sprite n="dreamDash14.png" x="1" y="69" w="32" h="32"/>
+    <sprite n="dreamDash15.png" x="35" y="69" w="32" h="32"/>
+    <sprite n="dreamDash16.png" x="69" y="69" w="32" h="32"/>
+    <sprite n="dreamDash17.png" x="103" y="69" w="32" h="32"/>
+    <sprite n="dreamDash18.png" x="137" y="69" w="32" h="32"/>
+    <sprite n="dreamDash19.png" x="171" y="69" w="32" h="32"/>
+    <sprite n="dreamDash20.png" x="205" y="69" w="32" h="32"/>
+</TextureAtlas>

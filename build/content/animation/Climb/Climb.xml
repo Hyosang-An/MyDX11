@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:404d1bdc0ef7e6d7d9a27a4c2fdeb15d:3dc6568c0d4c84c9d05cb2b721adc28e:2abaa29a8b806b55895c5722a9d10e21$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="Climb.png" width="510" height="34">
+    <sprite n="climb00.png" x="1" y="1" w="32" h="32"/>
+    <sprite n="climb01.png" x="35" y="1" w="32" h="32"/>
+    <sprite n="climb02.png" x="69" y="1" w="32" h="32"/>
+    <sprite n="climb03.png" x="103" y="1" w="32" h="32"/>
+    <sprite n="climb04.png" x="137" y="1" w="32" h="32"/>
+    <sprite n="climb05.png" x="171" y="1" w="32" h="32"/>
+    <sprite n="climb06.png" x="205" y="1" w="32" h="32"/>
+    <sprite n="climb07.png" x="239" y="1" w="32" h="32"/>
+    <sprite n="climb08.png" x="273" y="1" w="32" h="32"/>
+    <sprite n="climb09.png" x="307" y="1" w="32" h="32"/>
+    <sprite n="climb10.png" x="341" y="1" w="32" h="32"/>
+    <sprite n="climb11.png" x="375" y="1" w="32" h="32"/>
+    <sprite n="climb12.png" x="409" y="1" w="32" h="32"/>
+    <sprite n="climb13.png" x="443" y="1" w="32" h="32"/>
+    <sprite n="climb14.png" x="477" y="1" w="32" h="32"/>
+</TextureAtlas>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:8fe2c8cd0cad5af844e4c6ce2e1f829f:d92ea83940adea72f0737d94a4c63588:16926e8441c7bcbf914a242142ee421e$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="Death.png" width="510" height="34">
+    <sprite n="death_h00.png" x="1" y="1" w="32" h="32"/>
+    <sprite n="death_h01.png" x="35" y="1" w="32" h="32"/>
+    <sprite n="death_h02.png" x="69" y="1" w="32" h="32"/>
+    <sprite n="death_h03.png" x="103" y="1" w="32" h="32"/>
+    <sprite n="death_h04.png" x="137" y="1" w="32" h="32"/>
+    <sprite n="death_h05.png" x="171" y="1" w="32" h="32"/>
+    <sprite n="death_h06.png" x="205" y="1" w="32" h="32"/>
+    <sprite n="death_h07.png" x="239" y="1" w="32" h="32"/>
+    <sprite n="death_h08.png" x="273" y="1" w="32" h="32"/>
+    <sprite n="death_h09.png" x="307" y="1" w="32" h="32"/>
+    <sprite n="death_h10.png" x="341" y="1" w="32" h="32"/>
+    <sprite n="death_h11.png" x="375" y="1" w="32" h="32"/>
+    <sprite n="death_h12.png" x="409" y="1" w="32" h="32"/>
+    <sprite n="death_h13.png" x="443" y="1" w="32" h="32"/>
+    <sprite n="death_h14.png" x="477" y="1" w="32" h="32"/>
+</TextureAtlas>
