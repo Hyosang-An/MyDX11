@@ -23,8 +23,10 @@ public:
     vector<wstring> GetFlipBookNames();
 
     void AddFlipBook(Ptr<CFlipBook> _Flipbook);
+	void RemoveFlipBook(const wstring& _FlipBookName);
     Ptr<CFlipBook> FindFlipBook(const wstring& _FlipBookName);
     void Play(wstring _FliBookName, float _FPS, bool _Repeat);
+	void Play(wstring _FliBookName, bool _Repeat);
     Ptr<CSprite> GetCurSprite() { return m_CurFrmSprite; }
     void Reset();
     void Binding();

@@ -3,10 +3,11 @@
 
 enum class SpriteSlectMode
 {
+    FromXML,                // XML파일로부터 읽어오기
     ClickAndDrag,           // 클릭 드래그 방식
     AutoSelectOnClick,      // 클릭 시 자동 선택
     ManualSpecification,    // 영역 값 지정
-	FromXML                 // XML파일로부터 읽어오기
+
 };
 
 class SE_Detail :
@@ -17,7 +18,7 @@ public:
     ~SE_Detail();
 
     Ptr<CTexture>   m_AtlasTex;
-    SpriteSlectMode m_SelectMode = SpriteSlectMode::AutoSelectOnClick;
+    SpriteSlectMode m_SelectMode = SpriteSlectMode::FromXML;
 
     Vec2            m_SpriteLT;
     Vec2            m_SpriteSize;

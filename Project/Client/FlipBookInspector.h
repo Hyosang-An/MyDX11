@@ -25,6 +25,7 @@ private:
     wstring                 m_selectedSpriteDirectory;
     vector<Ptr<CSprite>>    m_vecSpriteInFolder;
     int                     m_selectedSpriteIndex = -1;
+	float                   m_FPS = 12;
 
 private:
     void    SelectFlipBook();

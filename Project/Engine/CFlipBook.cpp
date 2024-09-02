@@ -41,13 +41,19 @@ int CFlipBook::Save(const wstring& _FilePath)
 	if (nullptr == File)
 		return E_FAIL;
 
+	// FlipBook에 속한 Sprite 개수 저장
 	size_t SpriteCount = m_vecSprite.size();
 	fwrite(&SpriteCount, sizeof(size_t), 1, File);
 
+	// FlipBook에 속한 Sprite 저장
 	for (size_t i = 0; i < SpriteCount; ++i)
 	{
 		SaveAssetRef(m_vecSprite[i], File);
 	}
+
+	// Default FPS 저장
+	fwrite(&m_FPS, sizeof(float), 1, File);
+
 
 	fclose(File);
 
@@ -61,14 +67,20 @@ int CFlipBook::Load(const wstring& _FilePath)
 	if (nullptr == File)
 		return E_FAIL;
 
+	// FlipBook에 속한 Sprite 개수 불러오기
 	size_t SpriteCount = 0;
 	fread(&SpriteCount, sizeof(size_t), 1, File);
 	m_vecSprite.resize(SpriteCount);
 
+	// FlipBook에 속한 Sprite 불러오기
 	for (size_t i = 0; i < SpriteCount; ++i)
 	{
 		LoadAssetRef(m_vecSprite[i], File);
 	}
+
+	// Default FPS 불러오기
+	fread(&m_FPS, sizeof(float), 1, File);
+
 
 	fclose(File);
 

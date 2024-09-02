@@ -113,17 +113,18 @@ void SE_Detail::SpriteInfo()
 	ImGui::Text("Sprite Select Mode");
 	ImGui::SameLine(140);
 	ImGui::SetNextItemWidth(180.f);
-	const char* SpriteSelectModes[] = { "Click And Drag", "Auto Select On Click", "Manual Specification", "From XML" };
+	const char* SpriteSelectModes[] = {"From XML", "Click And Drag", "Auto Select On Click", "Manual Specification" };
 	if (ImGui::BeginCombo("##SpriteSelectMode", SpriteSelectModes[(int)m_SelectMode]))
 	{
+		if (ImGui::Selectable("FromXML"))
+			m_SelectMode = SpriteSlectMode::FromXML;
 		if (ImGui::Selectable("ClickAndDrag"))
 			m_SelectMode = SpriteSlectMode::ClickAndDrag; 
 		if (ImGui::Selectable("AutoSelectOnClick"))
 			m_SelectMode = SpriteSlectMode::AutoSelectOnClick;
 		if (ImGui::Selectable("ManualSpecification"))
 			m_SelectMode = SpriteSlectMode::ManualSpecification;
-		if (ImGui::Selectable("FromXML"))
-			m_SelectMode = SpriteSlectMode::FromXML;
+
 		ImGui::EndCombo();
 	}
 

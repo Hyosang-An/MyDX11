@@ -53,6 +53,16 @@ void FlipBookInspector::Update()
 				SaveFlipBook(m_selectedFlipBook);
 			}
 		}
+
+		// FPS ¼³Á¤
+		ImGui::Text("FPS");
+		ImGui::SameLine(50);
+		ImGui::SetNextItemWidth(50);
+		ImGui::DragFloat("##FPS", &m_FPS);
+		if (m_selectedFlipBook.Get())
+		{
+			m_selectedFlipBook->SetFPS(m_FPS);
+		}
 	}
 	ImGui::EndChild();
 

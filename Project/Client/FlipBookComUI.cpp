@@ -36,20 +36,25 @@ void FlipBookComUI::Update()
 
     vector<wstring> flipBookNames = pFlipBookComponent->GetFlipBookNames();
 
-    static int item_current_idx = 0; // Here we store our selection data as an index.
+	// FlipBook이 없으면 리턴
+	if (flipBookNames.empty())
+		return;
+
+    static int selectedFlipBookIdx = 0; // Here we store our selection data as an index.
 
     // Pass in the preview value visible before opening the combo (it could technically be different contents or not pulled from items[])
-    string curFlipBookStringName = string(flipBookNames[item_current_idx].begin(), flipBookNames[item_current_idx].end());
-
+    string curFlipBookStringName = string(flipBookNames[selectedFlipBookIdx].begin(), flipBookNames[selectedFlipBookIdx].end());
+	
+	// FliBook ComboBox
     ImGui::Text("FlipBook");
     ImGui::SameLine(100);
     if (ImGui::BeginCombo("##Selected FlipBook", curFlipBookStringName.c_str(), ImGuiComboFlags_None)) // The second parameter is the label previewed before opening the combo.
     {
         for (int n = 0; n < flipBookNames.size(); n++)
         {
-            const bool is_selected = (item_current_idx == n);
+            const bool is_selected = (selectedFlipBookIdx == n);
             if (ImGui::Selectable(string(flipBookNames[n].begin(), flipBookNames[n].end()).c_str(), is_selected))
-                item_current_idx = n;
+                selectedFlipBookIdx = n;
 
             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
             if (is_selected)
@@ -79,27 +84,40 @@ void FlipBookComUI::Update()
 
 
     //ImGuiInputTextFlags_
-    static float flipBookFPS = 0.f;
-    static bool repeat = true;
+	Ptr<CFlipBook> selectedFlipBook = pFlipBookComponent->FindFlipBook(flipBookNames[selectedFlipBookIdx]);
+
+
+	m_FPS = selectedFlipBook->GetFPS();
     ImGui::Text("FPS");
     ImGui::SameLine(100); // 100 is the x position of the next element (in this case the input field
-    ImGui::InputFloat("##FPS", &flipBookFPS, 1);
+    ImGui::DragFloat("##FPS", &m_FPS, 1, 0, 100, "%.1f");
+	selectedFlipBook->SetFPS(m_FPS);
     
     ImGui::Text("Repeat");
     ImGui::SameLine(100); 
-    ImGui::Checkbox("Repeat", &repeat);
+    ImGui::Checkbox("Repeat", &m_Repeat);
 
-    ImGui::BeginDisabled(flipBookFPS <= 0.f);
+    ImGui::BeginDisabled(m_FPS <= 0.f);
     if (ImGui::Button("Play##FlipBook"))
     {
-		pFlipBookComponent->Play(flipBookNames[item_current_idx], flipBookFPS, repeat);
+		pFlipBookComponent->Play(flipBookNames[selectedFlipBookIdx], m_FPS, m_Repeat);
     }
     ImGui::EndDisabled();
 
-
+	// FPS 변경 사항 FlipBook 파일에 저장 버튼
+	if (ImGui::Button("Save FPS"))
+	{
+		selectedFlipBook->Save(CPathMgr::GetInst()->GetContentPath() + selectedFlipBook->GetRelativePath());
+	}
 
     ImVec2 last_content_pos = ImGui::GetCursorPos();
     ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
+
+	// FlipBook 삭제 버튼
+	if (ImGui::Button("Remove FlipBook"))
+	{
+		pFlipBookComponent->RemoveFlipBook(flipBookNames[selectedFlipBookIdx]);
+	}
 
     SetChildSize(content_size);
 }
