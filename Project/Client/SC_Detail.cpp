@@ -12,6 +12,8 @@
 #include <Engine/CSprite.h>
 #include <Engine/func.h>
 
+#include <tinyxml2.h>
+
 SE_Detail::SE_Detail()
 {
 }
@@ -111,7 +113,7 @@ void SE_Detail::SpriteInfo()
 	ImGui::Text("Sprite Select Mode");
 	ImGui::SameLine(140);
 	ImGui::SetNextItemWidth(180.f);
-	const char* SpriteSelectModes[] = { "Click And Drag", "Auto Select On Click", "Manual Specification"};
+	const char* SpriteSelectModes[] = { "Click And Drag", "Auto Select On Click", "Manual Specification", "From XML" };
 	if (ImGui::BeginCombo("##SpriteSelectMode", SpriteSelectModes[(int)m_SelectMode]))
 	{
 		if (ImGui::Selectable("ClickAndDrag"))
@@ -120,6 +122,8 @@ void SE_Detail::SpriteInfo()
 			m_SelectMode = SpriteSlectMode::AutoSelectOnClick;
 		if (ImGui::Selectable("ManualSpecification"))
 			m_SelectMode = SpriteSlectMode::ManualSpecification;
+		if (ImGui::Selectable("FromXML"))
+			m_SelectMode = SpriteSlectMode::FromXML;
 		ImGui::EndCombo();
 	}
 
@@ -226,12 +230,12 @@ void SE_Detail::SpriteInfo()
 		{
 			if (SUCCEEDED(SelectSpriteSaveFolderByDialog()))
 			{
-				m_SpriteName = path(m_lastSaveDirectory).stem().wstring();
+				m_SpriteName = path(m_lastDirectoryInDialog).stem().wstring();
 			}
 		}
 		ImGui::Text("Save Directory");
 		ImGui::SameLine(120);
-		wstring WsaveRelativeDirectory = CPathMgr::GetInst()->GetRelativePath(m_lastSaveDirectory);
+		wstring WsaveRelativeDirectory = CPathMgr::GetInst()->GetRelativePath(m_lastDirectoryInDialog);
 		string saveRelativeDirectory = string(WsaveRelativeDirectory.begin(), WsaveRelativeDirectory.end());
 		ImGui::InputText("##SaveDirectory", (char*)saveRelativeDirectory.c_str(), saveRelativeDirectory.size(), ImGuiInputTextFlags_ReadOnly);
 
@@ -250,7 +254,115 @@ void SE_Detail::SpriteInfo()
 		// "Save All Sprites" 버튼
 		ImGui::BeginDisabled(m_SpriteSize.x * m_SpriteSize.y == 0 || m_AtlasTex == nullptr);
 		if (ImGui::Button("Save All Sprites"))
-			SaveAllSprites();
+			SaveAllSprites_Manual();
+		ImGui::EndDisabled();
+	}
+
+	else if (m_SelectMode == SpriteSlectMode::FromXML)
+	{
+		ImGui::Text("From XML");
+
+		// XML 파일 선택
+		if (ImGui::Button("Read XML File"))
+		{
+			wstring xmlRelativePath;
+			path atlasRelativePath = m_AtlasTex->GetRelativePath();
+
+			//atlastPath의 확장자를 xml로 바꾼다.
+			xmlRelativePath = atlasRelativePath.replace_extension(".xml");
+
+			wstring xmlFilePath = CPathMgr::GetInst()->GetContentPath() + xmlRelativePath;
+
+			FILE* File = nullptr;
+			_wfopen_s(&File, xmlFilePath.c_str(), L"rb");
+
+			//// xmlFilePath(wchar_t*) -> UTF-8 (char*) 변환
+			//int bufferSize = WideCharToMultiByte(CP_UTF8, 0, xmlFilePath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+			//std::string path(bufferSize, 0);
+			//WideCharToMultiByte(CP_UTF8, 0, xmlFilePath.c_str(), -1, &path[0], bufferSize, nullptr, nullptr);
+
+			using namespace tinyxml2;
+			// XMLDocument 객체 생성
+			tinyxml2::XMLDocument xmlDoc;
+
+			// XML 파일 로드
+			if (xmlDoc.LoadFile(File) != XML_SUCCESS)
+			{
+				MessageBox(NULL, L"Failed to load XML file!", L"Error", MB_OK);
+				return;
+			}
+
+			// TextureAtlas 엘리먼트 찾기
+			XMLElement* textureAtlas = xmlDoc.FirstChildElement("TextureAtlas");
+			if (textureAtlas == nullptr) 
+			{
+				MessageBox(NULL, L"No TextureAtlas element found!", L"Error", MB_OK);
+				return;
+			}
+
+			m_vecSpriteRectsFromXML.clear();
+
+			// 각 sprite 엘리먼트를 순회하며 RECT 정보 추출
+			for (XMLElement* sprite = textureAtlas->FirstChildElement("sprite"); sprite != nullptr; sprite = sprite->NextSiblingElement("sprite")) 
+			{
+				const char* name = sprite->Attribute("n");
+				int x, y, w, h;
+				sprite->QueryIntAttribute("x", &x);
+				sprite->QueryIntAttribute("y", &y);
+				sprite->QueryIntAttribute("w", &w);
+				sprite->QueryIntAttribute("h", &h);
+
+				// RECT 구조체 생성 및 데이터 저장
+				RECT rect{};
+				rect.left = x;
+				rect.top = y;
+				rect.right = x + w - 1;  // w-1 만큼 추가하여 포함된 범위까지만 설정
+				rect.bottom = y + h - 1; // h-1 만큼 추가하여 포함된 범위까지만 설정
+
+				// 벡터에 RECT 추가
+				m_vecSpriteRectsFromXML.push_back(rect);
+			}
+		}
+
+		// Background Size
+		int backgroundSize[] = { (int)m_BackgroundSize.x, (int)m_BackgroundSize.y };
+		ImGui::Text("Set Background Size");
+		ImGui::InputInt2("##Set Background Size", backgroundSize);
+		m_BackgroundSize.x = (float)backgroundSize[0];
+		m_BackgroundSize.y = (float)backgroundSize[1];
+		m_BackgroundSize.x = max(0, m_BackgroundSize.x);
+		m_BackgroundSize.y = max(0, m_BackgroundSize.y);
+
+		// 저장 경로 선택
+		if (ImGui::Button("Select Sprite Save Folder"))
+		{
+			if (SUCCEEDED(SelectSpriteSaveFolderByDialog()))
+			{
+				m_SpriteName = path(m_lastDirectoryInDialog).stem().wstring();
+			}
+		}
+		ImGui::Text("Save Directory");
+		ImGui::SameLine(120);
+		wstring WsaveRelativeDirectory = CPathMgr::GetInst()->GetRelativePath(m_lastDirectoryInDialog);
+		string saveRelativeDirectory = string(WsaveRelativeDirectory.begin(), WsaveRelativeDirectory.end());
+		ImGui::InputText("##SaveDirectory", (char*)saveRelativeDirectory.c_str(), saveRelativeDirectory.size(), ImGuiInputTextFlags_ReadOnly);
+
+
+		// 파일 이름 설정
+		ImGui::Text("File Name");
+		ImGui::SameLine(120);
+		string spriteName = string(m_SpriteName.begin(), m_SpriteName.end());
+		char buff[255] = {};
+		sprintf_s(buff, "%s", spriteName.c_str());
+		ImGui::InputText("##FileName", buff, 255);
+		spriteName = buff;
+		m_SpriteName = wstring(spriteName.begin(), spriteName.end());
+
+
+		// "Save All Sprites" 버튼
+		ImGui::BeginDisabled(m_vecSpriteRectsFromXML.empty() || m_AtlasTex == nullptr);
+		if (ImGui::Button("Save All Sprites"))
+			SaveAllSprites_FromXML();
 		ImGui::EndDisabled();
 	}
 
@@ -315,10 +427,10 @@ void SE_Detail::SaveSprite()
 			// 마지막 경로를 초기 폴더로 설정
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
-			if (m_lastSaveDirectory.empty())
+			if (m_lastDirectoryInDialog.empty())
 				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
 			else
-				defaultDirectory = m_lastSaveDirectory;
+				defaultDirectory = m_lastDirectoryInDialog;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
 			if (SUCCEEDED(hr) && psiFolder) {
 				pFileSave->SetFolder(psiFolder);
@@ -354,7 +466,7 @@ void SE_Detail::SaveSprite()
 						// 마지막 파일명 및 디렉토리 업데이트
 						path filePath = pszFilePath;
 						m_lastFileName = filePath.stem().wstring();
-						m_lastSaveDirectory = filePath.parent_path().wstring();
+						m_lastDirectoryInDialog = filePath.parent_path().wstring();
 						// 파일 경로 사용 후 메모리를 해제합니다.
 						CoTaskMemFree(pszFilePath);
 					}
@@ -368,7 +480,7 @@ void SE_Detail::SaveSprite()
 
 }
 
-void SE_Detail::SaveAllSprites()
+void SE_Detail::SaveAllSprites_Manual()
 {
 	for (int i = 0; i < m_Count; i++)
 	{
@@ -378,9 +490,25 @@ void SE_Detail::SaveAllSprites()
 		pSprite->Create(m_AtlasTex, m_StartLT + Vec2(m_SpriteSize.x * i, 0.f), m_SpriteSize);
 		pSprite->SetBackgroundPixelSize(m_BackgroundSize);
 
-		wstring savePath = path(m_lastSaveDirectory) / path(fileName);
+		wstring savePath = path(m_lastDirectoryInDialog) / path(fileName);
 		pSprite->Save(savePath);
 	}
+}
+
+void SE_Detail::SaveAllSprites_FromXML()
+{
+	for (int i = 0; i < m_vecSpriteRectsFromXML.size(); i++)
+	{
+		wstring fileName = m_SpriteName + L"_" + std::to_wstring(i) + L".sprite";
+
+		Ptr<CSprite> pSprite = new CSprite;
+		pSprite->Create(m_AtlasTex, Vec2((int)m_vecSpriteRectsFromXML[i].left, (int)m_vecSpriteRectsFromXML[i].top), Vec2(int(m_vecSpriteRectsFromXML[i].right - m_vecSpriteRectsFromXML[i].left + 1), int(m_vecSpriteRectsFromXML[i].bottom - m_vecSpriteRectsFromXML[i].top + 1)));
+		pSprite->SetBackgroundPixelSize(m_BackgroundSize);
+
+		wstring savePath = path(m_lastDirectoryInDialog) / path(fileName);
+		pSprite->Save(savePath);
+	}
+
 }
 
 HRESULT SE_Detail::SelectSpriteSaveFolderByDialog()
@@ -405,10 +533,10 @@ HRESULT SE_Detail::SelectSpriteSaveFolderByDialog()
 			// 마지막 경로를 초기 폴더로 설정
 			IShellItem* psiFolder = nullptr;
 			wstring defaultDirectory;
-			if (m_lastSaveDirectory.empty())
+			if (m_lastDirectoryInDialog.empty())
 				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
 			else
-				defaultDirectory = m_lastSaveDirectory;
+				defaultDirectory = m_lastDirectoryInDialog;
 			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
 			if (SUCCEEDED(hr) && psiFolder) {
 				pFolderOpen->SetFolder(psiFolder);
@@ -430,7 +558,7 @@ HRESULT SE_Detail::SelectSpriteSaveFolderByDialog()
 					if (SUCCEEDED(hr))
 					{
 
-						m_lastSaveDirectory = pszFolderPath;
+						m_lastDirectoryInDialog = pszFolderPath;
 
 						// 경로 사용 후 메모리 해제
 						CoTaskMemFree(pszFolderPath);

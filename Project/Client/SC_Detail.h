@@ -3,9 +3,10 @@
 
 enum class SpriteSlectMode
 {
-    ClickAndDrag,        // 클릭 드래그 방식
-    AutoSelectOnClick,   // 클릭 시 자동 선택
-    ManualSpecification  // 영역 값 지정
+    ClickAndDrag,           // 클릭 드래그 방식
+    AutoSelectOnClick,      // 클릭 시 자동 선택
+    ManualSpecification,    // 영역 값 지정
+	FromXML                 // XML파일로부터 읽어오기
 };
 
 class SE_Detail :
@@ -27,7 +28,9 @@ public:
     wstring         m_SpriteName; // ManualSpecification 모드에서 SpriteName
 
     wstring         m_lastFileName;
-    wstring         m_lastSaveDirectory;
+    wstring         m_lastDirectoryInDialog;
+
+	vector<RECT>    m_vecSpriteRectsFromXML;
 
 private:
     void Atlas();
@@ -45,11 +48,14 @@ public:
     std::pair<Vec2, Vec2> GetStartLTandSize() { return { m_StartLT, m_SpriteSize }; }
     int GetCount() { return m_Count; }
 
+	const vector<RECT>& GetSpriteRectsFromXML() { return m_vecSpriteRectsFromXML; }
+
 private:
     void SelectTexture(DWORD_PTR _ListUI);
     
     void SaveSprite();
-    void SaveAllSprites(); // ManualSpecification 모드에서 사용
+    void SaveAllSprites_Manual(); // ManualSpecification 모드에서 사용
+	void SaveAllSprites_FromXML(); // FromXML 모드에서 사용
 
 
 public:

@@ -303,6 +303,7 @@
     <ClInclude Include="FlipBookInspector.h">
       <Filter>EditorUI\09. FlipBookEditor\FlipBookInspector</Filter>
     </ClInclude>
+    <ClInclude Include="tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -459,6 +460,7 @@
     <ClCompile Include="FlipBookInspector.cpp">
       <Filter>EditorUI\09. FlipBookEditor\FlipBookInspector</Filter>
     </ClCompile>
+    <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

@@ -13,6 +13,8 @@ FlipBookViewer::~FlipBookViewer()
 
 }
 
+
+
 void FlipBookViewer::Init()
 {
 }
@@ -177,3 +179,23 @@ void FlipBookViewer::Update()
     ImGui::InputFloat2("PixelPos", PixelPos, "%.0f");
 }
 
+void FlipBookViewer::WheelCheck()
+{
+	if (ImGui::IsWindowHovered() == false || ImGui::IsKeyDown(ImGuiKey_LeftCtrl) == false)
+		return;
+
+	if (0 < ImGui::GetIO().MouseWheel)
+	{
+		m_ZoomRatio += 0.05f;
+	}
+
+	if (0 > ImGui::GetIO().MouseWheel)
+	{
+		m_ZoomRatio -= 0.05f;
+	}
+
+	if (6.f < m_ZoomRatio)
+		m_ZoomRatio = 3.f;
+	if (m_ZoomRatio < 0.1f)
+		m_ZoomRatio = 0.1f;
+}

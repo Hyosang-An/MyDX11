@@ -31,7 +31,7 @@ void SE_AtlasView::Update()
 	ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	ImVec4 border_col = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
 
-	ImGui::Image(m_AtlasTex->GetSRV().Get(), ImVec2((m_AtlasTex->Width() * m_Ratio), m_AtlasTex->Height() * m_Ratio)
+	ImGui::Image(m_AtlasTex->GetSRV().Get(), ImVec2((m_AtlasTex->Width() * m_ZoomRatio), m_AtlasTex->Height() * m_ZoomRatio)
 		, uv_min, uv_max, tint_col, border_col);
 
 	// SelectSpriteArea
@@ -59,18 +59,18 @@ void SE_AtlasView::WheelCheck()
 
 	if (0 < ImGui::GetIO().MouseWheel)
 	{
-		m_Ratio += 0.05f;
+		m_ZoomRatio += 0.05f;
 	}
 
 	if (0 > ImGui::GetIO().MouseWheel)
 	{
-		m_Ratio -= 0.05f;
+		m_ZoomRatio -= 0.05f;
 	}
 
-	if (3.f < m_Ratio)
-		m_Ratio = 3.f;
-	if (m_Ratio < 0.1f)
-		m_Ratio = 0.1f;
+	if (6.f < m_ZoomRatio)
+		m_ZoomRatio = 3.f;
+	if (m_ZoomRatio < 0.1f)
+		m_ZoomRatio = 0.1f;
 }
 
 void SE_AtlasView::SelectSpriteArea()
@@ -90,7 +90,7 @@ void SE_AtlasView::SelectSpriteArea()
 	ImGui::InputFloat2("MousePos", arrMousePos, "%.0f");
 
 	ImVec2 vDiff = ImVec2(m_MousePos.x - m_imageRectMin.x, m_MousePos.y - m_imageRectMin.y);
-	vDiff = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+	vDiff = ImVec2(vDiff.x / m_ZoomRatio, vDiff.y / m_ZoomRatio);
 
 	// 마우스 위치의 아틀라스 픽셀좌표	
 	float PixelPos[] = { vDiff.x, vDiff.y };
@@ -108,14 +108,14 @@ void SE_AtlasView::SelectSpriteArea()
 			{
 				m_stripeBoxLTonOriginalTex = ImGui::GetMousePos();
 				ImVec2 vDiff = ImVec2(m_stripeBoxLTonOriginalTex.x - m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y - m_imageRectMin.y);
-				m_stripeBoxLTonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+				m_stripeBoxLTonOriginalTex = ImVec2(vDiff.x / m_ZoomRatio, vDiff.y / m_ZoomRatio);
 			}
 
 			if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
 			{
 				m_stripeBoxRBonOriginalTex = ImGui::GetMousePos();
 				ImVec2 vDiff = ImVec2(m_stripeBoxRBonOriginalTex.x - m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y - m_imageRectMin.y);
-				m_stripeBoxRBonOriginalTex = ImVec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+				m_stripeBoxRBonOriginalTex = ImVec2(vDiff.x / m_ZoomRatio, vDiff.y / m_ZoomRatio);
 			}
 		}
 
@@ -129,7 +129,7 @@ void SE_AtlasView::SelectSpriteArea()
 			{
 				Vec2 vPixelPos = Vec2(ImGui::GetMousePos().x, ImGui::GetMousePos().y);
 				ImVec2 vDiff = ImVec2(vPixelPos.x - m_imageRectMin.x, vPixelPos.y - m_imageRectMin.y);
-				vPixelPos = Vec2(vDiff.x / m_Ratio, vDiff.y / m_Ratio);
+				vPixelPos = Vec2(vDiff.x / m_ZoomRatio, vDiff.y / m_ZoomRatio);
 
 				if (0.f <= vPixelPos.x && vPixelPos.x < m_AtlasTex->Width()
 					&& 0.f <= vPixelPos.y && vPixelPos.y < m_AtlasTex->Height())
@@ -153,8 +153,8 @@ void SE_AtlasView::DrawSelectRect()
 {
 	if (GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::ClickAndDrag || GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::AutoSelectOnClick)
 	{
-		ImVec2 BoxLTPosOnUI = ImVec2(m_stripeBoxLTonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y * m_Ratio + m_imageRectMin.y);
-		ImVec2 BoxRBPosOnUI = ImVec2(m_stripeBoxRBonOriginalTex.x * m_Ratio + m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y * m_Ratio + m_imageRectMin.y);
+		ImVec2 BoxLTPosOnUI = ImVec2(m_stripeBoxLTonOriginalTex.x * m_ZoomRatio + m_imageRectMin.x, m_stripeBoxLTonOriginalTex.y * m_ZoomRatio + m_imageRectMin.y);
+		ImVec2 BoxRBPosOnUI = ImVec2(m_stripeBoxRBonOriginalTex.x * m_ZoomRatio + m_imageRectMin.x, m_stripeBoxRBonOriginalTex.y * m_ZoomRatio + m_imageRectMin.y);
 
 		if (BoxLTPosOnUI.x == BoxRBPosOnUI.x && BoxLTPosOnUI.y == BoxRBPosOnUI.y)
 			return;
@@ -174,13 +174,30 @@ void SE_AtlasView::DrawSelectRect()
 
 		for (int i = 0; i < count; i++)
 		{
-			ImVec2 BoxLTPosOnUI = ImVec2(vStartLT.x * m_Ratio + m_imageRectMin.x, vStartLT.y * m_Ratio + m_imageRectMin.y);
-			ImVec2 BoxRBPosOnUI = ImVec2((vStartLT.x + vSize.x) * m_Ratio + m_imageRectMin.x, (vStartLT.y + vSize.y) * m_Ratio + m_imageRectMin.y);
+			ImVec2 BoxLTPosOnUI = ImVec2(vStartLT.x * m_ZoomRatio + m_imageRectMin.x, vStartLT.y * m_ZoomRatio + m_imageRectMin.y);
+			ImVec2 BoxRBPosOnUI = ImVec2((vStartLT.x + vSize.x) * m_ZoomRatio + m_imageRectMin.x, (vStartLT.y + vSize.y) * m_ZoomRatio + m_imageRectMin.y);
 
 			ImGui::GetWindowDrawList()->AddRect(BoxLTPosOnUI, BoxRBPosOnUI
 				, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0, 1.f);
 
 			vStartLT.x += vSize.x;
+		}
+	}
+
+	else if (GetDetail()->GetSpriteSelectMode() == SpriteSlectMode::FromXML)
+	{
+		const vector<RECT>& vecSpriteRects = GetDetail()->GetSpriteRectsFromXML();
+
+		for (const RECT& rc : vecSpriteRects)
+		{
+			Vec2 vStartLT = Vec2((int)rc.left, (int)rc.top);
+			Vec2 vSize = Vec2(int(rc.right - rc.left) + 2, int(rc.bottom - rc.top) + 2);
+
+			ImVec2 BoxLTPosOnUI = ImVec2(vStartLT.x * m_ZoomRatio + m_imageRectMin.x, vStartLT.y * m_ZoomRatio + m_imageRectMin.y);
+			ImVec2 BoxRBPosOnUI = ImVec2((vStartLT.x + vSize.x) * m_ZoomRatio + m_imageRectMin.x, (vStartLT.y + vSize.y) * m_ZoomRatio + m_imageRectMin.y);
+
+			ImGui::GetWindowDrawList()->AddRect(BoxLTPosOnUI, BoxRBPosOnUI
+				, ImGui::GetColorU32(ImVec4(1.f, 1.f, 0.f, 1.f)), 0.f, 0, 1.f);
 		}
 	}
 }

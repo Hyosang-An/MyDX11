@@ -20,7 +20,7 @@ private:
     ImVec2          m_stripeBoxRBonOriginalTex; // 마우스 위치에 해당하는 Texture 의 픽셀 좌표
 
     float           m_WheelScale = 1;
-    float           m_Ratio = 1;        // 실제 해상도 대비 출력 이미지의 비율
+    float           m_ZoomRatio = 1;        // 실제 해상도 대비 출력 이미지의 비율
 
 
 

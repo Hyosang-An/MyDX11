@@ -307,8 +307,8 @@ void CTestLevel::CreateCelesteTestLevel()
 	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 	pPlayer->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
 
-	pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Link_MoveDown.flip"));
-	pPlayer->FlipBookComponent()->Play(L"Link_MoveDown", 10, true);
+	pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Idle\\Idle.flip"));
+	pPlayer->FlipBookComponent()->Play(L"Idle", 10, true);
 
 	TestLevel->AddObject(LAYER::PLAYER, pPlayer);
 
