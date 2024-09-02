@@ -31,7 +31,7 @@ void SE_AtlasView::Update()
 	ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	ImVec4 border_col = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
 
-	ImGui::Image(m_AtlasTex->GetSRV().Get(), ImVec2((m_AtlasTex->Width() * m_ZoomRatio), m_AtlasTex->Height() * m_ZoomRatio)
+	ImGui::Image(m_AtlasTex->GetSRV().Get(), ImVec2(m_AtlasTex->Width() * m_ZoomRatio, m_AtlasTex->Height() * m_ZoomRatio)
 		, uv_min, uv_max, tint_col, border_col);
 
 	// SelectSpriteArea

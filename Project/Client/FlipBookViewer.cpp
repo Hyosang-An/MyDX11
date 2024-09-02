@@ -110,6 +110,8 @@ void FlipBookViewer::Update()
 {
     ImGui::Text("This is the FlipBookViewer.");
 
+    WheelCheck();
+
     // Get the flipbook from the owner
     Ptr<CFlipBook> flipBook = m_owner->GetFlipBook();
     int selectedSpriteIndex = m_inspector->GetSelectedSpriteIndex();
@@ -140,18 +142,19 @@ void FlipBookViewer::Update()
     ImVec4 background_col = ImVec4(0, 0, 0, 0);
 
     // 먼저 스프라이트 배경(알파 0)부터 출력
-    ImVec2 backgroundImagePos = ImGui::GetCursorPos();
-    ImGui::Image(atlasTexture->GetSRV().Get(), ImVec2(atlasTexture->Width() * backgroundSizeInAtlasUV.x, atlasTexture->Height() * backgroundSizeInAtlasUV.y), uv_min, uv_max, background_col, border_col);
+    ImVec2 backgroundImageLTPos = ImGui::GetCursorPos();
+    ImGui::Image(atlasTexture->GetSRV().Get(), ImVec2(atlasTexture->Width() * backgroundSizeInAtlasUV.x * m_ZoomRatio, atlasTexture->Height() * backgroundSizeInAtlasUV.y * m_ZoomRatio), uv_min, uv_max, background_col, border_col);
 
+    
     // 스프라이트 밑에 정보를 출력하기 위한 좌표 저장
     ImVec2 backgroundRectMin = ImGui::GetItemRectMin(); // 배경 이미지의 좌상단 좌표는 스크린 좌표 기준
     ImVec2 backgroundRectMax = ImGui::GetItemRectMax(); // 배경 이미지의 우하단 좌표는 스크린 좌표 기준
 
     // 스프라이트 출력
-    ImVec2 spriteImagePos = ImVec2(backgroundImagePos.x + ((backgroundSizeInAtlasUV.x - sliceSizeInAtlasUV.x) * 0.5f + offsetUV.x) * atlasTexture->Width(), backgroundImagePos.y + ((backgroundSizeInAtlasUV.y - sliceSizeInAtlasUV.y) * 0.5f + offsetUV.y) * atlasTexture->Height());
-    ImGui::SetCursorPos(spriteImagePos);    // 커서 위치를 배경 이미지의 시작 위치로 설정
-    ImGui::Image(atlasTexture->GetSRV().Get(), ImVec2(atlasTexture->Width() * sliceSizeInAtlasUV.x, atlasTexture->Height() * sliceSizeInAtlasUV.y), uv_min, uv_max, sprite_col, border_col);
-    ImGui::SetCursorPos(ImVec2(backgroundImagePos.x, backgroundImagePos.y + backgroundRectMax.y - backgroundRectMin.y + 20));
+    ImVec2 spriteImagePos = ImVec2(backgroundImageLTPos.x + ((backgroundSizeInAtlasUV.x - sliceSizeInAtlasUV.x) * 0.5f + offsetUV.x) * atlasTexture->Width() * m_ZoomRatio, backgroundImageLTPos.y + ((backgroundSizeInAtlasUV.y - sliceSizeInAtlasUV.y) * 0.5f + offsetUV.y) * atlasTexture->Height() * m_ZoomRatio);
+    ImGui::SetCursorPos(spriteImagePos);
+    ImGui::Image(atlasTexture->GetSRV().Get(), ImVec2(atlasTexture->Width() * sliceSizeInAtlasUV.x * m_ZoomRatio, atlasTexture->Height() * sliceSizeInAtlasUV.y * m_ZoomRatio), uv_min, uv_max, sprite_col, border_col);
+    ImGui::SetCursorPos(ImVec2(backgroundImageLTPos.x, backgroundImageLTPos.y + backgroundRectMax.y - backgroundRectMin.y + 20));
 
     // 십자선 그리기
     ImDrawList* drawList = ImGui::GetWindowDrawList();
