@@ -37,7 +37,7 @@ private:
     void EditorObjectProgress();
 
     void InitImGui();
-    void ImGuiProgress();
+    void ImGuiAndEditorObjProgress();
     void ImGuiTick();
     void ObserveContent();
 

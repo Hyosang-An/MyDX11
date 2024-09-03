@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "CEditorCameraScript.h"
+#include "Engine/CRenderMgr.h"
+
+#include "ImGui/imgui.h"
 
 CEditorCameraScript::CEditorCameraScript() :
 	CScript(-1),
@@ -71,14 +74,33 @@ void CEditorCameraScript::OrthoGraphicMove()
 
 	Transform()->SetRelativePos(vPos);
 
-	float Scale = Camera()->GetScale();
-	if (KEY_JUST_PRESSED(KEY::_8))
-		Scale += 0.1;
+	//double zoomRatio = Camera()->GetScale();
 
+	if (0 < ImGui::GetIO().MouseWheel)
+	{
+		m_ZoomRatio += 0.05f;
+	}
+
+	if (0 > ImGui::GetIO().MouseWheel)
+	{
+		m_ZoomRatio -= 0.05f;
+	}
 	if (KEY_JUST_PRESSED(KEY::_9))
-		Scale -= 0.1;
+		m_ZoomRatio += 0.1;
 
-	Camera()->SetScale(Scale);
+	if (KEY_JUST_PRESSED(KEY::_8))
+		m_ZoomRatio -= 0.1;
+
+	Camera()->SetScale(1.f/m_ZoomRatio);
+
+
+	wchar_t buffer[255]{}; // 결과를 저장할 버퍼
+	swprintf_s(buffer, L"Zoom Ratio : %.0f%%", m_ZoomRatio * 100);
+
+
+	// 줌 비율 출력 (백분율로)
+	CRenderMgr::GetInst()->AddText(buffer, Vec2(10, 50), 20, Vec4(255.f, 255.f, 255.f, 255.f), 0);
+
 }
 
 void CEditorCameraScript::PerspectiveMove()

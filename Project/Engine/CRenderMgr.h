@@ -5,6 +5,17 @@ class CGameObject;
 class CLight2D;
 class CStructuredBuffer;
 
+struct tTextInfo
+{
+	wstring Text;
+	Vector2 ScreenPos;
+	float FontSize;
+	Vector4 Color;
+
+	float LifeTime;
+	float accTime = 0.f;
+};
+
 class CRenderMgr :
 	public CSingleton<CRenderMgr>
 {
@@ -30,6 +41,8 @@ private:
 
 	bool					m_bEditorMode = false;	// Debug 모드면 true (Init에서 설정)
 
+	list<tTextInfo>		m_TextList;
+
 public:
 	void RegisterCamera(CCamera* _cam, int _camPriority);
 	void RegisterEditorCamera(CCamera* _Cam) { m_EditorCamera = _Cam; }
@@ -42,6 +55,9 @@ public:
 	void SetEditorMode(bool _Mode) { m_bEditorMode = _Mode; }
 
 	bool IsEditorMode() { return m_bEditorMode; }
+
+	// color : R, G, B, A는 0~255 사이의 값
+	void AddText(wstring _Text, Vector2 _ScreenPos, float _FontSize, Vector4 _Color, float _LifeTime);
 
 private:
 	void SetPostProcessTex();

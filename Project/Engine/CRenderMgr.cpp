@@ -9,6 +9,7 @@
 #include "CTimeMgr.h"
 #include "CAssetMgr.h"
 #include "CKeyMgr.h"
+#include "CFontMgr.h"
 
 #include "CGameObject.h"
 #include "CTransform.h"
@@ -56,6 +57,18 @@ void CRenderMgr::Init()
 }
 
 
+void CRenderMgr::AddText(wstring _Text, Vector2 _ScreenPos, float _FontSize, Vector4 _Color, float _LifeTime)
+{
+	tTextInfo Info;
+	Info.Text = _Text;
+	Info.ScreenPos = _ScreenPos;
+	Info.FontSize = _FontSize;
+	Info.Color = _Color;
+	Info.LifeTime = _LifeTime;
+
+	m_TextList.push_back(Info);
+}
+
 void CRenderMgr::SetPostProcessTex()
 {
 	for (int i = 0; i < CAssetMgr::GetInst()->GetPostProcessTextCnt(); i++)
@@ -102,6 +115,26 @@ void CRenderMgr::Tick()
 
 	// Time 정보 출력
 	CTimeMgr::GetInst()->Render();
+
+	// Text 정보 출력
+	list<tTextInfo>::iterator iter = m_TextList.begin();
+	for (; iter != m_TextList.end(); )
+	{
+		// Text 출력
+		auto color = FONT_RGBA((*iter).Color.x, (*iter).Color.y, (*iter).Color.z, (*iter).Color.w);
+		CFontMgr::GetInst()->DrawFont((*iter).Text.c_str(), (*iter).ScreenPos.x, (*iter).ScreenPos.y, (*iter).FontSize, color);
+
+		// 수명이 다한 Text 정보를 삭제
+		(*iter).accTime += EngineDT;
+		if ((*iter).LifeTime < (*iter).accTime)
+		{
+			iter = m_TextList.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
 
 	// Lightvec Clear
 	Clear();

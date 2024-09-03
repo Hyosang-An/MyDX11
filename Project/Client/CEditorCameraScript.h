@@ -6,6 +6,7 @@ class CEditorCameraScript :
 {
 private:
     float   m_Speed;
+	float   m_ZoomRatio = 1.f;
 
 public:
     virtual void Tick() override;

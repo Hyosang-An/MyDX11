@@ -52,9 +52,9 @@ void CEditorMgr::Progress()
 {
 	ShortCut();
 
-	EditorObjectProgress();
+	//EditorObjectProgress(); // ImGuiAndEditorObjProgress 에서 호출
 
-	ImGuiProgress();
+	ImGuiAndEditorObjProgress();
 
 	ObserveContent();
 }
@@ -62,7 +62,7 @@ void CEditorMgr::Progress()
 
 void CEditorMgr::ShortCut()
 {
-	if (KEY_JUST_PRESSED(KEY::I))
+	if (KEY_PRESSED(KEY::CTRL) && KEY_JUST_PRESSED(KEY::I))
 	{
 		EditorUI* pUI = FindEditorUI("Inspector");
 

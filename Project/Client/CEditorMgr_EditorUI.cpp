@@ -174,7 +174,7 @@ void CEditorMgr::CreateEditorUI()
 }
 
 
-void CEditorMgr::ImGuiProgress()
+void CEditorMgr::ImGuiAndEditorObjProgress()
 {
     // Start ImGui
     ImGui_ImplDX11_NewFrame();
@@ -186,6 +186,9 @@ void CEditorMgr::ImGuiProgress()
 
     // ImGui Tick
     ImGuiTick();
+
+	// Editor Object Progress
+    EditorObjectProgress();
 
     // ImGui Render    
     ImGui::Render();
