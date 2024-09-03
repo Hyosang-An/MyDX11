@@ -5,6 +5,7 @@ class CRigidBody :
 {
 public:
 	CRigidBody();
+	CRigidBody(const CRigidBody& _other);
 	~CRigidBody();
 	virtual CRigidBody* Clone() { return new CRigidBody(*this); }
 

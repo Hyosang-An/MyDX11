@@ -362,9 +362,6 @@ void FlipBookInspector::SaveFlipBook(Ptr<CFlipBook> FlipBookToSave)
 						// Save Selected FlipBook
 						FlipBookToSave->Save(pszFilePath);
 
-						// AssetMgr에 FlipBook 추가
-						CAssetMgr::GetInst()->AddAsset(CPathMgr::GetInst()->GetRelativePath(pszFilePath), FlipBookToSave);
-
 						// 마지막 디렉토리 업데이트
 						path filePath = pszFilePath;
 						m_lastFlipBookDirectory = filePath.parent_path().wstring();
@@ -604,6 +601,7 @@ void FlipBookInspector::SelectFlipBookByDialog()
 						}
 
 						m_owner->SetFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(relativePath));
+						m_selectedSpriteIndex = -1;
 
 						path filePath = pszFilePath;
 						m_lastFlipBookDirectory = filePath.parent_path().wstring();

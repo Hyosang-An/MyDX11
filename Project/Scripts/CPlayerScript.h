@@ -20,6 +20,7 @@ class CPlayerScript :
 {
 public:
     CPlayerScript();
+	CPlayerScript(const CPlayerScript& _Other);
     ~CPlayerScript();
     virtual CPlayerScript* Clone() { return new CPlayerScript(*this); }
 

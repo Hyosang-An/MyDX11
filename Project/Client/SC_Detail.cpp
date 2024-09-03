@@ -68,15 +68,17 @@ void SE_Detail::Atlas()
 	}
 
 	ImGui::SameLine();
-	if (ImGui::Button("##AtlasTexBtn", ImVec2(18.f, 18.f)))
+	if (ImGui::Button("...##AtlasTexBtn", ImVec2(18.f, 18.f)))
 	{
-		ListUI* pListUI = (ListUI*)CEditorMgr::GetInst()->FindEditorUI("List");
+		/*ListUI* pListUI = (ListUI*)CEditorMgr::GetInst()->FindEditorUI("List");
 		pListUI->SetName("Texture");
 		vector<string> vecTexNames;
 		CAssetMgr::GetInst()->GetAssetNames(ASSET_TYPE::TEXTURE, vecTexNames);
 		pListUI->AddList(vecTexNames);
 		pListUI->AddDelegate(this, (DELEGATE_1)&SE_Detail::SelectTexture);
-		pListUI->SetActive(true);
+		pListUI->SetActive(true);*/
+
+		SelectAtlasByDialog();
 	}
 }
 
@@ -113,13 +115,13 @@ void SE_Detail::SpriteInfo()
 	ImGui::Text("Sprite Select Mode");
 	ImGui::SameLine(140);
 	ImGui::SetNextItemWidth(180.f);
-	const char* SpriteSelectModes[] = {"From XML", "Click And Drag", "Auto Select On Click", "Manual Specification" };
+	const char* SpriteSelectModes[] = { "From XML", "Click And Drag", "Auto Select On Click", "Manual Specification" };
 	if (ImGui::BeginCombo("##SpriteSelectMode", SpriteSelectModes[(int)m_SelectMode]))
 	{
 		if (ImGui::Selectable("FromXML"))
 			m_SelectMode = SpriteSlectMode::FromXML;
 		if (ImGui::Selectable("ClickAndDrag"))
-			m_SelectMode = SpriteSlectMode::ClickAndDrag; 
+			m_SelectMode = SpriteSlectMode::ClickAndDrag;
 		if (ImGui::Selectable("AutoSelectOnClick"))
 			m_SelectMode = SpriteSlectMode::AutoSelectOnClick;
 		if (ImGui::Selectable("ManualSpecification"))
@@ -242,12 +244,12 @@ void SE_Detail::SpriteInfo()
 
 
 		// 파일 이름 설정
-		ImGui::Text("File Name");
+		ImGui::Text("Sprite Name");
 		ImGui::SameLine(120);
 		string spriteName = string(m_SpriteName.begin(), m_SpriteName.end());
 		char buff[255] = {};
 		sprintf_s(buff, "%s", spriteName.c_str());
-		ImGui::InputText("##FileName", buff, 255);
+		ImGui::InputText("##Sprite Name Manual Mode", buff, 255);
 		spriteName = buff;
 		m_SpriteName = wstring(spriteName.begin(), spriteName.end());
 
@@ -295,7 +297,7 @@ void SE_Detail::SpriteInfo()
 
 			// TextureAtlas 엘리먼트 찾기
 			XMLElement* textureAtlas = xmlDoc.FirstChildElement("TextureAtlas");
-			if (textureAtlas == nullptr) 
+			if (textureAtlas == nullptr)
 			{
 				MessageBox(NULL, L"No TextureAtlas element found!", L"Error", MB_OK);
 				return;
@@ -304,7 +306,7 @@ void SE_Detail::SpriteInfo()
 			m_vecSpriteRectsFromXML.clear();
 
 			// 각 sprite 엘리먼트를 순회하며 RECT 정보 추출
-			for (XMLElement* sprite = textureAtlas->FirstChildElement("sprite"); sprite != nullptr; sprite = sprite->NextSiblingElement("sprite")) 
+			for (XMLElement* sprite = textureAtlas->FirstChildElement("sprite"); sprite != nullptr; sprite = sprite->NextSiblingElement("sprite"))
 			{
 				const char* name = sprite->Attribute("n");
 				int x, y, w, h;
@@ -350,18 +352,18 @@ void SE_Detail::SpriteInfo()
 
 
 		// 파일 이름 설정
-		ImGui::Text("File Name");
+		ImGui::Text("Sprite Name");
 		ImGui::SameLine(120);
 		string spriteName = string(m_SpriteName.begin(), m_SpriteName.end());
 		char buff[255] = {};
 		sprintf_s(buff, "%s", spriteName.c_str());
-		ImGui::InputText("##FileName", buff, 255);
+		ImGui::InputText("##Sprite Name XML Mode", buff, 255);
 		spriteName = buff;
 		m_SpriteName = wstring(spriteName.begin(), spriteName.end());
 
 
 		// "Save All Sprites" 버튼
-		ImGui::BeginDisabled(m_vecSpriteRectsFromXML.empty() || m_AtlasTex == nullptr);
+		ImGui::BeginDisabled(m_vecSpriteRectsFromXML.empty() || m_AtlasTex == nullptr || spriteName.empty());
 		if (ImGui::Button("Save All Sprites"))
 			SaveAllSprites_FromXML();
 		ImGui::EndDisabled();
@@ -441,19 +443,19 @@ void SE_Detail::SaveSprite()
 			// 파일 저장 대화상자를 표시합니다.
 			hr = pFileSave->Show(NULL);
 
-			if (SUCCEEDED(hr)) 
+			if (SUCCEEDED(hr))
 			{
 				IShellItem* pItem;
 
 				// 사용자가 선택한 파일의 IShellItem을 가져옵니다.
 				hr = pFileSave->GetResult(&pItem);
-				if (SUCCEEDED(hr)) 
+				if (SUCCEEDED(hr))
 				{
 					PWSTR pszFilePath;
 
 					// IShellItem에서 파일 경로를 가져옵니다.
 					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-					if (SUCCEEDED(hr)) 
+					if (SUCCEEDED(hr))
 					{
 						// 여기에서 pszFilePath 경로를 사용하여 파일을 저장합니다.
 
@@ -462,7 +464,7 @@ void SE_Detail::SaveSprite()
 						pSprite->SetBackgroundPixelSize(m_BackgroundSize);
 
 						pSprite->Save(pszFilePath);
-						
+
 
 						// 마지막 파일명 및 디렉토리 업데이트
 						path filePath = pszFilePath;
@@ -569,6 +571,77 @@ HRESULT SE_Detail::SelectSpriteSaveFolderByDialog()
 			}
 
 			pFolderOpen->Release();
+		}
+		CoUninitialize();
+	}
+
+	return hr;
+}
+
+HRESULT SE_Detail::SelectAtlasByDialog()
+{
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+	if (SUCCEEDED(hr)) {
+		IFileOpenDialog* pFileOpen;
+
+		// CLSID_FileOpenDialog 클래스의 인스턴스를 생성하고 IFileOpenDialog 인터페이스 포인터를 가져옵니다.
+		hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+
+		if (SUCCEEDED(hr)) {
+			// 파일 형식 필터를 설정합니다.
+			COMDLG_FILTERSPEC rgSpec[] = {
+				{ L"Texture Files", L"*.png;*.jpg;*.bmp" },
+				{ L"All Files", L"*.*" }
+			};
+			pFileOpen->SetFileTypes(ARRAYSIZE(rgSpec), rgSpec); // 필터를 대화상자에 설정합니다.
+			pFileOpen->SetFileTypeIndex(1); // 기본 파일 형식을 설정합니다. rgSpec중 어떤 것을 기본값으로 할지. Index는 1부터.
+			pFileOpen->SetDefaultExtension(L"png"); // 기본 확장자를 설정합니다.
+			pFileOpen->SetTitle(L"Select Texture File"); // 대화상자의 제목을 설정합니다.
+
+			// 마지막 경로를 초기 폴더로 설정
+			IShellItem* psiFolder = nullptr;
+			wstring defaultDirectory;
+			if (m_lastDirectoryInDialog.empty())
+				defaultDirectory = CPathMgr::GetInst()->GetContentPath() + L"animation";
+			else
+				defaultDirectory = m_lastDirectoryInDialog;
+			hr = SHCreateItemFromParsingName(defaultDirectory.c_str(), NULL, IID_PPV_ARGS(&psiFolder));
+			if (SUCCEEDED(hr) && psiFolder) {
+				pFileOpen->SetFolder(psiFolder);
+				psiFolder->Release();
+			}
+
+			// 파일 열기 대화상자를 표시합니다.
+			hr = pFileOpen->Show(NULL);
+
+			if (SUCCEEDED(hr)) {
+				IShellItem* pItem;
+
+				// 사용자가 선택한 파일의 IShell
+				hr = pFileOpen->GetResult(&pItem);
+				if (SUCCEEDED(hr)) {
+					PWSTR pszFilePath;
+
+					// IShellItem에서 파일 경로를 가져옵니다.
+					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+					if (SUCCEEDED(hr)) {
+						// 여기에서 pszFilePath 경로를 사용하여 파일을 엽니다.
+
+						wstring relativePath = CPathMgr::GetInst()->GetRelativePath(pszFilePath);
+						Ptr<CTexture> AtlasTex = CAssetMgr::GetInst()->FindAsset<CTexture>(relativePath);
+						SetAtlasTex(AtlasTex);
+
+						// 마지막 파일명 및 디렉토리 업데이트
+						path filePath = pszFilePath;
+						m_lastFileName = filePath.stem().wstring();
+						m_lastDirectoryInDialog = filePath.parent_path().wstring();
+						// 파일 경로 사용 후 메모리를 해제합니다.
+						CoTaskMemFree(pszFilePath);
+					}
+					pItem->Release(); // IShellItem 포인터를 해제합니다.
+				}
+			}
+			pFileOpen->Release();
 		}
 		CoUninitialize();
 	}

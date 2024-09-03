@@ -8,9 +8,37 @@ CRigidBody::CRigidBody() :
 {
 	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Max Speed", &m_fMaxSpeed);
 	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Max Falling Speed", &m_fMaxFallingSpeed);
-	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Gravity Accelaration", &m_fGravityAccelaration);
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Gravity Accelaration!", &m_fGravityAccelaration);
+
+	// 디버깅
+	auto adress = &m_fGravityAccelaration;
 
 	// 현재 속도
+	AddScriptParam(SCRIPT_PARAM_TYPE::VEC3, "Velocity", &m_vVelocity);
+}
+
+CRigidBody::CRigidBody(const CRigidBody& _other) :
+	CScript((UINT)SCRIPT_TYPE::RIGIDBODY)
+{
+	m_fMass = _other.m_fMass;
+	m_vVelocity = _other.m_vVelocity;
+	m_vForce = _other.m_vForce;
+	m_vAcceleration = _other.m_vAcceleration;
+
+	m_bUseGravity = _other.m_bUseGravity;
+	m_fGravityAccelaration = _other.m_fGravityAccelaration;
+
+	m_fMaxSpeed = _other.m_fMaxSpeed;
+	m_fMaxFallingSpeed = _other.m_fMaxFallingSpeed;
+
+	m_bOnGround = _other.m_bOnGround;
+	m_bIsDangle = _other.m_bIsDangle;
+	m_bIsDash = _other.m_bIsDash;
+
+	// 노출시킬	데이터
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Max Speed", &m_fMaxSpeed);
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Max Falling Speed", &m_fMaxFallingSpeed);
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Gravity Accelaration!", &m_fGravityAccelaration);
 	AddScriptParam(SCRIPT_PARAM_TYPE::VEC3, "Velocity", &m_vVelocity);
 }
 
@@ -25,6 +53,9 @@ void CRigidBody::Begin()
 
 void CRigidBody::Tick()
 {
+	// 디버깅
+	auto adress = &m_fGravityAccelaration;
+
 	// 현재 플레이어 상태
 	PLAYER_STATE curState = GetOwner()->GetScript<CPlayerScript>()->GetCurState();
 

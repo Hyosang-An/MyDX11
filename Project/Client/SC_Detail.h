@@ -39,6 +39,7 @@ private:
     void SpriteInfo();
 
     HRESULT SelectSpriteSaveFolderByDialog();
+	HRESULT SelectAtlasByDialog();
 
 public:
     void SetAtlasTex(Ptr<CTexture> _Tex);

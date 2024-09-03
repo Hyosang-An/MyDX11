@@ -142,6 +142,8 @@ void CFlipBookComponent::Play(wstring _FliBookName, float _FPS, bool _Repeat)
 
 void CFlipBookComponent::Play(wstring _FliBookName, bool _Repeat)
 {
+	// _Repeat 의 기본값은 true
+
 	auto iter = m_mapFlipBook.find(_FliBookName);
 	if (iter == m_mapFlipBook.end())
 	{

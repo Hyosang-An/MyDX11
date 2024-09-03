@@ -9,6 +9,26 @@ CPlayerScript::CPlayerScript() :
 	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "MagnitudeOfMoveForce", &m_MagnitudeOfMoveForce);
 }
 
+CPlayerScript::CPlayerScript(const CPlayerScript& _Other) :
+	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
+{
+	// _other에서 변수들 얕은 복사
+	m_CurRoomIdx = 0;
+
+
+	m_MagnitudeOfMoveForce = _Other.m_MagnitudeOfMoveForce;
+	m_MaxRunSpeed = _Other.m_MaxRunSpeed;
+	m_JumpSpeed = _Other.m_JumpSpeed;
+	m_DashSpeed = _Other.m_DashSpeed;
+	m_ClimbSpeed = _Other.m_ClimbSpeed;
+	m_SpeedBeforeDash = _Other.m_SpeedBeforeDash;
+	m_DashTime = _Other.m_DashTime;
+	m_DashTimeRemained = _Other.m_DashTimeRemained;
+	m_MaxFallingSpeed = _Other.m_MaxFallingSpeed;
+
+	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "MagnitudeOfMoveForce", &m_MagnitudeOfMoveForce);
+}
+
 CPlayerScript::~CPlayerScript()
 {
 }
@@ -47,6 +67,9 @@ void CPlayerScript::Tick()
 
 void CPlayerScript::KeyCheck()
 {
+	// 디버그
+	auto owner = GetOwner();
+
 	//OnGround 상태 업데이트
 	m_bOnGround = m_RigidBody->IsOnGround();
 

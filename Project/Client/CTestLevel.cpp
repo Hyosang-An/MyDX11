@@ -288,28 +288,30 @@ void CTestLevel::CreateCelesteTestLevel()
 
 
 	//플레이어 오브젝트
-	CGameObject* pPlayer = new CGameObject;
-	pPlayer->SetName(L"Player");
-	pPlayer->AddComponent(new CTransform);
-	pPlayer->AddComponent(new CMeshRender);
-	pPlayer->AddComponent(new CCollider2D);
-	pPlayer->AddComponent(new CFlipBookComponent);
-	pPlayer->AddComponent(new CPlayerScript);
-	pPlayer->AddComponent(new CRigidBody);
+	//CGameObject* pPlayer = new CGameObject;
+	//pPlayer->SetName(L"Player");
+	//pPlayer->AddComponent(new CTransform);
+	//pPlayer->AddComponent(new CMeshRender);
+	//pPlayer->AddComponent(new CCollider2D);
+	//pPlayer->AddComponent(new CFlipBookComponent);
+	//pPlayer->AddComponent(new CPlayerScript);
+	//pPlayer->AddComponent(new CRigidBody);
 
-	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
-	pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
+	//pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+	//pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
 
-	pPlayer->Collider2D()->SetIndependentScale(false);
-	pPlayer->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
-	pPlayer->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
+	//pPlayer->Collider2D()->SetIndependentScale(false);
+	//pPlayer->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	//pPlayer->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
 
-	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pPlayer->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+	//pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	//pPlayer->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
 
 	//pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Idle\\Idle.flip"));
 	//pPlayer->FlipBookComponent()->Play(L"Idle", 10, true);
 
+	auto pPlayer = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Player_FlipBook_Added.prefab")->Instantiate();
+	pPlayer->FlipBookComponent()->Play(L"Idle");
 	TestLevel->AddObject(LAYER::PLAYER, pPlayer);
 
 

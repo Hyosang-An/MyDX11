@@ -26,7 +26,7 @@ public:
 	void RemoveFlipBook(const wstring& _FlipBookName);
     Ptr<CFlipBook> FindFlipBook(const wstring& _FlipBookName);
     void Play(wstring _FliBookName, float _FPS, bool _Repeat);
-	void Play(wstring _FliBookName, bool _Repeat);
+    void Play(wstring _FliBookName, bool _Repeat = true);
     Ptr<CSprite> GetCurSprite() { return m_CurFrmSprite; }
     void Reset();
     void Binding();
