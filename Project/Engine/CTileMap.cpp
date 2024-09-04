@@ -93,6 +93,27 @@ void CTileMap::SetRowCol(UINT _Row, UINT _Col)
 	UINT prevCol = m_Col;
 	m_Row = _Row;
 	m_Col = _Col;
+	
+	// 자식 오브젝트가 있다면 원래의 Row, Col위치를 유지하도록
+	auto vecChildren = GetOwner()->GetChildren();
+	for (size_t i = 0; i < vecChildren.size(); i++)
+	{
+		if (vecChildren[i]->TileMap() == nullptr)
+			continue;
+
+		Vec3 vRelativePos = vecChildren[i]->Transform()->GetRelativePos();
+		Vec3 vRelativeScale = vecChildren[i]->Transform()->GetRelativeScale();
+
+		int prevChildRowPos = -vRelativePos.y * prevRow;
+		int prevChildColPos = vRelativePos.x * prevCol;
+
+		
+		Vec3 vNewRelativePos = Vec3((float)prevChildColPos / m_Col, -(float)prevChildRowPos / m_Row, vRelativePos.z);
+		vecChildren[i]->Transform()->SetRelativePos(vNewRelativePos);
+
+		Vec3 vNewRelativeScale = Vec3(vRelativeScale.x * (prevCol / (float)m_Col), vRelativeScale.y * (prevRow / (float)m_Row), vRelativeScale.z);
+		vecChildren[i]->Transform()->SetRelativeScale(vNewRelativeScale);
+	}
 
 	ChangeTileMapSize();
 
@@ -138,6 +159,16 @@ void CTileMap::SetRowCol(UINT _Row, UINT _Col)
 void CTileMap::SetTileSize(Vec2 _Size)
 {
 	m_TileSize = _Size;
+
+	// 자식 타일맵이 있다면 그것도 같이 변경
+	auto vecChildren = GetOwner()->GetChildren();
+	for (size_t i = 0; i < vecChildren.size(); i++)
+	{
+		if (vecChildren[i]->TileMap() == nullptr)
+			continue;
+
+		vecChildren[i]->TileMap()->m_TileSize = _Size;
+	}
 
 	ChangeTileMapSize();
 }
