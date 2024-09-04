@@ -24,6 +24,7 @@ private:
 	void LevelPlayPauseStopButton();
 
 private:
+	void AddComponent();
     void AddScript();
     void LoadLevel(wstring _path);
 

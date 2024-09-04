@@ -473,6 +473,9 @@ void CPlayerScript::UpdateAnimation()
 
 void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider)
 {
+	if (m_RigidBody == nullptr)
+	return;
+
 	// 충돌한 오브젝트의 Layer에 따른 분류
 	switch (LAYER(_OtherObject->GetLayerIdx()))
 	{
@@ -603,6 +606,9 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 
 void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider)
 {
+	if (m_RigidBody == nullptr)
+		return;
+
 	// 충돌한 오브젝트의 Layer에 따른 분류
 	switch (LAYER(_OtherObject->GetLayerIdx()))
 	{
@@ -631,6 +637,9 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 
 void CPlayerScript::EndOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider)
 {
+	if (m_RigidBody == nullptr)
+		return;
+
 	switch (LAYER(_OtherObject->GetLayerIdx()))
 	{
 		case LAYER::WALL_OR_GROUND:

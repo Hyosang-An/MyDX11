@@ -78,11 +78,13 @@ void TileMapUI::Update()
 
 			ImGui::EndDragDropTarget();
 		}
-		ImGui::SameLine();
-		if (ImGui::Button("...##Tile AtlasTexture"))
-		{
-			SelectTileMapAtlasByDialog();
-		}
+
+	}
+
+	ImGui::SameLine();
+	if (ImGui::Button("...##Tile AtlasTexture"))
+	{
+		SelectTileMapAtlasByDialog();
 	}
 
 	// TileResolution 설정
@@ -171,7 +173,7 @@ void TileMapUI::Update()
 		// 타일맵 기준 마우스 world 좌표 계산
 		ImGui::Text("Mouse Pos In TileMap");
 		ImGui::SameLine(140);
-		Vec3 vMousePosInTileMap = vMouseWorldPos - m_selectedTileMap->Transform()->GetRelativePos();
+		Vec3 vMousePosInTileMap = vMouseWorldPos - m_selectedTileMap->Transform()->GetWorldPos();
 		ImGui::InputFloat3("##MousePosInTileMap", vMousePosInTileMap, "%.3f", ImGuiInputTextFlags_ReadOnly);
 
 		// 마우스가 가리키는 타일의 row col 확인
@@ -185,7 +187,7 @@ void TileMapUI::Update()
 
 
 		// 전체 타일맵 가장자리 테두리 그리기 (DebugRender)
-		Vec3 vTileMapLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos();
+		Vec3 vTileMapLTWorldPos = m_selectedTileMap->Transform()->GetWorldPos();
 		Vec3 vTileMapRBWorldPos = vTileMapLTWorldPos + Vec3(vTileMapRowCol.y * vTileSize.x, -vTileMapRowCol.x * vTileSize.y, 0.f);
 		DrawDebugRect((vTileMapLTWorldPos + vTileMapRBWorldPos) * 0.5f, Vec3(vTileMapRowCol.y * vTileSize.x, vTileMapRowCol.x * vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 0.f, 1.f, 1.f), 0.f, false);
 
@@ -231,7 +233,8 @@ void TileMapUI::Update()
 				uv_max = ImVec2((float)(col + 1) / atlasMaxCol, (float)(row + 1) / atlasMaxRow);
 			}
 			float tileAspectRatio = atlasTileResolution.x / atlasTileResolution.y;
-			ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
+			if (pAtlasTex != nullptr)
+				ImGui::Image(pAtlasTex->GetSRV().Get(), ImVec2(50, 50 / tileAspectRatio), uv_min, uv_max, tint_col, border_col);
 
 			// 타일 이미지 좌클릭시 팝업 창 띄우고 아틀라스이미지를 보여주기
 			if (ImGui::IsItemClicked(0))
@@ -284,7 +287,7 @@ void TileMapUI::Update()
 				m_MouseTileRowCol.y >= 0 && m_MouseTileRowCol.y < vTileMapRowCol.y)
 			{
 				// 마우스가 호버하는 타일의 좌상단 world 좌표
-				Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(m_MouseTileRowCol.y * vTileSize.x, -m_MouseTileRowCol.x * vTileSize.y, 0.f);
+				Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetWorldPos() + Vec3(m_MouseTileRowCol.y * vTileSize.x, -m_MouseTileRowCol.x * vTileSize.y, 0.f);
 
 				// DebugRender 그리기
 				DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);
@@ -390,7 +393,7 @@ void TileMapUI::Update()
 				{
 
 					// 마우스가 호버하는 타일의 좌상단 world 좌표
-					Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(m_MouseTileRowCol.y * vTileSize.x, -m_MouseTileRowCol.x * vTileSize.y, 0.f);
+					Vec3 vMouseTileLTWorldPos = m_selectedTileMap->Transform()->GetWorldPos() + Vec3(m_MouseTileRowCol.y * vTileSize.x, -m_MouseTileRowCol.x * vTileSize.y, 0.f);
 
 					// DebugRender 그리기
 					DrawDebugRect(vMouseTileLTWorldPos + Vec3(vTileSize.x * 0.5f, -vTileSize.y * 0.5f, 0), Vec3(vTileSize.x, vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 0.f, 1.f), 0.f, false);
@@ -412,8 +415,8 @@ void TileMapUI::Update()
 					int colliderRBCol = max((int)m_MouseClickTileRowCol.y, (int)m_MouseReleaseTileRowCol.y);
 
 					// Collider의 타일 LT, RB world 좌표
-					vColliderLTWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3(colliderLTCol * vTileSize.x, -colliderLTRow * vTileSize.y, 0.f);
-					vColliderRBWorldPos = m_selectedTileMap->Transform()->GetRelativePos() + Vec3((colliderRBCol + 1) * vTileSize.x, -(colliderRBRow + 1) * vTileSize.y, 0.f);
+					vColliderLTWorldPos = m_selectedTileMap->Transform()->GetWorldPos() + Vec3(colliderLTCol * vTileSize.x, -colliderLTRow * vTileSize.y, 0.f);
+					vColliderRBWorldPos = m_selectedTileMap->Transform()->GetWorldPos() + Vec3((colliderRBCol + 1) * vTileSize.x, -(colliderRBRow + 1) * vTileSize.y, 0.f);
 
 					// DebugRender 그리기
 					DrawDebugRect((vColliderLTWorldPos + vColliderRBWorldPos) * 0.5f, Vec3((colliderRBCol - colliderLTCol + 1)* vTileSize.x, (colliderRBRow - colliderLTRow + 1)* vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(0.f, 1.f, 0.f, 1.f), 0.f, false);
@@ -428,11 +431,11 @@ void TileMapUI::Update()
 						
 
 						// 충돌체의 위치는 타일맵의 상대 좌표
-						Vec3 vColliderRelativePos = ((vColliderLTWorldPos + vColliderRBWorldPos) * 0.5f - m_selectedTileMap->Transform()->GetRelativePos()) / m_selectedTileMap->GetOwner()->Transform()->GetRelativeScale();
+						Vec3 vColliderRelativePos = ((vColliderLTWorldPos + vColliderRBWorldPos) * 0.5f - m_selectedTileMap->Transform()->GetWorldPos()) / m_selectedTileMap->GetOwner()->Transform()->GetWorldScale();
 						pColliderObj->Transform()->SetRelativePos(vColliderRelativePos);
 
 						// 충돌체의 크기는 타일맵의 상대 크기
-						Vec3 vColliderRelativeScale = Vec3((colliderRBCol - colliderLTCol + 1) * vTileSize.x , (colliderRBRow - colliderLTRow + 1) * vTileSize.y, 1.f) / m_selectedTileMap->GetOwner()->Transform()->GetRelativeScale();
+						Vec3 vColliderRelativeScale = Vec3((colliderRBCol - colliderLTCol + 1) * vTileSize.x , (colliderRBRow - colliderLTRow + 1) * vTileSize.y, 1.f) / m_selectedTileMap->GetOwner()->Transform()->GetWorldScale();
 						pColliderObj->Transform()->SetRelativeScale(vColliderRelativeScale);
 						pColliderObj->Collider2D()->SetScale(Vec3(1, 1, 1));
 
@@ -483,7 +486,8 @@ void TileMapUI::Update()
 	ImVec2 last_content_pos = ImGui::GetCursorPos();
 	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
 
-	SetChildSize(content_size);
+	//SetChildSize(content_size);
+	SetChildSize(ImVec2(0, 800));
 }
 
 
@@ -551,7 +555,7 @@ void TileMapUI::SelectTileMapAtlasByDialog()
 						auto& vecTileInfo = m_selectedTileMap->GetTileInfoVec();
 						for (size_t i = 0; i < vecTileInfo.size(); ++i)
 						{
-							vecTileInfo[i].ImgIdx = 0;
+							vecTileInfo[i].ImgIdx = -1;
 						}
 
 						m_lastTextureDirectory = filePath.parent_path().wstring();

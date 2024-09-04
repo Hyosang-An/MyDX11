@@ -10,8 +10,8 @@ CTileMap::CTileMap()
 	: CRenderComponent(COMPONENT_TYPE::TILEMAP)
 	, m_Row(1)
 	, m_Col(1)
-	, m_AtlasMaxRow(0)
-	, m_AtlasMaxCol(0)
+	, m_AtlasMaxRow(1)
+	, m_AtlasMaxCol(1)
 	, m_structuredBuffer(nullptr)
 {
 	SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
@@ -46,8 +46,24 @@ CTileMap::~CTileMap()
 void CTileMap::Init()
 {
 	// 행, 렬 설정해서 구조화버퍼 크기 조정
-	SetRowCol(m_Row, m_Col);
-	SetTileSize(m_TileSize);
+	//SetRowCol(m_Row, m_Col);
+	//SetTileSize(m_TileSize);
+
+
+	// m_vecTileInfo와 구조화 버퍼 초기화 (ChangeTileMapSize를 여기서 해버리면 자식 타일맵 오브젝트를 로드할 때 문제가 생김)
+
+	// 타일 개수
+	UINT TileCount = m_Row * m_Col;
+
+	m_vecTileInfo.resize(TileCount);
+
+	// 타일정보를 전달받아서 t 레지스터에 전달시킬 구조화버퍼가 타일 전체 데이터 사이즈보다 작으면 리사이즈
+	auto elementsize = m_structuredBuffer->GetElementSize();
+	auto tileinfosize = sizeof(tTileInfo) * TileCount;
+	if (m_structuredBuffer->GetBufferSize() < sizeof(tTileInfo) * TileCount)
+	{
+		m_structuredBuffer->Create(sizeof(tTileInfo), TileCount);
+	}
 }
 
 void CTileMap::FinalTick()
@@ -129,7 +145,8 @@ void CTileMap::SetTileSize(Vec2 _Size)
 void CTileMap::ChangeTileMapSize()
 {
 	Vec2 vSize = m_TileSize * Vec2((float)m_Col, (float)m_Row);
-	Transform()->SetRelativeScale(vSize.x, vSize.y, 1.f);
+	//Transform()->SetRelativeScale(vSize.x, vSize.y, 1.f);
+	Transform()->SetWorldScale(Vec3(vSize.x, vSize.y, 1.f));
 }
 
 void CTileMap::SetAtlasTexture(Ptr<CTexture> _Atlas, Vec2 _tileResolution)
@@ -162,51 +179,105 @@ void CTileMap::SetAtlasTileResolution(Vec2 _TileResolution)
 
 void CTileMap::SaveToFile(FILE* _File)
 {
-	// 부모클래스인 RenderComponent 의 SaveToFile 호출
+	//// 부모클래스인 RenderComponent 의 SaveToFile 호출
+	//SaveDataToFile(_File);
+
+	//fwrite(&m_Col, sizeof(int), 1, _File);
+	//fwrite(&m_Row, sizeof(int), 1, _File);
+
+	//fwrite(&m_TileSize, sizeof(Vec2), 1, _File);
+	//fwrite(&m_AtlasTileResolution, sizeof(Vec2), 1, _File);
+
+	//for (size_t i = 0; i < m_vecTileInfo.size(); ++i)
+	//{
+	//	fwrite(&m_vecTileInfo[i], sizeof(tTileInfo), 1, _File);
+	//}
+
+	//// 아틀라스 텍스쳐
+	//SaveAssetRef(m_TileAtlas, _File);
+
+
+	// =========================================
+
 	SaveDataToFile(_File);
 
 	fwrite(&m_Col, sizeof(int), 1, _File);
 	fwrite(&m_Row, sizeof(int), 1, _File);
 
 	fwrite(&m_TileSize, sizeof(Vec2), 1, _File);
+	SaveAssetRef(m_TileAtlas, _File);
 	fwrite(&m_AtlasTileResolution, sizeof(Vec2), 1, _File);
+	fwrite(&m_AtlasTileSliceUV, sizeof(Vec2), 1, _File);
+
+	fwrite(&m_AtlasMaxRow, sizeof(int), 1, _File);
+	fwrite(&m_AtlasMaxCol, sizeof(int), 1, _File);
+
+	// m_vecTileInfo 개수 저장
+	size_t count = m_vecTileInfo.size();
+	fwrite(&count, sizeof(size_t), 1, _File);
 
 	for (size_t i = 0; i < m_vecTileInfo.size(); ++i)
 	{
 		fwrite(&m_vecTileInfo[i], sizeof(tTileInfo), 1, _File);
 	}
-
-	// 아틀라스 텍스쳐
-	SaveAssetRef(m_TileAtlas, _File);
 }
 
 void CTileMap::LoadFromFile(FILE* _File)
 {
-	// 부모클래스인 RenderComponent 의 LoadFromFile 호출
+	//// 부모클래스인 RenderComponent 의 LoadFromFile 호출
+	//LoadDataFromFile(_File);
+	//
+	//int col = 0;
+	//int row = 0;
+
+	//fread(&col, sizeof(int), 1, _File);
+	//fread(&row, sizeof(int), 1, _File);
+
+	//SetRowCol(row, col);
+
+	//fread(&m_TileSize, sizeof(Vec2), 1, _File);
+	//fread(&m_AtlasTileResolution, sizeof(Vec2), 1, _File);
+
+	//SetTileSize(m_TileSize);
+
+	//for (size_t i = 0; i < m_vecTileInfo.size(); ++i)
+	//{
+	//	fread(&m_vecTileInfo[i], sizeof(tTileInfo), 1, _File);
+	//}
+
+	//// 아틀라스 텍스쳐
+	//LoadAssetRef(m_TileAtlas, _File);
+	//if (nullptr != m_TileAtlas)
+	//{
+	//	SetAtlasTexture(m_TileAtlas, m_AtlasTileResolution);
+	//}
+
+
+	// =========================================
+
 	LoadDataFromFile(_File);
-	
-	int col = 0;
-	int row = 0;
 
-	fread(&col, sizeof(int), 1, _File);
-	fread(&row, sizeof(int), 1, _File);
-
-	SetRowCol(row, col);
+	fread(&m_Col, sizeof(int), 1, _File);
+	fread(&m_Row, sizeof(int), 1, _File);
 
 	fread(&m_TileSize, sizeof(Vec2), 1, _File);
+	LoadAssetRef(m_TileAtlas, _File);
 	fread(&m_AtlasTileResolution, sizeof(Vec2), 1, _File);
+	fread(&m_AtlasTileSliceUV, sizeof(Vec2), 1, _File);
 
-	SetTileSize(m_TileSize);
+	fread(&m_AtlasMaxRow, sizeof(int), 1, _File);
+	fread(&m_AtlasMaxCol, sizeof(int), 1, _File);
 
+	// m_vecTileInfo 개수 로드
+	size_t count = 0;
+	fread(&count, sizeof(size_t), 1, _File);
+
+	// m_vecTileInfo 리사이즈
+	m_vecTileInfo.resize(count);
+
+	// m_vecTileInfo 로드
 	for (size_t i = 0; i < m_vecTileInfo.size(); ++i)
 	{
 		fread(&m_vecTileInfo[i], sizeof(tTileInfo), 1, _File);
-	}
-
-	// 아틀라스 텍스쳐
-	LoadAssetRef(m_TileAtlas, _File);
-	if (nullptr != m_TileAtlas)
-	{
-		SetAtlasTexture(m_TileAtlas, m_AtlasTileResolution);
 	}
 }

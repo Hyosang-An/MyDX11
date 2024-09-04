@@ -76,15 +76,16 @@ void CEditorCameraScript::OrthoGraphicMove()
 
 	//double zoomRatio = Camera()->GetScale();
 
-	if (0 < ImGui::GetIO().MouseWheel)
+	if (KEY_PRESSED(KEY::CTRL) && 0 < ImGui::GetIO().MouseWheel)
 	{
 		m_ZoomRatio += 0.05f;
 	}
 
-	if (0 > ImGui::GetIO().MouseWheel)
+	if (KEY_PRESSED(KEY::CTRL) && 0 > ImGui::GetIO().MouseWheel)
 	{
 		m_ZoomRatio -= 0.05f;
 	}
+
 	if (KEY_JUST_PRESSED(KEY::_9))
 		m_ZoomRatio += 0.1;
 

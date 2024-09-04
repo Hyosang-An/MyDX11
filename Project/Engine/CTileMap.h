@@ -15,11 +15,11 @@ class CTileMap :
 private:
 	int                     m_Row;					// TileMap 의 행 숫자
 	int                     m_Col;					// TileMap 의 열 숫자
-	Vec2                    m_TileSize;				// Tile 1개의 크기
+	Vec2                    m_TileSize = Vec2(64, 64);				// Tile 1개의 크기
 
 	Ptr<CTexture>           m_TileAtlas;			// Tile 개별 이미지들을 보유하고 있는 아틀라스 텍스쳐
 	Vec2                    m_AtlasResolution;		// Atlas 텍스쳐 해상도
-	Vec2                    m_AtlasTileResolution;  // Atlas 텍스쳐 내에서 타일 1개의 크기
+	Vec2                    m_AtlasTileResolution = Vec2(8, 8);  // Atlas 텍스쳐 내에서 타일 1개의 크기
 	Vec2                    m_AtlasTileSliceUV;		// Atlas 텍스쳐 내에서 타일 1개의 크기를 UV 로 변환한 크기(SliceUV)
 
 	int                     m_AtlasMaxRow;			// Atlas 텍스쳐가 보유하고 있는 타일의 최대 행 숫자

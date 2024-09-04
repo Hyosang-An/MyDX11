@@ -319,16 +319,7 @@ void MenuUI::GameObject()
 			CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(0, pObject);
 		}
 
-		if (ImGui::BeginMenu("Add Component"))
-		{
-			ImGui::MenuItem("MeshRender");
-			ImGui::MenuItem("Collider2D");
-			ImGui::MenuItem("Camera");
-
-
-
-			ImGui::EndMenu();
-		}
+		AddComponent();
 
 		AddScript();
 
@@ -505,8 +496,53 @@ void MenuUI::FontsCheck()
 	}
 }
 
+void MenuUI::AddComponent()
+{
+	// 인스펙터
+	Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+
+	// 타겟 오브젝트 알아냄
+	CGameObject* pObject = pInspector->GetTargetObject();
+	ImGui::BeginDisabled(pObject == nullptr);
+	if (ImGui::BeginMenu("Add Component"))
+	{
+
+		if (ImGui::BeginMenu("Render Component"))
+		{
+			if (ImGui::MenuItem("MeshRender"))
+			{
+				pObject->AddComponent(new CMeshRender);
+			}
+
+			if (ImGui::MenuItem("TileMap"))
+			{
+				pObject->AddComponent(new CTileMap);
+				pObject->TileMap()->SetRowCol(10, 10);
+				pObject->TileMap()->SetTileSize(Vec2(64.f, 64.f)); // 해상도가 아닌 게임상 Scale
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::MenuItem("Collider2D");
+		ImGui::MenuItem("Camera");
+
+
+
+		ImGui::EndMenu();
+	}
+	ImGui::EndDisabled();
+}
+
 void MenuUI::AddScript()
 {
+	// 인스펙터
+	Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
+
+	// 타겟 오브젝트 알아냄
+	CGameObject* pObject = pInspector->GetTargetObject();
+
+	ImGui::BeginDisabled(pObject == nullptr);
 	if (ImGui::BeginMenu("Add Script"))
 	{
 		vector<wstring> vecScriptsName;
@@ -516,11 +552,7 @@ void MenuUI::AddScript()
 		{
 			if (ImGui::MenuItem(string(vecScriptsName[i].begin(), vecScriptsName[i].end()).c_str()))
 			{
-				// 인스펙터
-				Inspector* pInspector = (Inspector*)CEditorMgr::GetInst()->FindEditorUI("Inspector");
 
-				// 타겟 오브젝트 알아냄
-				CGameObject* pObject = pInspector->GetTargetObject();
 
 				// 오브젝트에, 선택한 스크립트를 추가해줌
 				if (nullptr != pObject)
@@ -534,6 +566,7 @@ void MenuUI::AddScript()
 
 		ImGui::EndMenu();
 	}
+	ImGui::EndDisabled();
 
 }
 
