@@ -154,14 +154,14 @@ void TileMapUI::Update()
 		CTransform* pCameraTrans = editorCamera->Transform();
 		if (pCameraTrans == nullptr)
 			return;
-		Vec3 vEditorCameraPos = pCameraTrans->GetWorldPos();
-		ImGui::InputFloat3("##EditorCameraPos", vEditorCameraPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
+		Vec3 vEditorCameraWorldPos = pCameraTrans->GetWorldPos();
+		ImGui::InputFloat3("##EditorCameraPos", vEditorCameraWorldPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
 
 
 		// 클라이언트 좌상단 world 좌표
 		ImGui::Text("Client LT World Pos");
 		ImGui::SameLine(140);
-		Vec3 vClientLTWorldPos = vEditorCameraPos - Vec3(screenWorldWidth * 0.5f, -screenWorldHeight * 0.5f, 0.f);
+		Vec3 vClientLTWorldPos = vEditorCameraWorldPos - Vec3(screenWorldWidth * 0.5f, -screenWorldHeight * 0.5f, 0.f);
 		ImGui::InputFloat3("##ClientLTWorldPos", vClientLTWorldPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
 
 		// 마우스 world 좌표
@@ -186,11 +186,27 @@ void TileMapUI::Update()
 		ImGui::InputFloat2("##MouseTileRowCol", m_MouseTileRowCol, "%.0f", ImGuiInputTextFlags_ReadOnly);
 
 
-		// 전체 타일맵 가장자리 테두리 그리기 (DebugRender)
+
+
+		// 부모 타일맵이 있는 경우 부모 타일맵 가장자리 테두리 그리기 (DebugRender)
+		CGameObject* pParent = m_selectedTileMap->GetOwner()->GetParent();		
+		if (pParent && pParent->TileMap())
+		{
+			CTileMap* pParentTileMap = m_selectedTileMap->GetOwner()->GetParent()->TileMap();
+			Vec3 vParentTileMapLTWorldPos = pParentTileMap->Transform()->GetWorldPos();
+			Vec3 vParentTileMapRBWorldPos = vParentTileMapLTWorldPos + Vec3(pParentTileMap->GetRowCol().y * pParentTileMap->GetTileSize().x, -pParentTileMap->GetRowCol().x * pParentTileMap->GetTileSize().y, 0.f);
+			DrawDebugRect((vParentTileMapLTWorldPos + vParentTileMapRBWorldPos) * 0.5f, Vec3(pParentTileMap->GetRowCol().y * pParentTileMap->GetTileSize().x, pParentTileMap->GetRowCol().x * pParentTileMap->GetTileSize().y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 1.f, 1.f), 0.f, false);
+		}
+
+		// 현재 타일맵 가장자리 테두리 그리기 (DebugRender)
 		Vec3 vTileMapLTWorldPos = m_selectedTileMap->Transform()->GetWorldPos();
 		Vec3 vTileMapRBWorldPos = vTileMapLTWorldPos + Vec3(vTileMapRowCol.y * vTileSize.x, -vTileMapRowCol.x * vTileSize.y, 0.f);
-		DrawDebugRect((vTileMapLTWorldPos + vTileMapRBWorldPos) * 0.5f, Vec3(vTileMapRowCol.y * vTileSize.x, vTileMapRowCol.x * vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 0.f, 1.f, 1.f), 0.f, false);
 
+		// 부모가 없는 경우 흰색, 부모가 있는 경우 마젠타색
+		if (pParent == nullptr)
+			DrawDebugRect((vTileMapLTWorldPos + vTileMapRBWorldPos) * 0.5f, Vec3(vTileMapRowCol.y * vTileSize.x, vTileMapRowCol.x * vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 1.f, 1.f, 1.f), 0.f, false);
+		else
+			DrawDebugRect((vTileMapLTWorldPos + vTileMapRBWorldPos) * 0.5f, Vec3(vTileMapRowCol.y * vTileSize.x, vTileMapRowCol.x * vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 0.f, 1.f, 1.f), 0.f, false);
 
 		ImGui::Separator();
 
@@ -198,17 +214,40 @@ void TileMapUI::Update()
 		ImGui::Text("TileMap Edit Mode");
 		ImGui::SameLine(140);
 		ImGui::SetNextItemWidth(180.f);
-		const char* TileMapEditModes[] = { "Edit Tile", "Edit Collider" };
+		const char* TileMapEditModes[] = { "Edit Tile", "Edit Collider", "Move TileMap In Room"};
 		if (ImGui::BeginCombo("##TileMapEditModes", TileMapEditModes[(int)m_editMode]))
 		{
 			if (ImGui::Selectable("Edit Tile"))
+			{
 				m_editMode = TileMapEditMode::EditTile;
+
+				// 부모 타일맵이 있으면 부모 TileGridShow 끄기
+				if (pParent != nullptr && pParent->TileMap() != nullptr)
+					pParent->TileMap()->SetTileGridShow(false);
+			}
 			if (ImGui::Selectable("Edit Collider"))
+			{
 				m_editMode = TileMapEditMode::EditCollider;
+
+				// 부모 타일맵이 있으면 부모 TileGridShow 끄기
+				if (pParent != nullptr && pParent->TileMap() != nullptr)
+					pParent->TileMap()->SetTileGridShow(false);
+			}
+
+			ImGui::BeginDisabled(pParent == nullptr || pParent->TileMap() == nullptr);
+			if (ImGui::Selectable("Move TileMap In Room"))
+			{
+				m_editMode = TileMapEditMode::MoveTileMapInRoom;
+				pParent->TileMap()->SetTileGridShow(true);
+			}
+			ImGui::EndDisabled();
+
 			ImGui::EndCombo();
 		}
 
+		// ========================================================================================================
 		// EditTile Mode
+		// ========================================================================================================
 		if (m_editMode == TileMapEditMode::EditTile)
 		{
 			// 타일맵 타일 선택
@@ -345,7 +384,9 @@ void TileMapUI::Update()
 			}
 		}
 
+		// ========================================================================================================
 		// Collider Edit Mode 
+		// ========================================================================================================
 		else if (m_editMode == TileMapEditMode::EditCollider)
 		{
 			// 타일맵 충돌체 편집
@@ -472,6 +513,42 @@ void TileMapUI::Update()
 					}
 				}
 			}
+		}
+
+		// ========================================================================================================
+		// MoveTileMapInRoom Mode
+		// ========================================================================================================
+		else if (m_editMode == TileMapEditMode::MoveTileMapInRoom && pParent)
+		{
+			auto pParentTileMap = m_selectedTileMap->GetOwner()->GetParent()->TileMap();
+
+			// 부모 타일맵의 row, col, tilesize 가져오기
+			Vec2 vParentTileMapRowCol = pParentTileMap->GetRowCol();
+			Vec2 vParentTileSize = pParentTileMap->GetTileSize();
+
+			// 부모 타일맵의 WorldLTPos 계산
+			Vec3 vParentTileMapLTWorldPos = pParentTileMap->Transform()->GetWorldPos();
+
+			// 현재 마우스가 부모 타일맵의 어떤 Row, Col에 있는지 계산
+			Vec3 vMousePosInParentTileMap = vMouseWorldPos - vParentTileMapLTWorldPos;
+			Vec2 vMouseTileRowColInParentTileMap = Vec2(-vMousePosInParentTileMap.y / vParentTileSize.y, vMousePosInParentTileMap.x / vParentTileSize.x);
+			vMouseTileRowColInParentTileMap.x = floor(vMouseTileRowColInParentTileMap.x);
+			vMouseTileRowColInParentTileMap.y = floor(vMouseTileRowColInParentTileMap.y);
+			ImGui::InputFloat2("##MouseTileRowColInParentTileMap", vMouseTileRowColInParentTileMap, "%.0f", ImGuiInputTextFlags_ReadOnly);
+
+			// 마우스 클릭 중이면 현재 타일맵을 부모 타일맵의 Row, Col에 맞게 이동
+			if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+			{
+				// 현재 마우스가 부모 타일맵 내부에 있는지 확인
+				if (vMouseTileRowColInParentTileMap.x >= 0 && vMouseTileRowColInParentTileMap.x < vParentTileMapRowCol.x &&
+					vMouseTileRowColInParentTileMap.y >= 0 && vMouseTileRowColInParentTileMap.y < vParentTileMapRowCol.y)
+				{
+					// vMouseTileRowColInParentTileMap에 해당하는 부모 타일맵의 RelativePos계산
+					Vec3 vRelativePos = Vec3(vMouseTileRowColInParentTileMap.y / vParentTileMapRowCol.y, -vMouseTileRowColInParentTileMap.x / vParentTileMapRowCol.x, 0.f);
+					m_selectedTileMap->Transform()->SetRelativePos(vRelativePos);
+				}
+			}
+
 		}
 
 		// 타일 그리드 표시 여부 체크박스

@@ -5,7 +5,8 @@
 enum class TileMapEditMode
 {
     EditTile,
-    EditCollider
+    EditCollider,
+    MoveTileMapInRoom,
 };
 
 class TileMapUI :
