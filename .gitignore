@@ -9,8 +9,8 @@ External/Include/**
 !External/Include/DirectXTex/
 !External/Include/DirectXTex/**
 
-!Build/FontEngineDll/**
-
+!build/FontEngineDll/
+!build/FontEngineDll/**
 
 # User-specific files
 *.rsuser
