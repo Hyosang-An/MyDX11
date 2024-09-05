@@ -15,6 +15,7 @@
 #include <Engine/CCollider2D.h>
 #include <Engine/CLevelMgr.h>
 #include <Engine/CLevel.h>
+#include <Engine/func.h>
 
 TileMapUI::TileMapUI()
 	: ComponentUI(COMPONENT_TYPE::TILEMAP)
@@ -210,6 +211,31 @@ void TileMapUI::Update()
 			DrawDebugRect((vTileMapLTWorldPos + vTileMapRBWorldPos) * 0.5f, Vec3(vTileMapRowCol.y * vTileSize.x, vTileMapRowCol.x * vTileSize.y, 1.f), Vec3(0.f, 0.f, 0.f), Vec4(1.f, 0.f, 1.f, 1.f), 0.f, false);
 
 		ImGui::Separator();
+
+		// ========================================================================================================
+		// Sub TileMap 추가 버튼
+		// ========================================================================================================
+		ImGui::BeginDisabled(pParent != nullptr);
+		if (ImGui::Button("Add Sub TileMap"))
+		{
+			// 부모 타일맵이 있는 경우에만 추가 가능
+			CGameObject* pSubTileMapObj = new CGameObject;
+
+			auto curLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			curLevel->AddObject(LAYER::TILEMAP, pSubTileMapObj);
+
+			// 부모 타일맵의 자식으로 추가 (일단 자식으로 들어간 다음 컴포넌트 세팅을 해줘야 스케일이 맞게됨)
+			m_selectedTileMap->GetOwner()->AddChild(pSubTileMapObj);
+
+			wstring subTileMapName = GetUniqueChildName(pSubTileMapObj->GetParent(), L"SubTileMap");
+			pSubTileMapObj->SetName(subTileMapName);
+
+			pSubTileMapObj->AddComponent(new CTransform);
+			pSubTileMapObj->AddComponent(new CTileMap);
+
+			pSubTileMapObj->TileMap()->SetTileSize(m_selectedTileMap->GetTileSize());
+		}
+		ImGui::EndDisabled();
 
 		// Sprite SelectMod Combo Box
 		ImGui::Text("TileMap Edit Mode");

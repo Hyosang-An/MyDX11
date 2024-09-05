@@ -21,6 +21,9 @@ void LoadWString(wstring& _String, FILE* _File);
 
 wstring incrementTrailingNumber(const std::wstring& input);
 
+// 자식 오브젝트들과 중복되지 않는 이름을 반환하는 함수
+wstring GetUniqueChildName(CGameObject* _Parent, const wstring& _defaultName);
+
 template<typename T, int _Size>
 void Delete_Array(T(&_arr)[_Size])
 {

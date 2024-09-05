@@ -310,7 +310,7 @@ void CTestLevel::CreateCelesteTestLevel()
 	//pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Idle\\Idle.flip"));
 	//pPlayer->FlipBookComponent()->Play(L"Idle", 10, true);
 
-	auto pPlayer = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Player_FlipBook_Added.prefab")->Instantiate();
+	auto pPlayer = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Player.prefab")->Instantiate();
 	pPlayer->FlipBookComponent()->Play(L"Idle");
 	TestLevel->AddObject(LAYER::PLAYER, pPlayer);
 
@@ -324,11 +324,11 @@ void CTestLevel::CreateCelesteTestLevel()
 
 	pTileMapObj->Transform()->SetRelativePos(Vec3(-500.f, 250.f, 500.f));
 
-	pTileMapObj->TileMap()->SetRowCol(15, 10);
-	pTileMapObj->TileMap()->SetTileSize(Vec2(64.f, 64.f)); // 해상도가 아닌 게임상 Scale
+	pTileMapObj->TileMap()->SetRowCol(200, 100);
+	pTileMapObj->TileMap()->SetTileSize(Vec2(58.f, 58.f)); // 해상도가 아닌 게임상 Scale
 
-	Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\TILE.bmp");
-	pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas, Vec2(64.f, 64.f));
+	//Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\TILE.bmp");
+	//pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas, Vec2(64.f, 64.f));
 
 	TestLevel->AddObject(LAYER::TILEMAP, pTileMapObj);
 

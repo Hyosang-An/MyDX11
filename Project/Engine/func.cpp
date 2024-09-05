@@ -156,3 +156,33 @@ wstring incrementTrailingNumber(const std::wstring& input)
 		return nonNumberPart + L"_1";
 	}
 }
+
+wstring GetUniqueChildName(CGameObject* _Parent, const wstring& _defaultName)
+{
+	const vector<CGameObject*>& vecChild = _Parent->GetChildren();
+
+	UINT idx = 0;
+	wstring uniqueChildName = _defaultName + L" " + std::to_wstring(idx);
+
+
+	// 중복되지 않는 이름 생성
+	while (true)
+	{
+		bool isExist = false;
+		for (size_t i = 0; i < vecChild.size(); ++i)
+		{
+			if (vecChild[i]->GetName() == uniqueChildName)
+			{
+				isExist = true;
+				break;
+			}
+		}
+
+		if (isExist == false)
+			break;
+
+		uniqueChildName = _defaultName + L" " + std::to_wstring(++idx);
+	}
+
+	return uniqueChildName;
+}
