@@ -20,6 +20,9 @@ private:
 
     HANDLE                      m_hNotifyHandle = nullptr;
 
+    bool                        m_isAnyUI_Hovered = false;
+	bool                        m_isAnyUI_Hovered_Buffer = false;
+
 public:
     EditorUI* FindEditorUI(const string& Name);
 
@@ -29,6 +32,8 @@ public:
 
 public:
     CGameObject* GetEditorCamera() { return m_EditorCamera; }
+    void SetUI_Hovered(bool _b);
+	bool IsAnyUI_Hovered() { return m_isAnyUI_Hovered; }
 
 private:
     void ShortCut();
@@ -42,5 +47,7 @@ private:
     void ObserveContent();
 
     void CreateEditorUI();
+
+	void MouseHoveredCheck();
 };
 

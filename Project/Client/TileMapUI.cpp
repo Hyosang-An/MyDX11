@@ -360,7 +360,7 @@ void TileMapUI::Update()
 			}
 
 			// 마우스 좌클릭시 타일맵에 타일 이미지 삽입
-			if (KEY_PRESSED(KEY::LBTN) && m_selectedTileImgIndex != -1)
+			if (KEY_PRESSED(KEY::LBTN) && m_selectedTileImgIndex != -1 && !CEditorMgr::GetInst()->IsAnyUI_Hovered())
 			{
 				// 타일맵 범위 내에서 클릭한 경우
 				if (m_MouseTileRowCol.x >= 0 && m_MouseTileRowCol.x < vTileMapRowCol.x &&
@@ -381,7 +381,7 @@ void TileMapUI::Update()
 			}
 
 			// 마우스 우클릭시 타일맵에 타일 이미지 삭제
-			if (KEY_PRESSED(KEY::RBTN))
+			if (KEY_PRESSED(KEY::RBTN) && !CEditorMgr::GetInst()->IsAnyUI_Hovered())
 			{
 				// 타일맵 범위 내에서 클릭한 경우
 				if (m_MouseTileRowCol.x >= 0 && m_MouseTileRowCol.x < vTileMapRowCol.x &&
@@ -444,14 +444,14 @@ void TileMapUI::Update()
 			bool isMouseInClient = PtInRect(&clientRect, mousePosInClient);
 
 			// 마우스가 클라이언트 내에 있으면서 타일맵 위에 있는 경우에만 편집 가능
-			if (isMouseInClient &&
+			if (isMouseInClient && !CEditorMgr::GetInst()->IsAnyUI_Hovered() &&
 				m_MouseTileRowCol.x >= 0 && m_MouseTileRowCol.x < vTileMapRowCol.x &&
 				m_MouseTileRowCol.y >= 0 && m_MouseTileRowCol.y < vTileMapRowCol.y 
 				)
 			{
 
 				// 마우스 좌클릭시 타일 위치 기억
-				if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+				if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !CEditorMgr::GetInst()->IsAnyUI_Hovered())
 				{
 					m_MouseClickTileRowCol = m_MouseTileRowCol;
 				}
@@ -469,7 +469,7 @@ void TileMapUI::Update()
 				}
 
 				// 마우스 드래그 중일 경우 타일 위치와 마우스 릴리즈 타일 위치까지의 사각형을 그림
-				if (ImGui::IsMouseDown(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+				if (ImGui::IsMouseDown(ImGuiMouseButton_Left) || ImGui::IsMouseReleased(ImGuiMouseButton_Left) && !CEditorMgr::GetInst()->IsAnyUI_Hovered())
 				{
 					// Collider의 타일 LT Row, Col
 					m_MouseReleaseTileRowCol = m_MouseTileRowCol;
@@ -567,9 +567,10 @@ void TileMapUI::Update()
 			vMouseTileRowColInParentTileMap.y = floor(vMouseTileRowColInParentTileMap.y);
 			ImGui::InputFloat2("##MouseTileRowColInParentTileMap", vMouseTileRowColInParentTileMap, "%.0f", ImGuiInputTextFlags_ReadOnly);
 
-			// 마우스 클릭 중이면 현재 타일맵을 부모 타일맵의 Row, Col에 맞게 이동
-			if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+			// 마우스 클릭 중이면 현재 타일맵을 부모 타일맵의 Row, Col에 맞게 이동 (어떤 UI에도 호버되지 않은 상태에서만)
+			if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && !CEditorMgr::GetInst()->IsAnyUI_Hovered())
 			{
+
 				// 현재 마우스가 부모 타일맵 내부에 있는지 확인
 				if (vMouseTileRowColInParentTileMap.x >= 0 && vMouseTileRowColInParentTileMap.x < vParentTileMapRowCol.x &&
 					vMouseTileRowColInParentTileMap.y >= 0 && vMouseTileRowColInParentTileMap.y < vParentTileMapRowCol.y)
@@ -595,7 +596,7 @@ void TileMapUI::Update()
 	ImVec2 content_size = ImVec2(last_content_pos.x - initial_content_pos.x, last_content_pos.y - initial_content_pos.y);
 
 	//SetChildSize(content_size);
-	SetChildSize(ImVec2(0, 800));
+	SetChildSize(ImVec2(0, 900));
 }
 
 

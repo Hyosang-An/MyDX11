@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "EditorUI.h"
 
+#include "CEditorMgr.h"
+
 #include "ImGui/imgui.h"
 
 UINT EditorUI::m_GlobalID = 0;
@@ -60,6 +62,8 @@ void EditorUI::Tick()
 					ImGui::Separator();
 			}
 
+			MouseHoverCheck();
+
 			ImGui::End();
 		}
 
@@ -108,6 +112,7 @@ void EditorUI::Tick()
 
 		ImGui::BeginChild(m_FullName.c_str(), m_ChildSize);
 
+
 		Update();
 
 		for (size_t i = 0; i < m_vecChildUI.size(); ++i)
@@ -121,6 +126,8 @@ void EditorUI::Tick()
 			if (m_vecChildUI[i]->m_ChildBorder && i == m_vecChildUI.size() - 1)
 				ImGui::Separator();
 		}
+
+		MouseHoverCheck();
 
 		ImGui::EndChild();
 	}
@@ -163,4 +170,24 @@ void EditorUI::SetActive(bool _Active)
 void EditorUI::SetFocus()
 {
 	ImGui::SetWindowFocus(m_FullName.c_str());
+}
+
+void EditorUI::MouseHoverCheck()
+{
+	ImVec2 windowPos = ImGui::GetWindowPos();  // 스크린 좌표계에서의 좌상단 좌표
+	ImVec2 windowSize = ImGui::GetWindowSize(); // 윈도우 크기
+	ImVec2 windowRBPos = ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y); // 스크린 좌표계에서의 우하단 좌표
+	
+	ImVec2 mousePos = ImGui::GetMousePos(); // 마우스 좌표
+
+	if (mousePos.x >= windowPos.x && mousePos.x <= windowRBPos.x &&
+		mousePos.y >= windowPos.y && mousePos.y <= windowRBPos.y)
+	{
+		CEditorMgr::GetInst()->SetUI_Hovered(true);
+	}
+	else
+	{
+		CEditorMgr::GetInst()->SetUI_Hovered(false);
+	}
+
 }

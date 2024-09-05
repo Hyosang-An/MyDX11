@@ -58,6 +58,9 @@ public:
 	void SetFocus();
 
 private:
+	void MouseHoverCheck();
+
+private:
 	virtual void Activate() {}
 	virtual void Deactivate() {}
 

@@ -57,6 +57,8 @@ void CEditorMgr::Progress()
 	ImGuiAndEditorObjProgress();
 
 	ObserveContent();
+
+	MouseHoveredCheck();
 }
 
 
@@ -95,4 +97,18 @@ void CEditorMgr::ImGuiTick()
 	{
 		pair.second->Tick();
 	}
+}
+
+void CEditorMgr::MouseHoveredCheck()
+{
+	m_isAnyUI_Hovered = m_isAnyUI_Hovered_Buffer;
+	m_isAnyUI_Hovered_Buffer = false;
+}
+
+void CEditorMgr::SetUI_Hovered(bool _b)
+{
+	if (m_isAnyUI_Hovered_Buffer == true)
+		return;
+
+	m_isAnyUI_Hovered_Buffer = _b;
 }
