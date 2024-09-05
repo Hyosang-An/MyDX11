@@ -8,8 +8,6 @@
 
 CTileMap::CTileMap()
 	: CRenderComponent(COMPONENT_TYPE::TILEMAP)
-	, m_Row(1)
-	, m_Col(1)
 	, m_AtlasMaxRow(1)
 	, m_AtlasMaxCol(1)
 	, m_structuredBuffer(nullptr)
@@ -18,7 +16,7 @@ CTileMap::CTileMap()
 	SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"TileMapMtrl"));
 
 	m_structuredBuffer = new CStructuredBuffer;
-	m_vecTileInfo.resize(1);
+	m_vecTileInfo.resize(m_Row * m_Col);
 }
 
 CTileMap::CTileMap(const CTileMap& _Origin) :

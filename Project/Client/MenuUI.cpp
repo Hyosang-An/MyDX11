@@ -517,8 +517,8 @@ void MenuUI::AddComponent()
 			if (ImGui::MenuItem("TileMap"))
 			{
 				pObject->AddComponent(new CTileMap);
-				pObject->TileMap()->SetRowCol(10, 10);
-				pObject->TileMap()->SetTileSize(Vec2(64.f, 64.f)); // 해상도가 아닌 게임상 Scale
+				pObject->TileMap()->SetRowCol(18, 32);
+				pObject->TileMap()->SetTileSize(Vec2(60.f, 60.f)); // 해상도가 아닌 게임상 Scale
 			}
 
 			ImGui::EndMenu();

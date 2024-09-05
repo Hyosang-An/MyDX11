@@ -146,7 +146,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    // CEngine 객체 초기화
    if (FAILED(CEngine::GetInst()->Init(hWnd
-       , POINT{ 1280, 768 }
+       , POINT{ 1920, 1080 }
        , (OBJECT_SAVE)&CLevelSaveLoad::SaveGameObject
        , (OBJECT_LOAD)&CLevelSaveLoad::LoadGameObject)))
    {
