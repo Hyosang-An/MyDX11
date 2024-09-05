@@ -122,7 +122,7 @@ void CPlayerScript::KeyCheck()
 	}
 
 	// CLIMB
-	if ((m_bOnLeftWall || m_bOnRightWall) && (KEY_JUST_PRESSED(KEY::Z) || KEY_PRESSED(KEY::Z)) && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
+	if ((m_bOnLeftWall || m_bOnRightWall) && (KEY_JUST_PRESSED(KEY::Z) || KEY_PRESSED(KEY::Z)) && m_CurState !=PLAYER_STATE::JUMP && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
 	{
 		m_CurState = PLAYER_STATE::CLIMB;
 	}
@@ -370,14 +370,13 @@ void CPlayerScript::UpdateState()
 			if (KEY_JUST_PRESSED(KEY::C))
 			{
 				Vec3 vVelocity;
-				if (m_bFacingRight)
-				{
+
+				if (m_bOnLeftWall && KEY_PRESSED(KEY::RIGHT))
 					vVelocity = Vec3(m_MaxRunSpeed, m_JumpSpeed, 0);
-				}
-				else
-				{
+				else if (m_bOnRightWall && KEY_PRESSED(KEY::LEFT))
 					vVelocity = Vec3(-m_MaxRunSpeed, m_JumpSpeed, 0);
-				}
+				else
+					vVelocity = Vec3(m_RigidBody->GetVelocity().x, m_JumpSpeed, 0);
 				
 				m_RigidBody->SetVelocity(vVelocity);
 				m_RigidBody->SetOnGround(false);
@@ -667,31 +666,82 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 		return;
 
 	Vec2 overlapArea = CCollisionMgr::GetInst()->GetOverlapArea();
-
-	// 위치 보정
 	Vec3 vObjWorldPos = GetOwner()->Transform()->GetWorldPos();
-	Vec3 vDir = _OtherCollider->GetWorldPos() - _OwnCollider->GetWorldPos();
 
 	// 충돌한 오브젝트의 Layer에 따른 분류
 	switch (LAYER(_OtherObject->GetLayerIdx()))
 	{
 		case LAYER::WALL_OR_GROUND:
 		{
-			// 벽 방향 속도 0
-			if (m_bFacingRight && m_bOnRightWall)
+			// 벽과 충돌한 경우
+			if (overlapArea.x < overlapArea.y)
 			{
-				m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
-			}
-			else if (!m_bFacingRight && m_bOnLeftWall)
-			{
-				m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
-			}
+				// 벽 방향 속도 0
+				if (m_bFacingRight && m_bOnRightWall)
+				{
+					// 위치 보정
+					vObjWorldPos.x -= overlapArea.x;
+					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
 
-			// 바닥 방향 속도 0
-			if (m_RigidBody->GetVelocity().y < 0.f && m_RigidBody->IsOnGround())
+					m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
+				}
+				else if (!m_bFacingRight && m_bOnLeftWall)
+				{
+					// 위치 보정
+					vObjWorldPos.x += overlapArea.x;
+					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+
+					m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
+				}
+
+				// 바닥 방향 속도 0 (땅과 충돌한 경우)
+				if (m_RigidBody->GetVelocity().y < 0.f && m_RigidBody->IsOnGround())
+				{
+					// 위치 보정
+					vObjWorldPos.y += overlapArea.y;
+					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+
+				}
+			}
+			// 땅과 충돌한 경우
+			else
 			{
+				// 위치 보정
+				vObjWorldPos.y += overlapArea.y;
+				GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+
 				m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, 0, 0));
 			}
+
+
+			//// 벽 방향 속도 0
+			//if (m_bFacingRight && m_bOnRightWall)
+			//{
+			//	// 위치 보정
+			//	vObjWorldPos.x -= overlapArea.x;
+			//	GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+
+			//	m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
+			//}
+			//else if (!m_bFacingRight && m_bOnLeftWall)
+			//{
+			//	// 위치 보정
+			//	vObjWorldPos.x += overlapArea.x;
+			//	GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+
+			//	m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
+			//}
+
+			// 바닥 방향 속도 0 (땅과 충돌한 경우)
+			//if (m_RigidBody->GetVelocity().y < 0.f && m_RigidBody->IsOnGround())
+			//{
+			//	// 위치 보정
+			//	vObjWorldPos.y += overlapArea.y;
+			//	GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+
+
+			//	m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, 0, 0));
+			//}
 		}
 		
 		break;
