@@ -616,6 +616,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 					m_setLeftWallColliders.insert(_OtherCollider);
 					m_bOnLeftWall = true;
 				}
+				GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
 
 				// 대쉬 상태에서 벽에 닿으면 해당 방향의 속도 0
 				if (m_CurState == PLAYER_STATE::DASH)
@@ -664,6 +665,12 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 {
 	if (m_RigidBody == nullptr)
 		return;
+
+	Vec2 overlapArea = CCollisionMgr::GetInst()->GetOverlapArea();
+
+	// 위치 보정
+	Vec3 vObjWorldPos = GetOwner()->Transform()->GetWorldPos();
+	Vec3 vDir = _OtherCollider->GetWorldPos() - _OwnCollider->GetWorldPos();
 
 	// 충돌한 오브젝트의 Layer에 따른 분류
 	switch (LAYER(_OtherObject->GetLayerIdx()))
