@@ -174,9 +174,6 @@ void CTransform::SetWorldPos(Vec3 _Pos)
 
 void CTransform::SetWorldScale(Vec3 _Scale)
 {
-	// µð¹ö±ë
-	if (m_RelativeScale.x == 0)
-		int a = 0;
 	Matrix matTargetRelativeScaling;
 
 	Matrix matTargetWorldScaling =  Matrix::CreateScale(_Scale);

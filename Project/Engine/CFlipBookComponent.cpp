@@ -37,6 +37,9 @@ CFlipBookComponent::~CFlipBookComponent()
 
 void CFlipBookComponent::FinalTick()
 {
+	if (m_Pause)
+		return;
+
 	if (m_Finish)
 	{
 		if (false == m_Repeat)
@@ -122,6 +125,8 @@ Ptr<CFlipBook> CFlipBookComponent::FindFlipBook(const wstring& _FlipBookName)
 
 void CFlipBookComponent::Play(wstring _FliBookName, float _FPS, bool _Repeat)
 {
+	m_Pause = false;
+
 	auto iter =  m_mapFlipBook.find(_FliBookName);
 	if (iter == m_mapFlipBook.end())
 	{
@@ -143,6 +148,7 @@ void CFlipBookComponent::Play(wstring _FliBookName, float _FPS, bool _Repeat)
 void CFlipBookComponent::Play(wstring _FliBookName, bool _Repeat)
 {
 	// _Repeat 의 기본값은 true
+	m_Pause = false;
 
 	auto iter = m_mapFlipBook.find(_FliBookName);
 	if (iter == m_mapFlipBook.end())

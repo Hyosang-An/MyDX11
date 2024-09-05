@@ -12,6 +12,7 @@ private:
     float                           m_AccTime = 0;      // 누적 시간값 체크
     bool                            m_Repeat = true;
     bool                            m_Finish = false;       // FlipBook 재생이 끝에 도달했는지 여부
+	bool                            m_Pause = false;        // 일시정지 여부
 
 public:
     virtual void FinalTick() override;
@@ -27,6 +28,10 @@ public:
     Ptr<CFlipBook> FindFlipBook(const wstring& _FlipBookName);
     void Play(wstring _FliBookName, float _FPS, bool _Repeat);
     void Play(wstring _FliBookName, bool _Repeat = true);
+
+	void Pause() { m_Pause = true; }
+	void Resume() { m_Pause = false; }
+
     Ptr<CSprite> GetCurSprite() { return m_CurFrmSprite; }
     void Reset();
     void Binding();

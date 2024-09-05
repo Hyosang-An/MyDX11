@@ -57,11 +57,6 @@ void CPlayerScript::Tick()
 	 // 애니메이션 업데이트
 	 UpdateAnimation();
 
-
-
-
-
-
 	 m_PrevState = m_CurState;
 }
 
@@ -469,6 +464,47 @@ void CPlayerScript::UpdateState()
 
 void CPlayerScript::UpdateAnimation()
 {
+	// CLIMB만 예외 처리
+	if (m_CurState == PLAYER_STATE::CLIMB)
+	{
+		m_RigidBody->GetVelocity().y != 0 ? GetOwner()->FlipBookComponent()->Resume() : GetOwner()->FlipBookComponent()->Pause();
+	}
+
+	if (m_PrevState == m_CurState)
+		return;
+
+	switch (m_CurState)
+	{
+		case PLAYER_STATE::IDLE:
+			GetOwner()->FlipBookComponent()->Play(L"Idle", true);
+			break;
+		case PLAYER_STATE::RUN:
+			GetOwner()->FlipBookComponent()->Play(L"Run", true);
+			break;
+		case PLAYER_STATE::JUMP:
+			GetOwner()->FlipBookComponent()->Play(L"Jump", false);
+			break;
+		case PLAYER_STATE::FALL:
+			GetOwner()->FlipBookComponent()->Play(L"Fall", true);
+			break;
+		case PLAYER_STATE::DASH:
+			GetOwner()->FlipBookComponent()->Play(L"Dash", false);
+			break;
+		case PLAYER_STATE::CLIMB:
+			GetOwner()->FlipBookComponent()->Play(L"Climb", true);
+			m_RigidBody->GetVelocity().y != 0 ? GetOwner()->FlipBookComponent()->Resume() : GetOwner()->FlipBookComponent()->Pause();
+			break;
+		case PLAYER_STATE::DREAM_DASH:
+			break;
+		case PLAYER_STATE::CHANGE_ROOM:
+			break;
+		case PLAYER_STATE::DEAD:
+			break;
+		case PLAYER_STATE::END:
+			break;
+		default:
+			break;
+	}
 }
 
 void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider)

@@ -9,11 +9,6 @@ CRigidBody::CRigidBody() :
 	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Max Speed", &m_fMaxSpeed);
 	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Max Falling Speed", &m_fMaxFallingSpeed);
 	AddScriptParam(SCRIPT_PARAM_TYPE::FLOAT, "Gravity Accelaration!", &m_fGravityAccelaration);
-
-	// 디버깅
-	auto adress = &m_fGravityAccelaration;
-
-	// 현재 속도
 	AddScriptParam(SCRIPT_PARAM_TYPE::VEC3, "Velocity", &m_vVelocity);
 }
 
@@ -53,9 +48,6 @@ void CRigidBody::Begin()
 
 void CRigidBody::Tick()
 {
-	// 디버깅
-	auto adress = &m_fGravityAccelaration;
-
 	// 현재 플레이어 상태
 	PLAYER_STATE curState = GetOwner()->GetScript<CPlayerScript>()->GetCurState();
 

@@ -39,10 +39,6 @@ void CCollider2D::FinalTick()
 		matObjectScaleInv = XMMatrixInverse(nullptr, matObjectScaleInv);
 	}
 
-	// µð¹ö±ë
-	auto owner = GetOwner();
-	auto transform = owner->Transform();
-	auto worldMat = transform->GetWorldMat();
 
 	m_matColWorld = matScale * matTranslation * matObjectScaleInv * GetOwner()->Transform()->GetWorldMat();
 
@@ -51,10 +47,6 @@ void CCollider2D::FinalTick()
 		DrawDebugRect(m_matColWorld, Vec4(1.f, 0.f, 0.f, 1.f), 0.f, false);
 	else
 		DrawDebugRect(m_matColWorld, Vec4(0.f, 1.f, 0.f, 1.f), 0.f, false);
-
-	// µð¹ö±ë
-	auto worldPos = GetWorldPos();
-	auto worldScale = GetOwner()->Transform()->GetWorldScale();
 }
 
 void CCollider2D::BeginOverlap(CCollider2D* _Other)

@@ -95,11 +95,6 @@ void TileMapUI::Update()
 	ImGui::InputInt2("##TileResolution", tileResolution);
 	tileResolution[0] = max(1, tileResolution[0]);
 	tileResolution[1] = max(1, tileResolution[1]);
-	// 디버깅
-	if (ImGui::IsKeyPressed(ImGuiKey_Tab))
-	{
-		int a = 0;
-	}
 	// InputInt2의 포커스가 풀리면 적용
 	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetAtlasTileResolution(Vec2((float)tileResolution[0], (float)tileResolution[1]));
@@ -125,16 +120,6 @@ void TileMapUI::Update()
 	ImGui::InputFloat2("##Tile Size", vTileSize, "%.3f", ImGuiSliderFlags_AlwaysClamp);
 	vTileSize.x = max(0.f, vTileSize.x);
 	vTileSize.y = max(0.f, vTileSize.y);
-	
-	// 디버깅
-	if (ImGui::IsKeyPressed(ImGuiKey_Tab))
-	{
-		int a = 0;
-	}
-	if (vTileSize.x == 32)
-	{
-		int a = 0;
-	}
 	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetTileSize(vTileSize);
 
