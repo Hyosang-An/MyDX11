@@ -26,6 +26,7 @@ public:
     Vec3 GetOffset() { return m_Offset; }
     Vec3 GetScale() { return m_Scale; }
     Vec3 GetWorldPos() { return m_matColWorld.Translation(); }
+    Vec3 GetWorldScale();
     const Matrix& GetWorldMat() { return m_matColWorld; }
 	bool GetIndependentScale() { return m_IndependentScale; }
 

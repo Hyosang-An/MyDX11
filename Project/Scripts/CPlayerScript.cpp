@@ -78,13 +78,26 @@ void CPlayerScript::KeyCheck()
 	if (KEY_JUST_PRESSED(KEY::RIGHT))
 	{
 		m_bFacingRight = true;
-		Transform()->SetRelativeRotation(Vec3(0, 0, 0));
+		
 	}
 	else if (KEY_JUST_PRESSED(KEY::LEFT))
 	{
 		m_bFacingRight = false;
-		auto vRot = Vec3(0, XM_PI, 0);
-		Transform()->SetRelativeRotation(vRot);
+	}
+
+	if (m_bFacingRight)
+	{
+		if (m_bOnLeftWall)
+			Transform()->SetRelativeRotation(Vec3(0, XM_PI, 0));
+		else
+			Transform()->SetRelativeRotation(Vec3(0, 0, 0));
+	}
+	else
+	{
+		if (m_bOnRightWall)
+			Transform()->SetRelativeRotation(Vec3(0, 0, 0));
+		else
+			Transform()->SetRelativeRotation(Vec3(0, XM_PI, 0));
 	}
 
 	// RUN
@@ -517,29 +530,25 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 	{
 		case LAYER::WALL_OR_GROUND:
 		{
-			Vec3 vOverlap = CCollisionMgr::GetInst()->GetOverlap();
-
+			//Vec3 vOverlap = CCollisionMgr::GetInst()->GetOverlap();
+			Vec2 overlapArea = CCollisionMgr::GetInst()->GetOverlapArea();
 
 			Vec3 vColliderPos = _OwnCollider->GetWorldPos();
 			Vec3 vOtherColliderPos = _OtherCollider->GetWorldPos();
 			Vec3 vDir = vOtherColliderPos - vColliderPos;
 
-			// 일단 파고들어간 깊이만큼 보정
-			//if (vOverlap.Dot(vDir) > 0)
-			//{
-			//	vOverlap = -vOverlap;
-			//}
-
-			//Vec3 vObjPos = Transform()->GetWorldPos();
-			//vObjPos += vOverlap;
-			//Transform()->SetWorldPos(vObjPos);
+			Vec3 vObjWorldPos = GetOwner()->Transform()->GetWorldPos();
 
 			// 벽과 충돌한건지 땅과 충돌한건지 판단
-			if (abs(vOverlap.y) > abs(vOverlap.x))
-			{
+			if (abs(overlapArea.y) < abs(overlapArea.x))
+			{		
 				// 땅과 충돌한 경우
 				if (vDir.y < 0 && m_RigidBody->GetVelocity().y < 0.f && !m_RigidBody->IsOnGround())
 				{
+					// 위치 보정
+					vObjWorldPos.y += overlapArea.y;
+					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+
 					m_RigidBody->OnLand();
 					m_setGroundColliders.insert(_OtherCollider);
 
@@ -558,9 +567,14 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 						m_CurState = PLAYER_STATE::DEAD;
 					}
 				}
+
+				// 천장과 충돌한 경우
 				else
 				{
-					// 천장과 충돌한 경우
+					// 위치 보정
+					vObjWorldPos.y -= overlapArea.y;
+					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+
 					m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, 0.f, 0.f));
 
 					// 점프	상태에서 천장에 닿으면 점프 상태 해제
@@ -588,11 +602,17 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 				m_RigidBody->SetVelocity(Vec3(0.f, m_RigidBody->GetVelocity().y, 0.f));
 				if (vDir.x > 0)
 				{
+					// 위치 보정
+					vObjWorldPos.x -= overlapArea.x;
+
 					m_setRightWallColliders.insert(_OtherCollider);
 					m_bOnRightWall = true;
 				}
 				else
 				{
+					// 위치 보정
+					vObjWorldPos.x += overlapArea.x;
+
 					m_setLeftWallColliders.insert(_OtherCollider);
 					m_bOnLeftWall = true;
 				}

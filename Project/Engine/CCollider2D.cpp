@@ -49,6 +49,23 @@ void CCollider2D::FinalTick()
 		DrawDebugRect(m_matColWorld, Vec4(0.f, 1.f, 0.f, 1.f), 0.f, false);
 }
 
+Vec3 CCollider2D::GetWorldScale()
+{
+	Vec3 vScale = Vec3(1.f, 1.f, 1.f);
+
+	if (m_IndependentScale)
+	{
+		vScale = m_Scale;
+	}
+	else
+	{
+		Vec3 vOwnerScale = GetOwner()->Transform()->GetWorldScale();
+		vScale = Vec3(vOwnerScale.x * m_Scale.x, vOwnerScale.y * m_Scale.y, vOwnerScale.z * m_Scale.z);
+	}
+
+	return vScale;
+}
+
 void CCollider2D::BeginOverlap(CCollider2D* _Other)
 {
 	m_OverlapCount += 1;
