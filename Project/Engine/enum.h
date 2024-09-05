@@ -60,11 +60,12 @@ enum class COMPONENT_TYPE
 extern const char* COMPONENT_TYPE_STRING[(UINT)COMPONENT_TYPE::END];
 const char* ToString(COMPONENT_TYPE _Type);
 
-// Layer 이름을 변경하면 level 생성자에서도 변경해야함
+// Layer 이름을 변경하면 LAYER_STRING에서도 변경해야함
 enum class LAYER
 {
 	DEFAULT,
 	BACKGROUND,
+	ROOM,
 	TILEMAP,
 	PLAYER,
 	MONSTER,

@@ -13,6 +13,7 @@
 #include "CTaskMgr.h"
 #include "CPrefab.h"
 #include "CFontMgr.h"
+#include "CCollisionMgr.h"
 
 CEngine::CEngine() :
 	m_hWnd{}
@@ -52,6 +53,7 @@ int CEngine::Init(HWND _wnd, POINT _ptResolution, OBJECT_SAVE _SaveFunc, OBJECT_
 	CKeyMgr::GetInst()->Init();
 	CTimeMgr::GetInst()->Init();
 	CAssetMgr::GetInst()->Init();
+	CCollisionMgr::GetInst()->Init();
 	CRenderMgr::GetInst()->Init();	// AssetMgr에서 렌더링에 필요한 Texture들을 생성한 뒤 RenderMgr 초기화
 	
 	CLevelMgr::GetInst()->Init();

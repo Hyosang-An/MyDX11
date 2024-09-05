@@ -21,6 +21,15 @@ CCollisionMgr::~CCollisionMgr()
 }
 
 
+void CCollisionMgr::Init()
+{
+	CollisionCheck(LAYER::PLAYER, LAYER::WALL_OR_GROUND);
+	CollisionCheck(LAYER::PLAYER, LAYER::SPIKE);
+	CollisionCheck(LAYER::PLAYER, LAYER::MONSTER);
+
+	CollisionCheck(LAYER::ROOM, LAYER::ROOM);
+}
+
 void CCollisionMgr::Tick()
 {
 	for (int Row = 0; Row < MAX_LAYER; ++Row)

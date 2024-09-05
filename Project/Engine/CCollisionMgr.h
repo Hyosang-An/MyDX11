@@ -35,6 +35,8 @@ public:
     void CollisionCheck(LAYER _layer1, LAYER _Layer2);
     void CollisionCheckClear() { memset(m_Matrix, 0, sizeof(UINT) * MAX_LAYER); }
 
+	const UINT* GetCollisionArr() { return m_Matrix; }
+
 	//Vec3 GetOverlap() { return m_vOverlap; }
 	Vec2 GetOverlapArea() { return m_OverlapArea; }
 
@@ -43,6 +45,7 @@ private:
     bool IsCollision(CCollider2D* _Left, CCollider2D* _Right);
 
 public:
+	void Init();
     void Tick();
 };
 

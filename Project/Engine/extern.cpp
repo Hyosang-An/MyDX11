@@ -50,6 +50,7 @@ const char* LAYER_STRING[] =
 {
 	"Default",
 	"Background",
+	"Room",
 	"TileMap",
 	"Player",
 	"Monster",
