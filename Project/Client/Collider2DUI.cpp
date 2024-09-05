@@ -3,6 +3,9 @@
 
 #include <Engine/CDevice.h>
 
+#include <Engine/CGameObject.h>
+#include <Engine/CCollider2D.h>
+
 
 Collider2DUI::Collider2DUI()
 	: ComponentUI(COMPONENT_TYPE::COLLIDER2D)
@@ -21,12 +24,34 @@ void Collider2DUI::Update()
 
 	Title();
 
-	// Offset Scale
+	CCollider2D* pCollider2D = GetTargetObject()->Collider2D();
+
+	if (pCollider2D == nullptr)
+		return;
 
 	// Offset Pos
+	Vec3 vOffset = pCollider2D->GetOffset();
+	ImGui::Text("Offset");
+	ImGui::SameLine(100);
+	ImGui::InputFloat3("##Offset", vOffset);
+	pCollider2D->SetOffset(vOffset);
+
+	
+	// Offset Scale
+	Vec3 vScale = pCollider2D->GetScale();
+	ImGui::Text("Scale");
+	ImGui::SameLine(100);
+	ImGui::DragFloat3("##Scale", vScale);
+	pCollider2D->SetScale(vScale);
+
+
 
 	// Independent Scale CheckBox
-
+	bool bIndependentScale = pCollider2D->GetIndependentScale();
+	ImGui::Text("Independent Scale");
+	ImGui::SameLine(100);
+	ImGui::Checkbox("##IndependentScale", &bIndependentScale);
+	pCollider2D->SetIndependentScale(bIndependentScale);
 
 
 

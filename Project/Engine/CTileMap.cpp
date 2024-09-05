@@ -98,9 +98,6 @@ void CTileMap::SetRowCol(UINT _Row, UINT _Col)
 	auto vecChildren = GetOwner()->GetChildren();
 	for (size_t i = 0; i < vecChildren.size(); i++)
 	{
-		if (vecChildren[i]->TileMap() == nullptr)
-			continue;
-
 		Vec3 vRelativePos = vecChildren[i]->Transform()->GetRelativePos();
 		Vec3 vRelativeScale = vecChildren[i]->Transform()->GetRelativeScale();
 

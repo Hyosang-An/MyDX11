@@ -95,6 +95,11 @@ void TileMapUI::Update()
 	ImGui::InputInt2("##TileResolution", tileResolution);
 	tileResolution[0] = max(1, tileResolution[0]);
 	tileResolution[1] = max(1, tileResolution[1]);
+	// 디버깅
+	if (ImGui::IsKeyPressed(ImGuiKey_Tab))
+	{
+		int a = 0;
+	}
 	// InputInt2의 포커스가 풀리면 적용
 	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetAtlasTileResolution(Vec2((float)tileResolution[0], (float)tileResolution[1]));
@@ -116,9 +121,20 @@ void TileMapUI::Update()
 	Vec2 vTileSize = m_selectedTileMap->GetTileSize();
 	ImGui::Text("Tile Size");
 	ImGui::SameLine(120);
-	ImGui::DragFloat2("##Tile Size", vTileSize, 1.f, 0.0f, FLT_MAX, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+	//ImGui::DragFloat2("##Tile Size", vTileSize, 1.f, 0.0f, FLT_MAX, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+	ImGui::InputFloat2("##Tile Size", vTileSize, "%.3f", ImGuiSliderFlags_AlwaysClamp);
 	vTileSize.x = max(0.f, vTileSize.x);
 	vTileSize.y = max(0.f, vTileSize.y);
+	
+	// 디버깅
+	if (ImGui::IsKeyPressed(ImGuiKey_Tab))
+	{
+		int a = 0;
+	}
+	if (vTileSize.x == 32)
+	{
+		int a = 0;
+	}
 	if (ImGui::IsItemDeactivatedAfterEdit())
 		m_selectedTileMap->SetTileSize(vTileSize);
 
@@ -471,14 +487,18 @@ void TileMapUI::Update()
 						pColliderObj->AddComponent(new CCollider2D);
 						
 
-						// 충돌체의 위치는 타일맵의 상대 좌표
-						Vec3 vColliderRelativePos = ((vColliderLTWorldPos + vColliderRBWorldPos) * 0.5f - m_selectedTileMap->Transform()->GetWorldPos()) / m_selectedTileMap->GetOwner()->Transform()->GetWorldScale();
+						// 충돌체오브젝트의 위치는 타일맵의 상대 좌표, 충돌체오브젝트의 기준 위치는 충돌체의 LT
+						//Vec3 vColliderRelativePos = ((vColliderLTWorldPos + vColliderRBWorldPos) * 0.5f - m_selectedTileMap->Transform()->GetWorldPos()) / m_selectedTileMap->GetOwner()->Transform()->GetWorldScale();
+						Vec3 vColliderRelativePos = (vColliderLTWorldPos - m_selectedTileMap->Transform()->GetWorldPos()) / m_selectedTileMap->GetOwner()->Transform()->GetWorldScale();
 						pColliderObj->Transform()->SetRelativePos(vColliderRelativePos);
 
 						// 충돌체의 크기는 타일맵의 상대 크기
 						Vec3 vColliderRelativeScale = Vec3((colliderRBCol - colliderLTCol + 1) * vTileSize.x , (colliderRBRow - colliderLTRow + 1) * vTileSize.y, 1.f) / m_selectedTileMap->GetOwner()->Transform()->GetWorldScale();
 						pColliderObj->Transform()->SetRelativeScale(vColliderRelativeScale);
 						pColliderObj->Collider2D()->SetScale(Vec3(1, 1, 1));
+
+						// 충돌체 오프셋 설정
+						pColliderObj->Collider2D()->SetOffset(Vec3(0.5f, -0.5f, 0));
 
 						wstring defaultName = L"TileMapColliderObj";
 						UINT idx = 0;

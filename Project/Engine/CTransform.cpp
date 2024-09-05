@@ -125,6 +125,10 @@ void CTransform::SetWorldPos(Vec3 _Pos)
 	// 크기행렬
 	Matrix matRelativeScale = XMMatrixScaling(m_RelativeScale.x, m_RelativeScale.y, m_RelativeScale.z);
 
+	// 크기가 하나라도 0이면 적용하지 않음
+	if (m_RelativeScale.x * m_RelativeScale.y * m_RelativeScale.z == 0)
+		return;
+
 	// 회전 행렬 (월드 좌표계의 X -> Y -> Z 축 순서로 오브젝트를 회전시킴)
 	Matrix matRelativeRot = XMMatrixRotationX(m_RelativeRotation.x)
 		* XMMatrixRotationY(m_RelativeRotation.y)
@@ -170,6 +174,9 @@ void CTransform::SetWorldPos(Vec3 _Pos)
 
 void CTransform::SetWorldScale(Vec3 _Scale)
 {
+	// 디버깅
+	if (m_RelativeScale.x == 0)
+		int a = 0;
 	Matrix matTargetRelativeScaling;
 
 	Matrix matTargetWorldScaling =  Matrix::CreateScale(_Scale);

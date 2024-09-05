@@ -27,6 +27,7 @@ public:
     Vec3 GetScale() { return m_Scale; }
     Vec3 GetWorldPos() { return m_matColWorld.Translation(); }
     const Matrix& GetWorldMat() { return m_matColWorld; }
+	bool GetIndependentScale() { return m_IndependentScale; }
 
     int GetOverlapCount() { return m_OverlapCount; }
 
