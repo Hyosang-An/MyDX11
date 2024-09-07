@@ -78,6 +78,8 @@ enum class LAYER
 
 	UI,
 
+	DEBUG,
+
 
 	END
 };

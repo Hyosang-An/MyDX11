@@ -10,11 +10,14 @@ public:
 	virtual CRoomScript* Clone() { return new CRoomScript(*this); }
 
 private:
-	CGameObject* m_PlayerSpawnPoint = nullptr;
+	bool m_StartRoom = false;
+
+	Vec3 m_PlayerSpawnPos;
 
 public:
 	void FirstSpawnPlayer();
-	void RespawnPlayer();
+	
+	Vec3 GetPlayerSpawnPos() { return m_PlayerSpawnPos; }
 
 public:
     virtual void Begin() override;

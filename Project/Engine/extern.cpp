@@ -59,7 +59,8 @@ const char* LAYER_STRING[] =
 	"Wall_Or_Ground",
 	"Spike",
 	"DreamBlock",
-	"UI"
+	"UI",
+	"Debug",
 };
 
 const char* ToString(LAYER _Layer)

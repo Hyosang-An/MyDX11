@@ -2,10 +2,14 @@
 #include "CRoomScript.h"
 #include "CPlayerScript.h"
 
+#include "Engine/CLevelMgr.h"
+#include "Engine/CLevel.h"
 
 CRoomScript::CRoomScript() :
 	CScript((UINT)SCRIPT_TYPE::ROOMSCRIPT)
 {
+	// 노출시킬 데이터
+	AddScriptParam(SCRIPT_PARAM_TYPE::BOOL, "Start Room", &m_StartRoom);
 }
 
 CRoomScript::CRoomScript(const CRoomScript& _Other) :
@@ -15,11 +19,7 @@ CRoomScript::CRoomScript(const CRoomScript& _Other) :
 
 CRoomScript::~CRoomScript()
 {
-	if (m_PlayerSpawnPoint)
-	{
-		delete m_PlayerSpawnPoint;
-		m_PlayerSpawnPoint = nullptr;
-	}
+
 }
 
 void CRoomScript::FirstSpawnPlayer()
@@ -28,11 +28,13 @@ void CRoomScript::FirstSpawnPlayer()
 	pPlayer->FlipBookComponent()->Play(L"Idle");
 
 	// 플레이어의 위치를 Room의 spawn로 이동
-	pPlayer->Transform()->SetWorldPos(m_PlayerSpawnPoint->Transform()->GetWorldPos());
-}
+	pPlayer->Transform()->SetWorldPos(m_PlayerSpawnPos);
 
-void CRoomScript::RespawnPlayer()
-{
+	// 레벨에 추가
+	CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(LAYER::PLAYER, pPlayer);
+
+	// 플레이어의 Room을 이 Room으로 변경
+	pPlayer->GetScript<CPlayerScript>()->ChangeRoom(GetOwner());
 }
 
 void CRoomScript::Begin()
@@ -43,9 +45,16 @@ void CRoomScript::Begin()
 	{
 		if (Child->GetName() == L"PlayerSpawnPoint")
 		{
-			m_PlayerSpawnPoint = Child;
-			break;
+			m_PlayerSpawnPos = Child->Transform()->GetWorldPos();
+
+			// offset
+			m_PlayerSpawnPos.y += 64;
 		}
+	}
+
+	if (m_StartRoom)
+	{
+		FirstSpawnPlayer();
 	}
 }
 
@@ -65,9 +74,11 @@ void CRoomScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 
 void CRoomScript::SaveToFile(FILE* _File)
 {
+	fwrite(&m_StartRoom, sizeof(bool), 1, _File);
 }
 
 void CRoomScript::LoadFromFile(FILE* _File)
 {
+	fread(&m_StartRoom, sizeof(bool), 1, _File);
 }
 

@@ -3,6 +3,8 @@
 #include "CRigidBody.h"
 #include "Engine/CCollisionMgr.h"
 
+#include "CRoomScript.h"
+
 CPlayerScript::CPlayerScript() :
 	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
 {
@@ -474,6 +476,16 @@ void CPlayerScript::UpdateState()
 		{
 			// TODO : 죽음 처리
 			m_RigidBody->SetVelocity(Vec3(0, 0, 0));
+
+			if (GetOwner()->FlipBookComponent()->IsFinished())
+			{
+				//respawn
+				auto respawnPos = m_Room->GetScript<CRoomScript>()->GetPlayerSpawnPos();
+				GetOwner()->Transform()->SetWorldPos(respawnPos);
+
+				m_CurState = PLAYER_STATE::IDLE;
+			}
+
 			break;
 		}
 	}
@@ -555,20 +567,20 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 					m_RigidBody->OnLand();
 					m_setGroundColliders.insert(_OtherCollider);
 
-					// 대쉬 초기화
-					m_DashTimeRemained = m_DashTime;
+					//// 대쉬 초기화
+					//m_DashTimeRemained = m_DashTime;
 
-					// 대쉬 상태에서 땅에 닿으면 대쉬 상태 해제
-					if (m_CurState == PLAYER_STATE::DASH)
-					{
-						m_CurState = PLAYER_STATE::IDLE;
-					}
+					//// 대쉬 상태에서 땅에 닿으면 대쉬 상태 해제
+					//if (m_CurState == PLAYER_STATE::DASH)
+					//{
+					//	m_CurState = PLAYER_STATE::IDLE;
+					//}
 
-					// 드림 대쉬 상태에서 땅에 닿으면 DEAD
-					if (m_CurState == PLAYER_STATE::DREAM_DASH)
-					{
-						m_CurState = PLAYER_STATE::DEATH;
-					}
+					//// 드림 대쉬 상태에서 땅에 닿으면 DEAD
+					//if (m_CurState == PLAYER_STATE::DREAM_DASH)
+					//{
+					//	m_CurState = PLAYER_STATE::DEATH;
+					//}
 				}
 
 				// 천장과 충돌한 경우
@@ -633,14 +645,14 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 						m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 					}
 
-					if (m_bOnGround)
+					/*if (m_bOnGround)
 					{
 						m_CurState = PLAYER_STATE::IDLE;
 					}
 					else
 					{
 						m_CurState = PLAYER_STATE::FALL;
-					}
+					}*/
 				}
 
 				// 드림 대쉬 상태에서 벽에 닿으면 DEAD

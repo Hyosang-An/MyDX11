@@ -95,6 +95,11 @@ void ScriptUI::Update()
 	{
 		switch (vecParam[i].Type)
 		{
+			case SCRIPT_PARAM_TYPE::BOOL:
+				//ParamUI::InputBool((bool*)vecParam[i].pData, vecParam[i].Desc);
+				ImGui::Checkbox(vecParam[i].Desc.c_str(), (bool*)vecParam[i].pData);
+				break;
+
 			case SCRIPT_PARAM_TYPE::INT:
 				ParamUI::InputInt((int*)vecParam[i].pData, vecParam[i].Desc);
 				break;

@@ -29,6 +29,8 @@ public:
     void Play(wstring _FliBookName, float _FPS, bool _Repeat);
     void Play(wstring _FliBookName, bool _Repeat = true);
 
+	bool IsFinished() { return m_Finish; }
+
 	void Pause() { m_Pause = true; }
 	void Resume() { m_Pause = false; }
 
