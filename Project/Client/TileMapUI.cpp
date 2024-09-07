@@ -233,6 +233,8 @@ void TileMapUI::Update()
 			pSubTileMapObj->AddComponent(new CTransform);
 			pSubTileMapObj->AddComponent(new CTileMap);
 
+			CTileMap* pSubTileMap = pSubTileMapObj->TileMap();
+			pSubTileMap->SetRowCol(1, 1);
 			pSubTileMapObj->TileMap()->SetTileSize(m_selectedTileMap->GetTileSize());
 		}
 		ImGui::EndDisabled();
