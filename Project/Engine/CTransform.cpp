@@ -167,11 +167,11 @@ void CTransform::SetWorldPos(Vec3 _Pos)
 	Vec3 TargetRelativePos = matTargetRelativeTranslation.Translation();
 
 	// 원래 RelativePos와 TargetRelativePos간의 차이가 매우 작은 것은 적용하지 않음 (0.1% 이하)
-	if (abs(TargetRelativePos.x - m_RelativePos.x) / m_RelativePos.x > 0.001)
+	if (abs(TargetRelativePos.x - m_RelativePos.x) / abs(m_RelativePos.x) > 0.001)
 		m_RelativePos.x = TargetRelativePos.x;
-	if (abs(TargetRelativePos.y - m_RelativePos.y) / m_RelativePos.y > 0.001)
+	if (abs(TargetRelativePos.y - m_RelativePos.y) / abs(m_RelativePos.y) > 0.001)
 		m_RelativePos.y = TargetRelativePos.y;
-	if (abs(TargetRelativePos.z - m_RelativePos.z) / m_RelativePos.z > 0.001)
+	if (abs(TargetRelativePos.z - m_RelativePos.z) / abs(m_RelativePos.z) > 0.001)
 		m_RelativePos.z = TargetRelativePos.z;
 
 

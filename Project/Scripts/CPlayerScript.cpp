@@ -12,8 +12,8 @@ CPlayerScript::CPlayerScript() :
 CPlayerScript::CPlayerScript(const CPlayerScript& _Other) :
 	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
 {
-	// _other에서 변수들 얕은 복사
-	m_CurRoomIdx = 0;
+	// _other에서 변수들 얕은 복사S
+	//m_CurRoomIdx = 0;
 
 
 	m_MagnitudeOfMoveForce = _Other.m_MagnitudeOfMoveForce;
@@ -67,6 +67,10 @@ void CPlayerScript::KeyCheck()
 
 	//OnGround 상태 업데이트
 	m_bOnGround = m_RigidBody->IsOnGround();
+
+	// Death 상태일 때는 입력을 받지 않는다.
+	if (m_CurState == PLAYER_STATE::DEATH)
+		return;
 
 	// IDLE
 	if (m_bOnGround && !KEY_PRESSED(KEY::RIGHT) && !KEY_PRESSED(KEY::LEFT) && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
@@ -466,9 +470,10 @@ void CPlayerScript::UpdateState()
 			break;
 		}
 
-		case PLAYER_STATE::DEAD:
+		case PLAYER_STATE::DEATH:
 		{
 			// TODO : 죽음 처리
+			m_RigidBody->SetVelocity(Vec3(0, 0, 0));
 			break;
 		}
 	}
@@ -510,9 +515,8 @@ void CPlayerScript::UpdateAnimation()
 			break;
 		case PLAYER_STATE::CHANGE_ROOM:
 			break;
-		case PLAYER_STATE::DEAD:
-			break;
-		case PLAYER_STATE::END:
+		case PLAYER_STATE::DEATH:
+			GetOwner()->FlipBookComponent()->Play(L"Death", false);
 			break;
 		default:
 			break;
@@ -563,7 +567,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 					// 드림 대쉬 상태에서 땅에 닿으면 DEAD
 					if (m_CurState == PLAYER_STATE::DREAM_DASH)
 					{
-						m_CurState = PLAYER_STATE::DEAD;
+						m_CurState = PLAYER_STATE::DEATH;
 					}
 				}
 
@@ -591,7 +595,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 					// 드림 대쉬 상태에서 천장에 닿으면 DEAD
 					if (m_CurState == PLAYER_STATE::DREAM_DASH)
 					{
-						m_CurState = PLAYER_STATE::DEAD;
+						m_CurState = PLAYER_STATE::DEATH;
 					}
 				}
 			}
@@ -642,7 +646,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 				// 드림 대쉬 상태에서 벽에 닿으면 DEAD
 				if (m_CurState == PLAYER_STATE::DREAM_DASH)
 				{
-					m_CurState = PLAYER_STATE::DEAD;
+					m_CurState = PLAYER_STATE::DEATH;
 				}
 
 			}
@@ -652,7 +656,8 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 		case LAYER::SPIKE:
 		{
 			// TODO : 죽음 처리
-
+			m_CurState = PLAYER_STATE::DEATH;
+			m_RigidBody->SetVelocity(Vec3(0, 0, 0));
 		}
 		break;
 		

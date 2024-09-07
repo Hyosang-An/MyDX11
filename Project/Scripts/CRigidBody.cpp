@@ -51,6 +51,10 @@ void CRigidBody::Tick()
 	// 현재 플레이어 상태
 	PLAYER_STATE curState = GetOwner()->GetScript<CPlayerScript>()->GetCurState();
 
+	// Death 상태일 때는 아무것도 하지 않음
+	if (curState == PLAYER_STATE::DEATH)
+		return;
+
 	// 중력 이외의 외력으로 인한 가속도
 	Vec3 Acceleration = m_vForce / m_fMass;	
 

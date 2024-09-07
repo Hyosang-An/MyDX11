@@ -34,6 +34,60 @@ void ScriptUI::Update()
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
 
+	// Script 삭제 버튼
+	if (ImGui::Button("X"))
+	{
+		// 정말 삭제할건지에 대한 확인창 띄우기
+		ImGui::OpenPopup("Delete##Script");
+	}
+
+	// Script 삭제 확인창
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing);
+
+	if (ImGui::BeginPopup("Delete##Script", ImGuiPopupFlags_None))
+	{
+		//string strScriptName = string(strScriptName.begin(), strScriptName.end());
+		string text = "Delete Script : " + string(strScriptName.begin(), strScriptName.end());
+		ImGui::Text(text.c_str());
+
+		ImGui::NewLine();
+
+		// 버튼들을 중앙에 정렬하기 위해 사용 가능한 너비를 가져옴
+		float windowWidth = ImGui::GetWindowSize().x;
+		float buttonWidth = ImGui::CalcTextSize("Yes").x + ImGui::GetStyle().FramePadding.x * 2;
+		buttonWidth += ImGui::CalcTextSize("No").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetStyle().ItemSpacing.x;
+
+		float offsetX = (windowWidth - buttonWidth) * 0.5f;
+
+		ImGui::SetCursorPosX(offsetX); // 버튼을 중앙으로 정렬
+
+		if (ImGui::Button("Yes") || ImGui::IsKeyDown(ImGuiKey_Enter))
+		{
+			// 삭제
+			auto TargetObject = m_Script->GetOwner();
+			TargetObject->RemoveScript(m_Script);
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("No") || ImGui::IsKeyDown(ImGuiKey_Escape))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		// 창 밖을 클릭하면 닫히게, 단 InputText가 활성화되어 있지 않은 경우에만
+		if (!ImGui::IsWindowHovered() &&
+			!ImGui::IsAnyItemActive() &&  // 활성화된 위젯이 없을 때만
+			ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
 	// Script 에서 노출시킬 데이터를 보여준다.
 	const vector<tScriptParam>& vecParam = m_Script->GetScriptParamVec();
 

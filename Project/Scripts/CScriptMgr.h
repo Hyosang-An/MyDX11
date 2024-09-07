@@ -9,6 +9,7 @@ enum SCRIPT_TYPE
 	MISSILESCRIPT,
 	PLAYERSCRIPT,
 	RIGIDBODY,
+	ROOMSCRIPT,
 };
 
 using namespace std;

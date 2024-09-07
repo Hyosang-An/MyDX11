@@ -115,6 +115,32 @@ void CGameObject::AddChild(CGameObject* _ChildObject)
 	CLevelMgr::GetInst()->LevelChanged();
 }
 
+void CGameObject::RemoveComponent(COMPONENT_TYPE _Type)
+{
+	// 해당 타입 컴포넌트를 제거
+	if (nullptr != m_arrCom[(UINT)_Type])
+	{
+		delete m_arrCom[(UINT)_Type];
+		m_arrCom[(UINT)_Type] = nullptr;
+	}
+}
+
+void CGameObject::RemoveScript(CScript* _Script)
+{
+	vector<CScript*>::iterator iter = m_vecScript.begin();
+
+	for (; iter != m_vecScript.end(); ++iter)
+	{
+		if ((*iter) == _Script)
+		{
+			delete (*iter);
+			m_vecScript.erase(iter);
+			return;
+		}
+	}
+
+}
+
 void CGameObject::AddChild(CGameObject* _ChildObject, int _childLayerIdx)
 {
 	_ChildObject->m_LayerIdx = _childLayerIdx;

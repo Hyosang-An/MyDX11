@@ -11,6 +11,7 @@
 #include <Engine/CGameObject.h>
 #include <Engine/CTransform.h>
 #include <Engine/CPathMgr.h>
+#include <Engine/CCollider2D.h>
 
 Outliner::Outliner()
 {
@@ -64,10 +65,17 @@ void Outliner::Update()
 	}
 
 	// 선택된 오브젝트 둘레에 보라색 테두리 (타일맵은 타일맵 컴포넌트UI에서 처리)
-	if (m_SelectedObject && m_SelectedObject->GetLayerIdx() != (int)LAYER::TILEMAP)
+	if (m_SelectedObject && m_SelectedObject->GetLayerIdx() != (int)LAYER::TILEMAP && m_SelectedObject->GetLayerIdx() != (int)LAYER::ROOM)
 	{
 		Vec3 objWorldPos = m_SelectedObject->Transform()->GetWorldPos();
 		Vec3 objWorldScale = m_SelectedObject->Transform()->GetWorldScale();
+
+		// 플레이어인경우 충돌체의 위치를 표시
+		if (m_SelectedObject->GetLayerIdx() == (int)LAYER::PLAYER)
+		{
+			objWorldPos = m_SelectedObject->Collider2D()->GetWorldPos();
+			objWorldScale = m_SelectedObject->Collider2D()->GetWorldScale();
+		}
 
 		DrawDebugRect(objWorldPos, objWorldScale * 1.1 ,Vec3(0, 0, 0), Vec4(1.f, 0.f, 1.f, 0.5f), 0.f, false);
 	}

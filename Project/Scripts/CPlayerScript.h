@@ -11,7 +11,7 @@ enum class PLAYER_STATE
     CLIMB,
     DREAM_DASH,
     CHANGE_ROOM,
-    DEAD,
+    DEATH,
     END
 };
 
@@ -30,7 +30,9 @@ private:
 	bool            m_bFacingRight = true; // 바라보고 있는 방향 (true : 오른쪽, false : 왼쪽)
 	bool			m_bOnGround = false;
 
-	int             m_CurRoomIdx = 0;
+	//int             m_CurRoomIdx = 0;
+
+	CGameObject*	m_Room = nullptr;
 
 
 	float           m_MagnitudeOfMoveForce = 1000;
@@ -62,6 +64,7 @@ private:
 
 public:
 	PLAYER_STATE GetCurState() { return m_CurState; }
+	void ChangeRoom(CGameObject* _Room) { m_Room = _Room; }
 
 private:
     void KeyCheck();

@@ -2,3 +2,4 @@ CCameraMoveScript
 CMissileScript
 CPlayerScript
 CRigidBody
+CRoomScript

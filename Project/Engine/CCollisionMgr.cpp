@@ -26,6 +26,7 @@ void CCollisionMgr::Init()
 	CollisionCheck(LAYER::PLAYER, LAYER::WALL_OR_GROUND);
 	CollisionCheck(LAYER::PLAYER, LAYER::SPIKE);
 	CollisionCheck(LAYER::PLAYER, LAYER::MONSTER);
+	//CollisionCheck(LAYER::TILEMAP, LAYER::TILEMAP);
 
 	CollisionCheck(LAYER::ROOM, LAYER::ROOM);
 }

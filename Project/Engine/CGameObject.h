@@ -34,6 +34,9 @@ public:
     void AddComponent(CComponent* _Comopnent);
     void AddChild(CGameObject* _ChildObject);
 
+	void RemoveComponent(COMPONENT_TYPE _Type);
+	void RemoveScript(CScript* _Script);
+
 	// LevelSaveLoad에서 사용
 	void AddChild(CGameObject* _ChildObject, int _childLayerIdx);
 

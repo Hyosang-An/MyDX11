@@ -17,6 +17,8 @@
 #include <Engine/CLevel.h>
 #include <Engine/func.h>
 
+#include <Scripts/CRoomScript.h>
+
 TileMapUI::TileMapUI()
 	: ComponentUI(COMPONENT_TYPE::TILEMAP)
 {
@@ -212,6 +214,10 @@ void TileMapUI::Update()
 
 		ImGui::Separator();
 
+
+		
+
+
 		// ========================================================================================================
 		// Sub TileMap 추가 버튼
 		// ========================================================================================================
@@ -238,6 +244,53 @@ void TileMapUI::Update()
 			pSubTileMapObj->TileMap()->SetTileSize(m_selectedTileMap->GetTileSize());
 		}
 		ImGui::EndDisabled();
+
+		// ========================================================================================================
+		// Room Collider 추가 버튼
+		// ========================================================================================================
+		ImGui::BeginDisabled(pParent != nullptr || m_selectedTileMap->GetOwner()->Collider2D() != nullptr);
+		if (ImGui::Button("Add Room Collider"))
+		{
+			m_selectedTileMap->GetOwner()->AddComponent(new CCollider2D);
+			CCollider2D* pCollider = m_selectedTileMap->GetOwner()->Collider2D();
+			pCollider->SetName(L"RoomCollider");
+			pCollider->SetIndependentScale(false);
+			pCollider->SetScale(Vec3(1, 1, 1));
+			pCollider->SetOffset(Vec3(0.5f, -0.5f, 0));
+		}
+		ImGui::EndDisabled();
+
+		// ========================================================================================================
+		// Player Spawn Point 추가 버튼
+		// ========================================================================================================
+		ImGui::BeginDisabled(pParent != nullptr || m_selectedTileMap->GetOwner()->GetScript<CRoomScript>() == nullptr);
+		if (ImGui::Button("Add Player Spawn Point"))
+		{
+			CGameObject* pPlayerSpawnPoint = new CGameObject;
+			pPlayerSpawnPoint->SetName(L"PlayerSpawnPoint");
+			pPlayerSpawnPoint->AddComponent(new CTransform);
+			pPlayerSpawnPoint->AddComponent(new CCollider2D);
+
+			// 레벨에 추가
+			auto curLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+			curLevel->AddObject(LAYER::UI, pPlayerSpawnPoint);
+
+			// 현재 타일맵의 자식으로 추가
+			m_selectedTileMap->GetOwner()->AddChild(pPlayerSpawnPoint);
+
+			// 위치는 에디터 카메라 위치로 설정
+			Vec3 vEditorCameraWorldPos = pCameraTrans->GetWorldPos();
+			pPlayerSpawnPoint->Transform()->SetWorldPos(vEditorCameraWorldPos);
+			pPlayerSpawnPoint->Transform()->SetWorldScale(Vec3(48, 96, 1));
+
+			CCollider2D* pCollider = pPlayerSpawnPoint->Collider2D();
+			pCollider->SetName(L"PlayerSpawnPointCollider");
+			pCollider->SetIndependentScale(true);
+			pCollider->SetScale(Vec3(48, 96, 1));
+			pCollider->SetOffset(Vec3(0, 0, 0));
+		}
+		ImGui::EndDisabled();
+
 
 		// Sprite SelectMod Combo Box
 		ImGui::Text("TileMap Edit Mode");
@@ -426,10 +479,10 @@ void TileMapUI::Update()
 			ImGui::SameLine(140);
 			ImGui::SetNextItemWidth(180.f);
 			//const char* layerTypes[] = { "Wall", "Spike", "Dream Block"};
-			static string layerType = "Wall";
+			static string layerType = "Wall Or Ground";
 			if (ImGui::BeginCombo("##Layer Type", layerType.c_str()))
 			{
-				if (ImGui::Selectable("Wall"))
+				if (ImGui::Selectable("Wall Or Ground"))
 				{
 					m_colliderLayerType = LAYER::WALL_OR_GROUND; 
 					layerType = "Wall";

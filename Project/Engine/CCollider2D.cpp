@@ -42,11 +42,30 @@ void CCollider2D::FinalTick()
 
 	m_matColWorld = matScale * matTranslation * matObjectScaleInv * GetOwner()->Transform()->GetWorldMat();
 
-	// Debug 렌더링으로 충돌체의 위치를 표시
-	if (m_OverlapCount)
-		DrawDebugRect(m_matColWorld, Vec4(1.f, 0.f, 0.f, 1.f), 0.f, false);
+	// Debug 렌더링으로 충돌체의 위치를 표시 (Room은 따로 처리)
+	if (GetOwner()->GetLayerIdx() == (int)LAYER::ROOM)
+	{
+		if (m_OverlapCount)
+			DrawDebugRect(m_matColWorld, Vec4(0.f, 0.f, 1.f, 1.f), 0.f, true);
+		else
+			DrawDebugRect(m_matColWorld, Vec4(1.f, 1.f, 1.f, 1.f), 0.f, true);
+	}
+
+	// UI도 따로 처리
+	else if (GetOwner()->GetLayerIdx() == (int)LAYER::UI)
+	{
+		DrawDebugRect(m_matColWorld, Vec4(0.7f, 0.7f, 0.7f, 1.f), 0.f, false);
+	}
+
+
 	else
-		DrawDebugRect(m_matColWorld, Vec4(0.f, 1.f, 0.f, 1.f), 0.f, false);
+	{
+		if (m_OverlapCount)
+			DrawDebugRect(m_matColWorld, Vec4(1.f, 0.f, 0.f, 1.f), 0.f, false);
+		else
+			DrawDebugRect(m_matColWorld, Vec4(0.f, 1.f, 0.f, 1.f), 0.f, false);
+	}
+	
 }
 
 Vec3 CCollider2D::GetWorldScale()
