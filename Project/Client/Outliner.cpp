@@ -298,6 +298,21 @@ void Outliner::PopUpMenu(DWORD_PTR _Param)
 		m_bDeleteObject = true;
 	}
 
+	if (ImGui::MenuItem("Clone"))
+	{
+		// 클론
+		CGameObject* pClone = pObject->Clone();
+		
+		// 이름 변경
+		wstring wstrObjName = pObject->GetName();
+		wstrObjName += L" Clone";
+		pClone->SetName(wstrObjName);
+
+		// 현재 레벨
+		CLevel* pCurrentLevel = CLevelMgr::GetInst()->GetCurrentLevel();
+		pCurrentLevel->AddObject(pObject->GetLayerIdx(), pClone);
+	}
+
 	if (ImGui::MenuItem("Save As Prefab"))
 	{
 		// Prefab으로 저장
