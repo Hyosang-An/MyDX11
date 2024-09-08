@@ -84,6 +84,9 @@ public:
     void SetScale(float _Scale) { m_ProjectionScale = _Scale; }
     float GetScale() { return m_ProjectionScale; }
 
+	float GetProjectionWidth() { return m_Width * m_ProjectionScale; }
+	float GetProjectionHeight() { return m_Height * m_ProjectionScale; }
+
 private:
     void SortGameObject();
 

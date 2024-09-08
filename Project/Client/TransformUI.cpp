@@ -3,6 +3,8 @@
 
 #include <Engine/CGameObject.h>
 #include <Engine/CTransform.h>
+#include <Engine/CLevelMgr.h>
+#include <Engine/CLevel.h>
 
 TransformUI::TransformUI()
 	: ComponentUI(COMPONENT_TYPE::TRANSFORM)
@@ -23,6 +25,12 @@ void TransformUI::Update()
 
 	if (pTrans == nullptr)
 		return;
+
+	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() == PLAY)
+	{
+		ImGui::Text("Play Mode \n Edit Impossible!");
+	}
+
 
 	Vec3 vPos = pTrans->GetRelativePos();
 	Vec3 vScale = pTrans->GetRelativeScale();
@@ -55,11 +63,7 @@ void TransformUI::Update()
 	ImGui::SameLine(100);
 	ImGui::DragFloat3("##Rot", vRot, 0.1f);
 
-	pTrans->SetRelativePos(vPos);
-	pTrans->SetRelativeScale(vScale);
 
-	vRot = (vRot / 180.f) * XM_PI;
-	pTrans->SetRelativeRotation(vRot);
 
 
 	// Independent Scale
@@ -72,20 +76,44 @@ void TransformUI::Update()
 		pTrans->SetIndependentScale(IS);
 	}
 
+	// 플레이 모드일 때는 상태를 변경하지 않도록
+	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() != PLAY)
+	{
+		pTrans->SetRelativePos(vPos);
+		pTrans->SetRelativeScale(vScale);
+
+		vRot = (vRot / 180.f) * XM_PI;
+		pTrans->SetRelativeRotation(vRot);
+	}
+
 
 	// WorldPos
 	Vec3 vWorldPos = pTrans->GetWorldPos();
 	ImGui::Text("World Position");
 	ImGui::SameLine(100);
 	ImGui::DragFloat3("##WorldPos", vWorldPos, 1);
-	pTrans->SetWorldPos(vWorldPos);
+	
+	// 디버깅
+	if (vWorldPos.y == -249.9f)
+	{
+
+		int a = 1;
+	}
 
 	// WorldScale
 	Vec3 vWorldScale = pTrans->GetWorldScale();
 	ImGui::Text("World Scale");
 	ImGui::SameLine(100);
 	ImGui::DragFloat3("##WorldScale", vWorldScale, 1);
-	pTrans->SetWorldScale(vWorldScale);
+
+
+	// 플레이 모드일 때는 상태를 변경하지 않도록
+	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() != PLAY)
+	{
+
+		pTrans->SetWorldPos(vWorldPos);
+		pTrans->SetWorldScale(vWorldScale);
+	}
 
 
 

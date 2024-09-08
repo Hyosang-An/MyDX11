@@ -248,6 +248,11 @@ void CGameObject::FinalTick()
 			m_arrCom[i]->FinalTick();
 	}
 
+	for (size_t i = 0; i < m_vecScript.size(); ++i)
+	{
+		m_vecScript[i]->FinalTick();
+	}
+
 	// 레이어 등록
 	assert(-1 != m_LayerIdx);
 	CLevel* pLevel = CLevelMgr::GetInst()->GetCurrentLevel();

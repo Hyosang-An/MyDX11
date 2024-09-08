@@ -64,7 +64,8 @@ private:
 
 public:
 	PLAYER_STATE GetCurState() { return m_CurState; }
-	void ChangeRoom(CGameObject* _Room) { m_Room = _Room; }
+	void ChangeRoom(CGameObject* _Room);
+	CGameObject* GetRoom() { return m_Room; }
 
 private:
     void KeyCheck();

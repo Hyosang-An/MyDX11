@@ -48,9 +48,9 @@ protected:
 
     void Instantiate(Ptr<CPrefab> _Pref, int _LayerIdx, Vec3 _WorldPos, const wstring& _Name = L"");
 public:
-    //virtual void Begin() override {}
+    virtual void Begin() override {}
     virtual void Tick() = 0;
-    virtual void FinalTick() final override {}
+    virtual void FinalTick() override {}
 
     virtual void BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider) {}
     virtual void Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider) {}

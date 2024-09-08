@@ -2,8 +2,11 @@
 #include "CPlayerScript.h"
 #include "CRigidBody.h"
 #include "Engine/CCollisionMgr.h"
+#include "Engine/CLevelMgr.h"
+#include "Engine/CLevel.h"
 
 #include "CRoomScript.h"
+#include "CCameraMoveScript.h"
 
 CPlayerScript::CPlayerScript() :
 	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
@@ -60,6 +63,15 @@ void CPlayerScript::Tick()
 	 UpdateAnimation();
 
 	 m_PrevState = m_CurState;
+}
+
+void CPlayerScript::ChangeRoom(CGameObject* _Room)
+{
+	m_Room = _Room;
+
+	// 메인카메라의 ChangeRoom 함수 호출
+	auto mainCamera = CLevelMgr::GetInst()->GetCurrentLevel()->FindObjectByName(L"MainCamera");
+	mainCamera->GetScript<CCameraMoveScript>()->SetChangeRoom();
 }
 
 void CPlayerScript::KeyCheck()
@@ -727,7 +739,7 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 				vObjWorldPos.y += overlapArea.y;
 				GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
 
-				m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, 0, 0));
+				m_RigidBody->OnLand();
 			}
 		}
 		

@@ -524,7 +524,10 @@ void MenuUI::AddComponent()
 			ImGui::EndMenu();
 		}
 
-		ImGui::MenuItem("Collider2D");
+		if (ImGui::MenuItem("Collider2D"))
+		{
+			pObject->AddComponent(new CCollider2D);
+		}
 		ImGui::MenuItem("Camera");
 
 

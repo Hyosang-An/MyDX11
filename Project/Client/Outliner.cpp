@@ -319,6 +319,10 @@ void Outliner::PopUpMenu(DWORD_PTR _Param)
 		// 현재 레벨
 		CLevel* pCurrentLevel = CLevelMgr::GetInst()->GetCurrentLevel();
 		pCurrentLevel->AddObject(pObject->GetLayerIdx(), pClone);
+
+		// 현재 에디터 카메라 위치에 생성
+		Vec3 vCamPos = CEditorMgr::GetInst()->GetEditorCamera()->Transform()->GetWorldPos();
+		pClone->Transform()->SetWorldPos(vCamPos);
 	}
 
 	if (ImGui::MenuItem("Save As Prefab"))

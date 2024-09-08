@@ -36,6 +36,14 @@ void CEditorCameraScript::Tick()
 		else
 			Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
 	}
+
+	if (KEY_JUST_PRESSED(KEY::P))
+{
+	if (PROJ_TYPE::ORTHOGRAPHIC == Camera()->GetProjType())
+		Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	else
+		Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+}
 }
 
 

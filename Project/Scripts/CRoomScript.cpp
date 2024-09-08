@@ -67,9 +67,56 @@ void CRoomScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 	// 플레이어와 충돌했을 때
 	if (_OtherObject->GetLayerIdx() == (UINT)LAYER::PLAYER)
 	{
+		CGameObject* pPlayer = _OtherObject;
+
 		// 기존의 플레이어가 속한 Room을 이쪽 Room으로 변경
-		_OtherObject->GetScript<CPlayerScript>()->ChangeRoom(GetOwner());
+		pPlayer->GetScript<CPlayerScript>()->ChangeRoom(GetOwner());
+
+		// 플레이어가 Room의 Top, Bottom, Left, Right중 어느쪽으로 들어왔는지 체크
+		Vec3 PlayerPos = pPlayer->Transform()->GetWorldPos();
+		Vec3 RoomPos = GetOwner()->Collider2D()->GetWorldPos();
+		Vec3 RoomScale = GetOwner()->Transform()->GetWorldScale();
+
+		// 플레이어와 Top, Bottom, Left, Right 중 어느쪽이 가까운지 체크
+		float TopDist = abs(PlayerPos.y - (RoomPos.y + RoomScale.y * 0.5f));
+		float BottomDist = abs(PlayerPos.y - (RoomPos.y - RoomScale.y * 0.5f));
+		float LeftDist = abs(PlayerPos.x - (RoomPos.x - RoomScale.x * 0.5f));
+		float RightDist = abs(PlayerPos.x - (RoomPos.x + RoomScale.x * 0.5f));
+
+		if (TopDist < BottomDist && TopDist < LeftDist && TopDist < RightDist)
+		{
+			// Top
+			auto pos = pPlayer->Transform()->GetWorldPos();
+			pos.y -= 48;
+			pPlayer->Transform()->SetWorldPos(pos);
+		}
+		else if (BottomDist < TopDist && BottomDist < LeftDist && BottomDist < RightDist)
+		{
+			// Bottom
+			auto pos = pPlayer->Transform()->GetWorldPos();
+			pos.y += 48;
+			pPlayer->Transform()->SetWorldPos(pos);
+		}
+		else if (LeftDist < TopDist && LeftDist < BottomDist && LeftDist < RightDist)
+		{
+			// Left
+			auto pos = pPlayer->Transform()->GetWorldPos();
+			pos.x += 48;
+			pPlayer->Transform()->SetWorldPos(pos);
+		}
+		else
+		{
+			// Right
+			auto pos = pPlayer->Transform()->GetWorldPos();
+			pos.x -= 48;
+			pPlayer->Transform()->SetWorldPos(pos);
+		}
+		
 	}
+	
+
+	
+
 }
 
 void CRoomScript::SaveToFile(FILE* _File)
