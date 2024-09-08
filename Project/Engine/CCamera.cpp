@@ -33,6 +33,9 @@ CCamera::CCamera()
 
 CCamera::~CCamera()
 {
+	// RenderMgr에서 제거
+
+	CRenderMgr::GetInst()->DeregisterCamera(this);	
 }
 
 void CCamera::Begin()

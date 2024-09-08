@@ -288,30 +288,33 @@ void CTestLevel::CreateCelesteTestLevel()
 
 
 	//플레이어 오브젝트
-	CGameObject* pPlayer = new CGameObject;
-	pPlayer->SetName(L"Player");
-	pPlayer->AddComponent(new CTransform);
-	pPlayer->AddComponent(new CMeshRender);
-	pPlayer->AddComponent(new CCollider2D);
-	pPlayer->AddComponent(new CFlipBookComponent);
-	pPlayer->AddComponent(new CPlayerScript);
-	pPlayer->AddComponent(new CRigidBody);
+	//CGameObject* pPlayer = new CGameObject;
+	//pPlayer->SetName(L"Player");
+	//pPlayer->AddComponent(new CTransform);
+	//pPlayer->AddComponent(new CMeshRender);
+	//pPlayer->AddComponent(new CCollider2D);
+	//pPlayer->AddComponent(new CFlipBookComponent);
+	//pPlayer->AddComponent(new CPlayerScript);
+	//pPlayer->AddComponent(new CRigidBody);
 
-	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
-	pPlayer->Transform()->SetRelativeScale(350, 350, 1.f);
+	//pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+	//pPlayer->Transform()->SetRelativeScale(350, 350, 1.f);
 
-	pPlayer->Collider2D()->SetIndependentScale(true);
-	pPlayer->Collider2D()->SetOffset(Vec3(0.f, -64.f, 0.f));
-	pPlayer->Collider2D()->SetScale(Vec3(60.f, 96.f, 1.f));
+	//pPlayer->Collider2D()->SetIndependentScale(true);
+	//pPlayer->Collider2D()->SetOffset(Vec3(0.f, -64.f, 0.f));
+	//pPlayer->Collider2D()->SetScale(Vec3(60.f, 96.f, 1.f));
 
-	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pPlayer->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+	//pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	//pPlayer->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
 
-	pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Idle\\Idle.flip"));
-	pPlayer->FlipBookComponent()->Play(L"Idle", 10, true);
+	//pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Idle\\Idle.flip"));
+	//pPlayer->FlipBookComponent()->Play(L"Idle", 10, true);
 
-	//auto pPlayer = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Player.prefab")->Instantiate();
-	//pPlayer->FlipBookComponent()->Play(L"Idle");
+
+
+
+	auto pPlayer = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Player.prefab")->Instantiate();
+	pPlayer->FlipBookComponent()->Play(L"Idle");
 	
 	TestLevel->AddObject(LAYER::PLAYER, pPlayer);
 

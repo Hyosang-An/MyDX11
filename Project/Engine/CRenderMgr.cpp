@@ -252,6 +252,16 @@ void CRenderMgr::RegisterCamera(CCamera* _cam, int _camPriority)
 	m_vecCam[_camPriority] = _cam;
 }
 
+void CRenderMgr::DeregisterCamera(CCamera* _cam)
+{
+	auto it = std::find(m_vecCam.begin(), m_vecCam.end(), _cam);
+	if (it != m_vecCam.end())
+	{
+		m_vecCam.erase(it);
+	}
+
+}
+
 void CRenderMgr::PostProcessCopy(int _postProcessRTTex_index)
 {
 	assert(m_vecPostProcessRTTex.size() > _postProcessRTTex_index);
