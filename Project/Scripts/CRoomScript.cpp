@@ -67,6 +67,10 @@ void CRoomScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 	// 플레이어와 충돌했을 때
 	if (_OtherObject->GetLayerIdx() == (UINT)LAYER::PLAYER)
 	{
+		// 현재 레벨이 정지상태면 return
+		if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() == LEVEL_STATE::STOP)
+			return;
+
 		CGameObject* pPlayer = _OtherObject;
 
 		// 기존의 플레이어가 속한 Room을 이쪽 Room으로 변경

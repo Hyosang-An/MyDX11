@@ -34,6 +34,12 @@ void CCameraMoveScript::Tick()
 
 void CCameraMoveScript::FinalTick()
 {
+	if (m_Player !=nullptr && m_Player->IsDead())
+	{
+		m_Player = nullptr;
+		return;
+	}
+
 	if (PROJ_TYPE::ORTHOGRAPHIC == Camera()->GetProjType())
 	{
 		OrthoGraphicMove();
