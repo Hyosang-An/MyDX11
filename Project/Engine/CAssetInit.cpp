@@ -254,6 +254,20 @@ void CAssetMgr::CreateEngineGraphicShader()
 	AddAsset(L"Std2DShader", pShader);
 
 
+	// DashTrailShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
+	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D");
+
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+
+	AddAsset(L"DashTrailShader", pShader);
+
+
 	// Std2DAlphaBlend
 	pShader = new CGraphicShader;
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
@@ -266,6 +280,8 @@ void CAssetMgr::CreateEngineGraphicShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
 	AddAsset(L"Std2DAlphaBlendShader", pShader);
+
+
 
 
 	// DebugShapeShader
@@ -408,7 +424,7 @@ void CAssetMgr::CreateEngineMaterial()
 
 	// 플레이어 잔상 Mtrl
 	pMtrl = new CMaterial(true);
-	pMtrl->SetShader(FindAsset<CGraphicShader>(L"Std2DShader"));
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"DashTrailShader"));
 	pMtrl->SetScalarParam(INT_0, 1);
 	AddAsset(L"PlayerTrailMtrl", pMtrl);
 

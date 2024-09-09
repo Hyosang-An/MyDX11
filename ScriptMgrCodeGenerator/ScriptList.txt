@@ -1,4 +1,5 @@
 CCameraMoveScript
+CDashTrailScript
 CMissileScript
 CPlayerScript
 CRigidBody

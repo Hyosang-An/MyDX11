@@ -311,6 +311,8 @@ int CDevice::CreateBlendState()
 	// AlphaBlend - Coverage
 	// AlphaToCoverageEnable가 true면, 알파값이 0.5이하인 부분을 렌더링 할 때, 무시한다. -> 경계가 뚜렷한 캐릭터같은 텍스쳐를 렌더링할 때 주로 사용
 	// 이걸 쓰지 않고 그냥 AlphaBlend를 하면 앞에 보이는 텍스쳐의 투명한 부분에 뒤에 그려지는 물체들이 가려지는 현상이 발생.
+
+	//AlphaToCoverageEnable = true: 이 설정은 **멀티 샘플링(MSAA)**을 사용할 때 활성화되며, 알파 블렌딩이 되는 픽셀의 일부가 커버리지에 의해 어떻게 처리될지 결정합니다. 즉, 알파 값에 따라 샘플들이 마스크되어 렌더링됩니다. 주로 경계가 뚜렷한 캐릭터 텍스처를 렌더링할 때 사용됩니다.
 	Desc.AlphaToCoverageEnable = true;	
 	Desc.IndependentBlendEnable = false;
 
@@ -333,6 +335,7 @@ int CDevice::CreateBlendState()
 
 
 	// AlphaBlend
+	// 이 블렌드 상태는 알파 블렌딩만 활성화된 상태로, 알파 값을 기반으로 두 픽셀의 색상을 섞는 일반적인 투명 객체 처리 방식입니다. 이는 유리, 물, 또는 반투명한 게임 오브젝트를 렌더링할 때 주로 사용됩니다. 이 방식에서는 오브젝트의 투명도에 따라 배경이 자연스럽게 드러납니다.
 	Desc.AlphaToCoverageEnable = false;
 	Desc.IndependentBlendEnable = false;
 
@@ -355,6 +358,8 @@ int CDevice::CreateBlendState()
 
 
 	// One - One Blend
+	// One-One 블렌딩은 소스와 기존 렌더 타겟의 색상을 더하는(Additive) 방식으로 동작합니다. 이 방식은 주로 빛, 파티클, 불꽃, 레이저 등 밝은 색이 쌓이는 효과가 필요한 경우에 사용됩니다. 각 픽셀의 색상이 더해지면서 화면이 더 밝아집니다.
+	//예를 들어, 여러 개의 빛 효과가 겹치는 장면에서는 이 블렌드 상태를 사용하면 색상들이 더해지면서 자연스럽게 밝아지는 효과를 얻을 수 있습니다.
 	Desc.AlphaToCoverageEnable = false;
 	Desc.IndependentBlendEnable = false;
 

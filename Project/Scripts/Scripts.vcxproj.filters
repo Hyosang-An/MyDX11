@@ -36,6 +36,7 @@
     <ClInclude Include="CRoomScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="CDashTrailScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -62,5 +63,6 @@
     <ClCompile Include="CRoomScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="CDashTrailScript.cpp" />
   </ItemGroup>
 </Project>

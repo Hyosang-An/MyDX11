@@ -7,6 +7,7 @@
 
 #include "CRoomScript.h"
 #include "CCameraMoveScript.h"
+#include "CDashTrailScript.h"
 
 CPlayerScript::CPlayerScript() :
 	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
@@ -372,6 +373,8 @@ void CPlayerScript::UpdateState()
 
 				dashTrail->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
 				dashTrail->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"PlayerTrailMtrl"));
+
+				dashTrail->AddComponent(new CDashTrailScript);
 
 				// 현재 레벨에 추가
 				CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(LAYER::DEFAULT, dashTrail);
