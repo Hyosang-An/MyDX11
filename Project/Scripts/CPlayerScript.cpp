@@ -341,8 +341,44 @@ void CPlayerScript::UpdateState()
 			if (m_PrevState != PLAYER_STATE::DASH)
 			{
 				m_DashTimeRemained = m_DashTime;
+				m_DashTrailTimeSinceLastTrail = 0;
 			}
 
+			// 대쉬 잔상 생성
+			if (m_DashTrailTimeSinceLastTrail >= m_DashTrailInterval)
+			{
+				m_DashTrailTimeSinceLastTrail -= m_DashTrailInterval;
+
+				CGameObject* dashTrail = new CGameObject;
+				dashTrail->SetName(L"DashTrail");
+
+				dashTrail->AddComponent(new CTransform);
+				dashTrail->AddComponent(new CMeshRender);
+				dashTrail->AddComponent(new CFlipBookComponent);
+
+				dashTrail->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Dash\\Dash.flip"));
+				dashTrail->FlipBookComponent()->Play(L"Dash", false);
+				dashTrail->FlipBookComponent()->SetCurSprite(2);
+				dashTrail->FlipBookComponent()->Pause();
+
+				Vec3 vPos = GetOwner()->Transform()->GetWorldPos();
+				dashTrail->Transform()->SetWorldPos(vPos);
+
+				Vec3 vScale = GetOwner()->Transform()->GetWorldScale();
+				dashTrail->Transform()->SetWorldScale(vScale);
+
+				Vec3 vRot = GetOwner()->Transform()->GetRelativeRoatation();
+				dashTrail->Transform()->SetRelativeRotation(vRot);
+
+				dashTrail->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+				dashTrail->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"PlayerTrailMtrl"));
+
+				// 현재 레벨에 추가
+				CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(LAYER::DEFAULT, dashTrail);
+
+			}
+
+			m_DashTrailTimeSinceLastTrail += DT;
 			m_DashTimeRemained -= DT;
 
 			if (m_DashTimeRemained <= 0)

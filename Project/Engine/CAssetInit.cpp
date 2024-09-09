@@ -406,6 +406,12 @@ void CAssetMgr::CreateEngineMaterial()
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"Std2DShader"));
 	AddAsset(L"Std2DMtrl", pMtrl);
 
+	// 플레이어 잔상 Mtrl
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"Std2DShader"));
+	pMtrl->SetScalarParam(INT_0, 1);
+	AddAsset(L"PlayerTrailMtrl", pMtrl);
+
 	// Std2DAlphaBlendMtrl
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"Std2DAlphaBlendShader"));

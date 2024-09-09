@@ -47,6 +47,9 @@ private:
 	float		    m_DashTime = 0.5;
     float		    m_DashTimeRemained = m_DashTime;
 
+	float			m_DashTrailInterval = 0.15;
+	float			m_DashTrailTimeSinceLastTrail = 0;
+
 	float           m_MaxFallingSpeed = 600;
 
 	bool            m_bOnLeftWall = false;

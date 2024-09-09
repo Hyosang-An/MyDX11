@@ -61,6 +61,15 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         {
             // 유효한 범위 내에 있으면, 텍스처를 샘플링하여 색상을 가져옵니다.
             vColor = g_AtlasTex.Sample(g_sam_1, vSpriteInAtlasUV);
+            
+            // 잔상인 경우
+            if (g_int_0 == 1)
+            {
+                if (vColor.a != 0.f)
+                {
+                    vColor = float4(0, 0, 1, 1);
+                }
+            }
         }
         else
         {
@@ -78,7 +87,7 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         }
         else
         {
-            vColor = float4(1.f, 0.f, 1.f, 1.f);
+            vColor = float4(1.f, 0.f, 0.5f, 1.f);
         }
     }
     

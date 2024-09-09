@@ -35,6 +35,8 @@ public:
 	void Resume() { m_Pause = false; }
 
     Ptr<CSprite> GetCurSprite() { return m_CurFrmSprite; }
+	void SetCurSprite(int _Idx) { m_CurFrmIdx = _Idx; m_CurFrmSprite = m_CurFlipBook->GetSprite(_Idx); }
+
     void Reset();
     void Binding();
     static void Clear();
