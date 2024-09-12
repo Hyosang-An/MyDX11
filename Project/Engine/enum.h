@@ -75,6 +75,8 @@ enum class LAYER
 	WALL_OR_GROUND,
 	SPIKE,
 	DREAMBLOCK,
+	
+	EXTRA_OBJ,
 
 	UI,
 

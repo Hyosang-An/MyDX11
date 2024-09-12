@@ -723,6 +723,11 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 			m_RigidBody->SetVelocity(Vec3(0, 0, 0));
 		}
 		break;
+
+		case LAYER::EXTRA_OBJ:
+		{
+			// TODO : 추가 오브젝트와 충돌한 경우 처리
+		}
 		
 
 	}

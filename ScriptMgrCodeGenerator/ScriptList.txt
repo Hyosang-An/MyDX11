@@ -1,6 +1,7 @@
 CBackgroundScript
 CCameraMoveScript
 CDashTrailScript
+CJumpThruScript
 CMissileScript
 CPlayerScript
 CRigidBody

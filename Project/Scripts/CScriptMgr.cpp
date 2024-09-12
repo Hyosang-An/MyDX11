@@ -4,6 +4,7 @@
 #include "CBackgroundScript.h"
 #include "CCameraMoveScript.h"
 #include "CDashTrailScript.h"
+#include "CJumpThruScript.h"
 #include "CMissileScript.h"
 #include "CPlayerScript.h"
 #include "CRigidBody.h"
@@ -14,6 +15,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CBackgroundScript");
 	_vec.push_back(L"CCameraMoveScript");
 	_vec.push_back(L"CDashTrailScript");
+	_vec.push_back(L"CJumpThruScript");
 	_vec.push_back(L"CMissileScript");
 	_vec.push_back(L"CPlayerScript");
 	_vec.push_back(L"CRigidBody");
@@ -28,6 +30,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CCameraMoveScript;
 	if (L"CDashTrailScript" == _strScriptName)
 		return new CDashTrailScript;
+	if (L"CJumpThruScript" == _strScriptName)
+		return new CJumpThruScript;
 	if (L"CMissileScript" == _strScriptName)
 		return new CMissileScript;
 	if (L"CPlayerScript" == _strScriptName)
@@ -51,6 +55,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::DASHTRAILSCRIPT:
 		return new CDashTrailScript;
+		break;
+	case (UINT)SCRIPT_TYPE::JUMPTHRUSCRIPT:
+		return new CJumpThruScript;
 		break;
 	case (UINT)SCRIPT_TYPE::MISSILESCRIPT:
 		return new CMissileScript;
@@ -82,6 +89,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::DASHTRAILSCRIPT:
 		return L"CDashTrailScript";
+		break;
+
+	case SCRIPT_TYPE::JUMPTHRUSCRIPT:
+		return L"CJumpThruScript";
 		break;
 
 	case SCRIPT_TYPE::MISSILESCRIPT:
