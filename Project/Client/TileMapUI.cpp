@@ -502,6 +502,11 @@ void TileMapUI::Update()
 					m_colliderLayerType = LAYER::ROOM;
 					layerType = "Room";
 				}
+				if (ImGui::Selectable("Extra Object"))
+				{
+					m_colliderLayerType = LAYER::EXTRA_OBJ;
+					layerType = "Extra Object";
+				}
 				ImGui::EndCombo();
 			}
 
