@@ -59,6 +59,7 @@ const char* LAYER_STRING[] =
 	"Wall_Or_Ground",
 	"Spike",
 	"DreamBlock",
+	"Extra_Object",
 	"UI",
 	"Debug",
 };

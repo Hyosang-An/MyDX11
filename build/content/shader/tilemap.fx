@@ -93,6 +93,9 @@ float4 PS_TileMap(VS_OUT _in) : SV_Target
                 {
                     float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
                     vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+                    
+                    if (vOutColor.a < 0.1f)
+                        discard;
                 }
             }
             
@@ -100,6 +103,9 @@ float4 PS_TileMap(VS_OUT _in) : SV_Target
             {
                 float2 vUV = vLeftTopUV + frac(_in.vUV) * TileSliceUV;
                 vOutColor = AtlasTex.Sample(g_sam_1, vUV);
+                
+                if (vOutColor.a < 0.1f)
+                    discard;
             }
             
         }

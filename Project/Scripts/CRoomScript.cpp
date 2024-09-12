@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CRoomScript.h"
 #include "CPlayerScript.h"
+#include "CRigidBody.h"
 
 #include "Engine/CLevelMgr.h"
 #include "Engine/CLevel.h"
@@ -98,8 +99,17 @@ void CRoomScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 		{
 			// Bottom
 			auto pos = pPlayer->Transform()->GetWorldPos();
-			pos.y += 48;
-			pPlayer->Transform()->SetWorldPos(pos);
+			//pos.y += 48;
+			//pPlayer->Transform()->SetWorldPos(pos);
+
+			// 플레이어를 점프시킴
+			CRigidBody* pRigidbody = pPlayer->GetScript<CRigidBody>();
+			Vec3 vVelocity = pRigidbody->GetVelocity();
+			vVelocity.y = 700;
+			pRigidbody->SetVelocity(vVelocity);
+
+			CPlayerScript* pPlayerScript = pPlayer->GetScript<CPlayerScript>();
+			pPlayerScript->SetCurState(PLAYER_STATE::JUMP);
 		}
 		else if (LeftDist < TopDist && LeftDist < BottomDist && LeftDist < RightDist)
 		{

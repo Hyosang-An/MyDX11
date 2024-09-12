@@ -37,7 +37,7 @@ private:
 
 	float           m_MagnitudeOfMoveForce = 1000;
 	float           m_MaxRunSpeed = 200;
-	float           m_JumpSpeed = 500;
+	float           m_JumpSpeed = 700;
     float		    m_DashSpeed = 700;
 	float           m_ClimbSpeed = 100;
 
@@ -67,8 +67,13 @@ private:
 
 public:
 	PLAYER_STATE GetCurState() { return m_CurState; }
+	void SetCurState(PLAYER_STATE _State) { m_CurState = _State; }
 	void ChangeRoom(CGameObject* _Room);
 	CGameObject* GetRoom() { return m_Room; }
+
+	bool IsEmptyGroundColliders() { return m_setGroundColliders.empty(); }
+	void AddGroundCollider(CCollider2D* _GroundCollider) { m_setGroundColliders.insert(_GroundCollider); }
+	void RemoveGroundCollider(CCollider2D* _GroundCollider) { m_setGroundColliders.erase(_GroundCollider); }
 
 private:
     void KeyCheck();

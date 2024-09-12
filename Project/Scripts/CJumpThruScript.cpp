@@ -47,7 +47,7 @@ void CJumpThruScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _Othe
 		CPlayerScript* playerScript = pPlayer->GetScript<CPlayerScript>();
 
 		// 플레이어가 점프스루에 위에서 충돌했을 때만 바닥처럼 작동
-		if (vDir.y <0 && playerRigidbody->GetVelocity().y < 0 && !playerRigidbody->IsOnGround())
+		if (overlapArea.x > overlapArea.y && vDir.y > 0 && playerRigidbody->GetVelocity().y < 0 && !playerRigidbody->IsOnGround())
 		{
 			//플레이어 위치 보정
 			playerPos.y += overlapArea.y;

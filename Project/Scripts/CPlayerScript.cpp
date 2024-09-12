@@ -277,7 +277,7 @@ void CPlayerScript::UpdateState()
 
 		case PLAYER_STATE::JUMP:
 		{
-			if (m_PrevState != PLAYER_STATE::JUMP)
+			if (m_PrevState != PLAYER_STATE::JUMP && m_bOnGround)
 			{
 				m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, m_JumpSpeed, 0));
 				m_RigidBody->SetOnGround(false);

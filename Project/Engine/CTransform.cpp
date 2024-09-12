@@ -120,6 +120,17 @@ void CTransform::Binding()
 
 void CTransform::SetWorldPos(Vec3 _Pos)
 {
+	// 자식 오브젝트인 경우
+	if (GetOwner()->GetParent())
+	{
+		// 현재의 WorldPos
+		Vec3 curWorldPos = GetWorldPos();
+
+		// 현재의 위치와 차이가 거의 없으면 적용하지 않음
+		if (abs(curWorldPos.x - _Pos.x) < 0.001 && abs(curWorldPos.y - _Pos.y) < 0.001 && abs(curWorldPos.z - _Pos.z) < 0.001)
+			return;			
+	}
+
 	Matrix matTargetRelativeTranslation;
 
 	// 크기행렬

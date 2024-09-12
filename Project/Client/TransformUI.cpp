@@ -39,7 +39,15 @@ void TransformUI::Update()
 	vRot = (vRot / XM_PI) * 180.f;
 	ImGui::Text("Position");
 	ImGui::SameLine(100);
-	ImGui::DragFloat3("##Pos", vPos);
+
+	float vSpeed = 1.f;
+	// 해당 오브젝트가 Room이라면 DragFloat3의 속도 48로
+	if (GetTargetObject()->GetLayerIdx() == (int)LAYER::ROOM)
+	{
+		vSpeed = 48.f;
+	}
+
+	ImGui::DragFloat3("##Pos", vPos, vSpeed);
 
 	ImGui::Text("Scale");
 	ImGui::SameLine(100);
@@ -79,6 +87,14 @@ void TransformUI::Update()
 	// 플레이 모드일 때는 상태를 변경하지 않도록
 	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() != PLAY)
 	{
+		// 해당 오브젝트가 Room이라면 위치는 48의 배수로 고정
+		if (GetTargetObject()->GetLayerIdx() == (int)LAYER::ROOM)
+		{
+			vPos.x = (int)(vPos.x / 48) * 48;
+			vPos.y = (int)(vPos.y / 48) * 48;
+			pTrans->SetRelativePos(vPos);
+		}
+
 		pTrans->SetRelativePos(vPos);
 		pTrans->SetRelativeScale(vScale);
 

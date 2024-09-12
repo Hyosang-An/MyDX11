@@ -30,6 +30,7 @@ void CCollisionMgr::Init()
 	//CollisionCheck(LAYER::TILEMAP, LAYER::TILEMAP);
 
 	CollisionCheck(LAYER::ROOM, LAYER::ROOM);
+	CollisionCheck(LAYER::PLAYER, LAYER::EXTRA_OBJ);
 }
 
 void CCollisionMgr::Tick()
