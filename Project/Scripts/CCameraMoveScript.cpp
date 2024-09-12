@@ -80,7 +80,14 @@ void CCameraMoveScript::OrthoGraphicMove()
 	}
 
 
-	
+	// 백그라운드 위치 업데이트
+	Vec3 camPos = Transform()->GetWorldPos();
+	CLayer* layer = CLevelMgr::GetInst()->GetCurrentLevel()->GetLayer((int)LAYER::BACKGROUND);
+	auto& bgs = layer->GetParentObjects();
+	for (auto bg : bgs)
+	{
+		bg->Transform()->SetWorldPos(Vec3(camPos.x, camPos.y, bg->Transform()->GetWorldPos().z));
+	}
 
 
 }

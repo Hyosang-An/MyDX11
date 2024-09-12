@@ -1,3 +1,4 @@
+CBackgroundScript
 CCameraMoveScript
 CDashTrailScript
 CMissileScript

@@ -613,7 +613,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 				{
 					// 위치 보정
 					vObjWorldPos.y += overlapArea.y;
-					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+					GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 					m_RigidBody->OnLand();
 					m_setGroundColliders.insert(_OtherCollider);
@@ -639,7 +639,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 				{
 					// 위치 보정
 					vObjWorldPos.y -= overlapArea.y;
-					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+					GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 					m_RigidBody->SetVelocity(Vec3(m_RigidBody->GetVelocity().x, 0.f, 0.f));
 
@@ -682,7 +682,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 					m_setLeftWallColliders.insert(_OtherCollider);
 					m_bOnLeftWall = true;
 				}
-				GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+				GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 				// 대쉬 상태에서 벽에 닿으면 해당 방향의 속도 0
 				if (m_CurState == PLAYER_STATE::DASH)
@@ -749,7 +749,7 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 				{
 					// 위치 보정
 					vObjWorldPos.x -= overlapArea.x;
-					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+					GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 					m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 				}
@@ -757,7 +757,7 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 				{
 					// 위치 보정
 					vObjWorldPos.x += overlapArea.x;
-					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+					GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 					m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
 				}
@@ -767,7 +767,7 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 				{
 					// 위치 보정
 					vObjWorldPos.y += overlapArea.y;
-					GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+					GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 				}
 			}
@@ -776,7 +776,7 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 			{
 				// 위치 보정
 				vObjWorldPos.y += overlapArea.y;
-				GetOwner()->Transform()->SetWorldPos(vObjWorldPos);
+				GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 				m_RigidBody->OnLand();
 			}
