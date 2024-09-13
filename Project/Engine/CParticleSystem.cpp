@@ -23,6 +23,7 @@ CParticleSystem::CParticleSystem()
 	// ParticleTick ComputeShader
 	m_TickCS = (CParticleTickCS*)CAssetMgr::GetInst()->FindAsset<CComputeShader>(L"ParticleTickCS").Get();
 
+
 	// Test¿ë Texture
 	SetParticleTexture(CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\particle\\TX_GlowScene_2.png"));
 
@@ -51,7 +52,7 @@ CParticleSystem::CParticleSystem()
 	m_Module.SpaceType = 1; // Local Space 
 
 	// Spawn Burst Module
-	m_Module.isModuleOn[(UINT)PARTICLE_MODULE::SPAWN_BURST] = true;
+	m_Module.isModuleOn[(UINT)PARTICLE_MODULE::SPAWN_BURST] = false;
 	m_Module.SpawnBurstRepeat = true;
 	m_Module.SpawnBurstCount = 100;
 	m_Module.SpawnBurstRepeatTime = 3.f;

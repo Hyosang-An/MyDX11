@@ -31,14 +31,14 @@ int CGraphicShader::CreateVertexShader(const wstring& _RelativePath, const strin
 	{
 		if (nullptr != m_ErrBlob)
 		{
-			MessageBoxA(nullptr, (char*)m_ErrBlob->GetBufferPointer(), "쉐이더 컴파일 실패", MB_OK);
+			MessageBoxA(nullptr, (char*)m_ErrBlob->GetBufferPointer(), "버텍스 쉐이더 컴파일 실패", MB_OK);
 		}
 		else
 		{
 			errno_t err = GetLastError();
 			wchar_t szErrMsg[255] = {};
 			swprintf_s(szErrMsg, 255, L"Error Code : %d", err);
-			MessageBox(nullptr, szErrMsg, L"쉐이더 컴파일 실패", MB_OK);
+			MessageBox(nullptr, szErrMsg, L"버텍스 쉐이더 컴파일 실패", MB_OK);
 		}
 
 		return E_FAIL;
@@ -95,14 +95,14 @@ int CGraphicShader::CreateGeometryShader(const wstring& _RelativePath, const str
 	{
 		if (nullptr != m_ErrBlob)
 		{
-			MessageBoxA(nullptr, (char*)m_ErrBlob->GetBufferPointer(), "쉐이더 컴파일 실패", MB_OK);
+			MessageBoxA(nullptr, (char*)m_ErrBlob->GetBufferPointer(), "지오메트리 쉐이더 컴파일 실패", MB_OK);
 		}
 		else
 		{
 			errno_t err = GetLastError();
 			wchar_t szErrMsg[255] = {};
 			swprintf_s(szErrMsg, 255, L"Error Code : %d", err);
-			MessageBox(nullptr, szErrMsg, L"쉐이더 컴파일 실패", MB_OK);
+			MessageBox(nullptr, szErrMsg, L"지오메트리 쉐이더 컴파일 실패", MB_OK);
 		}
 
 		return E_FAIL;
@@ -127,14 +127,14 @@ int CGraphicShader::CreatePixelShader(const wstring& _RelativePath, const string
 	{
 		if (nullptr != m_ErrBlob)
 		{
-			MessageBoxA(nullptr, (char*)m_ErrBlob->GetBufferPointer(), "쉐이더 컴파일 실패", MB_OK);
+			MessageBoxA(nullptr, (char*)m_ErrBlob->GetBufferPointer(), "픽셀 쉐이더 컴파일 실패", MB_OK);
 		}
 		else
 		{
 			errno_t err = GetLastError();
 			wchar_t szErrMsg[255] = {};
 			swprintf_s(szErrMsg, 255, L"Error Code : %d", err);
-			MessageBox(nullptr, szErrMsg, L"쉐이더 컴파일 실패", MB_OK);
+			MessageBox(nullptr, szErrMsg, L"픽셀 쉐이더 컴파일 실패", MB_OK);
 		}
 
 		return E_FAIL;

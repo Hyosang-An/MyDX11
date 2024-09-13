@@ -53,14 +53,14 @@ int CComputeShader::CreateComputeShader(const wstring& _RelativePath, const stri
 	{
 		if (nullptr != m_ErrBlob)
 		{
-			MessageBoxA(nullptr, (char*)m_ErrBlob->GetBufferPointer(), "쉐이더 컴파일 실패", MB_OK);
+			MessageBoxA(nullptr, (char*)m_ErrBlob->GetBufferPointer(), "컴퓨트 쉐이더 컴파일 실패", MB_OK);
 		}
 		else
 		{
 			errno_t err = GetLastError();
 			wchar_t szErrMsg[255] = {};
 			swprintf_s(szErrMsg, 255, L"Error Code : %d", err);
-			MessageBox(nullptr, szErrMsg, L"쉐이더 컴파일 실패", MB_OK);
+			MessageBox(nullptr, szErrMsg, L"컴퓨트 쉐이더 컴파일 실패", MB_OK);
 		}
 
 		return E_FAIL;

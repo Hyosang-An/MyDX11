@@ -42,7 +42,7 @@ struct tParticle
     float Age;
     float NormalizedAge;
 
-    float2 padding;
+    float3 padding;
 };
 
 struct tSpawnCount
@@ -101,6 +101,44 @@ struct tParticleModule
     
 	// Module On / Off
     int isModuleOn[7];
+};
+
+
+
+
+
+struct tMyParticle
+{
+    int Active;
+
+    float4 vColor;
+    float3 vLocalPos;
+    float3 vWorldPos;
+    float3 vWorldInitPos;
+    float3 vWorldInitScale;
+    float3 vWorldCurrentScale;
+    float3 vWorldRotation;
+
+    float3 vForce; // Particle 에 누적된 힘
+    float3 vVelocity; // Particle 의 속도
+
+    float NoiseForceAccTime; // Noise Force 텀에 도달하는 누적 시간
+    float3 NoiseForceDir; // Noise Force 의 방향
+
+    float Mass;
+    float Life;
+    float Age;
+    float NormalizedAge;
+    
+    float RandomValue;
+
+    float2 Padding;
+};
+
+struct tMySpawnCount
+{
+    uint iSpawnCount;
+    uint3 padding;
 };
 
 #endif

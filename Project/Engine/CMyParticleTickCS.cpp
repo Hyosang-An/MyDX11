@@ -1,24 +1,21 @@
 #include "pch.h"
-#include "CParticleTickCS.h"
+#include "CMyParticleTickCS.h"
 
 #include "CAssetMgr.h"
 #include "CStructuredBuffer.h"
 #include "CDevice.h"
 #include "CConstBuffer.h"
 
-
-CParticleTickCS::CParticleTickCS()
-	: CComputeShader(1024, 1, 1, L"shader\\particletick.fx", "CS_ParticleTick")
-{
-	m_NoiseTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\noise\\noise_03.jpg");
-}
-
-CParticleTickCS::~CParticleTickCS()
+CMyParticleTickCS::CMyParticleTickCS() :
+	CComputeShader(1024, 1, 1, L"shader\\my_particletick.fx", "CS_ParticleTick")
 {
 }
 
+CMyParticleTickCS::~CMyParticleTickCS()
+{
+}
 
-int CParticleTickCS::Binding()
+int CMyParticleTickCS::Binding()
 {
 	if (nullptr == m_ParticleBuffer || nullptr == m_SpawnCountBuffer || nullptr == m_NoiseTex)
 		return E_FAIL;
@@ -26,7 +23,6 @@ int CParticleTickCS::Binding()
 	m_ParticleBuffer->Binding_CS_UAV(0);
 	m_SpawnCountBuffer->Binding_CS_UAV(1);
 	m_NoiseTex->Binding_CS_SRV(20);
-	m_ModuleBuffer->Binding_CS_SRV(21);
 
 	m_Const.iArr[0] = m_ParticleBuffer->GetElementCount(); // Particle Max Count
 	m_Const.v4Arr[0] = m_ParticleWorldPos;
@@ -39,7 +35,7 @@ int CParticleTickCS::Binding()
 	return S_OK;
 }
 
-void CParticleTickCS::CalcGroupNum()
+void CMyParticleTickCS::CalcGroupNum()
 {
 	m_GroupX = m_ParticleBuffer->GetElementCount() / m_ThreadPerGroupX;
 
@@ -50,12 +46,10 @@ void CParticleTickCS::CalcGroupNum()
 	m_GroupZ = 1;
 }
 
-void CParticleTickCS::Clear()
+void CMyParticleTickCS::Clear()
 {
 	m_ParticleBuffer->Clear_CS_UAV();
 	m_ParticleBuffer = nullptr;
 
 	m_NoiseTex->Clear_CS_SRV();
-	m_ModuleBuffer->Clear_CS_SRV();
-	m_ModuleBuffer = nullptr;
 }

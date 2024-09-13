@@ -127,6 +127,8 @@ void CS_ParticleTick(int3 ThreadID : SV_DispatchThreadID)
             currentSpawnCount = SpawnCountBuffer[0].iSpawnCount;
         }
     }
+    
+    // 활성화된 파티클 업데이트
     else
     {
         Particle.vForce = float3(0.f, 0.f, 0.f);
