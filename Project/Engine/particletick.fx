@@ -58,9 +58,13 @@ void CS_ParticleTick(int3 ThreadID : SV_DispatchThreadID)
                 float2 vUV = (float2) 0.f;
                 
                 // 스레드를 UV 로 맵핑하기위해서 ID 를 0~1 범위로 정규화     
-                float3 vRandom0 = GetRandom(NoiseTex, ThreadID.x, MAX_COUNT);
-                float3 vRandom1 = GetRandom(NoiseTex, ThreadID.x + 1, MAX_COUNT);
-                float3 vRandom2 = GetRandom(NoiseTex, ThreadID.x + 2, MAX_COUNT);
+                //float3 vRandom0 = GetRandom(NoiseTex, ThreadID.x, MAX_COUNT);
+                //float3 vRandom1 = GetRandom(NoiseTex, ThreadID.x + 1, MAX_COUNT);
+                //float3 vRandom2 = GetRandom(NoiseTex, ThreadID.x + 2, MAX_COUNT);
+                
+                float3 vRandom0 = GetRandomFloat3(ThreadID.x);
+                float3 vRandom1 = GetRandomFloat3(MAX_COUNT + ThreadID.x);
+                float3 vRandom2 = GetRandomFloat3(2*MAX_COUNT + ThreadID.x);
                                 
                 float3 vSpawnPos = (float3) 0.f;
                 

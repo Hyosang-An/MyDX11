@@ -23,7 +23,6 @@ CParticleSystem::CParticleSystem()
 	// ParticleTick ComputeShader
 	m_TickCS = (CParticleTickCS*)CAssetMgr::GetInst()->FindAsset<CComputeShader>(L"ParticleTickCS").Get();
 
-
 	// Test¿ë Texture
 	SetParticleTexture(CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\particle\\TX_GlowScene_2.png"));
 
