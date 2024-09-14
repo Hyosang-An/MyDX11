@@ -336,9 +336,9 @@ void CAssetMgr::CreateEngineGraphicShader()
 
 	// MyParticleShader
 	pShader = new CGraphicShader;
-	pShader->CreateVertexShader(L"shader\\my_particle.fx", "VS_Particle");
-	pShader->CreateGeometryShader(L"shader\\my_particle.fx", "GS_Particle");
-	pShader->CreatePixelShader(L"shader\\my_particle.fx", "PS_Particle");
+	pShader->CreateVertexShader(L"shader\\my_particle.fx", "VS_MyParticle");
+	pShader->CreateGeometryShader(L"shader\\my_particle.fx", "GS_MyParticle");
+	pShader->CreatePixelShader(L"shader\\my_particle.fx", "PS_MyParticle");
 
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
