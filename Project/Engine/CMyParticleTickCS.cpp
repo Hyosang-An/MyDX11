@@ -7,7 +7,7 @@
 #include "CConstBuffer.h"
 
 CMyParticleTickCS::CMyParticleTickCS() :
-	CComputeShader(1024, 1, 1, L"shader\\my_particletick.fx", "CS_ParticleTick")
+	CComputeShader(1024, 1, 1, L"shader\\my_particletick.fx", "CS_MyParticleTick")
 {
 }
 
