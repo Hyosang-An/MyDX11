@@ -4,10 +4,19 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # 복사된 엔진 헤더파일
-External/Include/**
-# 예외
-!External/Include/DirectXTex/
-!External/Include/DirectXTex/**
+# External/Include/**
+# # 예외
+# !External/Include/DirectXTex/
+# !External/Include/DirectXTex/**
+
+# 기본 엔진 라이브러리 및 기본 스크립트 라이브러리 무시
+External/Library/Engine/**
+External/Library/Scripts/**
+
+# 기본 엔진 헤더파일 및 기본 스크립트 헤더파일 무시
+External/Include/Engine/**
+External/Include/Scripts/**
+
 
 # User-specific files
 *.rsuser
