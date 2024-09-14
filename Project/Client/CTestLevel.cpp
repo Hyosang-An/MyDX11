@@ -344,9 +344,9 @@ void CTestLevel::CreateCelesteTestLevel()
 	pParticleObj->SetName(L"Particle");
 
 	pParticleObj->AddComponent(new CTransform);
-	pParticleObj->AddComponent(new CParticleSystem);
+	pParticleObj->AddComponent(new CMyParticleSystem);
 
-	pParticleObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+	pParticleObj->Transform()->SetRelativePos(Vec3(1000.f, 0.f, 0.f));
 
 	TestLevel->AddObject(0, pParticleObj);
 

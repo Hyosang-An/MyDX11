@@ -56,6 +56,7 @@ void CS_MyParticleTick(int3 ThreadID : SV_DispatchThreadID)
                 
                 // Particle 초기화
                 Particle.vWorldInitPos = Particle.vWorldPos = spawnPos;
+                Particle.vWorldCurrentScale = float3(10.f, 10.f, 10.f);
                 Particle.Age = 0.f;
                 Particle.NormalizedAge = 0.f;
                 Particle.Life = 8.f;
@@ -63,15 +64,24 @@ void CS_MyParticleTick(int3 ThreadID : SV_DispatchThreadID)
                 Particle.RandomValue = vRandom1.x;
                 
                 // 파티클 색은 spawnPos의 z값이 0에 가까울수록 흰색, z_Max에 가까울수록 회색
-                float3 vColor = lerp(float3(1, 1, 1), float3(0.5, 0.5, 0.5), spawnPos.z / z_Max);
+                float3 vColor = lerp(float3(1, 1, 1), float3(0.3f, 0.3f, 0.3f), spawnPos.z / z_Max);
                 Particle.vColor = float4(vColor, 1.f);
                 
                 // 파티클 속도의 y값은 spawnPos의 z값이 클수록 작은 주기의 cos 그래프 형태로 변화, 속도의 x값은 spawnPos의 z값이 클수록 작도록 초기화
                 float3 velocity = float3(0.f, 0.f, 0.f);
-                velocity.x = 50 + 150 * (1 - spawnPos.z / z_Max);
                 
-                // 주기는 200 ~ 1000 사이에서 변화, 속도의 크기는 200 ~ 720 사이에서 변화
-                velocity.y = cos((g_EngineTime + Particle.RandomValue) * 2 * PI / ((1 - Particle.vWorldInitPos.z / z_Max) * 800 + 200)) * (1 - Particle.vWorldInitPos.z / z_Max) * 520 + 200;
+                // 속도의 x값은 600 ~ 1800 사이에서 변화
+                velocity.x = -(600 + 1200 * (1 - spawnPos.z / z_Max));
+                
+                // 주기는 800 ~ 4000 사이에서 변화, 속도의 크기는 200 ~ 1000 사이에서 변화
+                
+                // 주기
+                float L = (1 - Particle.vWorldInitPos.z / z_Max) * 3200 + 800;
+                float period = 2 * PI / ((1 - Particle.vWorldInitPos.z / z_Max) * 3200 + 800);
+               
+                // 0 ~ 주기 사이의 랜덤값
+                float randomValue = Particle.RandomValue * period;
+                velocity.y = cos(Particle.RandomValue * L * period) * ((1 - Particle.vWorldInitPos.z / z_Max) * 800 + 200);
                 Particle.vVelocity = velocity;
                 
                 
@@ -89,7 +99,13 @@ void CS_MyParticleTick(int3 ThreadID : SV_DispatchThreadID)
         // 파티클 업데이트
 
         // y속도 업데이트
-        Particle.vVelocity.y = cos((g_EngineTime + Particle.RandomValue) * 2 * PI / ((1 - Particle.vWorldInitPos.z / z_Max) * 800 + 200)) * (1 - Particle.vWorldInitPos.z / z_Max) * 520 + 200;
+        // 주기
+        float L = (1 - Particle.vWorldInitPos.z / z_Max) * 3200 + 800;
+        float period = 2 * PI / ((1 - Particle.vWorldInitPos.z / z_Max) * 3200 + 800);
+        // 0 ~ 주기 사이의 랜덤값
+        float randomValue = Particle.RandomValue * period;
+        float x_dist = abs(Particle.vWorldPos.x - Particle.vWorldInitPos.x);
+        Particle.vVelocity.y = cos((x_dist + Particle.RandomValue * L) * period) * ((1 - Particle.vWorldInitPos.z / z_Max) * 800 + 200);
         
         // 위치 업데이트
         Particle.vWorldPos += Particle.vVelocity * g_EngineDT;

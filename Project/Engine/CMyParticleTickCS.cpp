@@ -9,6 +9,7 @@
 CMyParticleTickCS::CMyParticleTickCS() :
 	CComputeShader(1024, 1, 1, L"shader\\my_particletick.fx", "CS_MyParticleTick")
 {
+	m_NoiseTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\noise\\noise_03.jpg");
 }
 
 CMyParticleTickCS::~CMyParticleTickCS()

@@ -86,7 +86,7 @@ void CMyParticleSystem::FinalTick()
 	m_TickCS->SetParticleBuffer(m_ParticleBuffer);
 	m_TickCS->SetSpawnCountBuffer(m_SpawnCountBuffer);
 
-	m_TickCS->Execute(); // ComputeShader 실행 및 Clear
+	m_TickCS->Execute(); // Buffer 바인딩 후 ComputeShader 실행한 뒤 바인딩 값 Clear
 }
 
 void CMyParticleSystem::Render()
@@ -95,7 +95,7 @@ void CMyParticleSystem::Render()
 	Transform()->Binding();
 
 	// 파티클 버퍼 바인딩
-	m_ParticleBuffer->Binding(20);	// t20
+	m_ParticleBuffer->Binding(20);	// t20 (SRV)
 
 	// 재질정보 바인딩
 	GetMaterial()->Binding();
