@@ -1,5 +1,5 @@
 #pragma once
-#include "C:\Users\gytha\Documents\Programming\Assort51th\MyDX11\External\Include\Engine\CScript.h"
+#include "Engine\CScript.h"
 class CDashTrailScript :
     public CScript
 {
