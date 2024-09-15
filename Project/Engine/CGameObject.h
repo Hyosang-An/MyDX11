@@ -65,7 +65,7 @@ public:
     class CTileMap* TileMap() { return (CTileMap*)GetComponent(COMPONENT_TYPE::TILEMAP); }
     class CLight2D* Light2D() { return (CLight2D*)GetComponent(COMPONENT_TYPE::LIGHT2D); }
     class CParticleSystem* ParticleSystem() { return (CParticleSystem*)GetComponent(COMPONENT_TYPE::PARTICLE_SYSTEM); }
-
+    class CMyParticleSystem* MyParticleSystem() { return (CMyParticleSystem*)GetComponent(COMPONENT_TYPE::PARTICLE_SYSTEM); }
 
     // Prefab Save Àü¿ë!
 	void SetLayerIdxForPrefabSave(int _Idx) { m_LayerIdx = _Idx; }

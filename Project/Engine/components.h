@@ -18,3 +18,5 @@
 //#include "CLandScape.h"
 
 #include "CScript.h"
+
+#include "CMyParticleSystem.h"

@@ -32,6 +32,7 @@ int CStructuredBuffer::Create(UINT _ElementSize, UINT _ElementCount,
 	m_SB_Read = nullptr;
 
 	m_SRV = nullptr;
+	m_UAV = nullptr;
 
 	m_ElementSize = _ElementSize;
 	m_ElementCount = _ElementCount;

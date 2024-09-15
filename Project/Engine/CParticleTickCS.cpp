@@ -28,7 +28,7 @@ int CParticleTickCS::Binding()
 	m_NoiseTex->Binding_CS_SRV(20);
 	m_ModuleBuffer->Binding_CS_SRV(21);
 
-	m_Const.iArr[0] = m_ParticleBuffer->GetElementCount();
+	m_Const.iArr[0] = m_ParticleBuffer->GetElementCount(); // Particle Max Count
 	m_Const.v4Arr[0] = m_ParticleWorldPos;
 
 	// 상수데이터 전달

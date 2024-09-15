@@ -3,6 +3,7 @@
 #include "CDevice.h"
 
 #include "CParticleTickCS.h"
+#include "CMyParticleTickCS.h"
 
 void CAssetMgr::Init()
 {
@@ -333,6 +334,23 @@ void CAssetMgr::CreateEngineGraphicShader()
 	AddAsset(L"ParticleRenderShader", pShader);
 
 
+	// MyParticleShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\my_particle.fx", "VS_MyParticle");
+	pShader->CreateGeometryShader(L"shader\\my_particle.fx", "GS_MyParticle");
+	pShader->CreatePixelShader(L"shader\\my_particle.fx", "PS_MyParticle");
+
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_PARTICLE);
+
+	AddAsset(L"MyParticleRenderShader", pShader);
+
+
 	// GrayFilterShader
 	pShader = new CGraphicShader;
 	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_Screen");
@@ -411,6 +429,11 @@ void CAssetMgr::CreateEngineComputeShader()
 
 	pCS = new CParticleTickCS;
 	AddAsset<CComputeShader>(L"ParticleTickCS", pCS);
+
+	// MyParticleTick
+	pCS = new CMyParticleTickCS;
+	AddAsset<CComputeShader>(L"MyParticleTickCS", pCS);
+
 }
 
 void CAssetMgr::CreateEngineMaterial()
@@ -447,6 +470,11 @@ void CAssetMgr::CreateEngineMaterial()
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindAsset<CGraphicShader>(L"ParticleRenderShader"));
 	AddAsset(L"ParticleRenderMtrl", pMtrl);
+
+	// MyParticleRenderMtrl
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"MyParticleRenderShader"));
+	AddAsset(L"MyParticleRenderMtrl", pMtrl);
 
 	// GrayFilterMtrl
 	pMtrl = new CMaterial(true);

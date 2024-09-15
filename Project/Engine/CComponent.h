@@ -36,6 +36,7 @@ public:
     class CFlipBookComponent* FlipBookComponent() { return m_Owner->FlipBookComponent(); }
     class CLight2D* Light2D() { return m_Owner->Light2D(); }
     class CParticleSystem* ParticleSystem() { return m_Owner->ParticleSystem(); }
+    class CMyParticleSystem* MyParticleSystem() { return m_Owner->MyParticleSystem(); }
     
 
 

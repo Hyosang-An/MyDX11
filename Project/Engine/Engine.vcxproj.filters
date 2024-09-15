@@ -160,6 +160,12 @@
     <ClInclude Include="CFontMgr.h">
       <Filter>04. Manager\08.FontMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CMyParticleSystem.h">
+      <Filter>08. Component\RenderComponent\MyParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CMyParticleTickCS.h">
+      <Filter>HLSL\03. Compute\MyParticleTick</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -296,6 +302,12 @@
     </ClCompile>
     <ClCompile Include="CFontMgr.cpp">
       <Filter>04. Manager\08.FontMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CMyParticleSystem.cpp">
+      <Filter>08. Component\RenderComponent\MyParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CMyParticleTickCS.cpp">
+      <Filter>HLSL\03. Compute\MyParticleTick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,6 +482,12 @@
     <Filter Include="04. Manager\08.FontMgr">
       <UniqueIdentifier>{36af2e89-8c3e-46ec-a38d-893395196a86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="08. Component\RenderComponent\MyParticleSystem">
+      <UniqueIdentifier>{7480861b-cf89-4886-9703-c0c72cc6275e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\03. Compute\MyParticleTick">
+      <UniqueIdentifier>{5e40815d-dd2d-4222-932b-839b07d151e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -509,6 +527,12 @@
     </FxCompile>
     <FxCompile Include="tilemap.fx">
       <Filter>HLSL\02. Render\2D</Filter>
+    </FxCompile>
+    <FxCompile Include="my_particle.fx">
+      <Filter>HLSL\02. Render\2D</Filter>
+    </FxCompile>
+    <FxCompile Include="my_particletick.fx">
+      <Filter>HLSL\03. Compute\MyParticleTick</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

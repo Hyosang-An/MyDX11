@@ -13,6 +13,7 @@ struct tParticle
     Vec4	vColor;
 	Vec3	vLocalPos;
 	Vec3	vWorldPos;
+	Vec3	vWorldInitPos;
     Vec3	vWorldInitScale;
     Vec3	vWorldCurrentScale;
     Vec3	vWorldRotation;
@@ -28,7 +29,7 @@ struct tParticle
     float	Age;
     float	NormalizedAge;
 
-    Vec2	Padding;
+    Vec3	Padding;
 };
 
 // Particle Module
