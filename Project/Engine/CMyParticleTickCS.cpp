@@ -54,4 +54,5 @@ void CMyParticleTickCS::Clear()
 	m_ParticleBuffer = nullptr;
 
 	m_NoiseTex->Clear_CS_SRV();
+	m_ModuleBuffer->Clear_CS_SRV();
 }
