@@ -65,8 +65,6 @@ void CS_MyParticleTick(int3 ThreadID : SV_DispatchThreadID)
                 
                 // 파티클 색은 spawnPos의 z값이 0에 가까울수록 흰색, z_Max에 가까울수록 회색
                 float3 vColor = lerp(float3(1, 1, 1), float3(0.3f, 0.3f, 0.3f), spawnPos.z / z_Max);
-                
-                //float3 vColor = float3(2, 2, 2);
                 Particle.vColor = float4(vColor, 1.f);
                 
                 // 파티클 속도의 y값은 spawnPos의 z값이 클수록 작은 주기의 cos 그래프 형태로 변화, 속도의 x값은 spawnPos의 z값이 클수록 작도록 초기화

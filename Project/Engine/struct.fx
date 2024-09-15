@@ -110,6 +110,8 @@ struct tParticleModule
 struct tMyParticle
 {
     int Active;
+    
+    int Type; //  0 : 배경 눈발 파티클, 1 : 대쉬 파티클
 
     float4 vColor;
     float3 vLocalPos;
@@ -132,13 +134,71 @@ struct tMyParticle
     
     float RandomValue;
 
-    float2 Padding;
+    float Padding;
 };
 
 struct tMySpawnCount
 {
     uint iSpawnCount;
     uint3 padding;
+};
+
+struct tMyParticleModule
+{
+    // Type
+    uint Type; // 0 : 배경 눈발 파티클, 1 : 대쉬 파티클
+    
+    // Spawn
+    uint SpawnRate; // 초당 파티클 생성 개수
+    float4 vSpawnColor; // 생성 시점 색상
+    float4 vSpawnMinScale; // 생성 시 최소 크기
+    float4 vSpawnMaxScale; // 생성 시 최대 크기
+
+    float MinLife; // 최소 수명
+    float MaxLife; // 최대 수명
+
+    uint SpawnShape; // 0 : Box,  1: Sphere
+    float3 SpawnShapeScale; // SpawnShapeScale.x == Radius
+
+    uint BlockSpawnShape; // 0 : Box,  1: Sphere
+    float3 BlockSpawnShapeScale; // SpawnShapeScale.x == Radius    
+    
+    uint SpaceType; // 0 : LocalSpcae, 1 : WorldSpace
+    
+    // Spawn Burst
+    uint SpawnBurstCount; // 한번에 발생시키는 Particle 수
+    uint SpawnBurstRepeat;
+    float SpawnBurstRepeatTime;
+    
+    // Add Velocity
+    uint AddVelocityType; // 0 : Random, 1 : FromCenter, 2 : ToCenter, 4 : Fixed 
+    float3 AddVelocityFixedDir;
+    float AddMinSpeed;
+    float AddMaxSpeed;
+    
+    // Scale Module
+    float StartScale;
+    float EndScale;
+    
+    // Drag Module
+    float DestNormalizedAge;
+    float TargetSpeed;
+    
+    // Noise Force Module
+    float NoiseForceTerm; // Noise Force 적용시키는 텀
+    float NoiseForceScale; // Noise Force 의 크기
+       
+    // Render Module
+    float3 EndColor; // 최종 색상
+    uint FadeOut; // 0 : Off, 1 : Normalized Age
+    float StartRatio; // FadeOut 효과가 시작되는 Normalized Age 지점
+    uint VelocityAlignment; // 속도 정렬 0 : Off, 1 : On
+    
+	// Module On / Off
+    int isModuleOn[7];
+    
+    // Padding
+    float3 padding;
 };
 
 #endif

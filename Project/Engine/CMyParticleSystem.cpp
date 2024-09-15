@@ -10,7 +10,7 @@
 
 #include "CTransform.h"
 
-CMyParticleSystem::CMyParticleSystem() :
+CMyParticleSystem::CMyParticleSystem(UINT _particleType) :
 	CRenderComponent(COMPONENT_TYPE::PARTICLE_SYSTEM)
 {
 	// Mesh / Material 
@@ -25,6 +25,23 @@ CMyParticleSystem::CMyParticleSystem() :
 
 	m_SpawnCountBuffer = new CStructuredBuffer;
 	m_SpawnCountBuffer->Create(sizeof(tMySpawnCount), 1, SB_TYPE::SRV_UAV);
+
+	// 모듈 정보 세팅
+	m_Module.Type = _particleType; // 눈발 파티클
+	m_Module.isModuleOn[(UINT)PARTICLE_MODULE::SPAWN] = true;
+	m_Module.SpawnRate = 20;
+
+	// Render Module
+	m_Module.isModuleOn[(UINT)PARTICLE_MODULE::RENDER] = true;
+	m_Module.EndColor = Vec3(1.f, 1.f, 1.f);
+	m_Module.FadeOut = true;
+	m_Module.FadeOutStartRatio = 0.9f;
+	m_Module.VelocityAlignment = true;
+
+	m_ModuleBuffer = new CStructuredBuffer;
+	m_ModuleBuffer->Create(sizeof(tMyParticleModule), 1, SB_TYPE::SRV_UAV, &m_Module);
+	
+	//m_ModuleBuffer->SetData(&m_Module);
 }
 
 CMyParticleSystem::CMyParticleSystem(const CMyParticleSystem& _Other) :
@@ -55,6 +72,7 @@ CMyParticleSystem::~CMyParticleSystem()
 {
 	DELETE_PTR(m_ParticleBuffer);
 	DELETE_PTR(m_SpawnCountBuffer);
+	DELETE_PTR(m_ModuleBuffer);
 }
 
 void CMyParticleSystem::SetParticleTexture(Ptr<CTexture> _Texture)
@@ -68,7 +86,7 @@ void CMyParticleSystem::CaculateSpawnCount()
 	m_Time += EngineDT;
 	tMySpawnCount count = {  };
 
-	float SpawnCount = m_SpawnRate * EngineDT + m_prevSpawnCountFraction;
+	float SpawnCount = m_Module.SpawnRate * EngineDT + m_prevSpawnCountFraction;
 	count.SpawnCount = floor(SpawnCount);
 	m_prevSpawnCountFraction = SpawnCount - count.SpawnCount;
 	
@@ -78,15 +96,50 @@ void CMyParticleSystem::CaculateSpawnCount()
 
 void CMyParticleSystem::FinalTick()
 {
-	// SpawnCount 계산
-	CaculateSpawnCount();
+	if (m_Module.Type == 0) // 눈발 파티클
+	{
+		// SpawnCount 계산
+		CaculateSpawnCount();
 
-	// ComputeShader (TickCS는 ParticleSystem 객체마다 따로 존재하는것이 아니라 Asset으로 하나만 존재하기 때문에 해당CS를 쓸 때마다 데이터를 Set해주고 계산한뒤 Clear해야한다. (계산(Excute하면서 처리))
-	m_TickCS->SetParticleWorldPos(Transform()->GetWorldPos());
-	m_TickCS->SetParticleBuffer(m_ParticleBuffer);
-	m_TickCS->SetSpawnCountBuffer(m_SpawnCountBuffer);
+		// ComputeShader (TickCS는 ParticleSystem 객체마다 따로 존재하는것이 아니라 Asset으로 하나만 존재하기 때문에 해당CS를 쓸 때마다 데이터를 Set해주고 계산한뒤 Clear해야한다. (계산(Excute하면서 처리))
+		m_TickCS->SetParticleWorldPos(Transform()->GetWorldPos());
+		m_TickCS->SetParticleBuffer(m_ParticleBuffer);
+		m_TickCS->SetSpawnCountBuffer(m_SpawnCountBuffer);
+		m_TickCS->SetModuleBuffer(m_ModuleBuffer);
 
-	m_TickCS->Execute(); // Buffer 바인딩 후 ComputeShader 실행한 뒤 바인딩 값 Clear
+		m_TickCS->Execute(); // Buffer 바인딩 후 ComputeShader 실행한 뒤 바인딩 값 Clear
+	}
+
+	else if (m_Module.Type == 1) // 대쉬 파티클
+	{
+		tMySpawnCount count = {  };
+
+		if (!m_DashParticleInit)
+		{
+			m_DashParticleInit = true;
+			count.SpawnCount = 3;
+		}
+		// SpawnCount 를 Buffer 에 전달	
+		m_SpawnCountBuffer->SetData(&count);
+
+		// ComputeShader (TickCS는 ParticleSystem 객체마다 따로 존재하는것이 아니라 Asset으로 하나만 존재하기 때문에 해당CS를 쓸 때마다 데이터를 Set해주고 계산한뒤 Clear해야한다. (계산(Excute하면서 처리))
+		m_TickCS->SetParticleWorldPos(Transform()->GetWorldPos());
+		m_TickCS->SetParticleBuffer(m_ParticleBuffer);
+		m_TickCS->SetSpawnCountBuffer(m_SpawnCountBuffer);
+		m_TickCS->SetModuleBuffer(m_ModuleBuffer);
+
+		m_TickCS->Execute(); // Buffer 바인딩 후 ComputeShader 실행한 뒤 바인딩 값 Clear
+
+
+		// 누적시간 3초가 지나면 파티클 삭제
+		if (m_Time > 3.f)
+		{
+			//DeleteObject(GetOwner());
+		}
+	}
+
+	m_Time += EngineDT;
+
 }
 
 void CMyParticleSystem::Render()
@@ -96,6 +149,9 @@ void CMyParticleSystem::Render()
 
 	// 파티클 버퍼 바인딩
 	m_ParticleBuffer->Binding(20);	// t20 (SRV)
+
+	// 모듈 버퍼 바인딩
+	m_ModuleBuffer->Binding(21);	// t21 (SRV)
 
 	// 재질정보 바인딩
 	GetMaterial()->Binding();
