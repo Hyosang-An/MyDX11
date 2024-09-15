@@ -87,8 +87,8 @@ void TransformUI::Update()
 	// 플레이 모드일 때는 상태를 변경하지 않도록
 	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() != PLAY)
 	{
-		// 해당 오브젝트가 Room이라면 위치는 48의 배수로 고정
-		if (GetTargetObject()->GetLayerIdx() == (int)LAYER::ROOM)
+		// 해당 오브젝트가 Room이고, 최 상위 오브젝트 라면 위치는 48의 배수로 고정
+		if (GetTargetObject()->GetLayerIdx() == (int)LAYER::ROOM && GetTargetObject()->GetParent() == nullptr)
 		{
 			vPos.x = (int)(vPos.x / 48) * 48;
 			vPos.y = (int)(vPos.y / 48) * 48;

@@ -183,10 +183,12 @@ void CRoomScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 void CRoomScript::SaveToFile(FILE* _File)
 {
 	fwrite(&m_StartRoom, sizeof(bool), 1, _File);
+	fwrite(&m_BadelineSpawnRoom, sizeof(bool), 1, _File);
 }
 
 void CRoomScript::LoadFromFile(FILE* _File)
 {
 	fread(&m_StartRoom, sizeof(bool), 1, _File);
+	fread(&m_BadelineSpawnRoom, sizeof(bool), 1, _File);
 }
 
