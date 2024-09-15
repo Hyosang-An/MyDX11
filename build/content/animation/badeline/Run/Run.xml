@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:c182182012a6010bb813f5360bee7510:04f6755ccfcc92fe5bdc0a67af2cf7ed:ed982377c07a778df57b538fb5e157cd$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="Run.png" width="384" height="32">
+    <sprite n="runFast00.png" x="0" y="0" w="32" h="32"/>
+    <sprite n="runFast01.png" x="32" y="0" w="32" h="32"/>
+    <sprite n="runFast02.png" x="64" y="0" w="32" h="32"/>
+    <sprite n="runFast03.png" x="96" y="0" w="32" h="32"/>
+    <sprite n="runFast04.png" x="128" y="0" w="32" h="32"/>
+    <sprite n="runFast05.png" x="160" y="0" w="32" h="32"/>
+    <sprite n="runFast06.png" x="192" y="0" w="32" h="32"/>
+    <sprite n="runFast07.png" x="224" y="0" w="32" h="32"/>
+    <sprite n="runFast08.png" x="256" y="0" w="32" h="32"/>
+    <sprite n="runFast09.png" x="288" y="0" w="32" h="32"/>
+    <sprite n="runFast10.png" x="320" y="0" w="32" h="32"/>
+    <sprite n="runFast11.png" x="352" y="0" w="32" h="32"/>
+</TextureAtlas>

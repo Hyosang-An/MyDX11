@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:9347a8df4619bd7ba3e3bbf197e7b9e4:ca2abf8c42bbd348fb40308bd3f353dc:de9df130b825f218a5ab899a8f6693af$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="Jump.png" width="128" height="32">
+    <sprite n="jumpFast00.png" x="0" y="0" w="32" h="32"/>
+    <sprite n="jumpFast01.png" x="32" y="0" w="32" h="32"/>
+    <sprite n="jumpFast02.png" x="64" y="0" w="32" h="32"/>
+    <sprite n="jumpFast03.png" x="96" y="0" w="32" h="32"/>
+</TextureAtlas>
