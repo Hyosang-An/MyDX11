@@ -49,6 +49,9 @@ struct tMyParticleModule
 	// Type
 	UINT	Type;					// 0 : 배경 눈발 파티클, 1 : 대쉬 파티클
 
+	// 기준 방향
+	Vec3	ReferenceDir;			// 기준 방향
+
 	// Spawn
 	UINT	SpawnRate;				// 초당 파티클 생성개수 (Spawn Per Second)
 	Vec4	vSpawnColor;			// 생성 시점 색상
@@ -100,7 +103,7 @@ struct tMyParticleModule
 	int		isModuleOn[(UINT)PARTICLE_MODULE::END];
 
 	// Padding
-	float	Padding[3];
+	//float	Padding[4];
 };
 
 
@@ -140,9 +143,10 @@ public:
     void CaculateSpawnCount();
 
 	void SetType(int _Type) { m_Module.Type = _Type; }
+	void SetReferenceDir(Vec3 _Dir);
 
 public:
-
+	virtual void Init() override;
     virtual void FinalTick() override;
     virtual void Render() override;
     virtual void SaveToFile(FILE* _File) override;   // 파일에 컴포넌트의 정보를 저장

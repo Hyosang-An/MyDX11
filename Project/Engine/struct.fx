@@ -148,6 +148,9 @@ struct tMyParticleModule
     // Type
     uint Type; // 0 : 배경 눈발 파티클, 1 : 대쉬 파티클
     
+    // 기준 방향
+    float3 ReferenceDir;
+    
     // Spawn
     uint SpawnRate; // 초당 파티클 생성 개수
     float4 vSpawnColor; // 생성 시점 색상
@@ -198,7 +201,7 @@ struct tMyParticleModule
     int isModuleOn[7];
     
     // Padding
-    float3 padding;
+    //float4 padding;
 };
 
 #endif

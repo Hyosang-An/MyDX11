@@ -20,6 +20,9 @@ CMyParticleSystem::CMyParticleSystem(UINT _particleType) :
 	// ParticleTick ComputeShader
 	m_TickCS = (CMyParticleTickCS*)CAssetMgr::GetInst()->FindAsset<CComputeShader>(L"MyParticleTickCS").Get();
 
+	if (_particleType == 1)
+		m_MaxParticleCount = 100;
+
 	m_ParticleBuffer = new CStructuredBuffer;
 	m_ParticleBuffer->Create(sizeof(tMyParticle), m_MaxParticleCount, SB_TYPE::SRV_UAV);
 
@@ -31,15 +34,21 @@ CMyParticleSystem::CMyParticleSystem(UINT _particleType) :
 	m_Module.isModuleOn[(UINT)PARTICLE_MODULE::SPAWN] = true;
 	m_Module.SpawnRate = 20;
 
+	// Spawn Shape
+	m_Module.SpawnShape = 0;
+
+
+
+
 	// Render Module
 	m_Module.isModuleOn[(UINT)PARTICLE_MODULE::RENDER] = true;
 	m_Module.EndColor = Vec3(1.f, 1.f, 1.f);
 	m_Module.FadeOut = true;
-	m_Module.FadeOutStartRatio = 0.9f;
+	m_Module.FadeOutStartRatio = 0.75f;
 	m_Module.VelocityAlignment = true;
 
 	m_ModuleBuffer = new CStructuredBuffer;
-	m_ModuleBuffer->Create(sizeof(tMyParticleModule), 1, SB_TYPE::SRV_UAV, &m_Module);
+	m_ModuleBuffer->Create(sizeof(tMyParticleModule), 1, SB_TYPE::SRV_ONLY, &m_Module); // SRV_Only도 가능한지 나중에 테스트해보기 -> 가능함
 	
 	//m_ModuleBuffer->SetData(&m_Module);
 }
@@ -66,6 +75,12 @@ CMyParticleSystem::CMyParticleSystem(const CMyParticleSystem& _Other) :
 		m_SpawnCountBuffer = new CStructuredBuffer;
 		m_SpawnCountBuffer->Create(sizeof(tMySpawnCount), 1, SB_TYPE::SRV_UAV);
 	}
+
+	if (_Other.m_ModuleBuffer)
+	{
+		m_ModuleBuffer = new CStructuredBuffer;
+		m_ModuleBuffer->Create(sizeof(tMyParticleModule), 1, SB_TYPE::SRV_UAV, &m_Module);
+	}
 }
 
 CMyParticleSystem::~CMyParticleSystem()
@@ -73,6 +88,31 @@ CMyParticleSystem::~CMyParticleSystem()
 	DELETE_PTR(m_ParticleBuffer);
 	DELETE_PTR(m_SpawnCountBuffer);
 	DELETE_PTR(m_ModuleBuffer);
+}
+
+void CMyParticleSystem::Init()
+{
+	// Particle Scale 설정
+
+	if (m_Module.Type == 0)
+	{
+
+	}
+	else if (m_Module.Type == 1)
+	{
+		// Noise Force Module
+		m_Module.isModuleOn[(UINT)PARTICLE_MODULE::NOISE_FORCE] = true;
+		m_Module.NoiseForceTerm = 0.3f;		// Noise Force 적용시키는 텀
+		m_Module.NoiseForceScale = 0.8f;		// Noise Force 크기
+
+		// Drag Module (감속)
+		m_Module.isModuleOn[(UINT)PARTICLE_MODULE::DRAG] = true;
+		m_Module.DestNormalizedAge = 1.f;
+		m_Module.TargetSpeed = 20.f;
+	}
+
+	m_Module.SpawnShapeScale = Transform()->GetRelativeScale();
+	m_ModuleBuffer->SetData(&m_Module);
 }
 
 void CMyParticleSystem::SetParticleTexture(Ptr<CTexture> _Texture)
@@ -93,6 +133,14 @@ void CMyParticleSystem::CaculateSpawnCount()
 	// SpawnCount 를 Buffer 에 전달	
 	m_SpawnCountBuffer->SetData(&count);
 }
+
+void CMyParticleSystem::SetReferenceDir(Vec3 _Dir)
+{
+	m_Module.ReferenceDir = _Dir;
+	m_ModuleBuffer->SetData(&m_Module);
+}
+
+
 
 void CMyParticleSystem::FinalTick()
 {
@@ -131,10 +179,10 @@ void CMyParticleSystem::FinalTick()
 		m_TickCS->Execute(); // Buffer 바인딩 후 ComputeShader 실행한 뒤 바인딩 값 Clear
 
 
-		// 누적시간 3초가 지나면 파티클 삭제
-		if (m_Time > 3.f)
+		// 누적시간 5초가 지나면 파티클 삭제
+		if (m_Time > 5.f)
 		{
-			//DeleteObject(GetOwner());
+			DeleteObject(GetOwner());
 		}
 	}
 
