@@ -34,6 +34,11 @@ public:
 	void Pause() { m_Pause = true; }
 	void Resume() { m_Pause = false; }
 
+	void SetCurFlipBook(wstring _FlipBookName);
+	void SetCurFrameIdx(int _Idx) { m_CurFrmIdx = _Idx; }
+
+    wstring GetCurFlipBookName() { return path(m_CurFlipBook->GetKey()).stem().wstring(); }
+	int GetCurFrmIdx() { return m_CurFrmIdx; }
     Ptr<CSprite> GetCurSprite() { return m_CurFrmSprite; }
 	void SetCurSprite(int _Idx) { m_CurFrmIdx = _Idx; m_CurFrmSprite = m_CurFlipBook->GetSprite(_Idx); }
 

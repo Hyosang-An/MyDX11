@@ -359,7 +359,7 @@ void CPlayerScript::UpdateState()
 
 				dashTrail->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Dash\\Dash.flip"));
 				dashTrail->FlipBookComponent()->Play(L"Dash", false);
-				dashTrail->FlipBookComponent()->SetCurSprite(2);
+				dashTrail->FlipBookComponent()->SetCurSpriteByIdx(2);
 				dashTrail->FlipBookComponent()->Pause();
 
 				Vec3 vPos = GetOwner()->Transform()->GetWorldPos();

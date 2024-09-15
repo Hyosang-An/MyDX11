@@ -55,6 +55,11 @@ using std::make_pair;
 #include <set>
 using std::set;
 
+#include <queue>
+using std::queue;
+
+#include <algorithm>
+
 #include <typeinfo>
 
 #include <filesystem>

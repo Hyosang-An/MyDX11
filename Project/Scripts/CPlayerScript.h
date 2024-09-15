@@ -71,6 +71,8 @@ public:
 	void ChangeRoom(CGameObject* _Room);
 	CGameObject* GetRoom() { return m_Room; }
 
+	bool IsFacingRight() { return m_bFacingRight; }
+
 	bool IsEmptyGroundColliders() { return m_setGroundColliders.empty(); }
 	void AddGroundCollider(CCollider2D* _GroundCollider) { m_setGroundColliders.insert(_GroundCollider); }
 	void RemoveGroundCollider(CCollider2D* _GroundCollider) { m_setGroundColliders.erase(_GroundCollider); }

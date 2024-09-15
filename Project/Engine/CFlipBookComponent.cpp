@@ -167,6 +167,21 @@ void CFlipBookComponent::Play(wstring _FliBookName, bool _Repeat)
 	m_Repeat = _Repeat;
 }
 
+void CFlipBookComponent::SetCurFlipBook(wstring _FlipBookName)
+{
+	auto iter = m_mapFlipBook.find(_FlipBookName);
+	if (iter == m_mapFlipBook.end())
+	{
+		assert(false);
+		MessageBox(nullptr, L"해당 이름의 FlipBook이 존재하지 않습니다.", L"FlipBook 찾기 실패", MB_OK);
+		return;
+	}
+	else
+	{
+		m_CurFlipBook = iter->second;
+	}
+}
+
 void CFlipBookComponent::Reset()
 {
 	m_CurFrmIdx = 0;

@@ -1,4 +1,5 @@
 CBackgroundScript
+CBadelineScript
 CCameraMoveScript
 CDashTrailScript
 CJumpThruScript

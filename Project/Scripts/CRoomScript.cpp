@@ -2,15 +2,18 @@
 #include "CRoomScript.h"
 #include "CPlayerScript.h"
 #include "CRigidBody.h"
+#include "CBadelineScript.h"
 
 #include "Engine/CLevelMgr.h"
 #include "Engine/CLevel.h"
+#include "Engine/CLayer.h"
 
 CRoomScript::CRoomScript() :
 	CScript((UINT)SCRIPT_TYPE::ROOMSCRIPT)
 {
 	// 노출시킬 데이터
 	AddScriptParam(SCRIPT_PARAM_TYPE::BOOL, "Start Room", &m_StartRoom);
+	AddScriptParam(SCRIPT_PARAM_TYPE::BOOL, "Spawn Badeline", &m_BadelineSpawnRoom);
 }
 
 CRoomScript::CRoomScript(const CRoomScript& _Other) :
@@ -50,6 +53,8 @@ void CRoomScript::Begin()
 
 			// offset
 			m_PlayerSpawnPos.y += 64;
+
+			break;
 		}
 	}
 
@@ -61,6 +66,48 @@ void CRoomScript::Begin()
 
 void CRoomScript::Tick()
 {
+
+	// Badeline 스폰시킬지 체크
+	if (m_BadelineSpawnRoom && !m_BadenlineSpawned)
+	{
+		CGameObject* pPlayer = CLevelMgr::GetInst()->GetCurrentLevel()->GetLayer((UINT)LAYER::PLAYER)->GetParentObjects().front();
+		Vec3 PlayerPos = pPlayer->Transform()->GetWorldPos();
+
+		// 플레이어와 SpawnPoint의 x좌표 차이가 10 이하일 때 Badeline 스폰
+		if (abs(PlayerPos.x - m_PlayerSpawnPos.x) < 10)
+		{
+			m_BadenlineSpawned = true;
+
+			// Badeline 스폰
+			//auto pBadeline = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Badeline.prefab")->Instantiate();
+
+			CGameObject* pBadeline = new CGameObject;
+			pBadeline->SetName(L"Badeline");
+			
+			pBadeline->AddComponent(new CTransform);
+			Vec3 badelineSpawnPos = m_PlayerSpawnPos + Vec3(-100, 200, 10); // 플레이어 스폰 위치에서 좌측으로 100, 위로 200 z축 방향으로 10만큼 오프셋
+			//badelineSpawnPos.z = 10;
+			pBadeline->Transform()->SetRelativePos(badelineSpawnPos);
+			pBadeline->Transform()->SetRelativeScale(pPlayer->Transform()->GetRelativeScale());
+
+			pBadeline->AddComponent(new CCollider2D);
+			pBadeline->Collider2D()->SetIndependentScale(true);
+			pBadeline->Collider2D()->SetOffset(Vec3(0, -64, 0));
+			pBadeline->Collider2D()->SetScale(Vec3(48, 96, 1));
+
+
+			pBadeline->AddComponent(new CMeshRender);
+			pBadeline->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+			pBadeline->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+
+			pBadeline->AddComponent(new CFlipBookComponent);
+
+			pBadeline->AddComponent(new CBadelineScript);
+			pBadeline->GetScript<CBadelineScript>()->SetPlayer(pPlayer);
+
+			SpawnObject(pBadeline, (UINT)LAYER::MONSTER);
+		}
+	}
 }
 
 void CRoomScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject, CCollider2D* _OtherCollider)

@@ -45,6 +45,7 @@
     <ClInclude Include="CJumpThruScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="CBadelineScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -80,5 +81,6 @@
     <ClCompile Include="CJumpThruScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="CBadelineScript.cpp" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@ public:
 
 private:
 	bool m_StartRoom = false;
+	bool m_BadelineSpawnRoom = false;
+	bool m_BadenlineSpawned = false;
 
 	Vec3 m_PlayerSpawnPos;
 

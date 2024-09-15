@@ -2,6 +2,7 @@
 #include "CScriptMgr.h"
 
 #include "CBackgroundScript.h"
+#include "CBadelineScript.h"
 #include "CCameraMoveScript.h"
 #include "CDashTrailScript.h"
 #include "CJumpThruScript.h"
@@ -13,6 +14,7 @@
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CBackgroundScript");
+	_vec.push_back(L"CBadelineScript");
 	_vec.push_back(L"CCameraMoveScript");
 	_vec.push_back(L"CDashTrailScript");
 	_vec.push_back(L"CJumpThruScript");
@@ -26,6 +28,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CBackgroundScript" == _strScriptName)
 		return new CBackgroundScript;
+	if (L"CBadelineScript" == _strScriptName)
+		return new CBadelineScript;
 	if (L"CCameraMoveScript" == _strScriptName)
 		return new CCameraMoveScript;
 	if (L"CDashTrailScript" == _strScriptName)
@@ -49,6 +53,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::BACKGROUNDSCRIPT:
 		return new CBackgroundScript;
+		break;
+	case (UINT)SCRIPT_TYPE::BADELINESCRIPT:
+		return new CBadelineScript;
 		break;
 	case (UINT)SCRIPT_TYPE::CAMERAMOVESCRIPT:
 		return new CCameraMoveScript;
@@ -81,6 +88,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::BACKGROUNDSCRIPT:
 		return L"CBackgroundScript";
+		break;
+
+	case SCRIPT_TYPE::BADELINESCRIPT:
+		return L"CBadelineScript";
 		break;
 
 	case SCRIPT_TYPE::CAMERAMOVESCRIPT:
