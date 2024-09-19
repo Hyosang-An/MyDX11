@@ -280,6 +280,7 @@ void TileMapUI::Update()
 
 			// 위치는 에디터 카메라 위치로 설정
 			Vec3 vEditorCameraWorldPos = pCameraTrans->GetWorldPos();
+			vEditorCameraWorldPos.z = 20;
 			pPlayerSpawnPoint->Transform()->SetWorldPos(vEditorCameraWorldPos);
 			pPlayerSpawnPoint->Transform()->SetWorldScale(Vec3(48, 96, 1));
 

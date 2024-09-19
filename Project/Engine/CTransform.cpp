@@ -178,18 +178,6 @@ void CTransform::SetWorldPos(Vec3 _Pos)
 	Vec3 TargetRelativePos = matTargetRelativeTranslation.Translation();
 
 
-
-	// 디버깅
-	float a = abs(TargetRelativePos.x - m_RelativePos.x);
-	if (a <= 0.005)
-	{		
-		int b = 1;
-	}
-	if (_Pos.y == -249.9)
-	{
-		int a = 1;
-	}
-
 	// 원래 RelativePos와 TargetRelativePos간의 차이가 매우 작은 것은 적용하지 않음 (최상위 오브젝트일때만)
 	if (GetOwner()->GetParent() == nullptr)
 	{

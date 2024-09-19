@@ -73,6 +73,7 @@ void CCameraMoveScript::OrthoGraphicMove()
 	if (m_bChangeRoom)
 	{
 		ChangeRoom();
+		m_bDashShake = false;
 	}
 	else if (m_bDashShake)
 	{
@@ -395,7 +396,7 @@ void CCameraMoveScript::DashShake()
 	Vec3 vCameraPos = Transform()->GetWorldPos();
 
 	// m_ShakeDir 방향대로 m_PrevShakePos에서 Sin파동을 그리며 m_ShakeRange만큼 흔들린다.
-	Vec3 vShakePos = m_PrevShakePos + m_ShakeDir * sin(m_accDashShakeTime * 2 * XM_PI * m_shakeFrequency) * m_ShakeRange;
+	Vec3 vShakePos = m_PrevShakePos + m_ShakeDir * sin(m_accDashShakeTime * 4 * XM_PI / m_DashShakeTime) * m_ShakeRange;
 
 	Transform()->SetWorldPos(vShakePos);
 }

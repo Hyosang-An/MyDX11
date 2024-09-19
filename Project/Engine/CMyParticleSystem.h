@@ -135,7 +135,7 @@ private:
 	//float                   m_SpawnRate = 10.f;			// 초당 생성되어야하는 파티클 개수
 
 	bool                    m_DashParticleInit = false; // 대쉬 파티클 초기화 여부
-
+	float					m_DashParticleLifeTime = 3.f;	// 대쉬 파티클 수명
 
 
 public:

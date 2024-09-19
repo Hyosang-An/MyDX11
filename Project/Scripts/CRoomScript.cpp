@@ -26,20 +26,7 @@ CRoomScript::~CRoomScript()
 
 }
 
-void CRoomScript::FirstSpawnPlayer()
-{
-	auto pPlayer = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Player.prefab")->Instantiate();
-	pPlayer->FlipBookComponent()->Play(L"Idle");
 
-	// 플레이어의 위치를 Room의 spawn로 이동
-	pPlayer->Transform()->SetWorldPos(m_PlayerSpawnPos);
-
-	// 레벨에 추가
-	CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(LAYER::PLAYER, pPlayer);
-
-	// 플레이어의 Room을 이 Room으로 변경
-	pPlayer->GetScript<CPlayerScript>()->ChangeRoom(GetOwner());
-}
 
 void CRoomScript::Begin()
 {
@@ -62,6 +49,21 @@ void CRoomScript::Begin()
 	{
 		FirstSpawnPlayer();
 	}
+}
+
+void CRoomScript::FirstSpawnPlayer()
+{
+	auto pPlayer = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Player.prefab")->Instantiate();
+	pPlayer->FlipBookComponent()->Play(L"Idle");
+
+	// 플레이어의 위치를 Room의 spawn로 이동
+	pPlayer->Transform()->SetWorldPos(m_PlayerSpawnPos);
+
+	// 레벨에 추가
+	CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(LAYER::PLAYER, pPlayer);
+
+	// 플레이어의 Room을 이 Room으로 변경
+	pPlayer->GetScript<CPlayerScript>()->ChangeRoom(GetOwner());
 }
 
 void CRoomScript::Tick()
@@ -120,6 +122,10 @@ void CRoomScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 			return;
 
 		CGameObject* pPlayer = _OtherObject;
+
+		// 플레이어와 SpawnPointPos가 매우 가까우면 처음 스폰된 것이므로 return
+		if ((pPlayer->Transform()->GetWorldPos() - m_PlayerSpawnPos).Length() < 10)
+			return;
 
 		// 기존의 플레이어가 속한 Room을 이쪽 Room으로 변경
 		pPlayer->GetScript<CPlayerScript>()->ChangeRoom(GetOwner());

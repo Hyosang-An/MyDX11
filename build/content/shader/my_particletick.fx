@@ -66,7 +66,7 @@ StructuredBuffer<tMyParticleModule> Module : register(t21);
                     Particle.vWorldCurrentScale = float3(10.f, 10.f, 10.f);
                     Particle.Age = 0.f;
                     Particle.NormalizedAge = 0.f;
-                    Particle.Life = 8.f;
+                    Particle.Life = 8.f; // 적당히 8초로 설정
 
                     Particle.RandomValue = vRandom1.x;
 
@@ -103,10 +103,10 @@ StructuredBuffer<tMyParticleModule> Module : register(t21);
 
                     // Particle 초기화
                     Particle.vWorldInitPos = Particle.vWorldPos = spawnPos;
-                    Particle.vWorldCurrentScale = float3(10.f, 10.f, 10.f);
+                    Particle.vWorldCurrentScale = float3(10.f, 10.f, 1.f);
                     Particle.Age = 0.f;
                     Particle.NormalizedAge = 0.f;
-                    Particle.Life = 5.f;
+                    Particle.Life = 3.f;
 
                     // 파티클 색은 하늘색
                     Particle.vColor = float4(0.5f, 0.5f, 1.f, 1.f);

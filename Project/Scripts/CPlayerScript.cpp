@@ -345,7 +345,8 @@ void CPlayerScript::UpdateState()
 				m_DashTimeRemained = m_DashTime;
 				m_DashTrailTimeSinceLastTrail = 0;
 
-				m_CameraMoveScript->TurnOnDashShake(m_RigidBody->GetVelocity());
+				// 카메라 흔들림 효과
+				m_CameraMoveScript->TurnOnDashShake(m_RigidBody->GetVelocity());				
 			}
 
 			// 대쉬 잔상 생성
@@ -366,6 +367,7 @@ void CPlayerScript::UpdateState()
 				dashTrail->FlipBookComponent()->Pause();
 
 				Vec3 vPos = GetOwner()->Transform()->GetWorldPos();
+				vPos.z = 30;
 				dashTrail->Transform()->SetWorldPos(vPos);
 
 				Vec3 vScale = GetOwner()->Transform()->GetWorldScale();
@@ -382,6 +384,24 @@ void CPlayerScript::UpdateState()
 				// 현재 레벨에 추가
 				CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(LAYER::DEFAULT, dashTrail);
 
+
+
+				// 대쉬 파티클 생성
+				CGameObject* dashParticle = new CGameObject;
+				dashParticle->SetName(L"Dash Particle");
+
+				dashParticle->AddComponent(new CTransform);
+
+				Vec3 particlePos = GetOwner()->Collider2D()->GetWorldPos();
+				particlePos.z = 25; // 파티클이 가장 앞에 보이도록 z값 조정
+				dashParticle->Transform()->SetWorldPos(particlePos);
+				
+				dashParticle->Transform()->SetRelativeScale(50, 50.f, 1.f); // 파티클 랜덤 생성 범위
+
+				dashParticle->AddComponent(new CMyParticleSystem(1));
+				dashParticle->MyParticleSystem()->SetReferenceDir(m_RigidBody->GetVelocity());
+
+				SpawnObject(dashParticle, (int)LAYER::DEFAULT);
 			}
 
 			m_DashTrailTimeSinceLastTrail += DT;

@@ -44,7 +44,7 @@ CMyParticleSystem::CMyParticleSystem(UINT _particleType) :
 	m_Module.isModuleOn[(UINT)PARTICLE_MODULE::RENDER] = true;
 	m_Module.EndColor = Vec3(1.f, 1.f, 1.f);
 	m_Module.FadeOut = true;
-	m_Module.FadeOutStartRatio = 0.75f;
+	m_Module.FadeOutStartRatio = 0.5f;
 	m_Module.VelocityAlignment = true;
 
 	m_ModuleBuffer = new CStructuredBuffer;
@@ -103,7 +103,7 @@ void CMyParticleSystem::Init()
 		// Noise Force Module
 		m_Module.isModuleOn[(UINT)PARTICLE_MODULE::NOISE_FORCE] = true;
 		m_Module.NoiseForceTerm = 0.3f;		// Noise Force 적용시키는 텀
-		m_Module.NoiseForceScale = 0.8f;		// Noise Force 크기
+		m_Module.NoiseForceScale = 0.8f;		// Noise Force 크기 (현재 속도에 대한 비율)
 
 		// Drag Module (감속)
 		m_Module.isModuleOn[(UINT)PARTICLE_MODULE::DRAG] = true;
@@ -136,7 +136,7 @@ void CMyParticleSystem::CaculateSpawnCount()
 
 void CMyParticleSystem::SetReferenceDir(Vec3 _Dir)
 {
-	m_Module.ReferenceDir = _Dir;
+	m_Module.ReferenceDir = _Dir.Normalize();
 	m_ModuleBuffer->SetData(&m_Module);
 }
 
@@ -179,8 +179,8 @@ void CMyParticleSystem::FinalTick()
 		m_TickCS->Execute(); // Buffer 바인딩 후 ComputeShader 실행한 뒤 바인딩 값 Clear
 
 
-		// 누적시간 5초가 지나면 파티클 삭제
-		if (m_Time > 5.f)
+		// 누적시간이 m_DashParticleLifeTime을 지나면 파티클 삭제
+		if (m_Time > m_DashParticleLifeTime)
 		{
 			DeleteObject(GetOwner());
 		}
