@@ -340,31 +340,33 @@ void CTestLevel::CreateCelesteTestLevel()
 
 	// 파티클 오브젝트 테스트 (눈발)
 	// Particle Object
-	//CGameObject* pParticleObj = new CGameObject;
-	//pParticleObj->SetName(L"Particle Snow");
+	CGameObject* pParticleObj = new CGameObject;
+	pParticleObj->SetName(L"Particle Snow");
 
-	//pParticleObj->AddComponent(new CTransform);
-	//pParticleObj->Transform()->SetRelativePos(Vec3(1000.f, 0.f, 0.f));
-	//pParticleObj->Transform()->SetRelativeScale(500.f, 500.f, 1.f);
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->Transform()->SetRelativePos(Vec3(1000.f, 0.f, 0.f));
+	pParticleObj->Transform()->SetRelativeScale(1000.f, 1200.f, 1.f);
 
-	//pParticleObj->AddComponent(new CMyParticleSystem);
+	pParticleObj->AddComponent(new CMyParticleSystem);
 
 
-	//TestLevel->AddObject(0, pParticleObj);
+	TestLevel->AddObject(0, pParticleObj);
+
+
 
 	// 파티클 오브젝트 테스트 (대쉬)
 	// Particle Object
-	CGameObject* pParticleObj2 = new CGameObject;
-	pParticleObj2->SetName(L"Particle Dash");
+	//CGameObject* pParticleObj2 = new CGameObject;
+	//pParticleObj2->SetName(L"Particle Dash");
 
-	pParticleObj2->AddComponent(new CTransform);
-	pParticleObj2->Transform()->SetRelativePos(Vec3(0, 0.f, 0.f));
-	pParticleObj2->Transform()->SetRelativeScale(50, 50.f, 1.f);
+	//pParticleObj2->AddComponent(new CTransform);
+	//pParticleObj2->Transform()->SetRelativePos(Vec3(0, 0.f, 0.f));
+	//pParticleObj2->Transform()->SetRelativeScale(50, 50.f, 1.f);
 
-	pParticleObj2->AddComponent(new CMyParticleSystem(1));
-	pParticleObj2->MyParticleSystem()->SetReferenceDir(Vec3(1.f, 0.f, 0.f));
+	//pParticleObj2->AddComponent(new CMyParticleSystem(1));
+	//pParticleObj2->MyParticleSystem()->SetReferenceDir(Vec3(1.f, 0.f, 0.f));
 
-	TestLevel->AddObject(LAYER::DEFAULT, pParticleObj2);
+	//TestLevel->AddObject(LAYER::DEFAULT, pParticleObj2);
 
 
 

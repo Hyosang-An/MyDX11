@@ -56,13 +56,16 @@ CMyParticleSystem::CMyParticleSystem(UINT _particleType) :
 CMyParticleSystem::CMyParticleSystem(const CMyParticleSystem& _Other) :
 	CRenderComponent(_Other)
 {
-	m_TickCS = _Other.m_TickCS;
+	m_TickCS = (CMyParticleTickCS*)CAssetMgr::GetInst()->FindAsset<CComputeShader>(L"MyParticleTickCS").Get();
+
+	m_Module = _Other.m_Module;
+	m_MaxParticleCount = _Other.m_MaxParticleCount;
+
 	m_ParticleBuffer = nullptr;
 	m_SpawnCountBuffer = nullptr;
 	m_ParticleTex = _Other.m_ParticleTex;
 	m_Time = 0;
 	m_prevSpawnCountFraction = 0;
-	m_MaxParticleCount = _Other.m_MaxParticleCount;
 
 	if (_Other.m_ParticleBuffer)
 	{
@@ -213,8 +216,14 @@ void CMyParticleSystem::Render()
 
 void CMyParticleSystem::SaveToFile(FILE* _File)
 {
+	fwrite(&m_Module, sizeof(tMyParticleModule), 1, _File);
+	fwrite(&m_MaxParticleCount, sizeof(int), 1, _File);
 }
 
 void CMyParticleSystem::LoadFromFile(FILE* _File)
 {
+	fread(&m_Module, sizeof(tMyParticleModule), 1, _File);
+	fread(&m_MaxParticleCount, sizeof(int), 1, _File);
+
+	//m_ModuleBuffer->SetData(&m_Module);
 }
