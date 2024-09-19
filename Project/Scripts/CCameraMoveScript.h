@@ -20,6 +20,17 @@ private:
 
 	bool m_bChangeRoom = false;
 
+	bool m_bDashShake = false;
+	float m_DashShakeTime = 0.25f;
+	float m_accDashShakeTime = 0;
+
+    float m_ShakeRange = 10.f;
+    //float m_ShakeSpeed = 50.f;
+	float m_shakeFrequency = 5.f;
+	Vec3 m_ShakeDir;
+	Vec3 m_PrevShakePos; // Shake하기 전의 Pos
+
+
 private:
     void OrthoGraphicMove();
     void PerspectiveMove();
@@ -30,6 +41,9 @@ public:
     void ChangeRoom();
 
     void SetChangeRoom();
+
+    void TurnOnDashShake(Vec3 _dashDir);
+	void DashShake();
 
 
 public:

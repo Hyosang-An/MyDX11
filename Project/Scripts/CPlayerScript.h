@@ -61,6 +61,7 @@ private:
 
     // Script
 	class CRigidBody* m_RigidBody = nullptr;
+	class CCameraMoveScript* m_CameraMoveScript = nullptr;
 
 
 

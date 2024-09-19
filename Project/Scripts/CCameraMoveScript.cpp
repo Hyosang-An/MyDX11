@@ -74,8 +74,14 @@ void CCameraMoveScript::OrthoGraphicMove()
 	{
 		ChangeRoom();
 	}
+	else if (m_bDashShake)
+	{
+		DashShake();
+		return;
+	}
 	else
 	{
+
 		TrackPlayer();
 	}
 
@@ -366,6 +372,32 @@ void CCameraMoveScript::SetChangeRoom()
 	//	// 카메라가 Room의 아래쪽 벽에 붙어야함.
 	//	m_ChangeRoomTargetPos.y = fRoomBottomBorder + Camera()->GetProjectionHeight() * 0.5f;
 	//}
+}
+
+void CCameraMoveScript::TurnOnDashShake(Vec3 _dashDir)
+{
+	m_bDashShake = true;
+	m_ShakeDir = _dashDir.Normalize();
+	m_PrevShakePos = Transform()->GetWorldPos();
+}
+
+void CCameraMoveScript::DashShake()
+{
+	m_accDashShakeTime += EngineDT;
+
+	if (m_accDashShakeTime > m_DashShakeTime)
+	{
+		m_bDashShake = false;
+		m_accDashShakeTime = 0;
+		return;
+	}
+
+	Vec3 vCameraPos = Transform()->GetWorldPos();
+
+	// m_ShakeDir 방향대로 m_PrevShakePos에서 Sin파동을 그리며 m_ShakeRange만큼 흔들린다.
+	Vec3 vShakePos = m_PrevShakePos + m_ShakeDir * sin(m_accDashShakeTime * 2 * XM_PI * m_shakeFrequency) * m_ShakeRange;
+
+	Transform()->SetWorldPos(vShakePos);
 }
 
 

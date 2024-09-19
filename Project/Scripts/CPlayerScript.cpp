@@ -45,6 +45,7 @@ void CPlayerScript::Begin()
 	GetRenderComponent()->GetDynamicMaterial();
 
 	m_RigidBody = GetOwner()->GetScript<CRigidBody>();
+	m_CameraMoveScript = CLevelMgr::GetInst()->GetCurrentLevel()->FindObjectByName(L"MainCamera")->GetScript<CCameraMoveScript>();
 }
 
 void CPlayerScript::Tick()
@@ -343,6 +344,8 @@ void CPlayerScript::UpdateState()
 			{
 				m_DashTimeRemained = m_DashTime;
 				m_DashTrailTimeSinceLastTrail = 0;
+
+				m_CameraMoveScript->TurnOnDashShake(m_RigidBody->GetVelocity());
 			}
 
 			// 대쉬 잔상 생성
