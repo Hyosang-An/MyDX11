@@ -16,6 +16,7 @@
 #include <Scripts/CRigidBody.h>
 #include <Scripts/CMissileScript.h>
 #include <Scripts/CCameraMoveScript.h>
+#include <Scripts/CDashShockWaveEffectScript.h>
 
 #include "CLevelSaveLoad.h"
 
@@ -41,15 +42,15 @@ void CTestLevel::CreateTestLevel()
 	//pSound->Play(0, 1.f, false);
 
 	// 컴퓨트 쉐이더 테스트용 텍스쳐 생성
-	Ptr<CTexture> pTestTex = CAssetMgr::GetInst()->CreateTexture(L"ComputeShaderTestTex"
-		, 1026, 1026, DXGI_FORMAT_R8G8B8A8_UNORM
-		, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+	//Ptr<CTexture> pTestTex = CAssetMgr::GetInst()->CreateTexture(L"ComputeShaderTestTex"
+	//	, 1026, 1026, DXGI_FORMAT_R8G8B8A8_UNORM
+	//	, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
 
-	CSetColorCS cs;
-	cs.SetTargetTexture(pTestTex);
-	cs.SetClearColor(Vec4(0.f, 1.f, 0.f, 1.f));
-	cs.Execute();
-	pMtrl->SetTexParam(TEX_0, pTestTex);
+	//CSetColorCS cs;
+	//cs.SetTargetTexture(pTestTex);
+	//cs.SetClearColor(Vec4(0.f, 1.f, 0.f, 1.f));
+	//cs.Execute();
+	//pMtrl->SetTexParam(TEX_0, pTestTex);
 
 
 	// Level 생성
@@ -100,30 +101,55 @@ void CTestLevel::CreateTestLevel()
 
 
 
-	//플레이어 오브젝트
-	CGameObject* pPlayer = new CGameObject;
-	pPlayer->SetName(L"Player");
-	pPlayer->AddComponent(new CTransform);
-	pPlayer->AddComponent(new CMeshRender);
-	pPlayer->AddComponent(new CCollider2D);
-	pPlayer->AddComponent(new CFlipBookComponent);
-	pPlayer->AddComponent(new CPlayerScript);
-	pPlayer->AddComponent(new CRigidBody);
+	////플레이어 오브젝트
+	//CGameObject* pPlayer = new CGameObject;
+	//pPlayer->SetName(L"Player");
+	//pPlayer->AddComponent(new CTransform);
+	//pPlayer->AddComponent(new CMeshRender);
+	//pPlayer->AddComponent(new CCollider2D);
+	//pPlayer->AddComponent(new CFlipBookComponent);
+	//pPlayer->AddComponent(new CPlayerScript);
+	//pPlayer->AddComponent(new CRigidBody);
 
-	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
-	pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
+	//pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+	//pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
 
-	pPlayer->Collider2D()->SetIndependentScale(false);
-	pPlayer->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
-	pPlayer->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
+	//pPlayer->Collider2D()->SetIndependentScale(false);
+	//pPlayer->Collider2D()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	//pPlayer->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
 
-	pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
-	pPlayer->MeshRender()->SetMaterial(pMtrl);
+	//pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	//pPlayer->MeshRender()->SetMaterial(pMtrl);
 
-	pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Link_MoveDown.flip"));
-	pPlayer->FlipBookComponent()->Play(L"Link_MoveDown", 10, true);
+	//pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Link_MoveDown.flip"));
+	//pPlayer->FlipBookComponent()->Play(L"Link_MoveDown", 10, true);
 
-	TestLevel->AddObject(3, pPlayer);
+	//TestLevel->AddObject(3, pPlayer);
+
+	// 플레이어 오브젝트
+	//CGameObject* pPlayer = new CGameObject;
+	//pPlayer->SetName(L"Player");
+	//pPlayer->AddComponent(new CTransform);
+	//pPlayer->AddComponent(new CMeshRender);
+	//pPlayer->AddComponent(new CCollider2D);
+	//pPlayer->AddComponent(new CFlipBookComponent);
+	//pPlayer->AddComponent(new CPlayerScript);
+	//pPlayer->AddComponent(new CRigidBody);
+
+	//pPlayer->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+	//pPlayer->Transform()->SetRelativeScale(350, 350, 1.f);
+
+	//pPlayer->Collider2D()->SetIndependentScale(true);
+	//pPlayer->Collider2D()->SetOffset(Vec3(0.f, -64.f, 0.f));
+	//pPlayer->Collider2D()->SetScale(Vec3(60.f, 96.f, 1.f));
+
+	//pPlayer->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	//pPlayer->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+
+	//pPlayer->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Idle\\Idle.flip"));
+	//pPlayer->FlipBookComponent()->Play(L"Idle", 10, true);
+
+	//TestLevel->AddObject(3, pPlayer);
 
 
 	//// Monster Object
@@ -161,6 +187,12 @@ void CTestLevel::CreateTestLevel()
 	Ptr<CTexture> pTileAtlas = CAssetMgr::GetInst()->FindAsset<CTexture>(L"texture\\TILE.bmp");
 	pTileMapObj->TileMap()->SetAtlasTexture(pTileAtlas, Vec2(64.f, 64.f));
 
+	auto& tileInfoVec = pTileMapObj->TileMap()->GetTileInfoVec();
+	for (int i = 0; i < tileInfoVec.size(); i++)
+	{
+		tileInfoVec[i].ImgIdx = i;
+	}
+
 	TestLevel->AddObject(2, pTileMapObj);
 
 
@@ -182,15 +214,15 @@ void CTestLevel::CreateTestLevel()
 
 
 	// Particle Object
-	CGameObject* pParticleObj = new CGameObject;
-	pParticleObj->SetName(L"Particle");
+	//CGameObject* pParticleObj = new CGameObject;
+	//pParticleObj->SetName(L"Particle");
 
-	pParticleObj->AddComponent(new CTransform);
-	pParticleObj->AddComponent(new CParticleSystem);
+	//pParticleObj->AddComponent(new CTransform);
+	//pParticleObj->AddComponent(new CParticleSystem);
 
-	pParticleObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+	//pParticleObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
 
-	TestLevel->AddObject(0, pParticleObj);
+	//TestLevel->AddObject(0, pParticleObj);
 
 
 	//// PostProcess Object2 (GaussianBlur)
@@ -207,6 +239,25 @@ void CTestLevel::CreateTestLevel()
 	//pGaussianBlurObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"BloomMtrl"));
 
 	//TestLevel->AddObject(0, pGaussianBlurObj);
+
+
+
+	// PostProcess Object2 (DashShockWaveObj)
+	CGameObject* pDashShockWaveObj = new CGameObject;
+	pDashShockWaveObj->SetName(L"DashShockWaveObj");
+	pDashShockWaveObj->AddComponent(new CTransform);
+	pDashShockWaveObj->AddComponent(new CMeshRender);
+
+	pDashShockWaveObj->Transform()->SetRelativePos(200, -200, 450);
+	pDashShockWaveObj->Transform()->SetRelativeScale(500.f, 500.f, 1.f);
+
+
+	pDashShockWaveObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"CircleMesh"));
+	pDashShockWaveObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DashShockWaveMtrl"));
+
+	pDashShockWaveObj->AddComponent(new CDashShockWaveEffectScript);
+
+	TestLevel->AddObject(0, pDashShockWaveObj);
 
 	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
 

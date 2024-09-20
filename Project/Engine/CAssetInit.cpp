@@ -420,6 +420,17 @@ void CAssetMgr::CreateEngineGraphicShader()
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
 	AddAsset(L"BloomShader", pShader);
+
+
+	// DashShockWaveShader
+	pShader = new CGraphicShader;
+	pShader->CreateVertexShader(L"shader\\postprocess_0.fx", "VS_DashShockWave");
+	pShader->CreatePixelShader(L"shader\\postprocess_0.fx", "PS_DashShockWave");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	AddAsset(L"DashShockWaveShader", pShader);
 }
 
 void CAssetMgr::CreateEngineComputeShader()
@@ -527,5 +538,12 @@ void CAssetMgr::CreateEngineMaterial()
 	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
 	pMtrl->SetTexParam(TEX_1, FindAsset<CTexture>(L"PostProcessRTTex_1"));
 	AddAsset(L"BloomMtrl", pMtrl);
+
+	// DashShockWaveMtrl
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindAsset<CGraphicShader>(L"DashShockWaveShader"));
+	pMtrl->SetTexParam(TEX_0, FindAsset<CTexture>(L"PostProcessRTTex_0"));
+	AddAsset(L"DashShockWaveMtrl", pMtrl);
+
 }
 

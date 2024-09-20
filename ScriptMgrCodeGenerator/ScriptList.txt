@@ -1,6 +1,7 @@
 CBackgroundScript
 CBadelineScript
 CCameraMoveScript
+CDashShockWaveEffectScript
 CDashTrailScript
 CJumpThruScript
 CMissileScript

@@ -4,6 +4,7 @@
 #include "CBackgroundScript.h"
 #include "CBadelineScript.h"
 #include "CCameraMoveScript.h"
+#include "CDashShockWaveEffectScript.h"
 #include "CDashTrailScript.h"
 #include "CJumpThruScript.h"
 #include "CMissileScript.h"
@@ -16,6 +17,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CBackgroundScript");
 	_vec.push_back(L"CBadelineScript");
 	_vec.push_back(L"CCameraMoveScript");
+	_vec.push_back(L"CDashShockWaveEffectScript");
 	_vec.push_back(L"CDashTrailScript");
 	_vec.push_back(L"CJumpThruScript");
 	_vec.push_back(L"CMissileScript");
@@ -32,6 +34,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CBadelineScript;
 	if (L"CCameraMoveScript" == _strScriptName)
 		return new CCameraMoveScript;
+	if (L"CDashShockWaveEffectScript" == _strScriptName)
+		return new CDashShockWaveEffectScript;
 	if (L"CDashTrailScript" == _strScriptName)
 		return new CDashTrailScript;
 	if (L"CJumpThruScript" == _strScriptName)
@@ -59,6 +63,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::CAMERAMOVESCRIPT:
 		return new CCameraMoveScript;
+		break;
+	case (UINT)SCRIPT_TYPE::DASHSHOCKWAVEEFFECTSCRIPT:
+		return new CDashShockWaveEffectScript;
 		break;
 	case (UINT)SCRIPT_TYPE::DASHTRAILSCRIPT:
 		return new CDashTrailScript;
@@ -96,6 +103,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::CAMERAMOVESCRIPT:
 		return L"CCameraMoveScript";
+		break;
+
+	case SCRIPT_TYPE::DASHSHOCKWAVEEFFECTSCRIPT:
+		return L"CDashShockWaveEffectScript";
 		break;
 
 	case SCRIPT_TYPE::DASHTRAILSCRIPT:

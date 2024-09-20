@@ -14,7 +14,7 @@ void CDashTrailScript::Tick()
 {
 	// 남은 시간 비율에 따라 투명도를 조절한다.
 	float alpha = 1.f - m_accTime / m_lifeTime;
-	GetOwner()->MeshRender()->GetDynamicMaterial()->SetScalarParam(FLOAT_0, alpha);
+	GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(FLOAT_0, alpha);
 
 	// 일정 시간이 지나면 사라지게 한다.
 	m_accTime += DT;

@@ -160,9 +160,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 #endif
 
    // 테스트용 레벨 초기상태 만들기
-   // CTestLevel::CreateTestLevel();
+   CTestLevel::CreateTestLevel();
 
-   CTestLevel::CreateCelesteTestLevel();
+   // CTestLevel::CreateCelesteTestLevel();
 
    g_bClientInitiated = true;
    return TRUE;

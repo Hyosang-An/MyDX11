@@ -87,7 +87,8 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         }
         else
         {
-            vColor = float4(1.f, 0.f, 0.5f, 1.f);
+            //vColor = float4(1.f, 0.f, 0.5f, 1.f);
+            vColor = float4(1.f, 0.f, 1.f, 1.f);
         }
     }
     

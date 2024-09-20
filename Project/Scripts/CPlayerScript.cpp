@@ -8,6 +8,7 @@
 #include "CRoomScript.h"
 #include "CCameraMoveScript.h"
 #include "CDashTrailScript.h"
+#include "CDashShockWaveEffectScript.h"
 
 CPlayerScript::CPlayerScript() :
 	CScript(UINT(SCRIPT_TYPE::PLAYERSCRIPT))
@@ -346,7 +347,25 @@ void CPlayerScript::UpdateState()
 				m_DashTrailTimeSinceLastTrail = 0;
 
 				// 카메라 흔들림 효과
-				m_CameraMoveScript->TurnOnDashShake(m_RigidBody->GetVelocity());				
+				m_CameraMoveScript->TurnOnDashShake(m_RigidBody->GetVelocity());	
+
+
+				// DashShockWaveEffect 생성
+				CGameObject* pDashShockWaveObj = new CGameObject;
+				pDashShockWaveObj->SetName(L"DashShockWaveObj");
+				pDashShockWaveObj->AddComponent(new CTransform);
+				pDashShockWaveObj->AddComponent(new CMeshRender);
+
+				pDashShockWaveObj->Transform()->SetRelativePos(GetOwner()->Collider2D()->GetWorldPos());
+				pDashShockWaveObj->Transform()->SetRelativeScale(800.f, 800.f, 1.f);
+
+
+				pDashShockWaveObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"CircleMesh"));
+				pDashShockWaveObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"DashShockWaveMtrl"));
+
+				pDashShockWaveObj->AddComponent(new CDashShockWaveEffectScript);
+
+				SpawnObject(pDashShockWaveObj, (int)LAYER::DEFAULT);
 			}
 
 			// 대쉬 잔상 생성

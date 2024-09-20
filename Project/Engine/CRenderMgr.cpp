@@ -264,7 +264,7 @@ void CRenderMgr::DeregisterCamera(CCamera* _cam)
 
 void CRenderMgr::PostProcessCopy(int _postProcessRTTex_index)
 {
-	assert(m_vecPostProcessRTTex.size() > _postProcessRTTex_index);
+	//assert(m_vecPostProcessRTTex.size() > _postProcessRTTex_index);
 
 	// RenderTarget -> PostProcessRTTex
 	Ptr<CTexture> pRTTex = CAssetMgr::GetInst()->FindAsset<CTexture>(L"RenderTargetTex");

@@ -198,9 +198,8 @@ void CCamera::Render()
 	// PostProcess 
 	for (size_t i = 0; i < m_vecPostProcess.size(); ++i)
 	{
-		
-
-		CRenderMgr::GetInst()->PostProcessCopy((int)i);
+		// Celeste에서는 0번째 PostPrecessRT만 사용
+		CRenderMgr::GetInst()->PostProcessCopy(0);
 		m_vecPostProcess[i]->Render();
 	}
 
