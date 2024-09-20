@@ -45,8 +45,12 @@
     <ClInclude Include="CJumpThruScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="CBadelineScript.h" />
-    <ClInclude Include="CDashShockWaveEffectScript.h" />
+    <ClInclude Include="CBadelineScript.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="CDashShockWaveEffectScript.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -82,7 +86,11 @@
     <ClCompile Include="CJumpThruScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="CBadelineScript.cpp" />
-    <ClCompile Include="CDashShockWaveEffectScript.cpp" />
+    <ClCompile Include="CBadelineScript.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CDashShockWaveEffectScript.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

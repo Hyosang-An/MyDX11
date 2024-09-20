@@ -18,6 +18,8 @@ private:
 	CGameObject* m_Player = nullptr;
 	CGameObject* m_Room = nullptr;
 
+	CGameObject* m_SnowParticle = nullptr;
+
 	bool m_bChangeRoom = false;
 
 	bool m_bDashShake = false;

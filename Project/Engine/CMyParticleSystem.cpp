@@ -32,7 +32,7 @@ CMyParticleSystem::CMyParticleSystem(UINT _particleType) :
 	// 모듈 정보 세팅
 	m_Module.Type = _particleType; // 눈발 파티클
 	m_Module.isModuleOn[(UINT)PARTICLE_MODULE::SPAWN] = true;
-	m_Module.SpawnRate = 20;
+	m_Module.SpawnRate = 30;
 
 	// Spawn Shape
 	m_Module.SpawnShape = 0;

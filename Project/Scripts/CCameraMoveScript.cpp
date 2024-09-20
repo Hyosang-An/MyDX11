@@ -25,7 +25,20 @@ CCameraMoveScript::~CCameraMoveScript()
 
 void CCameraMoveScript::Begin()
 {
+	// Snow Particle Object
+	CGameObject* pSnowParticleObj = new CGameObject;
+	m_SnowParticle = pSnowParticleObj;
 
+	pSnowParticleObj->SetName(L"Particle Snow");
+
+	pSnowParticleObj->AddComponent(new CTransform);
+	Vec3 vCameraPos = Transform()->GetWorldPos();
+	pSnowParticleObj->Transform()->SetRelativePos(Vec3(vCameraPos.x + 1000.f, vCameraPos.y, vCameraPos.z));
+	pSnowParticleObj->Transform()->SetRelativeScale(1000.f, 1200.f, 1.f);
+
+	pSnowParticleObj->AddComponent(new CMyParticleSystem);
+
+	SpawnObject(pSnowParticleObj, (int)LAYER::DEFAULT);
 }
 
 void CCameraMoveScript::Tick()
@@ -43,6 +56,13 @@ void CCameraMoveScript::FinalTick()
 	if (PROJ_TYPE::ORTHOGRAPHIC == Camera()->GetProjType())
 	{
 		OrthoGraphicMove();
+	}
+
+	// Snow Particle Object 위치 업데이트
+	if (nullptr != m_SnowParticle)
+	{
+		Vec3 vCameraPos = Transform()->GetWorldPos();
+		m_SnowParticle->Transform()->SetWorldPos(Vec3(vCameraPos.x + 1000.f, vCameraPos.y, vCameraPos.z));
 	}
 }
 
