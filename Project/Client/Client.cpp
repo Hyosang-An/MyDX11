@@ -133,7 +133,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     g_hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   HWND hWnd = CreateWindowW(L"MyWindowClass", szTitle, WS_OVERLAPPEDWINDOW, //& ~WS_SIZEBOX, // 창 크기 변경 불가 옵션
+   HWND hWnd = CreateWindowW(L"MyWindowClass", szTitle, WS_OVERLAPPEDWINDOW & ~WS_SIZEBOX, // 창 크기 변경 불가 옵션
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
@@ -167,7 +167,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 #else
    // 실제 게임 레벨 로드
-   CLevelSaveLoad::LoadInitialGameLevel();
+   // CLevelSaveLoad::LoadInitialGameLevel();
+
+   CTestLevel::LoadTestLevel();
 #endif
 
 
