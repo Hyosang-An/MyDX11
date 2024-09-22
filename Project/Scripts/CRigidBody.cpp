@@ -120,6 +120,11 @@ void CRigidBody::OnWallHang()
 {
 }
 
+void CRigidBody::SetOnGround(bool _bOnGround)
+{
+	m_bOnGround = _bOnGround;
+}
+
 void CRigidBody::SetVelocity(Vec3 _vVelocity)
 {
 	m_vVelocity = _vVelocity;

@@ -41,7 +41,7 @@ public:
 	void OnLand();
 	void OnWallHang();
 
-	void SetOnGround(bool _bOnGround) { m_bOnGround = _bOnGround; }
+	void SetOnGround(bool _bOnGround);
 	bool IsOnGround() { return m_bOnGround; }
 
 	Vec3 GetVelocity() { return m_vVelocity; }

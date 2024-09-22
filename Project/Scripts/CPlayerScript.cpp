@@ -79,14 +79,17 @@ void CPlayerScript::ChangeRoom(CGameObject* _Room)
 
 void CPlayerScript::KeyCheck()
 {
-	// 디버그
-	auto owner = GetOwner();
-
 	//OnGround 상태 업데이트
+	if (m_setGroundColliders.empty())
+		m_RigidBody->SetOnGround(false);
 	m_bOnGround = m_RigidBody->IsOnGround();
 
 	// Death 상태일 때는 입력을 받지 않는다.
 	if (m_CurState == PLAYER_STATE::DEATH)
+		return;
+
+	// CLIMB JUMP 상태면 예외처리
+	if (m_CurState == PLAYER_STATE::CLIMB_JUMP)
 		return;
 
 	// IDLE
@@ -240,7 +243,7 @@ void CPlayerScript::KeyCheck()
 	//	m_CurState = PLAYER_STATE::FALL;
 	//}
 	// 아래 방향으로 떨어지면서, CLIMB나 대쉬나 드림 대쉬 상태가 아니면 FALL 상태로 전환
-	if (m_RigidBody->GetVelocity().y < 0 && m_CurState !=PLAYER_STATE::CLIMB && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
+	if (!m_bOnGround && m_RigidBody->GetVelocity().y <= 0 && m_CurState !=PLAYER_STATE::CLIMB && m_CurState != PLAYER_STATE::DASH && m_CurState != PLAYER_STATE::DREAM_DASH)
 	{
 		m_CurState = PLAYER_STATE::FALL;
 	}
@@ -575,7 +578,61 @@ void CPlayerScript::UpdateState()
 
 		case PLAYER_STATE::CHANGE_ROOM:
 		{
-			// TODO : 방 바꾸는 상태 처리
+			// RoomScript에서 처리하는 것으로 구현완료
+			break;
+		}
+
+		case PLAYER_STATE::CLIMB_JUMP:
+		{
+
+
+			if (m_bOnGround)
+			{
+				m_CurState = PLAYER_STATE::IDLE;
+				break;
+			}
+
+			if (m_PrevState != PLAYER_STATE::CLIMB_JUMP)
+			{
+				Vec3 initVel = Vec3(0, 500, 0);
+				if (m_bFacingRight)
+					initVel.x = -50;
+				else
+					initVel.x = 50;
+
+				m_RigidBody->SetVelocity(initVel);
+				m_accClimbJumpTime = 0;
+				break;
+			}
+
+			m_accClimbJumpTime += DT;
+
+			if (m_accClimbJumpTime < 0.15)
+			{
+				Vec3 vel = m_RigidBody->GetVelocity();
+				vel.y = 300;
+				m_RigidBody->SetVelocity(vel);
+			}
+			else if (0.15 <= m_accClimbJumpTime && m_accClimbJumpTime < 0.3)
+			{
+				Vec3 vel = m_RigidBody->GetVelocity();
+				if (m_bFacingRight)
+					vel.x = 100;
+				else
+					vel.x = -100;
+				vel.y = 200;
+				m_RigidBody->SetVelocity(vel);
+			}
+			else if (0.3 <= m_accClimbJumpTime && m_accClimbJumpTime)
+			{
+				Vec3 vel = m_RigidBody->GetVelocity();
+				if (m_bFacingRight)
+					vel.x = 100;
+				else
+					vel.x = -100;
+				m_RigidBody->SetVelocity(vel);
+			}
+
 			break;
 		}
 
@@ -693,6 +750,23 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 				// 천장과 충돌한 경우
 				else
 				{
+					// 아주 조금 영역으로 겹친 경우는 위치만 보정하고 무시
+					if (overlapArea.x < 5)
+					{
+						if (vDir.x > 0)
+						{
+							// 위치 보정
+							vObjWorldPos.x -= overlapArea.x;
+						}
+						else
+						{
+							// 위치 보정
+							vObjWorldPos.x += overlapArea.x;
+						}
+
+						break;
+					}
+
 					// 위치 보정
 					vObjWorldPos.y -= overlapArea.y;
 					GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
@@ -813,6 +887,12 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 					GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 					m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
+					
+					// CLIMB_JUMP 상태로 들어간 경우
+					if (m_CurState == PLAYER_STATE::CLIMB && overlapArea.y < 50 && m_RigidBody->GetVelocity().y > 0 && m_setRightWallColliders.size() == 1)
+					{
+						m_CurState = PLAYER_STATE::CLIMB_JUMP;
+					}
 				}
 				else if (!m_bFacingRight && m_bOnLeftWall)
 				{
@@ -821,6 +901,12 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 					GetOwner()->Transform()->SetRelativePos(vObjWorldPos);
 
 					m_RigidBody->SetVelocity(Vec3(0, m_RigidBody->GetVelocity().y, 0));
+
+					// CLIMB_JUMP 상태로 들어간 경우
+					if (m_CurState == PLAYER_STATE::CLIMB && overlapArea.y < 50 && m_RigidBody->GetVelocity().y > 0 && m_setLeftWallColliders.size() == 1)
+					{
+						m_CurState = PLAYER_STATE::CLIMB_JUMP;
+					}
 				}
 
 				// 바닥 방향 속도 0 (땅과 충돌한 경우)
@@ -872,7 +958,17 @@ void CPlayerScript::EndOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 
 				// 벽에서 떨어진 경우
 				if (m_setLeftWallColliders.empty())
+				{
 					m_bOnLeftWall = false;
+
+					// 끝까지 다 올라간 경우
+					Vec3 vel = m_RigidBody->GetVelocity();
+					if (vel.x == 0 && vel.y > 0)
+					{
+						// 시간 남아돌면 하는걸로
+						// TODO
+					}
+				}
 			}
 
 			else if (m_setRightWallColliders.find(_OtherCollider) != m_setRightWallColliders.end())
@@ -882,6 +978,14 @@ void CPlayerScript::EndOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 				// 벽에서 떨어진 경우
 				if (m_setRightWallColliders.empty())
 					m_bOnRightWall = false;
+
+				// 끝까지 다 올라간 경우
+				Vec3 vel = m_RigidBody->GetVelocity();
+				if (vel.x == 0 && vel.y > 0)
+				{
+					// 시간 남아돌면 하는걸로
+					// TODO
+				}
 			}
 		}
 	}

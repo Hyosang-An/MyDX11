@@ -12,6 +12,8 @@ enum class PLAYER_STATE
     DREAM_DASH,
     CHANGE_ROOM,
     DEATH,
+	CLIMB_JUMP,
+
     END
 };
 
@@ -54,6 +56,8 @@ private:
 
 	bool            m_bOnLeftWall = false;
 	bool            m_bOnRightWall = false;
+
+	float			m_accClimbJumpTime = 0;
 
 	set<CCollider2D*> m_setGroundColliders;
 	set<CCollider2D*> m_setLeftWallColliders;
