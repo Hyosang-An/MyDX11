@@ -93,6 +93,7 @@ void CRoomScript::Tick()
 			//auto pBadeline = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Badeline.prefab")->Instantiate();
 
 			CGameObject* pBadeline = new CGameObject;
+			m_Badeline = pBadeline;
 			pBadeline->SetName(L"Badeline");
 			
 			pBadeline->AddComponent(new CTransform);
@@ -117,6 +118,19 @@ void CRoomScript::Tick()
 			pBadeline->GetScript<CBadelineScript>()->SetPlayer(pPlayer);
 
 			SpawnObject(pBadeline, (UINT)LAYER::MONSTER);
+		}
+	}
+
+	// 플레이어가 다른 Room으로 넘어가면 Badeline 제거
+	if (m_Badeline != nullptr)
+	{
+		CGameObject* pPlayer = CLevelMgr::GetInst()->GetCurrentLevel()->GetLayer((UINT)LAYER::PLAYER)->GetParentObjects().front();
+		if (pPlayer->GetScript<CPlayerScript>()->GetCurRoom() != GetOwner())
+		{
+			DeleteObject(m_Badeline);
+			m_Badeline = nullptr;
+
+			m_BadenlineSpawned = false;
 		}
 	}
 }

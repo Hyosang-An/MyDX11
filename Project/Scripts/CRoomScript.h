@@ -14,6 +14,8 @@ private:
 	bool m_BadelineSpawnRoom = false;
 	bool m_BadenlineSpawned = false;
 
+	CGameObject* m_Badeline = nullptr;
+
 	Vec3 m_PlayerSpawnPos;
 
 public:

@@ -78,7 +78,7 @@ void CCameraMoveScript::OrthoGraphicMove()
 		return;
 	}
 	// 플레이어가 현재 속한 Room을 가져온다
-	m_Room = m_Player->GetScript<CPlayerScript>()->GetRoom();
+	m_Room = m_Player->GetScript<CPlayerScript>()->GetCurRoom();
 	if (nullptr == m_Room)
 	{		
 		return;
@@ -316,7 +316,7 @@ void CCameraMoveScript::SetChangeRoom()
 	}
 
 	// 플레이어가 현재 속한 Room을 가져온다
-	m_Room = m_Player->GetScript<CPlayerScript>()->GetRoom();
+	m_Room = m_Player->GetScript<CPlayerScript>()->GetCurRoom();
 	if (nullptr == m_Room)
 	{
 		MessageBox(NULL, L"플레이어가 속한 Room을 찾을 수 없습니다.", L"경고", MB_OK);

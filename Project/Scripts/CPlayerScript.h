@@ -32,7 +32,7 @@ private:
 
 	//int             m_CurRoomIdx = 0;
 
-	CGameObject*	m_Room = nullptr;
+	CGameObject*	m_CurRoom = nullptr;
 
 
 	float           m_MagnitudeOfMoveForce = 1000;
@@ -70,7 +70,7 @@ public:
 	PLAYER_STATE GetCurState() { return m_CurState; }
 	void SetCurState(PLAYER_STATE _State) { m_CurState = _State; }
 	void ChangeRoom(CGameObject* _Room);
-	CGameObject* GetRoom() { return m_Room; }
+	CGameObject* GetCurRoom() { return m_CurRoom; }
 
 	bool IsFacingRight() { return m_bFacingRight; }
 

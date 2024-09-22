@@ -70,7 +70,7 @@ void CPlayerScript::Tick()
 
 void CPlayerScript::ChangeRoom(CGameObject* _Room)
 {
-	m_Room = _Room;
+	m_CurRoom = _Room;
 
 	// 메인카메라의 ChangeRoom 함수 호출
 	auto mainCamera = CLevelMgr::GetInst()->GetCurrentLevel()->FindObjectByName(L"MainCamera");
@@ -573,7 +573,7 @@ void CPlayerScript::UpdateState()
 			if (GetOwner()->FlipBookComponent()->IsFinished())
 			{
 				//respawn
-				auto respawnPos = m_Room->GetScript<CRoomScript>()->GetPlayerSpawnPos();
+				auto respawnPos = m_CurRoom->GetScript<CRoomScript>()->GetPlayerSpawnPos();
 				GetOwner()->Transform()->SetWorldPos(respawnPos);
 
 				m_CurState = PLAYER_STATE::IDLE;
