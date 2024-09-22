@@ -48,7 +48,7 @@ public:
     bool IsIndependentScale() { return m_IndependentScale; }
 
     Vec3 GetRelativePos() { return m_RelativePos; }
-    Vec3 GetWorldPos() { return m_matWorld.Translation(); }
+    Vec3 GetWorldPos() { FinalTick(); return m_matWorld.Translation(); }
 
     Vec3 GetRelativeScale() { return m_RelativeScale; }
     Vec3 GetWorldScale();
@@ -57,6 +57,6 @@ public:
     Vec3 GetRelativeDir(DIR _Type) { return m_RelativeDir[_Type]; }
     Vec3 GetWorldDir(DIR _Type) { return m_WorldDir[_Type]; }
 
-    const Matrix& GetWorldMat() { return m_matWorld; }
+    const Matrix& GetWorldMat() { FinalTick(); return m_matWorld; }
 };
 
