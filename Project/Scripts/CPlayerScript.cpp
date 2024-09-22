@@ -357,7 +357,7 @@ void CPlayerScript::UpdateState()
 				pDashShockWaveObj->AddComponent(new CMeshRender);
 
 				pDashShockWaveObj->Transform()->SetRelativePos(GetOwner()->Collider2D()->GetWorldPos());
-				pDashShockWaveObj->Transform()->SetRelativeScale(800.f, 800.f, 1.f);
+				pDashShockWaveObj->Transform()->SetRelativeScale(1200.f, 1200.f, 1.f); // ¹ÝÁö¸§ 600
 
 
 				pDashShockWaveObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"CircleMesh"));
