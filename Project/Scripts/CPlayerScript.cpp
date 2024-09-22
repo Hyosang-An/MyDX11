@@ -369,9 +369,10 @@ void CPlayerScript::UpdateState()
 			}
 
 			// 대쉬 잔상 생성
-			if (m_DashTrailTimeSinceLastTrail >= m_DashTrailInterval)
+			if (m_DashTrailTimeSinceLastTrail == 0 || m_DashTrailTimeSinceLastTrail >= m_DashTrailInterval)
 			{
-				m_DashTrailTimeSinceLastTrail -= m_DashTrailInterval;
+				if (m_DashTrailTimeSinceLastTrail != 0)
+					m_DashTrailTimeSinceLastTrail -= m_DashTrailInterval;
 
 				CGameObject* dashTrail = new CGameObject;
 				dashTrail->SetName(L"DashTrail");
@@ -434,9 +435,22 @@ void CPlayerScript::UpdateState()
 					m_CurState = PLAYER_STATE::FALL;
 
 				// 속도 정상화
-				Vec3 vDir = m_RigidBody->GetVelocity().Normalize();
-				m_RigidBody->SetVelocity(vDir * m_SpeedBeforeDash);
-				
+				/*Vec3 vDir = m_RigidBody->GetVelocity().Normalize();
+				m_RigidBody->SetVelocity(vDir * m_SpeedBeforeDash);*/
+
+				Vec3 vel = m_RigidBody->GetVelocity();
+				if (vel.x > 0)
+					vel.x = m_MaxRunSpeed;
+				else if (vel.x < 0)
+					vel.x = -m_MaxRunSpeed;
+
+				if (vel.y > 0)
+					vel.y = 300;
+				else if (vel.y < 0)
+					vel.y = -300;
+				m_RigidBody->SetVelocity(vel);
+
+				m_DashTrailTimeSinceLastTrail = 0;
 			}
 
 			break;

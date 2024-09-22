@@ -35,19 +35,19 @@ private:
 	CGameObject*	m_CurRoom = nullptr;
 
 
-	float           m_MagnitudeOfMoveForce = 1000;
-	float           m_MaxRunSpeed = 200;
-	float           m_JumpSpeed = 700;
-    float		    m_DashSpeed = 700;
-	float           m_ClimbSpeed = 100;
+	float           m_MagnitudeOfMoveForce = 2000;
+	float           m_MaxRunSpeed = 400;
+	float           m_JumpSpeed = 900;
+    float		    m_DashSpeed = 1200;
+	float           m_ClimbSpeed = 300;
 
 	float           m_SpeedBeforeDash = 0;
     
 	int             m_DashCount = 1;
-	float		    m_DashTime = 0.5;
+	float		    m_DashTime = 0.25;
     float		    m_DashTimeRemained = m_DashTime;
 
-	float			m_DashTrailInterval = 0.15;
+	float			m_DashTrailInterval = m_DashTime / 2.9f;
 	float			m_DashTrailTimeSinceLastTrail = 0;
 
 	float           m_MaxFallingSpeed = 600;

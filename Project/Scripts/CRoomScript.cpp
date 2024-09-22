@@ -181,7 +181,7 @@ void CRoomScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherObj
 			// 플레이어를 점프시킴
 			CRigidBody* pRigidbody = pPlayer->GetScript<CRigidBody>();
 			Vec3 vVelocity = pRigidbody->GetVelocity();
-			vVelocity.y = 700;
+			vVelocity.y = 1000;
 			pRigidbody->SetVelocity(vVelocity);
 
 			CPlayerScript* pPlayerScript = pPlayer->GetScript<CPlayerScript>();
