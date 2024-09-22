@@ -3,6 +3,7 @@
 #include "CPlayerScript.h"
 #include "CRigidBody.h"
 #include "CBadelineScript.h"
+#include "CCameraMoveScript.h"
 
 #include "Engine/CLevelMgr.h"
 #include "Engine/CLevel.h"
@@ -59,11 +60,19 @@ void CRoomScript::FirstSpawnPlayer()
 	// 플레이어의 위치를 Room의 spawn로 이동
 	pPlayer->Transform()->SetWorldPos(m_PlayerSpawnPos);
 
+	// 메인 카메라의 위치를 플레이어 위치로 이동
+	CGameObject* pMainCamera = CLevelMgr::GetInst()->GetCurrentLevel()->FindObjectByName(L"MainCamera");
+	pMainCamera->Transform()->SetWorldPos(m_PlayerSpawnPos);
+
 	// 레벨에 추가
 	CLevelMgr::GetInst()->GetCurrentLevel()->AddObject(LAYER::PLAYER, pPlayer);
 
 	// 플레이어의 Room을 이 Room으로 변경
 	pPlayer->GetScript<CPlayerScript>()->ChangeRoom(GetOwner());
+
+	// 메인 카메라의 위치를 ChangeRoomTarget으로 이동
+	Vec3 changeRoomTargetPos = pMainCamera->GetScript<CCameraMoveScript>()->GetChangeRoomTargetPos();
+	pMainCamera->Transform()->SetWorldPos(changeRoomTargetPos);
 }
 
 void CRoomScript::Tick()

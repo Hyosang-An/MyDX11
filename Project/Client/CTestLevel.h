@@ -6,5 +6,7 @@ public:
 	static void CreatePrefab();
 
 	static void CreateCelesteTestLevel();
+
+	static void LoadTestLevel();
 };
 

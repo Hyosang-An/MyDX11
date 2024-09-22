@@ -447,3 +447,12 @@ void CTestLevel::CreateCelesteTestLevel()
 
 	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
 }
+
+void CTestLevel::LoadTestLevel()
+{
+	// Load Initial Game Level
+	wstring _levelFilePath = L"level\\GameLevel_v_0.level";
+	_levelFilePath = CPathMgr::GetInst()->GetContentPath() + _levelFilePath;
+	CLevel* pLoadedLevel = CLevelSaveLoad::LoadLevel(_levelFilePath);
+	ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
+}

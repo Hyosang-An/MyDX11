@@ -110,7 +110,9 @@ void CRenderMgr::Tick()
 		}
 	}
 
-	// Debug Render
+	// 디버그 전용
+#ifdef _DEBUG
+		// Debug Render
 	RenderDebugShape();
 
 	// Time 정보 출력
@@ -135,6 +137,8 @@ void CRenderMgr::Tick()
 			++iter;
 		}
 	}
+#endif // _DEBUG		
+
 
 	// Lightvec Clear
 	Clear();

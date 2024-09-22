@@ -10,6 +10,8 @@ public:
 	static CGameObject* LoadGameObject(FILE* _File, int& _objIdx);
 	static class CComponent* GetComponent(COMPONENT_TYPE _Type);
 
+	static void LoadInitialGameLevel();
+
 private:
 	static CLevel* pLoadingLevel;
 };

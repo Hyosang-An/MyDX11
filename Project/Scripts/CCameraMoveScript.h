@@ -47,6 +47,8 @@ public:
     void TurnOnDashShake(Vec3 _dashDir);
 	void DashShake();
 
+	Vec3 GetChangeRoomTargetPos() { return m_ChangeRoomTargetPos; }
+
 
 public:
 	virtual void Begin() override;

@@ -118,6 +118,7 @@ CLevel* CLevelSaveLoad::LoadLevel(const wstring& _FilePath)
 	{
 		// 파일을 열지 못한 경우에 대한 예외 처리
 		MessageBox(nullptr, L"Level파일 로드 실패", L"Level파일 로드 실패", MB_OK);
+		assert(false);
 		return nullptr;
 	}
 
@@ -280,4 +281,12 @@ CComponent* CLevelSaveLoad::GetComponent(COMPONENT_TYPE _Type)
 	}
 
 	return nullptr;
+}
+
+void CLevelSaveLoad::LoadInitialGameLevel()
+{
+	// Load Initial Game Level
+	wstring _levelFilePath = L"";
+	CLevel* pLoadedLevel = LoadLevel(_levelFilePath);
+	ChangeLevel(pLoadedLevel, LEVEL_STATE::STOP);
 }

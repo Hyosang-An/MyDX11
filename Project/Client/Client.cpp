@@ -157,12 +157,20 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 #ifdef _DEBUG
    // CEditorMgr 초기화
    CEditorMgr::GetInst()->Init();
-#endif
 
    // 테스트용 레벨 초기상태 만들기
    //CTestLevel::CreateTestLevel();
 
-   CTestLevel::CreateCelesteTestLevel();
+   //CTestLevel::CreateCelesteTestLevel();
+
+   CTestLevel::LoadTestLevel();
+
+#else
+   // 실제 게임 레벨 로드
+   CLevelSaveLoad::LoadInitialGameLevel();
+#endif
+
+
 
    g_bClientInitiated = true;
    return TRUE;

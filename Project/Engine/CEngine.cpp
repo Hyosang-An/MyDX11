@@ -35,6 +35,10 @@ int CEngine::Init(HWND _wnd, POINT _ptResolution, OBJECT_SAVE _SaveFunc, OBJECT_
 
 	ChangeWindowScale(_ptResolution.x, _ptResolution.y);
 
+	// Prefab Function 등록 (AssetMgr에서 사용되므로 미리 할당)
+	CPrefab::g_ObjectSaveFunc = _SaveFunc;
+	CPrefab::g_ObjectLoadFunc = _LoadFunc;
+
 	if (FAILED(CDevice::GetInst()->Init(m_hWnd, _ptResolution.x, _ptResolution.y)))
 	{
 		MessageBox(nullptr, L"장치 초기화 실패", L"CDevice 초기화 실패", MB_OK);
@@ -59,9 +63,7 @@ int CEngine::Init(HWND _wnd, POINT _ptResolution, OBJECT_SAVE _SaveFunc, OBJECT_
 	CLevelMgr::GetInst()->Init();
 	CFontMgr::GetInst()->Init();
 
-	// Prefab Function 등록
-	CPrefab::g_ObjectSaveFunc = _SaveFunc;
-	CPrefab::g_ObjectLoadFunc = _LoadFunc;
+
 
 	return S_OK;
 }

@@ -130,7 +130,7 @@ void TileMapUI::Update()
 
 
 	// 에디터 카메라 및 마우스 월드 좌표 계산, 타일 편집 및 충돌체 편집 (level이 stop 상태일 때만)
-	if (CLevelMgr::GetInst()->GetCurrentLevel()->GetState() == LEVEL_STATE::STOP && CEditorMgr::GetInst()->GetEditorCamera() != nullptr)
+	if (true /* CLevelMgr::GetInst()->GetCurrentLevel()->GetState() == LEVEL_STATE::STOP && CEditorMgr::GetInst()->GetEditorCamera() != nullptr*/)
 	{
 		CCamera* editorCamera = CEditorMgr::GetInst()->GetEditorCamera()->Camera();
 		ImGui::Text("Editor Camera Info");

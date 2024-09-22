@@ -7,7 +7,6 @@
 
 void CAssetMgr::Init()
 {
-
 	CreateEngineMesh();
 
 	CreateEngineTexture();
@@ -19,6 +18,64 @@ void CAssetMgr::Init()
 	CreateEngineComputeShader();
 
 	CreateEngineMaterial();
+
+	// content 폴더에 있는 리소스(에셋) 들을 확인 및 로딩 (content 에셋들은 엔진 에셋에 종속적이므로 엔진 에셋들을 먼저 생성 후 로딩)
+	GetContentFiles();
+}
+
+void CAssetMgr::GetContentFiles()
+{
+	// Content 폴더에 있는 에셋파일들의 경로를 전부 알아낸다.
+	wstring ContentsPath = CPathMgr::GetInst()->GetContentPath();
+	FindAssetName(ContentsPath, L"*.*");
+
+	// 알아낸 에셋 파일들의 경로를 통해서 Asset 들을 상대경로를 Key값으로 AssetMgr 에 로딩한다.
+	for (size_t i = 0; i < m_vecAssetRelativePath.size(); ++i)
+	{
+		LoadAsset(m_vecAssetRelativePath[i]);
+	}
+
+
+	// 에셋 매니저에는 로딩되어있지만, content 폴더에는 없는 에셋은 AssetMgr 에서 삭제하기
+	// 로딩된 에셋에 해당하는 원본 파일이 Content 폴더에 있는지 Exist 체크
+	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
+
+	for (UINT i = 0; i < (UINT)ASSET_TYPE::END; ++i)
+	{
+		const map<wstring, Ptr<CAsset>>& mapAsset = CAssetMgr::GetInst()->GetAssetMap((ASSET_TYPE)i);
+		for (const auto& pair : mapAsset)
+		{
+			// 엔진에서 제작한 에셋은 원래 원본파일이 없기때문에 넘어간다.
+			if (pair.second->IsEngineAsset())
+				continue;
+
+
+			wstring strRelativePath = pair.second->GetRelativePath();
+
+			if (strRelativePath == L"" || false == std::filesystem::exists(strContentPath + strRelativePath))
+			{
+				// AssetMgr에서만 들고 있는 경우
+				if (pair.second->GetRefCount() <= 1)
+				{
+					// // AssetMgr에서 삭제 요청
+					tTask deleteAssetTask{ TASK_TYPE::DEL_ASSET, (DWORD_PTR)pair.second.Get() };
+					CTaskMgr::GetInst()->AddTask(deleteAssetTask);
+				}
+
+				// 다른 곳에서도 참조하고 있는 경우
+				else
+				{
+					wstring msg = pair.second->GetName() + L"다른 곳에서 참조되고 있을 수 있습니다.";
+					int ret = MessageBox(nullptr, msg.c_str(), L"에셋 삭제 경고", MB_YESNO);
+					if (ret == IDYES)
+					{
+
+						CTaskMgr::GetInst()->AddTask(tTask{ TASK_TYPE::DEL_ASSET, (DWORD_PTR)pair.second.Get(), });
+					}
+				}
+			}
+		}
+	}
 }
 
 void CAssetMgr::CreateEngineMesh()
