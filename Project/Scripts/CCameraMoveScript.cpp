@@ -6,6 +6,7 @@
 #include "Engine/CLevelMgr.h"
 #include "Engine/CLayer.h"
 #include "Engine/CLevel.h"
+#include "Engine/CDevice.h"
 
 
 
@@ -47,6 +48,12 @@ void CCameraMoveScript::Tick()
 
 void CCameraMoveScript::FinalTick()
 {
+	// 카메라 해상도는 항상 1920x1080으로 고정
+	Vec2 vResolution = CDevice::GetInst()->GetResolution();
+	float scale = 1920.f / vResolution.x;
+	Camera()->SetScale(scale);
+
+
 	if (m_Player !=nullptr && m_Player->IsDead())
 	{
 		m_Player = nullptr;
