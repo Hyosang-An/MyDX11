@@ -57,6 +57,20 @@ void CRoomScript::FirstSpawnPlayer()
 	auto pPlayer = CAssetMgr::GetInst()->FindAsset<CPrefab>(L"prefab\\Player.prefab")->Instantiate();
 	pPlayer->FlipBookComponent()->Play(L"Idle");
 
+	// 플레이어에 광원 추가
+	CGameObject* pPlayerLight = new CGameObject;
+	pPlayerLight->SetName(L"PlayerLight");
+	pPlayerLight->AddComponent(new CTransform);
+	pPlayerLight->AddComponent(new CLight2D);
+
+	pPlayerLight->Light2D()->SetLightType(LIGHT_TYPE::POINT);
+	pPlayerLight->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	pPlayerLight->Light2D()->SetLightAmbient(Vec3(226.f/255.f, 226.f/255.f, 226.f/255.f));
+	pPlayerLight->Light2D()->SetRadius(250);
+	pPlayerLight->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+
+	pPlayer->AddChild(pPlayerLight, (int)LAYER::DEFAULT);
+
 	// 플레이어의 위치를 Room의 spawn로 이동
 	pPlayer->Transform()->SetWorldPos(m_PlayerSpawnPos);
 
