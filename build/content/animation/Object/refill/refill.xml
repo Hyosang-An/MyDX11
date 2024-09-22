@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:70c5d89d1e6c3cfc4a0356ae9d65e85e:0f739adcc0160d4fa3df104efe8e5c12:65446f79519805053ee441ece86ad848$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="refill.png" width="80" height="16">
+    <sprite n="idle00.png" x="0" y="0" w="16" h="16"/>
+    <sprite n="idle01.png" x="16" y="0" w="16" h="16"/>
+    <sprite n="idle02.png" x="32" y="0" w="16" h="16"/>
+    <sprite n="idle03.png" x="48" y="0" w="16" h="16"/>
+    <sprite n="idle04.png" x="64" y="0" w="16" h="16"/>
+</TextureAtlas>

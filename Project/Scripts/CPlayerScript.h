@@ -78,6 +78,8 @@ public:
 	void AddGroundCollider(CCollider2D* _GroundCollider) { m_setGroundColliders.insert(_GroundCollider); }
 	void RemoveGroundCollider(CCollider2D* _GroundCollider) { m_setGroundColliders.erase(_GroundCollider); }
 
+	void AddDashCount() { m_DashCount++; }
+
 private:
     void KeyCheck();
 	void UpdateState();

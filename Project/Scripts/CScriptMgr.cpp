@@ -9,6 +9,7 @@
 #include "CJumpThruScript.h"
 #include "CMissileScript.h"
 #include "CPlayerScript.h"
+#include "CRefillScript.h"
 #include "CRigidBody.h"
 #include "CRoomScript.h"
 
@@ -22,6 +23,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CJumpThruScript");
 	_vec.push_back(L"CMissileScript");
 	_vec.push_back(L"CPlayerScript");
+	_vec.push_back(L"CRefillScript");
 	_vec.push_back(L"CRigidBody");
 	_vec.push_back(L"CRoomScript");
 }
@@ -44,6 +46,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CMissileScript;
 	if (L"CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
+	if (L"CRefillScript" == _strScriptName)
+		return new CRefillScript;
 	if (L"CRigidBody" == _strScriptName)
 		return new CRigidBody;
 	if (L"CRoomScript" == _strScriptName)
@@ -78,6 +82,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERSCRIPT:
 		return new CPlayerScript;
+		break;
+	case (UINT)SCRIPT_TYPE::REFILLSCRIPT:
+		return new CRefillScript;
 		break;
 	case (UINT)SCRIPT_TYPE::RIGIDBODY:
 		return new CRigidBody;
@@ -123,6 +130,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::PLAYERSCRIPT:
 		return L"CPlayerScript";
+		break;
+
+	case SCRIPT_TYPE::REFILLSCRIPT:
+		return L"CRefillScript";
 		break;
 
 	case SCRIPT_TYPE::RIGIDBODY:

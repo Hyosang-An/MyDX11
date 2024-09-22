@@ -51,6 +51,7 @@
     <ClInclude Include="CDashShockWaveEffectScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="CRefillScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -92,5 +93,6 @@
     <ClCompile Include="CDashShockWaveEffectScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="CRefillScript.cpp" />
   </ItemGroup>
 </Project>

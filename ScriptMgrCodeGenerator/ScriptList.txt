@@ -6,5 +6,6 @@ CDashTrailScript
 CJumpThruScript
 CMissileScript
 CPlayerScript
+CRefillScript
 CRigidBody
 CRoomScript

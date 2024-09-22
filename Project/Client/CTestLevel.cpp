@@ -391,17 +391,17 @@ void CTestLevel::CreateCelesteTestLevel()
 
 	// 파티클 오브젝트 테스트 (눈발)
 	// Particle Object
-	CGameObject* pParticleObj = new CGameObject;
-	pParticleObj->SetName(L"Particle Snow");
+	//CGameObject* pParticleObj = new CGameObject;
+	//pParticleObj->SetName(L"Particle Snow");
 
-	pParticleObj->AddComponent(new CTransform);
-	pParticleObj->Transform()->SetRelativePos(Vec3(1000.f, 0.f, 0.f));
-	pParticleObj->Transform()->SetRelativeScale(1000.f, 1200.f, 1.f);
+	//pParticleObj->AddComponent(new CTransform);
+	//pParticleObj->Transform()->SetRelativePos(Vec3(1000.f, 0.f, 0.f));
+	//pParticleObj->Transform()->SetRelativeScale(1000.f, 1200.f, 1.f);
 
-	pParticleObj->AddComponent(new CMyParticleSystem);
+	//pParticleObj->AddComponent(new CMyParticleSystem);
 
 
-	TestLevel->AddObject(0, pParticleObj);
+	//TestLevel->AddObject(0, pParticleObj);
 
 
 
@@ -420,6 +420,29 @@ void CTestLevel::CreateCelesteTestLevel()
 	//TestLevel->AddObject(LAYER::DEFAULT, pParticleObj2);
 
 
+	// refill 오브젝트
+	CGameObject* pRefillObj = new CGameObject;
+	pRefillObj->SetName(L"Refill");
+
+	pRefillObj->AddComponent(new CTransform);
+	pRefillObj->AddComponent(new CMeshRender);
+	pRefillObj->AddComponent(new CCollider2D);
+	pRefillObj->AddComponent(new CFlipBookComponent);
+	//pRefillObj->AddComponent(new CRefillScript);
+	
+
+	pRefillObj->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+	pRefillObj->Transform()->SetRelativeScale(50.f, 50.f, 1.f);
+
+	pRefillObj->Collider2D()->SetScale(Vec3(1.f, 1.f, 1.f));
+
+	pRefillObj->MeshRender()->SetMesh(CAssetMgr::GetInst()->FindAsset<CMesh>(L"RectMesh"));
+	pRefillObj->MeshRender()->SetMaterial(CAssetMgr::GetInst()->FindAsset<CMaterial>(L"Std2DMtrl"));
+
+	pRefillObj->FlipBookComponent()->AddFlipBook(CAssetMgr::GetInst()->FindAsset<CFlipBook>(L"animation\\Object\\refill\\refill.flip"));
+	pRefillObj->FlipBookComponent()->Play(L"refill");
+
+	TestLevel->AddObject(LAYER::EXTRA_OBJ, pRefillObj);
 
 
 	ChangeLevel(TestLevel, LEVEL_STATE::STOP);
