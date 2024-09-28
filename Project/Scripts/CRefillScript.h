@@ -10,7 +10,9 @@ public:
 	virtual CRefillScript* Clone() { return new CRefillScript(*this); }
 
 private:
-
+	bool m_Active = true;
+	float m_ReActiveTime = 3.f;
+	float m_accTimeToReActive = 0.f;
 
 public:
 	virtual void Begin() override;

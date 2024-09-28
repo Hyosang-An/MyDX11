@@ -91,11 +91,12 @@ void CRoomScript::FirstSpawnPlayer()
 
 void CRoomScript::Tick()
 {
+	CGameObject* pPlayer = CLevelMgr::GetInst()->GetCurrentLevel()->GetLayer((UINT)LAYER::PLAYER)->GetParentObjects().front();
 
 	// Badeline 스폰시킬지 체크
 	if (m_BadelineSpawnRoom && !m_BadenlineSpawned)
 	{
-		CGameObject* pPlayer = CLevelMgr::GetInst()->GetCurrentLevel()->GetLayer((UINT)LAYER::PLAYER)->GetParentObjects().front();
+		
 		Vec3 PlayerPos = pPlayer->Transform()->GetWorldPos();
 
 		// 플레이어와 SpawnPoint의 x좌표 차이가 10 이하일 때 Badeline 스폰
@@ -135,8 +136,8 @@ void CRoomScript::Tick()
 		}
 	}
 
-	// 플레이어가 다른 Room으로 넘어가면 Badeline 제거
-	if (m_Badeline != nullptr)
+	// 플레이어가 죽거나 다른 Room으로 넘어가면 Badeline 제거
+	if (m_Badeline != nullptr || pPlayer->GetScript<CPlayerScript>()->GetCurState() == PLAYER_STATE::DEATH)
 	{
 		CGameObject* pPlayer = CLevelMgr::GetInst()->GetCurrentLevel()->GetLayer((UINT)LAYER::PLAYER)->GetParentObjects().front();
 		if (pPlayer->GetScript<CPlayerScript>()->GetCurRoom() != GetOwner())

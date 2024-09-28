@@ -864,6 +864,16 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 		{
 			// TODO : 추가 오브젝트와 충돌한 경우 처리
 		}
+		break;
+
+		case LAYER::MONSTER:
+		{
+			// TODO : 몬스터와 충돌한 경우 처리
+			m_CurState = PLAYER_STATE::DEATH;
+			m_RigidBody->SetVelocity(Vec3(0, 0, 0));
+
+		}
+		break;
 		
 
 	}

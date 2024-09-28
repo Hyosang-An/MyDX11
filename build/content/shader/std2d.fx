@@ -43,6 +43,12 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
 {
     float4 vColor = float4(0.f, 0.f, 0.f, 1.f);
     
+    // Int3가 -1이면 discard
+    if (g_int_3 == -1)
+    {
+        discard;
+    }
+    
     // FlipBook 을 사용한다.
     if (UseFlipbook)
     {
