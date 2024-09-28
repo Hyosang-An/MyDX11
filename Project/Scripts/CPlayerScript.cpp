@@ -718,6 +718,14 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 
 			Vec3 vObjWorldPos = GetOwner()->Transform()->GetWorldPos();
 
+
+			// 바닥에 있는 상태에서 다른 바닥으로 이동하면 땅으로 인식되도록 처리
+			if (m_RigidBody->IsOnGround() && overlapArea.y <= 1)
+			{
+				m_setGroundColliders.insert(_OtherCollider);
+				break;
+			}
+
 			// 벽과 충돌한건지 땅과 충돌한건지 판단
 			if (abs(overlapArea.y) < abs(overlapArea.x))
 			{		
@@ -848,9 +856,7 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 
 		case LAYER::SPIKE:
 		{
-			// TODO : 죽음 처리
-			m_CurState = PLAYER_STATE::DEATH;
-			m_RigidBody->SetVelocity(Vec3(0, 0, 0));
+			// Overlap에서 처리
 		}
 		break;
 
@@ -929,6 +935,18 @@ void CPlayerScript::Overlap(CCollider2D* _OwnCollider, CGameObject* _OtherObject
 			}
 		}
 		
+		break;
+
+		case LAYER::SPIKE:
+		{
+			// ovelapArea.x가 2초과거나 overlapArea.y가 1초과인 경우에만 죽음 처리
+			if (overlapArea.x > 2 || overlapArea.y > 1)
+			{
+				// TODO : 죽음 처리
+				m_CurState = PLAYER_STATE::DEATH;
+				m_RigidBody->SetVelocity(Vec3(0, 0, 0));
+			}
+		}
 		break;
 	}
 }

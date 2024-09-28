@@ -56,6 +56,13 @@ void CJumpThruScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _Othe
 			playerRigidbody->OnLand();
 			playerScript->AddGroundCollider(_OwnCollider);
 		}
+
+		// 플레이어가 이미 바닥 위에 있다면 바닥처럼 작동
+		if (playerRigidbody->IsOnGround())
+		{
+			playerScript->AddGroundCollider(_OwnCollider);
+		}
+
 	}
 }
 
