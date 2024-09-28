@@ -300,7 +300,7 @@ void CCameraMoveScript::ChangeRoom()
 	Transform()->SetWorldPos(vCameraPos + vDiff.Normalize() * m_CamRoomChangeSpeed * EngineDT);
 
 	// 카메라가 m_ChangeRoomTargetPos에 도착하면 m_bChangeRoom을 false로 바꾼다
-	if ((m_ChangeRoomTargetPos - vCameraPos).Length() < 1.f)
+	if ((m_ChangeRoomTargetPos - vCameraPos).Length() < 20.f)
 	{
 		m_bChangeRoom = false;
 		ChangeLevelState(LEVEL_STATE::PLAY);

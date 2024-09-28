@@ -48,7 +48,14 @@ void CRoomScript::Begin()
 
 	if (m_StartRoom)
 	{
+		 //Sound 재생
+
 		FirstSpawnPlayer();
+
+		// BGM 재생
+		Ptr<CSound> pBGMSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\BGM.wav");
+		if (pBGMSound != nullptr)
+			pBGMSound->Play(0, 1.f, false);
 	}
 }
 

@@ -666,6 +666,9 @@ void CPlayerScript::UpdateAnimation()
 	if (m_PrevState == m_CurState)
 		return;
 
+	// 사운드
+	Ptr<CSound> pSound = nullptr;
+
 	switch (m_CurState)
 	{
 		case PLAYER_STATE::IDLE:
@@ -676,12 +679,21 @@ void CPlayerScript::UpdateAnimation()
 			break;
 		case PLAYER_STATE::JUMP:
 			GetOwner()->FlipBookComponent()->Play(L"Jump", false);
+			// 사운드
+			pSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\jump.wav");
+			if (pSound != nullptr)
+				pSound->Play(1, 1.f, false);
 			break;
+
 		case PLAYER_STATE::FALL:
 			GetOwner()->FlipBookComponent()->Play(L"Fall", true);
 			break;
 		case PLAYER_STATE::DASH:
 			GetOwner()->FlipBookComponent()->Play(L"Dash", false);
+			// 사운드
+			pSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\dash_red_left.wav");
+			if (pSound != nullptr)
+				pSound->Play(1, 1.f, true);
 			break;
 		case PLAYER_STATE::CLIMB:
 			GetOwner()->FlipBookComponent()->Play(L"Climb", true);
@@ -692,6 +704,11 @@ void CPlayerScript::UpdateAnimation()
 			break;
 		case PLAYER_STATE::DEATH:
 			GetOwner()->FlipBookComponent()->Play(L"Death", false);
+			// 사운드
+			pSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\death.wav");
+			if (pSound != nullptr)
+				pSound->Play(1, 1.f, false);
+
 			break;
 		default:
 			break;
@@ -737,6 +754,10 @@ void CPlayerScript::BeginOverlap(CCollider2D* _OwnCollider, CGameObject* _OtherO
 
 					m_RigidBody->OnLand();
 					m_setGroundColliders.insert(_OtherCollider);
+
+					// 사운드 재생
+					Ptr<CSound> pSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\land_00_snowsoft_01.wav");
+					pSound->Play(1.f, 1.f, true);
 
 					//// 대쉬 초기화
 					//m_DashTimeRemained = m_DashTime;

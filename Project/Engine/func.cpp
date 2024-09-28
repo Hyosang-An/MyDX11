@@ -3,6 +3,7 @@
 #include "CRenderMgr.h"
 #include "CTaskMgr.h"
 #include "CLevelMgr.h"
+#include "CAssetMgr.h"
 
 #include "CGameObject.h"
 
@@ -34,6 +35,14 @@ void ChangeLevelState(LEVEL_STATE _NextState)
 	task.Param_0 = (DWORD_PTR)_NextState;
 
 	CTaskMgr::GetInst()->AddTask(task);
+
+	// 레벨 정지면 BGM사운드 정지
+	if (_NextState == LEVEL_STATE::STOP)
+	{
+		Ptr<CSound> pBGMSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\BGM.wav");
+		if (pBGMSound != nullptr)
+			pBGMSound->Stop();
+	}
 }
 
 void ChangeLevel(CLevel* _nextLevel, LEVEL_STATE _nextLevelState)
@@ -45,6 +54,14 @@ void ChangeLevel(CLevel* _nextLevel, LEVEL_STATE _nextLevelState)
 	task.Param_1 = (DWORD_PTR)_nextLevelState;
 
 	CTaskMgr::GetInst()->AddTask(task);
+
+	// 레벨 정지면 BGM사운드 정지
+	if (_nextLevelState == LEVEL_STATE::STOP)
+	{
+		Ptr<CSound> pBGMSound = CAssetMgr::GetInst()->FindAsset<CSound>(L"sound\\BGM.wav");
+		if (pBGMSound != nullptr)
+			pBGMSound->Stop();
+	}
 }
 
 bool IsValid(CGameObject*& _Object)

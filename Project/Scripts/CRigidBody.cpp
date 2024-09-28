@@ -2,6 +2,7 @@
 #include "CRigidBody.h"
 
 #include "CPlayerScript.h"
+#include "Engine/CAssetMgr.h"
 
 CRigidBody::CRigidBody() :
 	CScript((UINT)SCRIPT_TYPE::RIGIDBODY)
