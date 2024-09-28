@@ -137,10 +137,10 @@ void CRoomScript::Tick()
 	}
 
 	// 플레이어가 죽거나 다른 Room으로 넘어가면 Badeline 제거
-	if (m_Badeline != nullptr || pPlayer->GetScript<CPlayerScript>()->GetCurState() == PLAYER_STATE::DEATH)
+	if (m_Badeline != nullptr)
 	{
 		CGameObject* pPlayer = CLevelMgr::GetInst()->GetCurrentLevel()->GetLayer((UINT)LAYER::PLAYER)->GetParentObjects().front();
-		if (pPlayer->GetScript<CPlayerScript>()->GetCurRoom() != GetOwner())
+		if (pPlayer->GetScript<CPlayerScript>()->GetCurRoom() != GetOwner() || pPlayer->GetScript<CPlayerScript>()->GetCurState() == PLAYER_STATE::DEATH)
 		{
 			DeleteObject(m_Badeline);
 			m_Badeline = nullptr;
