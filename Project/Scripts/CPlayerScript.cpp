@@ -658,7 +658,7 @@ void CPlayerScript::UpdateState()
 void CPlayerScript::UpdateAnimation()
 {
 	// CLIMB만 예외 처리
-	if (m_CurState == PLAYER_STATE::CLIMB)
+	if (m_CurState == PLAYER_STATE::CLIMB && m_PrevState == PLAYER_STATE::CLIMB)
 	{
 		m_RigidBody->GetVelocity().y != 0 ? GetOwner()->FlipBookComponent()->Resume() : GetOwner()->FlipBookComponent()->Pause();
 	}
@@ -685,7 +685,6 @@ void CPlayerScript::UpdateAnimation()
 			break;
 		case PLAYER_STATE::CLIMB:
 			GetOwner()->FlipBookComponent()->Play(L"Climb", true);
-			m_RigidBody->GetVelocity().y != 0 ? GetOwner()->FlipBookComponent()->Resume() : GetOwner()->FlipBookComponent()->Pause();
 			break;
 		case PLAYER_STATE::DREAM_DASH:
 			break;

@@ -236,9 +236,9 @@ float4 PS_DashShockWave(VS_OUT _in) : SV_Target
     float aspectRatio = g_Resolution.x / g_Resolution.y;
 
 // 파동 파라미터 설정
-    float waveSpeed = 700.0f; // 파동의 속도
-    float waveWidth = 100.0f; // 파동의 폭
-    float amplitude = 0.03f; // 파동의 강도
+    float waveSpeed = 1000.0f; // 파동의 속도
+    float waveWidth = 150.0f; // 파동의 폭
+    float amplitude = 0.04f; // 파동의 강도
     float MAX_DISTANCE = 600.0f; // 파동의 최대 거리
 
 // 파동의 전면 위치 계산
