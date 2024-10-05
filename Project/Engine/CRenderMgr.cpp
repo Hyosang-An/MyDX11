@@ -279,6 +279,13 @@ void CRenderMgr::PostProcessCopy(int _postProcessRTTex_index)
 	//CONTEXT->CopyResource(m_PostProcessDSTex->GetTex2D().Get(), pDSTex->GetTex2D().Get());
 }
 
+void CRenderMgr::AddDebugShapeInfo(const tDebugShapeInfo& _Info)
+{
+#ifdef _DEBUG
+	m_DebugShapeList.push_back(_Info);
+#endif // DEBUG
+}
+
 void CRenderMgr::RegisterLight2D(CLight2D* _light)
 {
 	// 중복 등록 방지

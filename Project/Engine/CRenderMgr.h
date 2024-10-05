@@ -48,7 +48,7 @@ public:
 	void RegisterEditorCamera(CCamera* _Cam) { m_EditorCamera = _Cam; }
 	void DeregisterCamera(CCamera* _cam);
 
-	void AddDebugShapeInfo(const tDebugShapeInfo& _Info) { m_DebugShapeList.push_back(_Info); }
+	void AddDebugShapeInfo(const tDebugShapeInfo& _Info);
 	void RegisterLight2D(CLight2D* _light);
 	void DeregisterLight2D(CLight2D* _light);
 
