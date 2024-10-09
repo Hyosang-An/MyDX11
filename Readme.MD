@@ -17,3 +17,5 @@ Celeste Graphic Resource는 Celeste Mod Api Averest Github에서 구하였다.
  [Celeste Graphic Resource download link](https://drive.google.com/open?id=1ITwCI2uJ7YflAG0OwBR4uOUEJBjwTCet)
 
 출처 : https://github.com/EverestAPI/Resources/wiki
+
+# 실행 파일 위치: build/bin 폴더 내 exe파일
